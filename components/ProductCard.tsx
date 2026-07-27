@@ -84,7 +84,7 @@ export const ProductCard = memo(function ProductCard({
                 className="object-contain drop-shadow-[0_24px_64px_rgba(0,0,0,0.55)] transition-all duration-[1200ms] ease-out group-hover:drop-shadow-[0_32px_80px_rgba(0,0,0,0.65)]"
                 fallback={
                   <div className="flex h-full w-full items-center justify-center">
-                    <span className="text-sm font-medium text-ivory/[0.05]">{initials</span>
+                    <span className="text-sm font-medium text-ivory/[0.05]">{initials}</span>
                 </div>
                 }
               />
@@ -96,7 +96,7 @@ export const ProductCard = memo(function ProductCard({
              </div>
             ) : (
               <div className="flex h-full w-full items-center justify-center">
-                <span className="text-sm font-medium text-ivory/[0.05]">{initials</span>
+                <span className="text-sm font-medium text-ivory/[0.05]">{initials}</span>
              </div>
             )}
         </div>
@@ -110,9 +110,9 @@ export const ProductCard = memo(function ProductCard({
         </p>
         )}
         <h3 className="font-display text-xl leading-[0.95] tracking-[-0.015em] text-ivory transition-colors duration-300 group-hover:text-gold/80">
-          <Link href={`/product/${id}`}>{name</Link>
+          <Link href={`/product/${id}`}>{name}</Link>
        </h3>
-        <p className="font-display text-base font-light tracking-wide text-gold">{price</p>
+        <p className="font-display text-base font-light tracking-wide text-gold">{price}</p>
     </div>
 
       <div className="mt-6">

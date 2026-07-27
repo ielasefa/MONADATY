@@ -1,19 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
 
 export default function ProductError({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
   const { t } = useTranslation("products");
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 32 }} 
-      animate={{ opacity: 1, y: 0 }} 
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="container-premium flex min-h-[60vh] items-center justify-center py-20"
-    >
-      <div className="border border-ivory/[0.06] bg-black-surface rounded-md px-12 py-16 max-w-lg text-center">
+    <div className="container-premium flex min-h-[60vh] items-center justify-center py-20 animate-fade-in">
+      <div className="border border-ivory/[0.06] bg-black-surface rounded-md px-12 py-16 max-w-lg text-center stagger-1">
         <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-md border border-burgundy/20 bg-burgundy/10">
           <svg className="h-7 w-7 text-burgundy" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <circle cx="12" cy="12" r="10" />
@@ -31,6 +25,6 @@ export default function ProductError({ reset }: { error: Error & { digest?: stri
           <Link href="/shop" className="btn-secondary">{t("browse_shop")}</Link>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

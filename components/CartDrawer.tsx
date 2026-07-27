@@ -101,28 +101,34 @@ export function CartDrawer() {
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-ivory/[0.05] px-6 py-5">
-          <div className="flex items-baseline gap-3">
-            <p className="label-utility tracking-[0.3em] text-ivory/20">{t("your_box")}</p>
-            <h2 id="cart-title" className="font-display text-base text-ivory">
-              {t("your_cart_title")}
-            </h2>
-            {itemCount > 0 && (
-              <span className="rounded-md bg-burgundy/10 px-2 py-0.5 text-[0.45rem] font-semibold text-burgundy">
-                {itemCount}
-              </span>
-            )}
-          </div>
+        <div className="px-6 pb-3 pt-5">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-baseline gap-3">
+              <span className="label-utility text-ivory/20">{t("your_box")}</span>
+              <h2 id="cart-title" className="font-display text-base text-ivory">
+                {t("your_cart_title")}
+              </h2>
+              {itemCount > 0 && (
+                <span className="label-utility rounded-md bg-burgundy/10 px-2 py-0.5 text-burgundy">
+                  {itemCount}
+                </span>
+              )}
+            </div>
 
-          <button
-            type="button"
-            onClick={closeDrawer}
-            className="group flex h-8 w-8 items-center justify-center rounded-md border border-ivory/[0.05] bg-transparent text-base text-ivory/25 transition-all duration-200 hover:border-ivory/[0.10] hover:text-ivory"
-            aria-label={t("close_cart")}
-          >
-            &times;
-          </button>
+            <button
+              type="button"
+              onClick={closeDrawer}
+              className="group flex h-8 w-8 items-center justify-center rounded-md border border-ivory/[0.05] bg-transparent text-ivory/25 transition-all duration-200 hover:border-ivory/[0.10] hover:text-ivory"
+              aria-label={t("close_cart")}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
+                <path d="M18 6L6 18" />
+                <path d="M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
         </div>
+        <div className="rule-ivory mx-6" />
 
         {/* Items */}
         <div className="flex-1 overflow-y-auto px-5 py-2">
@@ -171,7 +177,7 @@ export function CartDrawer() {
                         sizes="80px"
                         className="object-contain"
                         fallback={
-                          <div className="flex h-full w-full items-center justify-center text-[0.45rem] font-semibold tracking-[0.24em] text-ivory/8">
+                          <div className="flex h-full w-full items-center justify-center label-utility text-ivory/8">
                             {item.name.split(" ").slice(0, 2).map((part) => part[0]).join("")}
                           </div>
                         }
@@ -199,50 +205,48 @@ export function CartDrawer() {
                   <div className="flex min-w-0 flex-1 flex-col justify-between py-0.5">
                     <div className="min-w-0">
                       {item.category && (
-                        <p className="text-[0.38rem] uppercase tracking-[0.28em] text-ivory/15">{item.category}</p>
+                        <p className="label-utility text-ivory/15">{item.category}</p>
                       )}
                       <h3 className="mt-1 truncate font-display text-[0.82rem] text-ivory">{item.name}</h3>
                       <p className="mt-1 text-[0.75rem] font-semibold text-gold">{item.price}</p>
                     </div>
 
-                    <div className="mt-3 flex items-center justify-between">
-                      {/* Quantity — minimal */}
-                      <div className="flex items-center border border-ivory/[0.06] bg-transparent rounded-md">
-                        <button
-                          type="button"
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="flex h-7 w-7 items-center justify-center rounded-l-md text-[0.7rem] text-ivory/25 transition-colors duration-150 hover:bg-ivory/[0.04] hover:text-ivory"
-                          aria-label={`${t("decrease_qty_item")} ${item.name}`}
-                        >
-                          &minus;
-                        </button>
-                        <span className="min-w-[1.8rem] border-x border-ivory/[0.05] text-center text-[0.55rem] font-semibold text-ivory">
-                          {item.quantity}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="flex h-7 w-7 items-center justify-center rounded-r-md text-[0.7rem] text-ivory/25 transition-colors duration-150 hover:bg-ivory/[0.04] hover:text-ivory"
-                          aria-label={`${t("increase_qty_item")} ${item.name}`}
-                        >
-                          +
-                        </button>
-                      </div>
+            <div className="mt-3 flex items-center justify-between">
+              <div className="flex items-center border border-ivory/[0.06] bg-transparent rounded-md">
+                <button
+                  type="button"
+                  onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                  className="flex h-7 w-7 items-center justify-center rounded-l-md text-[0.7rem] text-ivory/25 transition-colors duration-150 hover:bg-ivory/[0.04] hover:text-ivory"
+                  aria-label={`${t("decrease_qty_item")} ${item.name}`}
+                >
+                  &minus;
+                </button>
+                <span className="min-w-[1.8rem] border-x border-ivory/[0.05] text-center label-utility text-ivory">
+                  {item.quantity}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                  className="flex h-7 w-7 items-center justify-center rounded-r-md text-[0.7rem] text-ivory/25 transition-colors duration-150 hover:bg-ivory/[0.04] hover:text-ivory"
+                  aria-label={`${t("increase_qty_item")} ${item.name}`}
+                >
+                  +
+                </button>
+              </div>
 
-                      {/* Remove */}
-                      <button
-                        type="button"
-                        onClick={() => removeItem(item.id)}
-                        className="flex items-center gap-1 text-[0.42rem] font-medium uppercase tracking-[0.12em] text-ivory/15 transition-colors duration-150 hover:text-burgundy"
-                        aria-label={`${t("remove")} ${item.name}`}
-                      >
-                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="3 6 5 6 21 6" />
-                          <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
-                        </svg>
-                        {t("remove")}
-                      </button>
-                    </div>
+              <button
+                type="button"
+                onClick={() => removeItem(item.id)}
+                className="flex items-center gap-1 label-utility text-ivory/15 transition-colors duration-150 hover:text-burgundy"
+                aria-label={`${t("remove")} ${item.name}`}
+              >
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="3 6 5 6 21 6" />
+                  <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
+                </svg>
+                {t("remove")}
+              </button>
+            </div>
                   </div>
                 </div>
               ))}
@@ -252,14 +256,15 @@ export function CartDrawer() {
 
         {/* Footer */}
         {items.length > 0 && (
-          <div className="border-t border-ivory/[0.05] px-6 pb-6 pt-5">
+          <div className="px-6 pb-6 pt-5">
+            <div className="rule-ivory mb-5" />
             <div className="flex items-baseline justify-between">
-              <span className="text-[0.48rem] uppercase tracking-[0.22em] text-ivory/25">{t("cart_subtotal")}</span>
+              <span className="label-utility text-ivory/25">{t("cart_subtotal")}</span>
               <span className="text-xl font-semibold text-ivory">{subtotal}</span>
             </div>
-            <p className="mt-1 text-[0.42rem] text-ivory/15">{t("taxes_shipping_note")}</p>
+            <p className="mt-1 label-utility text-ivory/15">{t("taxes_shipping_note")}</p>
 
-            <div className="my-4 h-px bg-ivory/[0.04]" />
+            <div className="my-4 rule-ivory" />
 
             <Link
               href="/checkout"

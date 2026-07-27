@@ -279,7 +279,7 @@ export function Hero({ settings }: HeroProps) {
                   href={settings.ctaLink || "/shop"}
                   className="btn-primary"
                 >
-                  <span>{settings.ctaText || t("shop_now")</span>
+                  <span>{settings.ctaText || t("shop_now")}</span>
                   <ArrowRight />
                </Link>
                 <Link
