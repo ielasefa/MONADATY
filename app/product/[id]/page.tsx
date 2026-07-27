@@ -41,9 +41,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {t(translations, "back_to_drinks", lang)}
          </Link>
           <span aria-hidden="true" className="text-ivory/8">/</span>
-          <span className="text-ivory/20">{product.category</span>
+          <span className="text-ivory/20">{product.category}</span>
           <span aria-hidden="true" className="text-ivory/8">/</span>
-          <span className="text-ivory/30">{product.name</span>
+          <span className="text-ivory/30">{product.name}</span>
        </nav>
      </div>
 

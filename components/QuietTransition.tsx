@@ -35,8 +35,8 @@ export function QuietTransition() {
             <span className="block italic text-gold/70 text-[0.6em] mb-3 font-light">
               &ldquo;
           </span>
-            <span className="block">{t("quiet_statement_1")</span>
-            <span className="block mt-2 text-ivory/55">{t("quiet_statement_2")</span>
+            <span className="block">{t("quiet_statement_1")}</span>
+            <span className="block mt-2 text-ivory/55">{t("quiet_statement_2")}</span>
         </h2>
       </div>
 

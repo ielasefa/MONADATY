@@ -520,7 +520,7 @@ function FeaturedExhibit({
               {product.category || t("drink_label")}
           </p>
             <h3 className="font-display text-2xl leading-[0.95] tracking-[-0.02em] text-ivory transition-colors duration-300 hover:text-gold/80 md:text-3xl">
-              <Link href={`/product/${product.id}`}>{product.name</Link>
+              <Link href={`/product/${product.id}`}>{product.name}</Link>
           </h3>
         </div>
           <div className="flex items-center gap-5">
@@ -648,7 +648,7 @@ export function SectionTestimonials(props: {
                     {tm.name}
             </p>
                   {tm.role && (
-                    <span className="text-[0.42rem] uppercase tracking-[0.32em] text-ivory/20">
+                    <span className="label-utility text-ivory/20">
                       — {tm.role}
               </span>
                   )}
@@ -718,7 +718,7 @@ export function SectionNewsletter(props: {
               type="submit"
               className="btn-primary h-12 !px-7 !text-[0.52rem] !tracking-[0.28em]"
             >
-              <span>{props.buttonText || t("join")</span>
+              <span>{props.buttonText || t("join")}</span>
               <ArrowRight />
           </button>
         </div>
@@ -756,7 +756,7 @@ export function SectionCTA() {
             href="/shop"
             className="btn-primary h-12 px-9"
           >
-            <span>{t("cta_button")</span>
+            <span>{t("cta_button")}</span>
             <ArrowRight />
         </Link>
       </div>
