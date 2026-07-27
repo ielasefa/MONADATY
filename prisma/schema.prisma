@@ -1,0 +1,993 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum OrderStatus {
+  pending
+  processing
+  shipped
+  out_for_delivery
+  delivered
+  completed
+  cancelled
+  refunded
+}
+
+enum PaymentStatus {
+  pending
+  paid
+  refunded
+}
+
+enum ProductStatus {
+  Draft
+  Active
+  Hidden
+  Archived
+}
+
+model Product {
+  id               String        @id @default(uuid())
+  slug             String        @unique
+  name             String
+  description      String        @default("")
+  shortDescription String        @default("")
+  image            String        @default("")
+  gallery          String[]      @default([])
+  categoryId       String?
+  category         Category?     @relation(fields: [categoryId], references: [id])
+  collectionId     String?
+  collection       Collection?   @relation(fields: [collectionId], references: [id])
+  price            String        @default("0.00 DH")
+  comparePrice     String        @default("")
+  salePrice        String        @default("")
+  costPrice        String        @default("")
+  visual           String        @default("")
+  accent           String        @default("#C8A96A")
+  ingredients      String        @default("")
+  nutrition        String        @default("")
+  badges           String[]      @default([])
+  stock            Int           @default(0)
+  lowStockThreshold Int          @default(5)
+  featured         Boolean       @default(false)
+  isBestSeller     Boolean       @default(false)
+  available        Boolean       @default(true)
+  status           ProductStatus @default(Draft)
+  sku              String        @default("")
+  barcode          String        @default("")
+  brand            String        @default("")
+
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  orderItems       OrderItem[]
+  images           ProductImage[]
+  variants         ProductVariant[]
+  history          ProductHistory[]
+  landingSections  LandingSection[]
+
+  @@index([categoryId])
+  @@index([collectionId])
+  @@index([available])
+  @@index([featured])
+  @@index([slug])
+  @@index([sku])
+  @@index([status])
+  @@map("products")
+}
+
+model ProductImage {
+  id        String   @id @default(uuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  alt       String   @default("")
+  sortOrder Int      @default(0)
+  isCover   Boolean  @default(false)
+  width     Int      @default(0)
+  height    Int      @default(0)
+  format    String   @default("")
+  publicId  String   @default("")
+  bytes     Int      @default(0)
+  imageHash String   @default("")
+  blurDataURL String @default("")
+  createdAt DateTime @default(now())
+
+  @@index([productId])
+  @@index([imageHash])
+  @@map("product_images")
+}
+
+model ProductVariant {
+  id            String   @id @default(uuid())
+  productId     String
+  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name          String   @default("")
+  size          String   @default("")
+  price         String   @default("0.00 DH")
+  salePrice     String   @default("")
+  stock         Int      @default(0)
+  sku           String   @default("")
+  barcode       String   @default("")
+  image         String   @default("")
+  weight        String   @default("")
+  sortOrder     Int      @default(0)
+  status        String   @default("Active")
+  isDefault     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([productId])
+  @@index([sku])
+  @@index([sortOrder])
+  @@map("product_variants")
+}
+
+model ProductHistory {
+  id        String   @id @default(uuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  adminId   String
+  admin     Admin    @relation(fields: [adminId], references: [id])
+  adminName String   @default("")
+  action    String
+  field     String   @default("")
+  oldValue  String   @default("")
+  newValue  String   @default("")
+  createdAt DateTime @default(now())
+
+  @@index([productId])
+  @@index([createdAt])
+  @@map("product_history")
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  name        String
+  slug        String    @unique
+  description String    @default("")
+  image       String    @default("")
+  products    Product[]
+
+  @@index([slug])
+  @@map("categories")
+}
+
+model Collection {
+  id            String    @id @default(uuid())
+  name          String
+  slug          String    @unique
+  description   String    @default("")
+  image         String    @default("")
+  accent        String    @default("#C8A96A")
+  tone          String    @default("from-[#fffdf7] via-white to-[#f4ead3]")
+  previewLabel  String    @default("")
+  order         Int       @default(0)
+  landingEnabled Boolean  @default(false)
+  landingOrder  Int       @default(0)
+  products      Product[]
+
+  @@index([slug])
+  @@index([order])
+  @@index([landingEnabled, landingOrder])
+  @@map("collections")
+}
+
+model Customer {
+  id            String  @id @default(uuid())
+  firstName     String  @default("")
+  lastName      String  @default("")
+  email         String  @unique
+  phone         String  @default("")
+  city          String  @default("")
+  address       String  @default("")
+  postalCode    String  @default("")
+  country       String  @default("Morocco")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  orders        Order[]
+
+  @@index([email])
+  @@index([phone])
+  @@index([createdAt])
+  @@map("customers")
+}
+
+model Order {
+  id                String        @id @default(uuid())
+  orderNumber       String        @unique
+  customerId        String?
+  customer          Customer?     @relation(fields: [customerId], references: [id])
+  customerName      String
+  customerEmail     String
+  phone             String        @default("")
+  address           String        @default("")
+  city              String        @default("")
+  postalCode        String        @default("")
+  country           String        @default("Morocco")
+  paymentMethod     String        @default("cash_on_delivery")
+  paymentStatus     PaymentStatus @default(pending)
+  orderStatus       OrderStatus   @default(pending)
+  subtotal          String
+  shipping          String        @default("0.00 DH")
+  shippingMethod    String        @default("delivery")
+  tax               String        @default("0.00 DH")
+  total             String
+  currency          String        @default("MAD")
+  idempotencyKey    String        @unique
+  couponCode        String?
+  discountAmount    String        @default("0.00 DH")
+  estimatedDelivery String        @default("")
+  actualDeliveryDate String       @default("")
+  deliveryCompany   String        @default("")
+  trackingNumber    String        @default("")
+  deliveryNotes     String        @default("")
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  items             OrderItem[]
+  invoice           Invoice?
+  creditNotes       CreditNote[]
+
+  @@index([orderNumber])
+  @@index([customerId])
+  @@index([customerEmail])
+  @@index([orderStatus])
+  @@index([paymentStatus])
+  @@index([createdAt])
+  @@map("orders")
+}
+
+model OrderItem {
+  id         String  @id @default(uuid())
+  orderId    String
+  order      Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId  String?
+  product    Product? @relation(fields: [productId], references: [id])
+  name       String
+  slug       String   @default("")
+  image      String   @default("")
+  quantity   Int
+  unitPrice  String
+  totalPrice String
+
+  @@index([orderId])
+  @@index([productId])
+  @@map("order_items")
+}
+
+model BlogPost {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  content     String   @default("")
+  excerpt     String   @default("")
+  coverImage  String   @default("")
+  author      String   @default("")
+  tags        String[] @default([])
+  published   Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+  @@index([published])
+  @@index([createdAt])
+  @@map("blog_posts")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+}
+
+model Admin {
+  id                String    @id @default(uuid())
+  name              String
+  email             String    @unique
+  passwordHash      String
+  role              AdminRole @default(ADMIN)
+  sessionToken      String?
+  mustChangePassword Boolean  @default(true)
+  lastLoginAt       DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  logs              AdminLog[]
+  history           ProductHistory[]
+
+  @@index([sessionToken])
+  @@index([email])
+  @@map("admins")
+}
+
+
+
+model Setting {
+  id    String @id @default(uuid())
+  key   String @unique
+  value String @default("")
+
+  @@index([key])
+  @@map("settings")
+}
+
+model Testimonial {
+  id      String  @id @default(uuid())
+  name    String  @default("")
+  role    String  @default("")
+  content String  @default("")
+  avatar  String  @default("")
+  visible Boolean @default(true)
+  order   Int     @default(0)
+
+  @@index([visible])
+  @@index([order])
+  @@map("testimonials")
+}
+
+model Faq {
+  id       String @id @default(uuid())
+  question String @default("")
+  answer   String @default("")
+  order    Int    @default(0)
+
+  @@map("faqs")
+}
+
+model AdminLog {
+  id        String   @id @default(uuid())
+  adminId   String
+  admin     Admin    @relation(fields: [adminId], references: [id])
+  action    String
+  entity    String
+  entityId  String   @default("")
+  ip        String   @default("")
+  createdAt DateTime @default(now())
+
+  @@index([adminId])
+  @@index([action])
+  @@index([entity])
+  @@index([createdAt])
+  @@map("admin_logs")
+}
+
+model City {
+  id           String   @id @default(uuid())
+  name         String
+  active       Boolean  @default(true)
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  @@index([active])
+  @@index([displayOrder])
+  @@map("cities")
+}
+
+model EmailTemplate {
+  id      String @id @default(uuid())
+  key     String @unique
+  subject String @default("")
+  body    String @default("")
+
+  @@index([key])
+  @@map("email_templates")
+}
+
+model AdminMenuItem {
+  id                String   @id @default(uuid())
+  label             String
+  href              String   @unique
+  icon              String   @default("")
+  requireSuperAdmin Boolean  @default(false)
+  displayOrder      Int      @default(0)
+
+  @@index([displayOrder])
+  @@map("admin_menu_items")
+}
+
+model AdminNotification {
+  id        String   @id @default(uuid())
+  type      String
+  title     String
+  message   String
+  link      String   @default("")
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([read])
+  @@index([type])
+  @@map("admin_notifications")
+}
+
+enum InvoiceStatus {
+  Draft
+  Issued
+  Cancelled
+}
+
+model Invoice {
+  id             String        @id @default(uuid())
+  invoiceNumber  String        @unique
+  orderId        String        @unique
+  order          Order         @relation(fields: [orderId], references: [id])
+  status         InvoiceStatus @default(Issued)
+  pdfPath        String?
+  signedToken    String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  events         InvoiceEvent[]
+  creditNote     CreditNote?
+
+  @@index([invoiceNumber])
+  @@index([signedToken])
+  @@index([createdAt])
+  @@map("invoices")
+}
+
+model InvoiceEvent {
+  id        String   @id @default(uuid())
+  invoiceId String
+  invoice   Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  event     String
+  metadata  String   @default("")
+  ip        String   @default("")
+  createdAt DateTime @default(now())
+
+  @@index([invoiceId])
+  @@index([createdAt])
+  @@map("invoice_events")
+}
+
+enum CreditNoteStatus {
+  Issued
+  Applied
+}
+
+model CreditNote {
+  id             String           @id @default(uuid())
+  creditNoteNumber String         @unique
+  invoiceId      String           @unique
+  invoice        Invoice          @relation(fields: [invoiceId], references: [id])
+  orderId        String
+  order          Order            @relation(fields: [orderId], references: [id])
+  amount         String
+  reason         String           @default("")
+  status         CreditNoteStatus @default(Issued)
+  pdfPath        String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  @@index([creditNoteNumber])
+  @@index([createdAt])
+  @@map("credit_notes")
+}
+
+model Coupon {
+  id              String   @id @default(uuid())
+  code            String   @unique
+  discountPercent Int      @default(0)
+  discountAmount  String   @default("0.00 DH")
+  minPurchase     String   @default("0.00 DH")
+  maxUsage        Int      @default(0)
+  usageCount      Int      @default(0)
+  isActive        Boolean  @default(true)
+  expiresAt       DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([code])
+  @@index([isActive])
+  @@map("coupons")
+}
+
+model TempUpload {
+  id         String   @id @default(uuid())
+  publicId   String
+  secureUrl  String
+  imageHash  String   @default("")
+  bytes      Int      @default(0)
+  width      Int      @default(0)
+  height     Int      @default(0)
+  format     String   @default("")
+  filename   String   @default("")
+  createdBy  String   @default("")
+  isAttached Boolean  @default(false)
+  attachedAt DateTime?
+  createdAt  DateTime @default(now())
+
+  @@index([publicId])
+  @@index([imageHash])
+  @@index([isAttached])
+  @@index([createdAt])
+  @@index([isAttached, createdAt])
+  @@map("temp_uploads")
+}
+
+enum MovementType {
+  IN
+  OUT
+  SALE
+  RETURN
+  ADJUSTMENT
+  TRANSFER
+  PURCHASE
+  REFUND
+  DAMAGED
+}
+
+enum PurchaseOrderStatus {
+  Draft
+  Pending
+  Approved
+  Ordered
+  Received
+  Cancelled
+}
+
+model Warehouse {
+  id        String   @id @default(uuid())
+  name      String
+  code      String   @unique
+  address   String   @default("")
+  city      String   @default("")
+  country   String   @default("Morocco")
+  manager   String   @default("")
+  phone     String   @default("")
+  email     String   @default("")
+  isDefault Boolean  @default(false)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  stocks    ProductWarehouseStock[]
+  movements InventoryMovement[]
+  purchaseOrders PurchaseOrder[]
+
+  @@index([code])
+  @@index([isActive])
+  @@map("warehouses")
+}
+
+model ProductWarehouseStock {
+  id             String  @id @default(uuid())
+  warehouseId    String
+  warehouse      Warehouse @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+  productId      String
+  variantId      String  @default("")
+  stock          Int     @default(0)
+  reservedStock  Int     @default(0)
+
+  @@unique([warehouseId, productId, variantId])
+  @@index([warehouseId])
+  @@index([productId])
+  @@index([variantId])
+  @@index([stock])
+  @@map("product_warehouse_stocks")
+}
+
+model Supplier {
+  id            String   @id @default(uuid())
+  name          String
+  company       String   @default("")
+  email         String   @default("")
+  phone         String   @default("")
+  address       String   @default("")
+  website       String   @default("")
+  taxNumber     String   @default("")
+  contactPerson String   @default("")
+  notes         String   @default("")
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  products      ProductSupplier[]
+  purchaseOrders PurchaseOrder[]
+
+  @@index([name])
+  @@index([active])
+  @@map("suppliers")
+}
+
+model ProductSupplier {
+  id         String   @id @default(uuid())
+  productId  String
+  supplierId String
+  supplier   Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([productId, supplierId])
+  @@index([supplierId])
+  @@map("product_suppliers")
+}
+
+model PurchaseOrder {
+  id             String              @id @default(uuid())
+  orderNumber    String              @unique
+  supplierId     String
+  supplier       Supplier            @relation(fields: [supplierId], references: [id])
+  warehouseId    String
+  warehouse      Warehouse           @relation(fields: [warehouseId], references: [id])
+  status         PurchaseOrderStatus @default(Draft)
+  notes          String              @default("")
+  subtotal       String              @default("0.00 DH")
+  tax            String              @default("0.00 DH")
+  total          String              @default("0.00 DH")
+  adminId        String              @default("")
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  items          PurchaseOrderItem[]
+
+  @@index([orderNumber])
+  @@index([supplierId])
+  @@index([warehouseId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("purchase_orders")
+}
+
+model PurchaseOrderItem {
+  id               String   @id @default(uuid())
+  purchaseOrderId  String
+  purchaseOrder    PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  productId        String
+  variantId        String   @default("")
+  quantity         Int      @default(0)
+  cost             String   @default("0.00 DH")
+  receivedQuantity Int      @default(0)
+  remainingQuantity Int     @default(0)
+
+  @@index([purchaseOrderId])
+  @@index([productId])
+  @@map("purchase_order_items")
+}
+
+model InventoryMovement {
+  id            String       @id @default(uuid())
+  productId     String
+  variantId     String       @default("")
+  warehouseId   String
+  warehouse     Warehouse    @relation(fields: [warehouseId], references: [id])
+  movementType  MovementType
+  quantity      Int
+  previousStock Int          @default(0)
+  newStock      Int          @default(0)
+  reason        String       @default("")
+  reference     String       @default("")
+  adminId       String       @default("")
+  createdAt     DateTime     @default(now())
+
+  @@index([productId])
+  @@index([variantId])
+  @@index([warehouseId])
+  @@index([movementType])
+  @@index([createdAt])
+  @@index([productId, createdAt])
+  @@map("inventory_movements")
+}
+
+model InventoryReservation {
+  id          String   @id @default(uuid())
+  orderId     String   @default("")
+  productId   String
+  variantId   String   @default("")
+  warehouseId String
+  quantity    Int      @default(0)
+  status      String   @default("reserved")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([orderId])
+  @@index([productId])
+  @@index([warehouseId])
+  @@index([status])
+  @@map("inventory_reservations")
+}
+
+model AdminPermission {
+  id        String @id @default(uuid())
+  adminId   String
+  inventory Boolean @default(false)
+  warehouse Boolean @default(false)
+  purchasing Boolean @default(false)
+
+  @@unique([adminId])
+  @@map("admin_permissions")
+}
+
+model LoginHistory {
+  id            String   @id @default(uuid())
+  adminId       String
+  ip            String   @default("")
+  browser       String   @default("")
+  os            String   @default("")
+  country       String   @default("")
+  city          String   @default("")
+  device        String   @default("")
+  userAgent     String   @default("")
+  success       Boolean  @default(true)
+  failure       Boolean  @default(false)
+  loginAt       DateTime @default(now())
+  logoutAt      DateTime?
+  duration      Int      @default(0)
+  suspicious    Boolean  @default(false)
+
+  @@index([adminId])
+  @@index([loginAt])
+  @@index([ip])
+  @@index([success])
+  @@map("login_history")
+}
+
+model DeviceSession {
+  id            String   @id @default(uuid())
+  adminId       String
+  token         String
+  browser       String   @default("")
+  os            String   @default("")
+  ip            String   @default("")
+  country       String   @default("")
+  device        String   @default("")
+  userAgent     String   @default("")
+  isCurrent     Boolean  @default(false)
+  lastActiveAt  DateTime @default(now())
+  createdAt     DateTime @default(now())
+  expiresAt     DateTime?
+
+  @@index([adminId])
+  @@index([token])
+  @@index([lastActiveAt])
+  @@map("device_sessions")
+}
+
+model ApiKey {
+  id            String   @id @default(uuid())
+  name          String   @default("")
+  key           String   @unique
+  hash          String
+  permissions   String   @default("[]")
+  adminId       String
+  lastUsedAt    DateTime?
+  expiresAt     DateTime?
+  isActive      Boolean  @default(true)
+  usageCount    Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([key])
+  @@index([adminId])
+  @@index([isActive])
+  @@map("api_keys")
+}
+
+model ApiKeyLog {
+  id        String   @id @default(uuid())
+  apiKeyId  String
+  action    String   @default("")
+  ip        String   @default("")
+  endpoint  String   @default("")
+  status    Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([apiKeyId])
+  @@index([createdAt])
+  @@map("api_key_logs")
+}
+
+model TwoFactor {
+  id        String   @id @default(uuid())
+  adminId   String   @unique
+  secret    String   @default("")
+  enabled   Boolean  @default(false)
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("two_factors")
+}
+
+model RecoveryCode {
+  id        String   @id @default(uuid())
+  adminId   String
+  code      String
+  used      Boolean  @default(false)
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([adminId])
+  @@index([code])
+  @@map("recovery_codes")
+}
+
+model IpWhitelist {
+  id        String   @id @default(uuid())
+  ip        String
+  label     String   @default("")
+  createdBy String   @default("")
+  createdAt DateTime @default(now())
+
+  @@unique([ip])
+  @@index([ip])
+  @@map("ip_whitelist")
+}
+
+model BlockedIp {
+  id        String   @id @default(uuid())
+  ip        String
+  reason    String   @default("")
+  blockedBy String   @default("")
+  createdAt DateTime @default(now())
+  expiresAt DateTime?
+
+  @@unique([ip])
+  @@index([ip])
+  @@map("blocked_ips")
+}
+
+model RateLimitLog {
+  id        String   @id @default(uuid())
+  ip        String
+  endpoint  String   @default("")
+  method    String   @default("")
+  status    Int      @default(200)
+  blocked   Boolean  @default(false)
+  duration  Int      @default(0)
+  country   String   @default("")
+  createdAt DateTime @default(now())
+
+  @@index([ip])
+  @@index([endpoint])
+  @@index([blocked])
+  @@index([createdAt])
+  @@map("rate_limit_logs")
+}
+
+model ScheduledJob {
+  id              String   @id @default(uuid())
+  name            String   @unique
+  description     String   @default("")
+  type            String   @default("manual")
+  cronExpression  String   @default("")
+  enabled         Boolean  @default(true)
+  lastRunAt       DateTime?
+  nextRunAt       DateTime?
+  lastStatus      String   @default("idle")
+  lastDuration    Int      @default(0)
+  failureCount    Int      @default(0)
+  totalRuns       Int      @default(0)
+  config          String   @default("{}")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([type])
+  @@index([enabled])
+  @@index([nextRunAt])
+  @@map("scheduled_jobs")
+}
+
+model JobLog {
+  id          String   @id @default(uuid())
+  jobId       String
+  status      String
+  startedAt   DateTime @default(now())
+  finishedAt  DateTime?
+  duration    Int      @default(0)
+  output      String   @default("")
+  error       String   @default("")
+  triggeredBy String   @default("system")
+  createdAt   DateTime @default(now())
+
+  @@index([jobId])
+  @@index([status])
+  @@index([startedAt])
+  @@map("job_logs")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  adminId   String   @default("")
+  adminName String   @default("")
+  action    String
+  entity    String
+  entityId  String   @default("")
+  oldValue  String   @default("")
+  newValue  String   @default("")
+  ip        String   @default("")
+  browser   String   @default("")
+  duration  Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([adminId])
+  @@index([action])
+  @@index([entity])
+  @@index([entityId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+model WebhookSecret {
+  id        String   @id @default(uuid())
+  name      String   @default("")
+  secret    String
+  url       String   @default("")
+  events    String   @default("[]")
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([secret])
+  @@map("webhook_secrets")
+}
+
+model ReportDefinition {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  description String   @default("")
+  type        String   @default("sales")
+  config      String   @default("{}")
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+  @@index([type])
+  @@map("report_definitions")
+}
+
+model Translation {
+  id         String   @id @default(uuid())
+  key        String
+  namespace  String   @default("common")
+  fr         String   @default("")
+  en         String   @default("")
+  ar         String   @default("")
+  description String  @default("")
+  updatedBy  String   @default("")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([key, namespace])
+  @@index([key])
+  @@index([namespace])
+  @@index([namespace, key])
+  @@map("translations")
+}
+
+model TranslationHistory {
+  id          String   @id @default(uuid())
+  translationId String
+  key         String   @default("")
+  namespace   String   @default("")
+  field       String   @default("")
+  oldValue    String   @default("")
+  newValue    String   @default("")
+  adminId     String   @default("")
+  adminName   String   @default("")
+  ip          String   @default("")
+  browser     String   @default("")
+  createdAt   DateTime @default(now())
+
+  @@index([translationId])
+  @@index([createdAt])
+  @@map("translation_history")
+}
+
+model LandingSection {
+  id        String   @id @default(uuid())
+  section   String
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  position  Int      @default(0)
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([section, productId])
+  @@index([section])
+  @@index([productId])
+  @@index([section, position])
+  @@index([section, enabled, position])
+  @@map("landing_sections")
+}

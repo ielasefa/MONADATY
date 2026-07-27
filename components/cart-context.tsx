@@ -1,0 +1,180 @@
+"use client";
+
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import dynamic from "next/dynamic";
+import type { Product } from "@/types";
+import { formatMoney, parseMoney } from "@/lib/money";
+
+export type CartItem = {
+  id: string;
+  name: string;
+  image: string;
+  price: string;
+  category: Product["category"];
+  // Use explicit visual union instead of depending on Product type here to keep the cart model stable
+  visual?: "can" | "bottle" | "glass";
+  accent?: string;
+  quantity: number;
+};
+
+type CartContextValue = {
+  items: CartItem[];
+  itemCount: number;
+  subtotal: string;
+  isDrawerOpen: boolean;
+  addItem: (product: Product, quantity: number) => void;
+  updateQuantity: (id: string, quantity: number) => void;
+  removeItem: (id: string) => void;
+  clearCart: () => void;
+  openDrawer: () => void;
+  closeDrawer: () => void;
+  toggleDrawer: () => void;
+  toastMessage: string | null;
+};
+
+const STORAGE_KEY = "monadaty-cart";
+
+const CartDrawer = dynamic(() => import("@/components/CartDrawer").then((mod) => mod.CartDrawer), {
+  ssr: false,
+});
+
+const CartContext = createContext<CartContextValue | undefined>(undefined);
+
+export function CartProvider({ children }: Readonly<{ children: React.ReactNode }>) {
+  const [items, setItems] = useState<CartItem[]>([]);
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    const storedCart = window.localStorage.getItem(STORAGE_KEY);
+
+    if (storedCart) {
+      try {
+        setItems(JSON.parse(storedCart) as CartItem[]);
+      } catch {
+        window.localStorage.removeItem(STORAGE_KEY);
+      }
+    }
+
+    setHasMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hasMounted) {
+      return;
+    }
+
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  }, [hasMounted, items]);
+
+  useEffect(() => {
+    if (!toastMessage) {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => setToastMessage(null), 2400);
+    return () => window.clearTimeout(timeout);
+  }, [toastMessage]);
+
+  const itemCount = useMemo(
+    () => items.reduce((total, item) => total + item.quantity, 0),
+    [items],
+  );
+
+  const subtotal = useMemo(
+    () => formatMoney(items.reduce((total, item) => total + parseMoney(item.price) * item.quantity, 0)),
+    [items],
+  );
+
+  function addItem(product: Product, quantity: number) {
+    setItems((currentItems) => {
+      const existingItem = currentItems.find((item) => item.id === product.id);
+
+      if (existingItem) {
+        return currentItems.map((item) =>
+          item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item,
+        );
+      }
+
+      return [
+        ...currentItems,
+        {
+          id: product.id,
+          name: product.name,
+          image: product.image ?? "",
+          // Coerce visual into the explicit cart union; leave undefined if not present
+          visual: (product.visual as "can" | "bottle" | "glass") ?? undefined,
+          accent: product.accent ?? undefined,
+          price: product.price,
+          category: product.category,
+          quantity,
+        },
+      ];
+    });
+
+    setDrawerOpen(true);
+    setToastMessage(`${product.name} added to box`);
+  }
+
+  function updateQuantity(id: string, quantity: number) {
+    setItems((currentItems) =>
+      currentItems
+        .map((item) => (item.id === id ? { ...item, quantity } : item))
+        .filter((item) => item.quantity > 0),
+    );
+  }
+
+  function removeItem(id: string) {
+    setItems((currentItems) => currentItems.filter((item) => item.id !== id));
+    setToastMessage("Item removed from box");
+  }
+
+  function clearCart() {
+    setItems([]);
+    setDrawerOpen(false);
+  }
+
+  const value: CartContextValue = {
+    items,
+    itemCount,
+    subtotal,
+    isDrawerOpen,
+    addItem,
+    updateQuantity,
+    removeItem,
+    clearCart,
+    openDrawer: () => setDrawerOpen(true),
+    closeDrawer: () => setDrawerOpen(false),
+    toggleDrawer: () => setDrawerOpen((currentOpen) => !currentOpen),
+    toastMessage,
+  };
+
+  return (
+    <CartContext.Provider value={value}>
+      {children}
+      <CartDrawer />
+
+      {toastMessage ? (
+        <div
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          className="fixed bottom-6 left-1/2 z-[70] w-[min(92vw,26rem)] -translate-x-1/2 rounded-md border border-ivory/[0.06] bg-black-surface px-5 py-3 text-sm text-ivory shadow-2xl backdrop-blur-xl animate-fade-in"
+        >
+          {toastMessage}
+        </div>
+      ) : null}
+    </CartContext.Provider>
+  );
+}
+
+export function useCart() {
+  const context = useContext(CartContext);
+
+  if (!context) {
+    throw new Error("useCart must be used within CartProvider");
+  }
+
+  return context;
+}
