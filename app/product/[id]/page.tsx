@@ -34,20 +34,23 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <div className="min-h-screen bg-black">
+      {/* Breadcrumb — minimal editorial */}
       <div className="container-premium pt-8 md:pt-10">
-        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-[0.5rem] font-medium uppercase tracking-[0.16em] text-ivory/15">
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2 label-utility tracking-[0.32em] text-ivory/15">
           <Link href="/shop" className="transition-colors hover:text-ivory/40">
             {t(translations, "back_to_drinks", lang)}
-          </Link>
-          <span aria-hidden="true" className="text-ivory/6">/</span>
-          <span className="text-ivory/20">{product.category}</span>
-          <span aria-hidden="true" className="text-ivory/6">/</span>
-          <span className="text-ivory/30">{product.name}</span>
-        </nav>
-      </div>
+         </Link>
+          <span aria-hidden="true" className="text-ivory/8">/</span>
+          <span className="text-ivory/20">{product.category</span>
+          <span aria-hidden="true" className="text-ivory/8">/</span>
+          <span className="text-ivory/30">{product.name</span>
+       </nav>
+     </div>
 
+      {/* Hero — asymmetric gallery / sticky info */}
       <section className="container-premium py-12 md:py-20 lg:py-28">
-        <div className="grid gap-8 lg:grid-cols-[1.3fr_0.7fr] lg:items-start lg:gap-16 xl:gap-24">
+        <div className="grid gap-8 lg:grid-cols-[1.4fr_0.6fr] lg:items-start lg:gap-16 xl:gap-24">
+          {/* Gallery — large floating product */}
           <div className="relative">
             <ProductGallery
               name={product.name}
@@ -56,81 +59,112 @@ export default async function ProductPage({ params }: ProductPageProps) {
               visual={product.visual as "can" | "bottle" | "glass" | undefined}
               accent={product.accent}
             />
-          </div>
+         </div>
 
-          <div className="lg:sticky lg:top-32 space-y-8 lg:pt-8">
-            <div>
-              <p className="label-utility text-gold/40">
+          {/* Sticky info column */}
+          <div className="lg:sticky lg:top-32 space-y-10 lg:pt-8">
+            {/* Eyebrow — category */}
+            <div className="flex items-center gap-3">
+              <span className="h-px w-8 bg-gold/30" />
+              <p className="label-utility tracking-[0.55em] text-gold/40">
                 {product.category}
-              </p>
-            </div>
+             </p>
+           </div>
 
-            <h1 className="font-display text-[clamp(2.5rem,5vw,4rem)] leading-[0.88] tracking-[-0.03em] text-ivory">
+            {/* Editorial number indicator */}
+            <div className="flex items-center gap-4">
+              <span className="label-utility tracking-[0.4em] text-ivory/15">
+                N° {String(product.id).slice(-3).padStart(3, "0")}
+             </span>
+              <span className="h-px w-8 bg-ivory/15" />
+           </div>
+
+            {/* Product name — massive display */}
+            <h1 className="font-display text-[clamp(2.5rem,5vw,4.5rem)] leading-[0.88] tracking-[-0.035em] text-ivory">
               {product.name}
-            </h1>
+           </h1>
 
+            {/* Price — champagne gold */}
             <div className="flex items-baseline gap-4">
-              <p className="text-2xl font-semibold text-gold md:text-3xl">
+              <p className="font-display text-2xl font-light text-gold md:text-3xl">
                 {product.price}
-              </p>
-            </div>
+             </p>
+           </div>
 
-            <div className="h-px w-16 bg-gold/15" />
+            {/* Thin gold divider */}
+            <div className="h-px w-16 bg-gold/20" />
 
             {product.description && (
-              <p className="max-w-md text-[0.85rem] leading-[2] text-ivory/28">
+              <p className="max-w-md text-[0.85rem] leading-[2] text-ivory/30">
                 {product.description}
-              </p>
+             </p>
             )}
 
+            {/* Order form — sticky CTAs */}
             <div className="pt-4">
               <ProductOrderForm product={product} />
-            </div>
-          </div>
-        </div>
-      </section>
+           </div>
 
+            {/* Trust signature — editorial micro-mark */}
+            <div className="pt-6 flex items-center gap-3">
+              <span className="h-px w-10 bg-ivory/[0.06]" />
+              <span className="label-utility tracking-[0.4em] text-ivory/15">
+                CRAFTED IN MOROCCO · 2024
+             </span>
+           </div>
+         </div>
+       </div>
+     </section>
+
+      {/* Editorial section divider */}
       {(hasIngredients || hasNutrition) && (
         <section className="container-premium py-16 md:py-24 lg:py-32">
-          <div className="space-y-10">
-            <div className="space-y-4">
-              <p className="label-utility text-gold/40">
+          <div className="space-y-12">
+            {/* Section eyebrow */}
+            <div className="flex items-baseline justify-between">
+              <p className="label-utility tracking-[0.55em] text-gold/40">
                 {t(translations, "ingredients", lang)}
-              </p>
-              <div className="h-px w-full bg-ivory/[0.04]" />
-            </div>
+             </p>
+              <span className="font-display text-[3rem] font-light leading-none tracking-[-0.04em] text-ivory/[0.06] md:text-[4rem]">
+                02
+             </span>
+           </div>
+            <div className="h-px w-full bg-ivory/[0.04]" />
 
-            <div className="grid gap-10 md:grid-cols-2">
+            <div className="grid gap-12 md:grid-cols-2 lg:gap-20">
               {hasIngredients && (
-                <div className="space-y-4">
-                  <p className="text-[0.45rem] font-semibold uppercase tracking-[0.22em] text-ivory/25">
+                <div className="space-y-5">
+                  <p className="label-utility tracking-[0.4em] text-ivory/22">
                     {t(translations, "ingredients", lang)}
-                  </p>
-                  <p className="text-[0.82rem] leading-[2] text-ivory/28">
+                 </p>
+                  <p className="text-[0.88rem] leading-[2] text-ivory/30">
                     {product.ingredients}
-                  </p>
-                </div>
+                 </p>
+               </div>
               )}
               {hasNutrition && (
-                <div className="space-y-4">
-                  <p className="text-[0.45rem] font-semibold uppercase tracking-[0.22em] text-ivory/25">
+                <div className="space-y-5">
+                  <p className="label-utility tracking-[0.4em] text-ivory/22">
                     {t(translations, "nutrition", lang)}
-                  </p>
-                  <p className="text-[0.82rem] leading-[2] text-ivory/28">
+                 </p>
+                  <p className="text-[0.88rem] leading-[2] text-ivory/30">
                     {product.nutrition}
-                  </p>
-                </div>
+                 </p>
+               </div>
               )}
-            </div>
-          </div>
-        </section>
+           </div>
+         </div>
+       </section>
       )}
 
+      {/* Related products — editorial divider */}
       {relatedProducts.length > 0 && (
-        <section className="container-premium py-16 md:py-24 lg:py-32 border-t border-ivory/[0.04]">
-          <RelatedProducts products={relatedProducts} />
-        </section>
+        <section className="border-t border-ivory/[0.04]">
+          <div className="container-premium py-16 md:py-24 lg:py-32">
+            <RelatedProducts products={relatedProducts} />
+         </div>
+       </section>
       )}
-    </div>
+   </div>
   );
 }

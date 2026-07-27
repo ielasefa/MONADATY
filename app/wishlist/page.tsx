@@ -2,9 +2,12 @@ import { getProducts } from "@/lib/db";
 import { WishlistPageClient } from "@/components/WishlistPageClient";
 import type { Product } from "@/types";
 import { loadTranslations, t, getLanguage } from "@/lib/translations";
-import { FadeIn } from "@/components/MotionWrappers";
 
 export const dynamic = "force-dynamic";
+
+/* ============================================================
+   WISHLIST PAGE — editorial minimal
+   ============================================================ */
 
 export default async function WishlistPage() {
   const lang = await getLanguage();
@@ -13,19 +16,39 @@ export default async function WishlistPage() {
   const products: Product[] = rows;
 
   return (
-    <div className="container-premium py-8 md:py-14">
-      <FadeIn>
-        <div className="mb-8 text-center">
-          <p className="label-utility">
-            {t(translations, "saved_label", lang)}
-          </p>
-          <h1 className="font-display mt-4 text-display-sm sm:text-display-md text-ivory">
-            {t(translations, "wishlist_title", lang)}
-          </h1>
-          <div className="mx-auto mt-5 h-px w-8 bg-ivory/[0.05]" />
+    <div className="bg-black">
+      <section className="relative overflow-hidden">
+        <div className="mx-auto max-w-[1600px] px-6 py-24 md:px-10 md:py-32 lg:px-16 lg:py-40">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-8 bg-gold/30" />
+            <span className="label-utility tracking-[0.55em] text-gold/40">
+              {t(translations, "saved_label", lang)}
+        </span>
+      </div>
+
+          <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-16">
+            <div className="lg:col-span-2">
+              <span className="font-display text-[4.5rem] font-light leading-none tracking-[-0.04em] text-ivory/[0.06] md:text-[6rem]">
+                SAVED
+          </span>
         </div>
-      </FadeIn>
-      <WishlistPageClient products={products} />
-    </div>
+
+            <div className="lg:col-span-9">
+              <h1 className="font-display text-[clamp(2.5rem,6vw,6rem)] leading-[0.86] tracking-[-0.05em] text-ivory">
+                {t(translations, "wishlist_title", lang)}
+          </h1>
+        </div>
+      </div>
+
+          <div className="mt-16 h-px w-full bg-gradient-to-r from-transparent via-gold/15 to-transparent" />
+      </div>
+    </section>
+
+      <section className="relative overflow-hidden border-t border-ivory/[0.04]">
+        <div className="mx-auto max-w-[1600px] px-6 py-12 md:px-10 md:py-16 lg:px-16 lg:py-20">
+          <WishlistPageClient products={products} />
+       </div>
+     </section>
+   </div>
   );
 }
