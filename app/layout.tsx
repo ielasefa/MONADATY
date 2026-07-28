@@ -41,7 +41,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#050505",
+  themeColor: "#0B0B0A",
 };
 
 export default async function RootLayout({
@@ -59,14 +59,14 @@ export default async function RootLayout({
     <html lang={langFromCookie} dir={dirFromLang} className={`${dmSerifDisplay.variable} ${dmSans.variable}`}>
       <head>
         <link rel="apple-touch-icon" href="/apple-touch-icon.svg" sizes="180x180" />
-        <meta name="msapplication-TileColor" content="#050505" />
-        <meta name="theme-color" content="#050505" />
+        <meta name="msapplication-TileColor" content="#0B0B0A" />
+        <meta name="theme-color" content="#0B0B0A" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="prefetch" href="/shop" as="document" />
       </head>
       <body>
-        <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-red focus:px-6 focus:py-3 focus:text-sm focus:font-semibold focus:text-white focus:outline-none" aria-label="Skip to main content">
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-burgundy focus:px-6 focus:py-3 focus:text-sm focus:font-semibold focus:text-white focus:outline-none" aria-label="Skip to main content">
           Skip to main content
         </a>
         {isAdmin ? (

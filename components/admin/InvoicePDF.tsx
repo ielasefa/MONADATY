@@ -15,10 +15,10 @@ Font.register({
 
 const colors = {
   bg: "#050505",
-  card: "#161616",
-  red: "#C1121F",
-  gold: "#D4AF37",
-  muted: "#9B9B9B",
+  card: "#141413",
+  burgundy: "#6E1F2A",
+  gold: "#B89B5E",
+  muted: "#969087",
   white: "#FFFFFF",
   text: "#1A1917",
   lightBg: "#f8f8f8",
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     marginBottom: 28,
     paddingBottom: 16,
     borderBottomWidth: 2,
-    borderBottomColor: colors.red,
+    borderBottomColor: colors.burgundy,
   },
   logoArea: {
     flexDirection: "row",
@@ -50,19 +50,19 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 10,
-    backgroundColor: colors.red,
+    backgroundColor: colors.burgundy,
     alignItems: "center",
     justifyContent: "center",
   },
   logoText: {
-    color: colors.white,
+    color: colors.gold,
     fontSize: 18,
     fontWeight: 700,
   },
   brandName: {
     fontSize: 22,
     fontWeight: 700,
-    color: colors.red,
+    color: colors.white,
     letterSpacing: 1.5,
   },
   invoiceTitle: {
@@ -101,13 +101,13 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 8,
     fontWeight: 700,
-    color: colors.red,
+    color: colors.burgundy,
     textTransform: "uppercase",
     letterSpacing: 1.5,
     marginBottom: 8,
     paddingBottom: 4,
     borderBottomWidth: 1,
-    borderBottomColor: colors.red,
+    borderBottomColor: colors.burgundy,
   },
   addressBlock: {
     marginBottom: 20,
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   },
   tableHeader: {
     flexDirection: "row",
-    backgroundColor: colors.red,
+    backgroundColor: colors.burgundy,
     paddingVertical: 6,
     paddingHorizontal: 8,
     borderRadius: 4,
@@ -182,12 +182,12 @@ const styles = StyleSheet.create({
     marginTop: 6,
     paddingTop: 6,
     borderTopWidth: 2,
-    borderTopColor: colors.red,
+    borderTopColor: colors.burgundy,
   },
   grandTotalLabel: {
     fontSize: 10,
     fontWeight: 700,
-    color: colors.red,
+    color: colors.burgundy,
     width: 100,
     textAlign: "right",
     marginRight: 8,
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   grandTotalValue: {
     fontSize: 10,
     fontWeight: 700,
-    color: colors.red,
+    color: colors.burgundy,
     width: 90,
     textAlign: "right",
   },
@@ -500,7 +500,7 @@ export function InvoiceDocument({ order, invoiceNumber, invoiceDate, qrDataUrl, 
                 </View>
                 <View style={styles.totalRow}>
                   <Text style={styles.totalLabel}>{t("discount")}</Text>
-                  <Text style={[styles.totalValue, { color: colors.red }]}>-{fmt(discountNum)}</Text>
+                  <Text style={[styles.totalValue, { color: colors.burgundy }]}>-{fmt(discountNum)}</Text>
                 </View>
                 <View style={styles.totalRow}>
                   <Text style={styles.totalLabel}>{t("tax")}</Text>

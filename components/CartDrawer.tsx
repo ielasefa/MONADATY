@@ -94,7 +94,7 @@ export function CartDrawer() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="cart-title"
-        className={`fixed end-0 top-0 z-[65] flex h-full w-full max-w-[26rem] flex-col border-s border-ivory/[0.05] shadow-sm transition-all duration-300 ease-out ${
+        className={`fixed end-0 top-0 z-[65] flex h-full w-full max-w-[26rem] flex-col border-s border-ivory/[0.04] bg-black/80 backdrop-blur-xl shadow-[0_0_80px_rgba(0,0,0,0.6)] transition-all duration-300 ease-out ${
           isDrawerOpen
             ? "translate-x-0 rtl:-translate-x-0 opacity-100"
             : "pointer-events-none translate-x-full rtl:-translate-x-full opacity-0"
@@ -104,23 +104,23 @@ export function CartDrawer() {
         <div className="px-6 pb-3 pt-5">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-baseline gap-3">
-              <span className="label-utility text-ivory/20">{t("your_box")}</span>
-              <h2 id="cart-title" className="font-display text-base text-ivory">
+              <span className="label-utility text-ivory/15">{t("your_box")}</span>
+              <h2 id="cart-title" className="text-base font-medium text-ivory">
                 {t("your_cart_title")}
               </h2>
               {itemCount > 0 && (
-                <span className="label-utility rounded-md bg-burgundy/10 px-2 py-0.5 text-burgundy">
+                <span className="label-utility rounded-input bg-burgundy/10 px-2 py-0.5 text-burgundy">
                   {itemCount}
                 </span>
               )}
             </div>
 
-            <button
-              type="button"
-              onClick={closeDrawer}
-              className="group flex h-8 w-8 items-center justify-center rounded-md border border-ivory/[0.05] bg-transparent text-ivory/25 transition-all duration-200 hover:border-ivory/[0.10] hover:text-ivory"
-              aria-label={t("close_cart")}
-            >
+<button
+        type="button"
+        onClick={closeDrawer}
+        className="group flex h-10 w-10 items-center justify-center rounded-input border border-ivory/[0.04] bg-transparent text-ivory/20 transition-all duration-200 hover:border-ivory/[0.08] hover:text-ivory"
+        aria-label={t("close_cart")}
+      >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
                 <path d="M18 6L6 18" />
                 <path d="M6 6l12 12" />
@@ -134,7 +134,7 @@ export function CartDrawer() {
         <div className="flex-1 overflow-y-auto px-5 py-2">
           {items.length === 0 ? (
             <div className="flex h-full min-h-[20rem] flex-col items-center justify-center px-6 text-center">
-              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-md border border-ivory/[0.05] bg-black-surface">
+                <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-input border border-ivory/[0.04] bg-black-surface">
                 <svg
                   width="24"
                   height="24"
@@ -144,7 +144,7 @@ export function CartDrawer() {
                   strokeWidth="1.2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="text-ivory/8"
+                  className="text-ivory/6"
                 >
                   <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
                   <line x1="3" y1="6" x2="21" y2="6" />
@@ -152,7 +152,7 @@ export function CartDrawer() {
                 </svg>
               </div>
               <p className="font-display text-lg text-ivory">{t("your_box_empty")}</p>
-              <p className="mt-3 max-w-[14rem] text-[0.72rem] leading-relaxed text-ivory/20">
+              <p className="mt-3 max-w-[14rem] text-[0.72rem] leading-relaxed text-ivory/15">
                 {t("explore_collection_desc")}
               </p>
               <Link
@@ -168,7 +168,7 @@ export function CartDrawer() {
               {items.map((item) => (
                 <div key={item.id} className="group flex gap-4 py-5 transition-all duration-200">
                   {/* Product image */}
-                  <div className="relative h-[5rem] w-[4rem] shrink-0 overflow-hidden bg-black rounded-[6px]">
+                  <div className="relative h-[5rem] w-[4rem] shrink-0 overflow-hidden bg-black rounded-input">
                     {item.image ? (
                       <SafeImage
                         src={item.image}
@@ -205,39 +205,39 @@ export function CartDrawer() {
                   <div className="flex min-w-0 flex-1 flex-col justify-between py-0.5">
                     <div className="min-w-0">
                       {item.category && (
-                        <p className="label-utility text-ivory/15">{item.category}</p>
+                        <p className="label-utility text-ivory/12">{item.category}</p>
                       )}
                       <h3 className="mt-1 truncate font-display text-[0.82rem] text-ivory">{item.name}</h3>
                       <p className="mt-1 text-[0.75rem] font-semibold text-gold">{item.price}</p>
                     </div>
 
             <div className="mt-3 flex items-center justify-between">
-              <div className="flex items-center border border-ivory/[0.06] bg-transparent rounded-md">
-                <button
-                  type="button"
-                  onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                  className="flex h-7 w-7 items-center justify-center rounded-l-md text-[0.7rem] text-ivory/25 transition-colors duration-150 hover:bg-ivory/[0.04] hover:text-ivory"
-                  aria-label={`${t("decrease_qty_item")} ${item.name}`}
-                >
+              <div className="flex items-center border border-ivory/[0.04] bg-transparent rounded-input">
+<button
+          type="button"
+          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+          className="flex h-9 w-9 items-center justify-center rounded-l-input text-[0.7rem] text-ivory/20 transition-colors duration-150 hover:bg-ivory/[0.03] hover:text-ivory"
+          aria-label={`${t("decrease_qty_item")} ${item.name}`}
+        >
                   &minus;
                 </button>
-                <span className="min-w-[1.8rem] border-x border-ivory/[0.05] text-center label-utility text-ivory">
+                <span className="min-w-[1.8rem] border-x border-ivory/[0.04] text-center label-utility text-ivory">
                   {item.quantity}
                 </span>
-                <button
-                  type="button"
-                  onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                  className="flex h-7 w-7 items-center justify-center rounded-r-md text-[0.7rem] text-ivory/25 transition-colors duration-150 hover:bg-ivory/[0.04] hover:text-ivory"
-                  aria-label={`${t("increase_qty_item")} ${item.name}`}
-                >
+<button
+          type="button"
+          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+          className="flex h-9 w-9 items-center justify-center rounded-r-input text-[0.7rem] text-ivory/20 transition-colors duration-150 hover:bg-ivory/[0.03] hover:text-ivory"
+          aria-label={`${t("increase_qty_item")} ${item.name}`}
+        >
                   +
                 </button>
               </div>
 
-              <button
-                type="button"
-                onClick={() => removeItem(item.id)}
-                className="flex items-center gap-1 label-utility text-ivory/15 transition-colors duration-150 hover:text-burgundy"
+  <button
+    type="button"
+    onClick={() => removeItem(item.id)}
+    className="flex items-center gap-1.5 px-2 py-1.5 label-utility text-ivory/25 transition-colors duration-150 hover:text-burgundy"
                 aria-label={`${t("remove")} ${item.name}`}
               >
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -259,10 +259,10 @@ export function CartDrawer() {
           <div className="px-6 pb-6 pt-5">
             <div className="rule-ivory mb-5" />
             <div className="flex items-baseline justify-between">
-              <span className="label-utility text-ivory/25">{t("cart_subtotal")}</span>
+              <span className="label-utility text-ivory/20">{t("cart_subtotal")}</span>
               <span className="text-xl font-semibold text-ivory">{subtotal}</span>
             </div>
-            <p className="mt-1 label-utility text-ivory/15">{t("taxes_shipping_note")}</p>
+            <p className="mt-1 label-utility text-ivory/12">{t("taxes_shipping_note")}</p>
 
             <div className="my-4 rule-ivory" />
 
@@ -274,13 +274,13 @@ export function CartDrawer() {
               {t("proceed_to_checkout")}
             </Link>
 
-            <button
-              type="button"
-              onClick={closeDrawer}
-              className="btn-secondary mt-2.5 w-full h-10 !text-[0.5rem] !tracking-[0.14em]"
-            >
-              {t("continue_shopping")}
-            </button>
+<button
+  type="button"
+  onClick={closeDrawer}
+  className="btn-secondary mt-2.5 w-full"
+>
+  {t("continue_shopping")}
+</button>
           </div>
         )}
       </aside>

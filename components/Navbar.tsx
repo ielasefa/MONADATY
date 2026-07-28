@@ -16,9 +16,11 @@ import type { CollectionData } from "@/types";
 export function Navbar({
   collections,
   websiteName,
+  isAdmin = false,
 }: {
   collections: CollectionData[];
   websiteName: string;
+  isAdmin?: boolean;
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCollectionsOpen, setIsCollectionsOpen] = useState(false);
@@ -29,8 +31,7 @@ export function Navbar({
   const router = useRouter();
   const [search, setSearch] = useState("");
   const [cmdOpen, setCmdOpen] = useState(false);
-  const isShopPage = pathname === "/shop";
-  const isAdminPage = pathname.startsWith("/admin");
+const isShopPage = pathname === "/shop";
 
   const { t } = useTranslation("navbar");
   const { t: tCommon } = useTranslation("common");
@@ -179,14 +180,14 @@ export function Navbar({
           : "bg-transparent border-b border-transparent"
       }`}
     >
-      <div className="mx-auto flex h-[3.5rem] md:h-[4rem] items-center justify-between gap-6 max-w-[1600px] px-6 md:px-10 lg:px-16">
+        <div className="mx-auto flex h-20 items-center justify-between gap-6 max-w-[1400px] px-6 md:px-10 lg:px-16">
         <Link
           href="/"
-          className="group shrink-0 font-display text-[0.8rem] font-normal uppercase tracking-[0.55em] text-ivory transition-colors duration-500 hover:text-ivory/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-4 focus-visible:ring-offset-black"
+          className="group shrink-0 font-display text-[0.8rem] font-normal uppercase tracking-[0.55em] text-gold transition-colors duration-500 hover:text-gold/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-4 focus-visible:ring-offset-white"
           aria-label={`${websiteName} — Home`}
         >
           <span>{websiteName}</span>
-        </Link>
+       </Link>
 
         <nav
           aria-label="Primary"
@@ -196,9 +197,9 @@ export function Navbar({
             <li>
               <Link
                 href="/"
-                className={`relative py-2 transition-colors duration-300 hover:text-ivory focus-visible:text-ivory focus-visible:outline-none ${
-                  pathname === "/" ? "text-ivory" : "text-ivory/35"
-                }`}
+              className={`relative py-2 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none ${
+                pathname === "/" ? "text-white" : "text-white/45"
+              }`}
               >
                 {t("home")}
                 {pathname === "/" && (
@@ -209,9 +210,9 @@ export function Navbar({
             <li>
               <Link
                 href="/shop"
-                className={`relative py-2 transition-colors duration-300 hover:text-ivory focus-visible:text-ivory focus-visible:outline-none ${
-                  isShopPage ? "text-ivory" : "text-ivory/35"
-                }`}
+              className={`relative py-2 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none ${
+                isShopPage ? "text-white" : "text-white/45"
+              }`}
               >
                 {t("shop")}
                 {isShopPage && (
@@ -271,7 +272,7 @@ export function Navbar({
                   onMouseLeave={closeWithDelay}
                   className="absolute left-1/2 top-full z-40 -translate-x-1/2 pt-5 animate-fade-in"
                 >
-                  <div className="w-[680px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-[6px] border border-ivory/[0.05] bg-black-soft/95 backdrop-blur-xl shadow-premium-lg">
+                  <div className="w-[680px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-input border border-black/[0.05] bg-white/95 backdrop-blur-xl shadow-premium">
                     <div className="p-7">
                       <p className="mb-5 label-utility tracking-[0.32em] text-ivory/20">
                         {t("our_collections")}
@@ -305,6 +306,16 @@ export function Navbar({
                 )}
               </Link>
             </li>
+      {isAdmin && (
+        <li>
+          <Link
+            href="/admin/dashboard"
+            className="relative py-2 text-[0.52rem] font-medium uppercase tracking-[0.2em] text-gold/55 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none"
+          >
+            Admin
+          </Link>
+        </li>
+      )}
           </ul>
         </nav>
 
@@ -314,7 +325,7 @@ export function Navbar({
           <button
             type="button"
             onClick={() => setCmdOpen(true)}
-            className="hidden lg:inline-flex h-8 w-8 items-center justify-center rounded-[6px] text-ivory/25 transition-colors duration-300 hover:text-ivory focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/10 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+            className="hidden lg:inline-flex h-8 w-8 items-center justify-center rounded-input text-ivory/25 transition-colors duration-300 hover:text-ivory focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/10 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
             aria-label={t("open_search")}
           >
             <svg
@@ -342,7 +353,7 @@ export function Navbar({
                 ? `, ${wishlistCount} item${wishlistCount !== 1 ? "s" : ""}`
                 : ""
             }`}
-            className={`relative hidden lg:inline-flex h-8 w-8 items-center justify-center rounded-[6px] transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/10 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
+            className={`relative hidden lg:inline-flex h-8 w-8 items-center justify-center rounded-input transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/10 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
               wishlistCount > 0
                 ? "text-gold"
                 : "text-ivory/25 hover:text-ivory"
@@ -362,7 +373,7 @@ export function Navbar({
             {wishlistCount > 0 && (
               <span
                 key={`wish-${wishlistCount}`}
-                className="absolute -end-1 -top-1 inline-flex h-3.5 min-w-[0.8rem] items-center justify-center rounded-full bg-burgundy px-1 text-[0.42rem] font-bold text-ivory"
+                className="absolute -end-1 -top-1 inline-flex h-3.5 min-w-[0.8rem] items-center justify-center rounded-full bg-gold px-1 text-[0.42rem] font-bold text-ivory"
               >
                 {wishlistCount}
               </span>
@@ -378,7 +389,7 @@ export function Navbar({
                 : ""
             }`}
             id="cart-button"
-            className={`relative hidden lg:inline-flex h-8 w-8 items-center justify-center rounded-[6px] transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-burgundy/30 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
+            className={`relative hidden lg:inline-flex h-10 w-10 items-center justify-center rounded-input transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rouge/30 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
               itemCount > 0 ? "text-gold" : "text-ivory/25 hover:text-ivory"
             }`}
           >
@@ -400,21 +411,14 @@ export function Navbar({
             {itemCount > 0 && (
               <span
                 key={`cart-${itemCount}`}
-                className="absolute -end-1 -top-1 inline-flex h-3.5 min-w-[0.8rem] items-center justify-center rounded-full bg-burgundy px-1 text-[0.42rem] font-bold text-ivory"
+                className="absolute -end-1 -top-1 inline-flex h-3.5 min-w-[0.8rem] items-center justify-center rounded-full bg-gold px-1 text-[0.42rem] font-bold text-ivory"
               >
                 {itemCount}
               </span>
             )}
           </button>
 
-          {!isAdminPage && (
-            <Link
-              href="/admin/login"
-              className="hidden xl:inline-flex h-7 items-center rounded-[6px] px-3 text-[0.45rem] font-medium uppercase tracking-[0.18em] text-ivory/15 transition-colors duration-300 hover:text-ivory/35 hover:bg-ivory/[0.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/10 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-            >
-              {t("admin")}
-            </Link>
-          )}
+
 
           {!isShopPage && (
             <form
@@ -430,7 +434,7 @@ export function Navbar({
                 placeholder={tCommon("search")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="h-8 w-28 rounded-[6px] border border-ivory/[0.04] bg-ivory/[0.015] px-3 pe-7 text-[0.6rem] text-ivory outline-none transition-all duration-300 placeholder:text-ivory/12 focus:w-36 focus:border-ivory/12 focus:bg-ivory/[0.03]"
+                className="h-8 w-28 rounded-input border border-black/[0.06] bg-black/[0.015] px-3 pe-7 text-[0.6rem] text-ivory outline-none transition-all duration-300 placeholder:text-ivory/25 focus:w-36 focus:border-black/15 focus:bg-black/[0.02]"
               />
             </form>
           )}
@@ -439,7 +443,7 @@ export function Navbar({
             ref={hamburgerRef}
             type="button"
             onClick={() => setIsMenuOpen((c) => !c)}
-            className="relative inline-flex h-8 w-8 items-center justify-center rounded-[6px] text-ivory/25 transition-colors duration-300 hover:text-ivory lg:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/10 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+            className="relative inline-flex h-8 w-8 items-center justify-center rounded-input text-ivory/25 transition-colors duration-300 hover:text-ivory lg:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/10 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
             aria-label={t("toggle_menu")}
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
@@ -485,21 +489,21 @@ export function Navbar({
           role="dialog"
           aria-modal="true"
           aria-label="Navigation menu"
-          className="lg:hidden border-t border-ivory/[0.04] liquid-glass-heavy animate-fade-in"
+          className="lg:hidden border-t border-black/[0.04] liquid-glass-heavy animate-fade-in"
         >
           <div className="max-h-[85vh] overflow-y-auto">
             <div className="flex items-center justify-between px-6 pt-4 pb-2">
               <Link
                 href="/"
                 onClick={() => setIsMenuOpen(false)}
-                className="font-display text-[0.7rem] font-normal uppercase tracking-[0.5em] text-ivory transition-colors duration-300"
+                className="font-display text-[0.7rem] font-normal uppercase tracking-[0.5em] text-[#C8A96A] transition-colors duration-300"
               >
                 {websiteName}
               </Link>
               <button
                 type="button"
                 onClick={() => setIsMenuOpen(false)}
-                className="flex h-9 w-9 items-center justify-center rounded-[6px] text-ivory/30 transition-colors duration-300 hover:text-ivory focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/15"
+                className="flex h-9 w-9 items-center justify-center rounded-input text-ivory/30 transition-colors duration-300 hover:text-ivory focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/15"
                 aria-label={t("toggle_menu")}
               >
                 <svg
@@ -523,9 +527,9 @@ export function Navbar({
                 <Link
                   href="/"
                   onClick={() => setIsMenuOpen(false)}
-                  className={`rounded-[6px] px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] transition-colors duration-200 hover:bg-ivory/[0.025] hover:text-ivory ${
+                  className={`rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] transition-colors duration-200 hover:bg-black/[0.03] hover:text-ivory ${
                     pathname === "/"
-                      ? "text-ivory bg-ivory/[0.025]"
+                      ? "text-ivory bg-black/[0.03]"
                       : "text-ivory/30"
                   }`}
                 >
@@ -534,17 +538,17 @@ export function Navbar({
                 <Link
                   href="/shop"
                   onClick={() => setIsMenuOpen(false)}
-                  className={`rounded-[6px] px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] transition-colors duration-200 hover:bg-ivory/[0.025] hover:text-ivory ${
+                  className={`rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] transition-colors duration-200 hover:bg-black/[0.03] hover:text-ivory ${
                     isShopPage
-                      ? "text-ivory bg-ivory/[0.025]"
+                      ? "text-ivory bg-black/[0.03]"
                       : "text-ivory/30"
                   }`}
                 >
                   {t("shop")}
                 </Link>
 
-                <details className="group rounded-[6px]">
-                  <summary className="flex cursor-pointer items-center justify-between rounded-[6px] px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] text-ivory/30 transition-colors duration-200 hover:bg-ivory/[0.025] hover:text-ivory [&::-webkit-details-marker]:hidden [&::marker]:hidden">
+                <details className="group rounded-input">
+                  <summary className="flex cursor-pointer items-center justify-between rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] text-ivory/30 transition-colors duration-200 hover:bg-black/[0.03] hover:text-ivory [&::-webkit-details-marker]:hidden [&::marker]:hidden">
                     {t("collections")}
                     <svg
                       aria-hidden="true"
@@ -569,7 +573,7 @@ export function Navbar({
                         key={col.slug}
                         href={`/shop?category=${col.slug}`}
                         onClick={() => setIsMenuOpen(false)}
-                        className="block rounded-[6px] px-5 py-3 text-[0.68rem] text-ivory/25 transition-colors duration-200 hover:bg-ivory/[0.025] hover:text-ivory"
+                        className="block rounded-input px-5 py-3 text-[0.68rem] text-ivory/25 transition-colors duration-200 hover:bg-black/[0.03] hover:text-ivory"
                       >
                         {col.title}
                       </Link>
@@ -580,14 +584,23 @@ export function Navbar({
                 <Link
                   href="/about"
                   onClick={() => setIsMenuOpen(false)}
-                  className={`rounded-[6px] px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] transition-colors duration-200 hover:bg-ivory/[0.025] hover:text-ivory ${
+                  className={`rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] transition-colors duration-200 hover:bg-black/[0.03] hover:text-ivory ${
                     pathname === "/about"
-                      ? "text-ivory bg-ivory/[0.025]"
+                      ? "text-ivory bg-black/[0.03]"
                       : "text-ivory/30"
                   }`}
                 >
                   {t("about")}
                 </Link>
+      {isAdmin && (
+        <Link
+          href="/admin/dashboard"
+          onClick={() => setIsMenuOpen(false)}
+          className="rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] text-gold/55 transition-colors duration-200 hover:bg-black/[0.03] hover:text-gold"
+        >
+          Admin
+        </Link>
+      )}
               </div>
 
               <div className="mx-5 my-5 h-px bg-ivory/[0.05]" />
@@ -599,7 +612,7 @@ export function Navbar({
                     setIsMenuOpen(false);
                     setCmdOpen(true);
                   }}
-                  className="flex w-full items-center gap-3 rounded-[6px] border border-ivory/[0.04] bg-ivory/[0.015] px-4 py-3.5 text-left text-[0.68rem] text-ivory/20 transition-colors duration-200 hover:border-ivory/[0.08] hover:text-ivory/35"
+                  className="flex w-full items-center gap-3 rounded-input border border-black/[0.06] bg-black/[0.015] px-4 py-3.5 text-left text-[0.68rem] text-ivory/20 transition-colors duration-200 hover:border-ivory/[0.08] hover:text-ivory/35"
                 >
                   <svg
                     aria-hidden="true"
@@ -609,7 +622,7 @@ export function Navbar({
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="1.5"
-                    className="shrink-0 text-ivory/12"
+                    className="shrink-0 text-white/20"
                   >
                     <circle cx="11" cy="11" r="4" />
                     <path d="M21 21l-4.35-4.35" strokeLinecap="round" />
@@ -621,7 +634,7 @@ export function Navbar({
                   <Link
                     href="/wishlist"
                     onClick={() => setIsMenuOpen(false)}
-                    className="flex h-11 flex-1 items-center justify-center gap-2.5 rounded-[6px] border border-ivory/[0.04] bg-ivory/[0.015] text-ivory/25 transition-colors duration-200 hover:border-ivory/[0.08] hover:text-gold"
+                    className="flex h-11 flex-1 items-center justify-center gap-2.5 rounded-input border border-black/[0.06] bg-black/[0.015] text-ivory/25 transition-colors duration-200 hover:border-ivory/[0.08] hover:text-gold"
                   >
                     <svg
                       aria-hidden="true"
@@ -644,7 +657,7 @@ export function Navbar({
                       setIsMenuOpen(false);
                       toggleDrawer();
                     }}
-                    className="relative flex h-11 flex-1 items-center justify-center gap-2.5 rounded-[6px] border border-ivory/[0.04] bg-ivory/[0.015] text-ivory/25 transition-colors duration-200 hover:border-ivory/[0.08] hover:text-gold"
+                    className="relative flex h-11 flex-1 items-center justify-center gap-2.5 rounded-input border border-black/[0.06] bg-black/[0.015] text-ivory/25 transition-colors duration-200 hover:border-ivory/[0.08] hover:text-gold"
                   >
                     <svg
                       aria-hidden="true"
@@ -665,7 +678,7 @@ export function Navbar({
                       Cart
                     </span>
                     {itemCount > 0 && (
-                      <span className="absolute -end-1.5 -top-1.5 flex h-3.5 min-w-[0.8rem] items-center justify-center rounded-full bg-burgundy px-1 text-[0.42rem] font-bold text-ivory">
+                      <span className="absolute -end-1.5 -top-1.5 flex h-3.5 min-w-[0.8rem] items-center justify-center rounded-full bg-gold px-1 text-[0.42rem] font-bold text-ivory">
                         {itemCount}
                       </span>
                     )}
@@ -673,22 +686,10 @@ export function Navbar({
                 </div>
               </div>
 
-              {!isAdminPage && (
-                <div className="mt-5 px-2">
-                  <Link
-                    href="/admin/login"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="block rounded-[6px] px-5 py-3 text-[0.58rem] font-medium uppercase tracking-[0.18em] text-ivory/15 transition-colors duration-200 hover:bg-ivory/[0.025] hover:text-ivory/30"
-                  >
-                    {t("admin_login")}
-                  </Link>
-                </div>
-              )}
-
-              <div className="mx-5 mt-5 h-px bg-ivory/[0.04]" />
-              <div className="mt-4 px-2">
-                <MobileLanguageSwitcher onSelect={() => setIsMenuOpen(false)} />
-              </div>
+<div className="mx-5 mt-5 h-px bg-ivory/[0.04]" />
+  <div className="mt-4 px-2">
+    <MobileLanguageSwitcher onSelect={() => setIsMenuOpen(false)} />
+  </div>
             </nav>
           </div>
         </div>

@@ -72,7 +72,7 @@ export function LanguageSwitcher({ className = "" }: { className?: string }) {
                 <svg
                   width={24}
                   height={24}
-                  className="h-3.5 w-3.5 shrink-0 text-red"
+                  className="h-3.5 w-3.5 shrink-0 text-gold"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"

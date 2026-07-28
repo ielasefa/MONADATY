@@ -224,13 +224,25 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
     >
-      <div className="mb-10">
-        <Link href="/shop" className="text-[0.5rem] font-semibold uppercase tracking-[0.3em] text-ivory/20 transition-colors duration-200 hover:text-ivory/40">
-          &larr; {t("back_to_drinks")}
-        </Link>
-      </div>
+  <div className="mb-10">
+    <Link href="/shop" className="text-[0.5rem] font-semibold uppercase tracking-[0.3em] text-ivory/20 transition-colors duration-200 hover:text-ivory/40">
+      &larr; {t("back_to_drinks")}
+    </Link>
+  </div>
 
-      <div className="grid gap-12 lg:grid-cols-[3fr_2fr] lg:items-start">
+  {items.length > 0 && (
+    <div className="mb-8 sm:hidden">
+      <div className="flex items-center justify-between rounded-input border border-ivory/[0.04] bg-black-surface px-5 py-4">
+        <div>
+          <p className="text-[0.5rem] uppercase tracking-[0.22em] text-ivory/30">{t("order_summary_title")}</p>
+          <p className="mt-1 text-sm font-medium text-ivory">{items.length} {t("drinks_count")}</p>
+        </div>
+        <p className="font-display text-xl text-gold">{formatMoney(totalValue)}</p>
+      </div>
+    </div>
+  )}
+
+  <div className="grid gap-12 lg:grid-cols-[3fr_2fr] lg:items-start">
         <section>
           <form onSubmit={handleSubmit} className="space-y-10">
             <div>
@@ -238,7 +250,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-burgundy text-[0.5rem] font-semibold text-ivory">1</span>
                 <div>
                   <p className="text-[0.4rem] font-semibold uppercase tracking-[0.35em] text-ivory/20">{t("step_delivery")}</p>
-                  <h2 className="font-display text-lg text-ivory">{t("deliver_to_door")}</h2>
+                  <h2 className="text-lg font-medium text-ivory">{t("deliver_to_door")}</h2>
                 </div>
               </div>
               <div className="ml-10 space-y-5">
@@ -359,7 +371,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-burgundy text-[0.5rem] font-semibold text-ivory">2</span>
                 <div>
                   <p className="text-[0.4rem] font-semibold uppercase tracking-[0.35em] text-ivory/20">{t("step_payment")}</p>
-                  <h2 className="font-display text-lg text-ivory">{t("cash_on_delivery")}</h2>
+                  <h2 className="text-lg font-medium text-ivory">{t("cash_on_delivery")}</h2>
                 </div>
               </div>
               <div className="ml-10">

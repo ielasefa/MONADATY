@@ -7,7 +7,7 @@ type GlassDrinkProps = {
   label?: string;
 };
 
-export function GlassDrink({ width = 260, height = 280, accent = "#C8A96A", label = "" }: GlassDrinkProps) {
+export function GlassDrink({ width = 260, height = 280, accent = "#D5B87D", label = "" }: GlassDrinkProps) {
   return (
     <svg width={width} height={height} viewBox="0 0 260 280" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label={label}>
       <defs>

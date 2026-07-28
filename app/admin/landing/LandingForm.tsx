@@ -631,8 +631,8 @@ function AnnouncementBarForm({ announcement, onChange, onSave }: { announcement:
         <Input label={t("announcement_link") || "URL"} name="link" value={announcement.link} onChange={(v) => onChange({ link: v })} />
         <Input label={t("button_text") || "Button Text"} name="buttonText" value={announcement.buttonText} onChange={(v) => onChange({ buttonText: v })} />
         <div className="grid grid-cols-2 gap-4">
-          <Input label={t("bg_color") || "Background Color"} name="bgColor" value={announcement.bgColor} onChange={(v) => onChange({ bgColor: v })} placeholder="#C8A96A or rgba(200,169,106,0.1)" />
-          <Input label={t("text_color") || "Text Color"} name="textColor" value={announcement.textColor} onChange={(v) => onChange({ textColor: v })} placeholder="#C8A96A" />
+          <Input label={t("bg_color") || "Background Color"} name="bgColor" value={announcement.bgColor} onChange={(v) => onChange({ bgColor: v })} placeholder="#D5B87D or rgba(213,184,125,0.1)" />
+          <Input label={t("text_color") || "Text Color"} name="textColor" value={announcement.textColor} onChange={(v) => onChange({ textColor: v })} placeholder="#D5B87D" />
         </div>
         <button type="submit" className="btn-primary mt-2">{t("save")}</button>
       </form>
@@ -709,7 +709,7 @@ function PreviewPanel({ draft, featuredEntries, testimonials }: {
                         <span className="text-4xl font-semibold tracking-[0.2em] text-gold/40">MD</span>
                       )}
                     </div>
-                    <p className="mt-2 text-xs text-center text-[#1E1E1E]/45 uppercase tracking-wider truncate">{entry.product?.name || "Product"}</p>
+                    <p className="mt-2 text-xs text-center text-[#1C1C1B]/45 uppercase tracking-wider truncate">{entry.product?.name || "Product"}</p>
                   </div>
                 ))}
               </div>
@@ -719,7 +719,7 @@ function PreviewPanel({ draft, featuredEntries, testimonials }: {
           {draft.collectionsSection.enabled && (
             <PreviewSection title={draft.collectionsSection.title}>
               <div className="rounded-card bg-white/10 p-4 shadow-sm border border-white/[0.06]">
-                <p className="text-xs text-[#1E1E1E]/60 text-center">{t("collections_section")}</p>
+                <p className="text-xs text-[#1C1C1B]/60 text-center">{t("collections_section")}</p>
               </div>
             </PreviewSection>
           )}
@@ -727,7 +727,7 @@ function PreviewPanel({ draft, featuredEntries, testimonials }: {
           {draft.aboutSection.enabled && (
             <PreviewSection title={draft.aboutSection.title}>
               <div className="rounded-card bg-white/10 p-4 shadow-sm border border-white/[0.08]">
-                <p className="text-xs text-[#1E1E1E]/60 leading-relaxed line-clamp-3">{draft.aboutSection.description || "About description"}</p>
+                <p className="text-xs text-[#1C1C1B]/60 leading-relaxed line-clamp-3">{draft.aboutSection.description || "About description"}</p>
               </div>
             </PreviewSection>
           )}
@@ -737,8 +737,8 @@ function PreviewPanel({ draft, featuredEntries, testimonials }: {
               <div className="space-y-3">
                 {visibleTestimonials.map((t) => (
                   <div key={t.id} className="rounded-card bg-white/10 p-4 shadow-sm border border-white/[0.08]">
-                    <p className="text-xs text-[#1E1E1E]/70 leading-relaxed">&ldquo;{t.content}&rdquo;</p>
-                    <p className="mt-2 text-xs font-medium text-[#1E1E1E]">{t.name}</p>
+                    <p className="text-xs text-[#1C1C1B]/70 leading-relaxed">&ldquo;{t.content}&rdquo;</p>
+                    <p className="mt-2 text-xs font-medium text-[#1C1C1B]">{t.name}</p>
                   </div>
                 ))}
               </div>
@@ -748,7 +748,7 @@ function PreviewPanel({ draft, featuredEntries, testimonials }: {
           {draft.newsletter.enabled && (
             <PreviewSection title={draft.newsletter.title}>
               <div className="rounded-card bg-white/10 p-4 shadow-sm border border-white/[0.08] text-center">
-                <p className="text-[0.65rem] text-[#1E1E1E]/60">{draft.newsletter.placeholder || "Email input"}</p>
+                <p className="text-[0.65rem] text-[#1C1C1B]/60">{draft.newsletter.placeholder || "Email input"}</p>
               </div>
             </PreviewSection>
           )}

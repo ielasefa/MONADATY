@@ -71,7 +71,7 @@ export default function SalesReportPage() {
               <XAxis dataKey="date" tick={{ fill: "#8B7355", fontSize: 11 }} />
               <YAxis tick={{ fill: "#8B7355", fontSize: 11 }} />
               <Tooltip contentStyle={{ background: "#1a1a1a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8 }} />
-              <Area type="monotone" dataKey="revenue" stroke="#D4AF37" fill="rgba(212,175,55,0.1)" />
+              <Area type="monotone" dataKey="revenue" stroke="#D5B87D" fill="rgba(213,184,125,0.1)" />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -86,7 +86,7 @@ export default function SalesReportPage() {
               <XAxis dataKey="date" tick={{ fill: "#8B7355", fontSize: 11 }} />
               <YAxis tick={{ fill: "#8B7355", fontSize: 11 }} />
               <Tooltip contentStyle={{ background: "#1a1a1a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8 }} />
-              <Bar dataKey="orders" fill="#D4AF37" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="orders" fill="#D5B87D" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

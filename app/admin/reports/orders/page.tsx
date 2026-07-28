@@ -6,7 +6,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 
 const STATUS_COLORS: Record<string, string> = {
   pending: "#F5C542", processing: "#4A90D9", shipped: "#7B68EE", out_for_delivery: "#FF8C00",
-  delivered: "#0F8B6F", completed: "#D4AF37", cancelled: "#C8121F", refunded: "#8B7355",
+  delivered: "#0F8B6F", completed: "#D5B87D", cancelled: "#C8121F", refunded: "#8B7355",
 };
 
 export default function OrdersReportPage() {
@@ -56,7 +56,7 @@ export default function OrdersReportPage() {
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie data={paymentData} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={({ name, value }) => `${name}: ${value}`}>
-                  {paymentData.map((entry, i) => <Cell key={i} fill={[ "#0F8B6F", "#D4AF37", "#C8121F" ][i] || "#666"} />)}
+                  {paymentData.map((entry, i) => <Cell key={i} fill={[ "#0F8B6F", "#D5B87D", "#C8121F" ][i] || "#666"} />)}
                 </Pie>
                 <Tooltip contentStyle={{ background: "#1a1a1a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8 }} />
               </PieChart>

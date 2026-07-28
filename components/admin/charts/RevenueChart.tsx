@@ -37,25 +37,25 @@ export default function RevenueChart({ data }: Props) {
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 4, right: 4, left: -16, bottom: 0 }}>
             <defs>
-              <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#D4AF37" stopOpacity={0.2} />
-                <stop offset="100%" stopColor="#D4AF37" stopOpacity={0} />
-              </linearGradient>
+  <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0%" stopColor="#D5B87D" stopOpacity={0.2} />
+  <stop offset="100%" stopColor="#D5B87D" stopOpacity={0} />
+  </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-            <XAxis
-              dataKey="date"
-              tick={{ fill: "#9B9B9B", fontSize: 10 }}
-              tickLine={false}
-              axisLine={false}
-              tickFormatter={(v) => v.slice(5)}
-            />
-            <YAxis
-              tick={{ fill: "#9B9B9B", fontSize: 10 }}
-              tickLine={false}
-              axisLine={false}
-              tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
-            />
+  <XAxis
+    dataKey="date"
+    tick={{ fill: "#969087", fontSize: 10 }}
+    tickLine={false}
+    axisLine={false}
+    tickFormatter={(v) => v.slice(5)}
+  />
+  <YAxis
+    tick={{ fill: "#969087", fontSize: 10 }}
+    tickLine={false}
+    axisLine={false}
+    tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
+  />
             <Tooltip
               contentStyle={{
                 background: "rgba(16,16,16,0.95)",
@@ -68,14 +68,14 @@ export default function RevenueChart({ data }: Props) {
               formatter={(value) => [`${Number(value).toFixed(2)} DH`, "Revenue"]}
               labelFormatter={(label) => label}
             />
-            <Area
-              type="monotone"
-              dataKey="revenue"
-              stroke="#D4AF37"
-              strokeWidth={2}
-              fill="url(#revenueGradient)"
-              animationDuration={800}
-            />
+  <Area
+    type="monotone"
+    dataKey="revenue"
+    stroke="#D5B87D"
+    strokeWidth={2}
+    fill="url(#revenueGradient)"
+    animationDuration={800}
+  />
           </AreaChart>
         </ResponsiveContainer>
       </div>

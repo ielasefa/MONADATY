@@ -36,14 +36,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
     <div className="min-h-screen bg-black">
       {/* Breadcrumb — minimal editorial */}
       <div className="container-premium pt-8 md:pt-10">
-        <nav aria-label="Breadcrumb" className="flex items-center gap-2 label-utility tracking-[0.32em] text-ivory/15">
-          <Link href="/shop" className="transition-colors hover:text-ivory/40">
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2 label-utility tracking-[0.32em] text-ivory/12">
+          <Link href="/shop" className="transition-colors hover:text-ivory/35">
             {t(translations, "back_to_drinks", lang)}
          </Link>
-          <span aria-hidden="true" className="text-ivory/8">/</span>
-          <span className="text-ivory/20">{product.category}</span>
-          <span aria-hidden="true" className="text-ivory/8">/</span>
-          <span className="text-ivory/30">{product.name}</span>
+          <span aria-hidden="true" className="text-ivory/6">/</span>
+          <span className="text-ivory/15">{product.category}</span>
+          <span aria-hidden="true" className="text-ivory/6">/</span>
+          <span className="text-ivory/25">{product.name}</span>
        </nav>
      </div>
 
@@ -66,17 +66,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {/* Eyebrow — category */}
             <div className="flex items-center gap-3">
               <span className="h-px w-8 bg-gold/30" />
-              <p className="label-utility tracking-[0.55em] text-gold/40">
+              <p className="label-utility tracking-[0.55em] text-gold/35">
                 {product.category}
              </p>
            </div>
 
             {/* Editorial number indicator */}
             <div className="flex items-center gap-4">
-              <span className="label-utility tracking-[0.4em] text-ivory/15">
+              <span className="label-utility tracking-[0.4em] text-ivory/12">
                 N° {String(product.id).slice(-3).padStart(3, "0")}
              </span>
-              <span className="h-px w-8 bg-ivory/15" />
+              <span className="h-px w-8 bg-ivory/10" />
            </div>
 
             {/* Product name — massive display */}
@@ -95,7 +95,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div className="h-px w-16 bg-gold/20" />
 
             {product.description && (
-              <p className="max-w-md text-[0.85rem] leading-[2] text-ivory/30">
+              <p className="max-w-md text-[0.85rem] leading-[2] text-ivory/25">
                 {product.description}
              </p>
             )}
@@ -107,8 +107,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
             {/* Trust signature — editorial micro-mark */}
             <div className="pt-6 flex items-center gap-3">
-              <span className="h-px w-10 bg-ivory/[0.06]" />
-              <span className="label-utility tracking-[0.4em] text-ivory/15">
+              <span className="h-px w-10 bg-ivory/[0.04]" />
+              <span className="label-utility tracking-[0.4em] text-ivory/12">
                 CRAFTED IN MOROCCO · 2024
              </span>
            </div>
@@ -122,32 +122,32 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <div className="space-y-12">
             {/* Section eyebrow */}
             <div className="flex items-baseline justify-between">
-              <p className="label-utility tracking-[0.55em] text-gold/40">
+              <p className="label-utility tracking-[0.55em] text-gold/35">
                 {t(translations, "ingredients", lang)}
              </p>
-              <span className="font-display text-[3rem] font-light leading-none tracking-[-0.04em] text-ivory/[0.06] md:text-[4rem]">
+              <span className="font-display text-[3rem] font-light leading-none tracking-[-0.04em] text-ivory/[0.04] md:text-[4rem]">
                 02
              </span>
            </div>
-            <div className="h-px w-full bg-ivory/[0.04]" />
+            <div className="h-px w-full bg-ivory/[0.03]" />
 
             <div className="grid gap-12 md:grid-cols-2 lg:gap-20">
               {hasIngredients && (
                 <div className="space-y-5">
-                  <p className="label-utility tracking-[0.4em] text-ivory/22">
+                  <p className="label-utility tracking-[0.4em] text-ivory/18">
                     {t(translations, "ingredients", lang)}
                  </p>
-                  <p className="text-[0.88rem] leading-[2] text-ivory/30">
+                  <p className="text-[0.88rem] leading-[2] text-ivory/25">
                     {product.ingredients}
                  </p>
                </div>
               )}
               {hasNutrition && (
                 <div className="space-y-5">
-                  <p className="label-utility tracking-[0.4em] text-ivory/22">
+                  <p className="label-utility tracking-[0.4em] text-ivory/18">
                     {t(translations, "nutrition", lang)}
                  </p>
-                  <p className="text-[0.88rem] leading-[2] text-ivory/30">
+                  <p className="text-[0.88rem] leading-[2] text-ivory/25">
                     {product.nutrition}
                  </p>
                </div>
@@ -159,7 +159,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
       {/* Related products — editorial divider */}
       {relatedProducts.length > 0 && (
-        <section className="border-t border-ivory/[0.04]">
+        <section className="border-t border-ivory/[0.03]">
           <div className="container-premium py-16 md:py-24 lg:py-32">
             <RelatedProducts products={relatedProducts} />
          </div>

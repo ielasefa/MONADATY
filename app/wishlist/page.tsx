@@ -21,16 +21,16 @@ export default async function WishlistPage() {
         <div className="mx-auto max-w-[1600px] px-6 py-24 md:px-10 md:py-32 lg:px-16 lg:py-40">
           <div className="flex items-center gap-3">
             <span className="h-px w-8 bg-gold/30" />
-            <span className="label-utility tracking-[0.55em] text-gold/40">
+            <span className="label-utility tracking-[0.55em] text-gold/35">
               {t(translations, "saved_label", lang)}
-        </span>
+       </span>
       </div>
 
           <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-2">
-              <span className="font-display text-[4.5rem] font-light leading-none tracking-[-0.04em] text-ivory/[0.06] md:text-[6rem]">
+              <span className="font-display text-[4.5rem] font-light leading-none tracking-[-0.04em] text-ivory/[0.04] md:text-[6rem]">
                 SAVED
-          </span>
+         </span>
         </div>
 
             <div className="lg:col-span-9">
@@ -40,11 +40,11 @@ export default async function WishlistPage() {
         </div>
       </div>
 
-          <div className="mt-16 h-px w-full bg-gradient-to-r from-transparent via-gold/15 to-transparent" />
-      </div>
-    </section>
+          <div className="mt-16 h-px w-full bg-gradient-to-r from-transparent via-gold/12 to-transparent" />
+    </div>
+  </section>
 
-      <section className="relative overflow-hidden border-t border-ivory/[0.04]">
+      <section className="relative overflow-hidden border-t border-ivory/[0.03]">
         <div className="mx-auto max-w-[1600px] px-6 py-12 md:px-10 md:py-16 lg:px-16 lg:py-20">
           <WishlistPageClient products={products} />
        </div>

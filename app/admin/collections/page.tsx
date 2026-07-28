@@ -19,7 +19,7 @@ async function saveCollection(formData: FormData) {
   const slug = formData.get("slug") as string;
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
-  const accent = formData.get("accent") as string || "#C8A96A";
+  const accent = formData.get("accent") as string || "#D5B87D";
   const tone = formData.get("tone") as string || "";
   const previewLabel = formData.get("previewLabel") as string || title;
   const image = formData.get("image") as string || "";

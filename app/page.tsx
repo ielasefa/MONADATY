@@ -1,88 +1,104 @@
 import { Hero } from "@/components/Hero";
-import { QuietTransition } from "@/components/QuietTransition";
 import {
-  SectionFeatured,
-  SectionCollections,
-  SectionAbout,
-  SectionTestimonials,
-  SectionNewsletter,
-  SectionCTA,
+  TrustStrip,
+  FeaturedProducts,
+  CollectionsShowcase,
+  BrandStory,
+  BestSellers,
+  BuildYourBox,
+  HowItWorks,
+  SocialProof,
+  MoroccanMoment,
+  Newsletter,
+  FAQSection,
+  FinalCTA,
 } from "@/components/HomepageCommerce";
-import { getFeaturedProducts, getTestimonials, getSiteSettings, getLandingCollections } from "@/lib/db";
+import { getProducts, getTestimonials, getSiteSettings, getLandingCollections, getFAQ } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [settings, testimonialRows, featuredProducts, landingCollections] = await Promise.all([
-    getSiteSettings(),
-    getTestimonials(),
-    getFeaturedProducts(),
-    getLandingCollections(),
-  ]);
+  const [settings, testimonialRows, allProducts, landingCollections, faqs] =
+    await Promise.all([
+      getSiteSettings(),
+      getTestimonials(),
+      getProducts(),
+      getLandingCollections(),
+      getFAQ(),
+    ]);
+
+  const hero = settings.hero;
 
   const testimonials = testimonialRows
     .filter((t) => t.visible)
     .map((t) => ({ id: t.id, name: t.name, role: t.role, content: t.content }));
 
-  const hero = settings.hero;
-  const nineProducts = featuredProducts.slice(0, 9);
+  const shopProducts = allProducts.slice(0, 4);
+  const bestSellers = allProducts.slice(0, 4);
+  const bundleProducts = allProducts.slice(0, 8);
+  const faqList = faqs || [];
 
   return (
-    <div>
-      {/* 1. HERO — full viewport editorial composition */}
+  <div className="bg-black">
+      {/* 02 — Hero */}
       {hero.enabled && <Hero settings={hero} />}
 
-      {/* 2. QUIET TRANSITION — breathing room, intentional whitespace */}
-      {hero.enabled && <QuietTransition />}
+      {/* 03 — Trust Strip */}
+      <TrustStrip />
 
-      {/* 3. OUR STORY — editorial scene, not image|text */}
-      {settings.aboutSection.enabled && <SectionAbout
-        title={settings.aboutSection.title}
-        subtitle={settings.aboutSection.subtitle}
-        description={settings.aboutSection.description}
-        image={settings.aboutSection.image}
-      />}
+      {/* 04 — Featured Products */}
+      {shopProducts.length > 0 && <FeaturedProducts products={shopProducts} />}
 
-      {/* 4. SHOP BY COLLECTION — three campaign chapters */}
-      {settings.collectionsSection.enabled && landingCollections.length > 0 && (
-        <SectionCollections
-          collections={landingCollections}
-          title={settings.collectionsSection.title}
-          subtitle={settings.collectionsSection.subtitle}
+      {/* 05 — Collections */}
+      {landingCollections.length > 0 && (
+        <CollectionsShowcase collections={landingCollections} />
+      )}
+
+      {/* 07 — Best Sellers */}
+      {bestSellers.length > 0 && <BestSellers products={bestSellers} />}
+
+      {/* 08 — Build Your Box */}
+      {bundleProducts.length > 1 && <BuildYourBox products={bundleProducts} />}
+
+      {/* 09 — How It Works */}
+      <HowItWorks />
+
+      {/* 06 — Brand Story */}
+      {settings.aboutSection.enabled && (
+        <BrandStory
+          title={settings.aboutSection.title}
+          description={settings.aboutSection.description}
+          image={settings.aboutSection.image}
         />
       )}
 
-      {/* 5. FEATURED PRODUCTS — 9-product exhibition, varied scales */}
-      {settings.featuredProducts.enabled && nineProducts.length > 0 && (
-        <SectionFeatured
-          featuredProducts={nineProducts}
-          title={settings.featuredProducts.title}
-          subtitle={settings.featuredProducts.subtitle}
-        />
-      )}
-
-      {/* 6. TESTIMONIALS — one giant voice */}
-      {settings.testimonialsSection.enabled && testimonials.length > 0 && (
-        <SectionTestimonials
+      {/* 10 — Customer Notes */}
+      {testimonials.length > 0 && (
+        <SocialProof
           testimonials={testimonials}
-          title={settings.testimonialsSection.title}
-          subtitle={settings.testimonialsSection.subtitle}
+          title={settings.testimonialsSection?.title ?? ""}
+          subtitle={settings.testimonialsSection?.subtitle ?? ""}
         />
       )}
 
-      {/* 7. NEWSLETTER — minimal, no container */}
+      {/* 11 — Moroccan Moment */}
+      <MoroccanMoment />
+
+      {/* 12 — Newsletter */}
       {settings.newsletter.enabled && (
-        <SectionNewsletter
+        <Newsletter
           title={settings.newsletter.title}
-          subtitle={settings.newsletter.subtitle}
           description={settings.newsletter.description}
           placeholder={settings.newsletter.placeholder}
           buttonText={settings.newsletter.buttonText}
         />
       )}
 
-      {/* 8. FINAL CTA — near-empty black scene */}
-      <SectionCTA />
-   </div>
+      {/* 13 — FAQ */}
+      <FAQSection faqs={faqList} />
+
+      {/* 14 — Final CTA */}
+      <FinalCTA />
+    </div>
   );
 }

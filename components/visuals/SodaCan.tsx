@@ -7,7 +7,7 @@ type SodaCanProps = {
   label?: string;
 };
 
-export function SodaCan({ width = 240, height = 320, accent = "#C8A96A", label = "" }: SodaCanProps) {
+export function SodaCan({ width = 240, height = 320, accent = "#D5B87D", label = "" }: SodaCanProps) {
   return (
     <svg width={width} height={height} viewBox="0 0 240 320" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label={label}>
       <defs>

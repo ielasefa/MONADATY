@@ -37,20 +37,20 @@ export default function MonthlyRevenueChart({ data }: Props) {
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 4, right: 4, left: -16, bottom: 0 }}>
             <defs>
-              <linearGradient id="monthlyRevenueGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#0F8B6F" stopOpacity={0.2} />
-                <stop offset="100%" stopColor="#0F8B6F" stopOpacity={0} />
-              </linearGradient>
+  <linearGradient id="monthlyRevenueGradient" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0%" stopColor="#D5B87D" stopOpacity={0.18} />
+  <stop offset="100%" stopColor="#D5B87D" stopOpacity={0} />
+  </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
             <XAxis
               dataKey="month"
-              tick={{ fill: "#9B9B9B", fontSize: 10 }}
+              tick={{ fill: "#969087", fontSize: 10 }}
               tickLine={false}
               axisLine={false}
             />
             <YAxis
-              tick={{ fill: "#9B9B9B", fontSize: 10 }}
+              tick={{ fill: "#969087", fontSize: 10 }}
               tickLine={false}
               axisLine={false}
               tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}

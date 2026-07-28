@@ -183,7 +183,7 @@ function ProductEditor({ product, categories, collections, onSave, onCancel }: {
         </div>
         <div className="grid grid-cols-2 gap-4">
           <Select label={tc("visual_label")} name="visual" options={["", "can", "bottle", "glass"]} defaultValue={product?.visual} />
-          <Field label={tc("accent_color_label")} name="accent" defaultValue={product?.accent || "#D4AF37"} type="color" />
+          <Field label={tc("accent_color_label")} name="accent" defaultValue={product?.accent || "#D5B87D"} type="color" />
         </div>
         <Field label={t("description_label")} name="description" defaultValue={product?.description} rows={3} />
         <div className="grid grid-cols-2 gap-4">

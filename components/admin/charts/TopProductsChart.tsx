@@ -41,20 +41,20 @@ export default function TopProductsChart({ data }: Props) {
             margin={{ top: 4, right: 4, left: 4, bottom: 0 }}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-            <XAxis
-              type="number"
-              tick={{ fill: "#9B9B9B", fontSize: 10 }}
-              tickLine={false}
-              axisLine={false}
-            />
-            <YAxis
-              type="category"
-              dataKey="name"
-              tick={{ fill: "#9B9B9B", fontSize: 10 }}
-              tickLine={false}
-              axisLine={false}
-              width={80}
-            />
+  <XAxis
+    type="number"
+    tick={{ fill: "#969087", fontSize: 10 }}
+    tickLine={false}
+    axisLine={false}
+  />
+  <YAxis
+    type="category"
+    dataKey="name"
+    tick={{ fill: "#969087", fontSize: 10 }}
+    tickLine={false}
+    axisLine={false}
+    width={80}
+  />
             <Tooltip
               contentStyle={{
                 background: "rgba(16,16,16,0.95)",
@@ -66,12 +66,12 @@ export default function TopProductsChart({ data }: Props) {
               }}
               formatter={(value) => [value, "Sold"]}
             />
-            <Bar
-              dataKey="value"
-              fill="#D4AF37"
-              radius={[0, 3, 3, 0]}
-              animationDuration={800}
-            />
+  <Bar
+    dataKey="value"
+    fill="#D5B87D"
+    radius={[0, 3, 3, 0]}
+    animationDuration={800}
+  />
           </BarChart>
         </ResponsiveContainer>
       </div>

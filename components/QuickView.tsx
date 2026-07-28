@@ -85,19 +85,19 @@ export function QuickView({ product, open, onClose }: QuickViewProps) {
         role="dialog"
         aria-modal="true"
         aria-label={`${product.name} ${t("quick_view")}`}
-        className="relative z-10 w-[min(92vw,44rem)] rounded-[6px] border border-ivory/[0.05] bg-black-surface p-5 animate-fade-in"
+        className="relative z-10 w-[min(92vw,44rem)] rounded-input border border-ivory/[0.05] bg-black-surface p-5 animate-fade-in"
       >
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-md bg-ivory/[0.04] text-lg text-ivory/25 transition-colors duration-200 hover:text-ivory"
+          className="absolute right-3 top-3 inline-flex h-10 w-10 items-center justify-center rounded-input bg-ivory/[0.04] text-lg text-ivory/25 transition-colors duration-200 hover:text-ivory"
           aria-label={t("close_quick_view")}
         >
           &times;
         </button>
         <div className="flex flex-col gap-4 md:flex-row md:gap-6">
           <div className="flex-1">
-            <div className="aspect-[4/5] overflow-hidden rounded-md bg-black p-4">
+            <div className="aspect-[4/5] overflow-hidden rounded-input bg-black p-4">
               <div className="flex h-full items-center justify-center">
                 <SafeImage
                   src={product.image}
@@ -119,10 +119,10 @@ export function QuickView({ product, open, onClose }: QuickViewProps) {
             <div className="h-px bg-ivory/[0.04] my-4" />
 
             <div className="flex items-center gap-3">
-              <div className="flex items-center rounded-md border border-ivory/[0.06] bg-transparent p-0.5">
-                <button type="button" onClick={() => setQuantity((q) => Math.max(1, q - 1))} className="h-7 w-7 text-ivory/30 transition-colors duration-200 hover:text-ivory" aria-label={t("decrease_qty")}>&minus;</button>
+              <div className="flex items-center rounded-input border border-ivory/[0.06] bg-transparent p-0.5">
+                <button type="button" onClick={() => setQuantity((q) => Math.max(1, q - 1))} className="h-9 w-9 text-ivory/30 transition-colors duration-200 hover:text-ivory" aria-label={t("decrease_qty")}>&minus;</button>
                 <span className="min-w-7 text-center text-sm text-ivory">{quantity}</span>
-                <button type="button" onClick={() => setQuantity((q) => q + 1)} className="h-7 w-7 text-ivory/30 transition-colors duration-200 hover:text-ivory" aria-label={t("increase_qty")}>+</button>
+                <button type="button" onClick={() => setQuantity((q) => q + 1)} className="h-9 w-9 text-ivory/30 transition-colors duration-200 hover:text-ivory" aria-label={t("increase_qty")}>+</button>
               </div>
 
               <button onClick={handleAdd} className="btn-primary flex-1">

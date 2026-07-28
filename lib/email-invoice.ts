@@ -46,7 +46,7 @@ export async function sendInvoiceEmail(params: {
             <div style="width: 48px; height: 48px; background: #C1121F; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">
               <span style="color: white; font-size: 24px; font-weight: 700;">M</span>
             </div>
-            <h1 style="color: #D4AF37; font-size: 24px; margin: 0; font-weight: 700; letter-spacing: 1px;">MONADATY</h1>
+            <h1 style="color: #D4B06A; font-size: 24px; margin: 0; font-weight: 700; letter-spacing: 1px;">MONADATY</h1>
           </div>
 
           <h2 style="color: #fff; font-size: 20px; margin-bottom: 8px;">Invoice Ready</h2>
@@ -54,7 +54,7 @@ export async function sendInvoiceEmail(params: {
             Dear ${params.customerName},
           </p>
           <p style="color: #9B9B9B; font-size: 14px; line-height: 1.6; margin-bottom: 24px;">
-            Your invoice <strong style="color: #D4AF37;">${params.invoiceNumber}</strong> for order <strong style="color: #fff;">${params.orderNumber}</strong> is ready.
+            Your invoice <strong style="color: #D4B06A;">${params.invoiceNumber}</strong> for order <strong style="color: #fff;">${params.orderNumber}</strong> is ready.
           </p>
 
           <div style="background: #161616; border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 20px; margin-bottom: 24px;">

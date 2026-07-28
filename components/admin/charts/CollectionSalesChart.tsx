@@ -12,7 +12,7 @@ type Props = {
   data: { name: string; value: number }[];
 };
 
-const COLORS = ["#D4AF37", "#C1121F", "#0F8B6F", "#3B82F6", "#8B5CF6", "#F59E0B"];
+const COLORS = ["#D5B87D", "#8F1F30", "#0F8B6F", "#3B82F6", "#8B5CF6", "#D5B87D"];
 
 export default function CollectionSalesChart({ data }: Props) {
   if (data.length === 0) {

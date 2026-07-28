@@ -31,14 +31,14 @@ export default async function ShopPage() {
         <div className="mx-auto max-w-[1600px] px-6 py-24 md:px-10 md:py-32 lg:px-16 lg:py-40">
           <div className="flex items-center gap-3">
             <span className="h-px w-8 bg-gold/30" />
-            <span className="label-utility tracking-[0.55em] text-gold/40">
+            <span className="label-utility tracking-[0.55em] text-gold/35">
               {t(translations, "the_collection", lang)}
         </span>
       </div>
 
           <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-2">
-              <span className="font-display text-[4.5rem] font-light leading-none tracking-[-0.04em] text-ivory/[0.06] md:text-[6rem]">
+              <span className="font-display text-[4.5rem] font-light leading-none tracking-[-0.04em] text-ivory/[0.04] md:text-[6rem]">
                 COLLECTION
           </span>
         </div>
@@ -52,11 +52,11 @@ export default async function ShopPage() {
 
           {/* Bottom markers — count + chapter */}
           <div className="mt-16 flex items-center justify-between md:mt-20 lg:mt-24">
-            <span className="label-utility tracking-[0.4em] text-ivory/15">
+            <span className="label-utility tracking-[0.4em] text-ivory/12">
               {products.length} {products.length === 1 ? "drink" : "drinks"}
         </span>
-            <span className="hidden h-px flex-1 mx-6 bg-ivory/[0.06] md:block" />
-            <span className="label-utility tracking-[0.4em] text-ivory/15">
+            <span className="hidden h-px flex-1 mx-6 bg-ivory/[0.04] md:block" />
+            <span className="label-utility tracking-[0.4em] text-ivory/12">
               2024 — 2026
         </span>
       </div>
@@ -64,14 +64,14 @@ export default async function ShopPage() {
   </section>
 
       {/* Products grid with filters */}
-      <section className="relative overflow-hidden border-t border-ivory/[0.04]">
+      <section className="relative overflow-hidden border-t border-ivory/[0.03]">
         <div className="mx-auto max-w-[1600px] px-6 py-16 md:px-10 md:py-20 lg:px-16 lg:py-24">
           <Suspense
             fallback={
               <div className="flex items-center justify-center py-40">
                 <div className="text-center">
-                  <div className="mx-auto mb-3 h-6 w-6 animate-spin rounded-full border border-ivory/[0.08] border-t-ivory/25" />
-                  <p className="mt-3 label-utility tracking-[0.4em] text-ivory/20">
+                  <div className="mx-auto mb-3 h-6 w-6 animate-spin rounded-full border border-ivory/[0.06] border-t-ivory/20" />
+                  <p className="mt-3 label-utility tracking-[0.4em] text-ivory/15">
                     {t(translations, "loading_collection", lang)}
             </p>
             </div>

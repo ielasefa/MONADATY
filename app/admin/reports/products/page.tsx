@@ -39,7 +39,7 @@ export default function ProductsReportPage() {
               <XAxis type="number" tick={{ fill: "#8B7355", fontSize: 11 }} />
               <YAxis type="category" dataKey="name" tick={{ fill: "#8B7355", fontSize: 10 }} width={180} />
               <Tooltip contentStyle={{ background: "#1a1a1a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8 }} />
-              <Bar dataKey="qty" fill="#D4AF37" radius={[0, 4, 4, 0]} />
+              <Bar dataKey="qty" fill="#D5B87D" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

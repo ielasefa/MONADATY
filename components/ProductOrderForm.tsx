@@ -84,117 +84,107 @@ export function ProductOrderForm({ product }: ProductOrderFormProps) {
         </div>
       ) : null}
 
-      <div className="flex flex-wrap items-center gap-3 border-b border-ivory/[0.04] pb-4">
-        <div className="flex items-center gap-1 rounded-md border border-ivory/[0.04] bg-black p-0.5">
-          <button
-            type="button"
-            onClick={() => setQuantity((current) => Math.max(1, current - 1))}
-            className="h-9 w-9 rounded-md text-ivory/35 transition-colors duration-200 hover:bg-ivory/[0.04] hover:text-ivory flex items-center justify-center text-base font-medium"
-            aria-label={t("decrease_qty")}
-          >
-            &minus;
-          </button>
-          <span className="min-w-7 text-center text-sm font-medium text-ivory">{quantity}</span>
-          <button
-            type="button"
-            onClick={() => setQuantity((current) => current + 1)}
-            className="h-9 w-9 rounded-md text-ivory/35 transition-colors duration-200 hover:bg-ivory/[0.04] hover:text-ivory flex items-center justify-center text-base font-medium"
-            aria-label={t("increase_qty")}
-          >
-            +
-          </button>
-        </div>
+  <div className="flex flex-wrap items-center gap-3 border-b border-ivory/[0.04] pb-4">
+  <div className="flex items-center gap-1 rounded-input border border-ivory/[0.04] bg-black p-0.5">
+  <button
+    type="button"
+    onClick={() => setQuantity((current) => Math.max(1, current - 1))}
+    className="h-9 w-9 rounded-input text-ivory/35 transition-colors duration-200 hover:bg-ivory/[0.04] hover:text-ivory flex items-center justify-center text-base font-medium"
+    aria-label={t("decrease_qty")}
+  >
+    &minus;
+  </button>
+  <span className="min-w-7 text-center text-sm font-medium text-ivory">{quantity}</span>
+  <button
+    type="button"
+    onClick={() => setQuantity((current) => current + 1)}
+    className="h-9 w-9 rounded-input text-ivory/35 transition-colors duration-200 hover:bg-ivory/[0.04] hover:text-ivory flex items-center justify-center text-base font-medium"
+    aria-label={t("increase_qty")}
+  >
+    +
+  </button>
+  </div>
 
-        <button
-          type="button"
-          onClick={handleAddToCart}
-          disabled={isOutOfStock}
-          className="btn-primary flex-1"
-        >
-          {t("add_to_box")}
-        </button>
-      </div>
-
-      <div className="flex items-center gap-3 border-b border-ivory/[0.04] pb-4 pt-3">
-        <button
-          type="button"
-          className="btn-secondary flex-1"
-          onClick={() => {}}
-        >
-          {t("build_drink_order")}
-        </button>
-      </div>
+  <button
+    type="button"
+    onClick={handleAddToCart}
+    disabled={isOutOfStock}
+    className="btn-primary flex-1"
+  >
+    {t("add_to_box")}
+  </button>
+  </div>
 
       <form onSubmit={handleSubmit} className="mt-4 space-y-3.5">
         <div className="grid gap-3.5 md:grid-cols-2">
-          <label className="space-y-1.5">
-            <span className="text-[0.5rem] font-semibold uppercase tracking-[0.2em] text-ivory/40">{t("name")}</span>
-            <input
-              id={`name-${product.id}`}
-              type="text"
-              name="name"
-              value={formState.name}
-              onChange={(event) => handleChange("name", event.target.value)}
-              placeholder={t("full_name_placeholder")}
-              className={`l-input ${errors.name ? "!border-red" : ""}`}
-              aria-invalid={Boolean(errors.name)}
-              aria-describedby={errors.name ? `name-error-${product.id}` : undefined}
-              required
-            />
-            {errors.name ? <p id={`name-error-${product.id}`} className="text-xs text-red">{errors.name}</p> : null}
-          </label>
+  <label className="space-y-1.5">
+  <span className="text-[0.55rem] font-semibold uppercase tracking-[0.2em] text-ivory/50">{t("name")}</span>
+  <input
+    id={`name-${product.id}`}
+    type="text"
+    name="name"
+    value={formState.name}
+    onChange={(event) => handleChange("name", event.target.value)}
+    placeholder={t("full_name_placeholder")}
+    className={`l-input ${errors.name ? "l-input-error" : ""}`}
+    aria-invalid={Boolean(errors.name)}
+    aria-describedby={errors.name ? `name-error-${product.id}` : undefined}
+    required
+  />
+  {errors.name ? <p id={`name-error-${product.id}`} className="text-xs text-burgundy">{errors.name}</p> : null}
+  </label>
 
-          <label className="space-y-1.5">
-            <span className="text-[0.5rem] font-semibold uppercase tracking-[0.2em] text-ivory/40">{t("phone")}</span>
-            <input
-              id={`phone-${product.id}`}
-              type="tel"
-              name="phone"
-              value={formState.phone}
-              onChange={(event) => handleChange("phone", event.target.value)}
-              placeholder={t("phone_placeholder")}
-              className={`l-input ${errors.phone ? "!border-red" : ""}`}
-              aria-invalid={Boolean(errors.phone)}
-              aria-describedby={errors.phone ? `phone-error-${product.id}` : undefined}
-              required
-            />
-            {errors.phone ? <p id={`phone-error-${product.id}`} className="text-xs text-red">{errors.phone}</p> : null}
-          </label>
-        </div>
-        <div className="grid gap-3.5 md:grid-cols-2">
-          <label className="space-y-1.5">
-            <span className="text-[0.5rem] font-semibold uppercase tracking-[0.2em] text-ivory/40">{t("city")}</span>
-            <input
-              id={`city-${product.id}`}
-              type="text"
-              name="city"
-              value={formState.city}
-              onChange={(event) => handleChange("city", event.target.value)}
-              placeholder={t("city")}
-              className={`l-input ${errors.city ? "!border-red" : ""}`}
-              aria-invalid={Boolean(errors.city)}
-              aria-describedby={errors.city ? `city-error-${product.id}` : undefined}
-              required
-            />
-            {errors.city ? <p id={`city-error-${product.id}`} className="text-xs text-red">{errors.city}</p> : null}
-          </label>
+  <label className="space-y-1.5">
+  <span className="text-[0.55rem] font-semibold uppercase tracking-[0.2em] text-ivory/50">{t("phone")}</span>
+  <input
+    id={`phone-${product.id}`}
+    type="tel"
+    name="phone"
+    value={formState.phone}
+    onChange={(event) => handleChange("phone", event.target.value)}
+    placeholder={t("phone_placeholder")}
+    className={`l-input ${errors.phone ? "l-input-error" : ""}`}
+    aria-invalid={Boolean(errors.phone)}
+    aria-describedby={errors.phone ? `phone-error-${product.id}` : undefined}
+    required
+  />
+  {errors.phone ? <p id={`phone-error-${product.id}`} className="text-xs text-burgundy">{errors.phone}</p> : null}
+  </label>
+  </div>
+  <div className="grid gap-3.5 md:grid-cols-2">
+  <label className="space-y-1.5">
+  <span className="text-[0.55rem] font-semibold uppercase tracking-[0.2em] text-ivory/50">{t("city")}</span>
+  <input
+    id={`city-${product.id}`}
+    type="text"
+    name="city"
+    value={formState.city}
+    onChange={(event) => handleChange("city", event.target.value)}
+    placeholder={t("city")}
+    className={`l-input ${errors.city ? "l-input-error" : ""}`}
+    aria-invalid={Boolean(errors.city)}
+    aria-describedby={errors.city ? `city-error-${product.id}` : undefined}
+    required
+  />
+  {errors.city ? <p id={`city-error-${product.id}`} className="text-xs text-burgundy">{errors.city}</p> : null}
+  </label>
 
-          <label className="space-y-1.5">
-            <span className="text-[0.5rem] font-semibold uppercase tracking-[0.2em] text-ivory/40">{t("address")}</span>
-            <input
-              id={`address-${product.id}`}
-              type="text"
-              name="address"
-              value={formState.address}
-              onChange={(event) => handleChange("address", event.target.value)}
-              placeholder={t("address_placeholder")}
-              className={`l-input ${errors.address ? "!border-red" : ""}`}
-              aria-invalid={Boolean(errors.address)}
-              aria-describedby={errors.address ? `address-error-${product.id}` : undefined}
-              required
-            />
-            {errors.address ? <p id={`address-error-${product.id}`} className="text-xs text-red">{errors.address}</p> : null}
-          </label>
+  <label className="space-y-1.5">
+  <span className="text-[0.55rem] font-semibold uppercase tracking-[0.2em] text-ivory/50">{t("address")}</span>
+  <input
+    id={`address-${product.id}`}
+    type="text"
+    name="address"
+    value={formState.address}
+    onChange={(event) => handleChange("address", event.target.value)}
+    placeholder={t("address_placeholder")}
+    className={`l-input ${errors.address ? "l-input-error" : ""}`}
+    aria-invalid={Boolean(errors.address)}
+    aria-describedby={errors.address ? `address-error-${product.id}` : undefined}
+    required
+  />
+  {errors.address ? <p id={`address-error-${product.id}`} className="text-xs text-burgundy">{errors.address}</p> : null}
+  </label>
         </div>
 
         <button

@@ -8,23 +8,23 @@ export default function OfflinePage() {
   return (
     <div className="flex min-h-[80vh] flex-col items-center justify-center bg-black px-6 text-center">
       {/* Editorial icon */}
-      <div className="mx-auto mb-8 flex h-20 w-20 items-center justify-center border border-ivory/[0.06]">
-        <svg className="h-9 w-9 text-ivory/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+      <div className="mx-auto mb-8 flex h-20 w-20 items-center justify-center border border-ivory/[0.04]">
+        <svg className="h-9 w-9 text-ivory/22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
           <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0119 12.55M5 12.55a10.94 10.94 0 015.17-2.39M10.71 5.05A16 16 0 0122.56 9M1.42 9a15.91 15.91 0 014.7-2.88M8.53 16.11a6 6 0 016.95 0M12 20h.01" />
-       </svg>
-     </div>
+    </svg>
+  </div>
 
-      <span className="label-utility tracking-[0.55em] text-ivory/25">
+      <span className="label-utility tracking-[0.55em] text-ivory/18">
         OFFLINE
-     </span>
+    </span>
 
       <h1 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[0.92] tracking-[-0.04em] text-ivory">
         {t("no_connection")}
      </h1>
 
-      <div className="mx-auto my-8 h-px w-12 bg-gold/30" />
+      <div className="mx-auto my-8 h-px w-12 bg-gold/25" />
 
-      <p className="max-w-md text-[0.85rem] leading-[1.95] text-ivory/30">
+      <p className="max-w-md text-[0.85rem] leading-[1.95] text-ivory/25">
         {t("check_connection")}
      </p>
 

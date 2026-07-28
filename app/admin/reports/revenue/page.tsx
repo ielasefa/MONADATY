@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { useTranslation } from "@/hooks/useTranslation";
 
-const COLORS = ["#D4AF37", "#C8121F", "#0F8B6F", "#4A0080", "#F5C542", "#FF8C00"];
+const COLORS = ["#D5B87D", "#C8121F", "#0F8B6F", "#4A0080", "#D5B87D", "#E2C98A"];
 
 export default function RevenueReportPage() {
   const { t } = useTranslation("admin");
@@ -79,7 +79,7 @@ export default function RevenueReportPage() {
                 <XAxis dataKey="month" tick={{ fill: "#8B7355", fontSize: 11 }} />
                 <YAxis tick={{ fill: "#8B7355", fontSize: 11 }} />
                 <Tooltip contentStyle={{ background: "#1a1a1a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8 }} />
-                <Bar dataKey="revenue" fill="#D4AF37" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="revenue" fill="#D5B87D" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

@@ -37,19 +37,19 @@ export default function OrdersChart({ data }: Props) {
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} margin={{ top: 4, right: 4, left: -16, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-            <XAxis
-              dataKey="date"
-              tick={{ fill: "#9B9B9B", fontSize: 10 }}
-              tickLine={false}
-              axisLine={false}
-              tickFormatter={(v) => v.slice(5)}
-            />
-            <YAxis
-              tick={{ fill: "#9B9B9B", fontSize: 10 }}
-              tickLine={false}
-              axisLine={false}
-              allowDecimals={false}
-            />
+  <XAxis
+    dataKey="date"
+    tick={{ fill: "#969087", fontSize: 10 }}
+    tickLine={false}
+    axisLine={false}
+    tickFormatter={(v) => v.slice(5)}
+  />
+  <YAxis
+    tick={{ fill: "#969087", fontSize: 10 }}
+    tickLine={false}
+    axisLine={false}
+    allowDecimals={false}
+  />
             <Tooltip
               contentStyle={{
                 background: "rgba(16,16,16,0.95)",

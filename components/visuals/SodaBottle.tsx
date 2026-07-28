@@ -7,7 +7,7 @@ type SodaBottleProps = {
   label?: string;
 };
 
-export function SodaBottle({ width = 220, height = 360, accent = "#C8A96A", label = "" }: SodaBottleProps) {
+export function SodaBottle({ width = 220, height = 360, accent = "#D5B87D", label = "" }: SodaBottleProps) {
   return (
     <svg width={width} height={height} viewBox="0 0 220 360" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label={label}>
       <defs>

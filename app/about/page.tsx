@@ -18,40 +18,40 @@ export default async function AboutPage() {
         <div className="mx-auto max-w-[1600px] px-6 py-32 md:px-10 md:py-44 lg:px-16 lg:py-56">
           <div className="flex items-center gap-3">
             <span className="h-px w-8 bg-gold/30" />
-            <span className="label-utility tracking-[0.55em] text-gold/40">
+            <span className="label-utility tracking-[0.55em] text-gold/35">
               {t(translations, "our_story", lang)}
-         </span>
-       </div>
+            </span>
+          </div>
 
           <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-2">
-              <span className="font-display text-[4.5rem] font-light leading-none tracking-[-0.04em] text-ivory/[0.06] md:text-[6rem]">
+              <span className="font-display text-[4.5rem] font-light leading-none tracking-[-0.04em] text-ivory/[0.04] md:text-[6rem]">
                 01
-           </span>
-           </div>
+              </span>
+            </div>
 
             <div className="lg:col-span-9">
               <h1 className="font-display text-[clamp(2.5rem,6.5vw,6.5rem)] leading-[0.86] tracking-[-0.045em] text-ivory">
                 {t(translations, "about_hero_title", lang)}
-           </h1>
-              <p className="mt-10 max-w-2xl text-[0.92rem] leading-[1.95] text-ivory/30">
+              </h1>
+              <p className="mt-10 max-w-2xl text-[0.92rem] leading-[1.95] text-ivory/28">
                 {t(translations, "about_hero_desc", lang)}
-           </p>
-           </div>
-         </div>
+              </p>
+            </div>
+          </div>
 
           {/* Bottom markers — chapter + city */}
           <div className="mt-20 flex items-center justify-between md:mt-28 lg:mt-36">
-            <span className="label-utility tracking-[0.5em] text-ivory/15">
+            <span className="label-utility tracking-[0.5em] text-ivory/12">
               CASABLANCA · BERRECHID
-         </span>
-            <span className="hidden h-px flex-1 mx-6 bg-ivory/[0.06] md:block" />
-            <span className="label-utility tracking-[0.5em] text-ivory/15">
+            </span>
+            <span className="hidden h-px flex-1 mx-6 bg-ivory/[0.04] md:block" />
+            <span className="label-utility tracking-[0.5em] text-ivory/12">
               2024 — PRESENT
-         </span>
-       </div>
-     </div>
-   </section>
+            </span>
+          </div>
+        </div>
+      </section>
 
       <div className="mx-auto max-w-[1600px] px-6 lg:px-16">
         <div className="h-px w-full bg-gradient-to-r from-transparent via-gold/15 to-transparent" />
@@ -67,17 +67,17 @@ export default async function AboutPage() {
                 {/* Editorial image placeholder */}
                 <div className="absolute inset-0 flex items-end justify-start p-8">
                   <div className="space-y-3">
-                    <span className="block label-utility tracking-[0.55em] text-ivory/15">
+                    <span className="block label-utility tracking-[0.55em] text-ivory/12">
                       CASABLANCA
                </span>
-                    <span className="block label-utility text-[0.4rem] tracking-[0.4em] text-ivory/12">
+                    <span className="block label-utility text-[0.4rem] tracking-[0.4em] text-ivory/10">
                       ATLANTIC COAST · MOROCCO
                </span>
              </div>
                </div>
                 {/* Chapter number overlay */}
                 <div className="absolute right-8 top-8">
-                  <span className="font-display text-[3rem] font-light leading-none tracking-[-0.04em] text-ivory/[0.06]">
+                  <span className="font-display text-[3rem] font-light leading-none tracking-[-0.04em] text-ivory/[0.04]">
                     01
              </span>
                </div>
@@ -97,15 +97,15 @@ export default async function AboutPage() {
                 {t(translations, "origin_title", lang)}
            </h2>
 
-              <p className="text-[0.85rem] leading-[2] text-ivory/30">
+              <p className="text-[0.85rem] leading-[2] text-ivory/25">
                 {t(translations, "origin_desc", lang)}
            </p>
 
               {/* Micro signature */}
               <div className="pt-4 flex items-center gap-3">
                 <span className="h-px w-10 bg-gold/30" />
-                <span className="label-utility tracking-[0.4em] text-ivory/22">
-                  {t(translations, "craft_origin", lang)}
+                <span className="label-utility tracking-[0.4em] text-ivory/18">
+                   {t(translations, "craft_origin", lang)}
              </span>
            </div>
          </div>
@@ -134,13 +134,13 @@ export default async function AboutPage() {
                 {t(translations, "quality_title", lang)}
            </h2>
 
-              <p className="text-[0.85rem] leading-[2] text-ivory/30">
+               <p className="text-[0.85rem] leading-[2] text-ivory/25">
                 {t(translations, "quality_desc", lang)}
            </p>
 
               <div className="pt-4 flex items-center gap-3">
                 <span className="h-px w-10 bg-gold/30" />
-                <span className="label-utility tracking-[0.4em] text-ivory/22">
+                 <span className="label-utility tracking-[0.4em] text-ivory/18">
                   ATLAS · SAHARA · MEDINA
               </span>
             </div>
@@ -151,16 +151,16 @@ export default async function AboutPage() {
               <div className="relative aspect-[4/5] overflow-hidden bg-black-soft md:aspect-[16/11]">
                 <div className="absolute inset-0 flex items-end justify-start p-8">
                   <div className="space-y-3">
-                    <span className="block label-utility tracking-[0.55em] text-ivory/15">
+                    <span className="block label-utility tracking-[0.55em] text-ivory/12">
                       BERRECHID
                </span>
-                    <span className="block label-utility text-[0.4rem] tracking-[0.4em] text-ivory/12">
+                    <span className="block label-utility text-[0.4rem] tracking-[0.4em] text-ivory/10">
                       THE PLAIN · MOROCCO
                </span>
              </div>
                </div>
                 <div className="absolute right-8 top-8">
-                  <span className="font-display text-[3rem] font-light leading-none tracking-[-0.04em] text-ivory/[0.06]">
+                  <span className="font-display text-[3rem] font-light leading-none tracking-[-0.04em] text-ivory/[0.04]">
                     02
              </span>
                </div>
@@ -179,8 +179,8 @@ export default async function AboutPage() {
         <div className="mx-auto max-w-[1600px] px-6 py-28 md:px-10 md:py-40 lg:px-16 lg:py-56">
           <div className="mb-20 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-16 md:mb-28 lg:mb-36">
             <div className="lg:col-span-2">
-              <span className="font-display text-[4.5rem] font-light leading-none tracking-[-0.04em] text-ivory/[0.06] md:text-[6rem]">
-                03
+               <span className="font-display text-[4.5rem] font-light leading-none tracking-[-0.04em] text-ivory/[0.04] md:text-[6rem]">
+                 03
            </span>
            </div>
 
@@ -217,7 +217,7 @@ export default async function AboutPage() {
                   <h3 className="font-display text-2xl leading-[0.95] tracking-[-0.02em] text-ivory md:text-3xl">
                     {t(translations, `${key}_title`, lang)}
              </h3>
-                  <p className="max-w-2xl text-[0.85rem] leading-[2] text-ivory/30">
+                  <p className="max-w-2xl text-[0.85rem] leading-[2] text-ivory/25">
                     {t(translations, `${key}_desc`, lang)}
              </p>
            </div>
@@ -234,13 +234,13 @@ export default async function AboutPage() {
 
           <div className="mt-20 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16 lg:mt-28">
             <div className="lg:col-span-2">
-              <span className="font-display text-[4.5rem] font-light leading-none tracking-[-0.04em] text-ivory/[0.06] md:text-[6rem]">
-                04
+               <span className="font-display text-[4.5rem] font-light leading-none tracking-[-0.04em] text-ivory/[0.04] md:text-[6rem]">
+                 04
            </span>
            </div>
 
             <div className="lg:col-span-9 max-w-3xl">
-              <p className="font-display text-[clamp(1.5rem,2.5vw,2rem)] leading-[1.4] tracking-[-0.025em] text-ivory/65">
+              <p className="font-display text-[clamp(1.5rem,2.5vw,2rem)] leading-[1.4] tracking-[-0.025em] text-ivory/60">
                 {t(translations, "closing", lang)}
            </p>
 

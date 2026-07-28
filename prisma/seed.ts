@@ -40,7 +40,7 @@ function getProductImages(categorySlug: string) {
 }
 
 function getAccent(categorySlug: string) {
-  return CATEGORY_ACCENT[categorySlug] ?? "#C8A96A";
+  return CATEGORY_ACCENT[categorySlug] ?? "#D4B06A";
 }
 
 async function main() {
@@ -126,7 +126,7 @@ async function main() {
 
   // ── Collections ──
   const collections = [
-    { slug: "classic", name: "Classic", description: "Timeless flavors", accent: "#C8A96A", tone: "from-[#fffdf7] via-white to-[#f4ead3]", previewLabel: "Signature", order: 1, image: "" },
+    { slug: "classic", name: "Classic", description: "Timeless flavors", accent: "#D4B06A", tone: "from-[#fffdf7] via-white to-[#f4ead3]", previewLabel: "Signature", order: 1, image: "" },
     { slug: "premium", name: "Premium", description: "Our finest selection", accent: "#1a1a2e", tone: "from-[#f0f0ff] via-white to-[#e8e8ff]", previewLabel: "Luxury", order: 2, image: "" },
     { slug: "limited", name: "Limited Edition", description: "Seasonal exclusives", accent: "#8B0000", tone: "from-[#fff5f5] via-white to-[#ffe0e0]", previewLabel: "Limited", order: 3, image: "" },
   ];

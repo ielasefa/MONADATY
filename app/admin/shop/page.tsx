@@ -28,7 +28,7 @@ async function saveProduct(formData: FormData) {
     category: (formData.get("category") as string) || "Sparkling",
     collection: (formData.get("collection") as string) || "",
     visual: (formData.get("visual") as string) || "",
-    accent: (formData.get("accent") as string) || "#C8A96A",
+    accent: (formData.get("accent") as string) || "#D5B87D",
     description: (formData.get("description") as string) || "",
     ingredients: (formData.get("ingredients") as string) || "",
     nutrition: (formData.get("nutrition") as string) || "",

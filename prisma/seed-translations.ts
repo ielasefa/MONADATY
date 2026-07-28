@@ -112,6 +112,12 @@ export async function seedTranslations(prisma: PrismaClient) {
     { key: "collections", namespace: "footer", fr: "Collections", en: "Collections", ar: "المجموعات" },
     { key: "about", namespace: "footer", fr: "À propos", en: "About", ar: "حول" },
     { key: "best_sellers", namespace: "footer", fr: "Meilleures ventes", en: "Best Sellers", ar: "الأكثر مبيعاً" },
+    { key: "shipping", namespace: "footer", fr: "Livraison", en: "Shipping", ar: "الشحن" },
+    { key: "returns", namespace: "footer", fr: "Retours", en: "Returns", ar: "مرتجعات" },
+    { key: "journal", namespace: "footer", fr: "Journal", en: "Journal", ar: "المجلة" },
+    { key: "discover", namespace: "footer", fr: "Découvrir", en: "Discover", ar: "اكتشف" },
+    { key: "help", namespace: "footer", fr: "Aide", en: "Help", ar: "مساعدة" },
+    { key: "brand_desc", namespace: "footer", fr: "Fabriqué à Casablanca. Rafraîchissement marocain premium, construit autour du goût.", en: "Crafted in Casablanca. Premium Moroccan refreshment, built around taste.", ar: "مصنوع في الدار البيضاء. مشروبات مغربية فاخرة، مبنية حول الذوق." },
 
     // ── Home ──
     { key: "hero_title", namespace: "home", fr: "LE GOÛT,\nAUTREMENT.", en: "TASTE,\nREDEFINED.", ar: "الذائقة،\nبصيغة أخرى." },
@@ -162,12 +168,39 @@ export async function seedTranslations(prisma: PrismaClient) {
     { key: "cta_title", namespace: "home", fr: "LE GOÛT\nVOUS ATTEND.", en: "THE TASTE\nAWAITS.", ar: "الذائقة\nتنتظرك." },
     { key: "cta_desc", namespace: "home", fr: "", en: "", ar: "" },
     { key: "cta_button", namespace: "home", fr: "SHOP MONADATY", en: "SHOP MONADATY", ar: "تسوق MONADATY" },
-    { key: "newsletter_title", namespace: "home", fr: "STAY CLOSE\nTO THE TASTE.", en: "STAY CLOSE\nTO THE TASTE.", ar: "ابقَ قريباً\nمن الذائقة." },
-    { key: "newsletter_subtitle", namespace: "home", fr: "THE INNER CIRCLE", en: "THE INNER CIRCLE", ar: "الدائرة الداخلية" },
-    { key: "inner_circle", namespace: "home", fr: "THE INNER CIRCLE", en: "THE INNER CIRCLE", ar: "الدائرة الداخلية" },
-    { key: "join", namespace: "home", fr: "REJOINDRE", en: "JOIN", ar: "انضم" },
-    { key: "shop_by_collection", namespace: "home", fr: "SHOP BY COLLECTION", en: "SHOP BY COLLECTION", ar: "تسوق حسب المجموعة" },
-    { key: "the_collection", namespace: "home", fr: "THE COLLECTION", en: "THE COLLECTION", ar: "المجموعة" },
+    { key: "cta_headline", namespace: "home", fr: "AMENEZ LE MAROC AU MOMENT.", en: "BRING MOROCCO TO THE MOMENT.", ar: "أحضر المغرب إلى اللحظة." },
+{ key: "newsletter_title", namespace: "home", fr: "STAY CLOSE\nTO THE TASTE.", en: "STAY CLOSE\nTO THE TASTE.", ar: "ابقَ قريباً\nمن الذائقة." },
+{ key: "newsletter_subtitle", namespace: "home", fr: "THE INNER CIRCLE", en: "THE INNER CIRCLE", ar: "الدائرة الداخلية" },
+{ key: "inner_circle", namespace: "home", fr: "THE INNER CIRCLE", en: "THE INNER CIRCLE", ar: "الدائرة الداخلية" },
+{ key: "join", namespace: "home", fr: "REJOINDRE", en: "JOIN", ar: "انضم" },
+{ key: "shop_by_collection", namespace: "home", fr: "SHOP BY COLLECTION", en: "SHOP BY COLLECTION", ar: "تسوق حسب المجموعة" },
+{ key: "the_collection", namespace: "home", fr: "THE COLLECTION", en: "THE COLLECTION", ar: "المجموعة" },
+    { key: "brand_statement_eyebrow", namespace: "home", fr: "UNE NOUVELLE EXPRESSION", en: "A NEW EXPRESSION", ar: "تعبير جديد" },
+    { key: "brand_statement_headline", namespace: "home", fr: "UNE NOUVELLE EXPRESSION\nDE LA FRAÎCHEUR MAROCAINE.", en: "A NEW EXPRESSION\nOF MOROCCAN REFRESHMENT.", ar: "تعبير جديد\nعن الانتعاش المغربي." },
+    { key: "brand_statement_desc", namespace: "home", fr: "MONADATY puise son inspiration dans les saveurs, les ingrédients et la culture du Maroc pour créer une expérience de boisson moderne, pensée pour ceux qui recherchent l'authenticité et le raffinement.", en: "MONADATY draws from Morocco's flavors, ingredients, and culture to create a modern beverage experience — crafted for those who appreciate taste, authenticity, and refinement.", ar: "تستلهم MONADATY نكهاتها ومكوناتها وثقافتها من المغرب لتخلق تجربة مشروب عصريّة، صُممت لمن يقدرون الذوق والأصالة والرقي." },
+    { key: "shop_the_drinks_title", namespace: "home", fr: "SHOP THE DRINKS", en: "SHOP THE DRINKS", ar: "تسوق المشروبات" },
+    { key: "shop_the_drinks_desc", namespace: "home", fr: "Découvrez notre sélection de boissons marocaines premium, chacune racontant une histoire de saveur et d'intention.", en: "Browse our selection of premium Moroccan beverages, each one crafted with intention and taste.", ar: "تصفح مجموعتنا من المشروبات المغربية الفاخرة، كل منها مصنوع بقصد وذوق." },
+    { key: "view_all_drinks", namespace: "home", fr: "VOIR TOUT", en: "VIEW ALL DRINKS", ar: "عرض الكل" },
+{ key: "why_choose_us_title", namespace: "home", fr: "Pourquoi MONADATY", en: "Why MONADATY", ar: "لماذا MONADATY" },
+{ key: "pillar_origin_title", namespace: "home", fr: "ORIGINE MAROCAINE", en: "MOROCCAN ORIGIN", ar: "أصل مغربي" },
+{ key: "pillar_origin_desc", namespace: "home", fr: "Née à Casablanca. Chaque ingrédient choisi avec intention.", en: "Born in Casablanca. Every ingredient chosen with intention.", ar: "وُلدت في الدار البيضاء. كل مكون مختار بعناية." },
+{ key: "pillar_taste_title", namespace: "home", fr: "GOÛT SANS COMPROMIS", en: "DISTINCT TASTE", ar: "ذوق واضح" },
+{ key: "pillar_taste_desc", namespace: "home", fr: "Pas de sirops, pas de compromis. Chaque bouteille raconte une histoire.", en: "No syrups, no compromise. Every bottle tells a story.", ar: "لا شراب، لا مساومة. كل زجاجة تحكي قصة." },
+{ key: "pillar_shared_title", namespace: "home", fr: "FAIT POUR ÊTRE PARTAUGÉ", en: "MADE TO BE SHARED", ar: "مصمم للمشاركة" },
+    { key: "pillar_shared_desc", namespace: "home", fr: "Conçue autour de la tradition marocaine du partage et de la convivialité.", en: "Designed around the Moroccan tradition of gathering and sharing.", ar: "مصممة حول التقليد المغربي للتجمع والمشاركة." },
+    { key: "pillar_craft_title", namespace: "home", fr: "FABRIQUÉ AVEC SOIN", en: "CRAFTED WITH CARE", ar: "مصنوع بعناية" },
+    { key: "pillar_craft_desc", namespace: "home", fr: "Chaque recette est testée, affinée et équilibrée — pas de sirops, pas de raccourcis. Fabriqué en petits lots avec intention.", en: "Every recipe is tested, refined, and balanced — no syrups, no shortcuts. Crafted in small batches with intention.", ar: "كل وصفة تُختبر وتُحسَّن وتُوازن — لا شراب، لا اختصارات. مصنوعة بدفعات صغيرة وبقصد." },
+{ key: "explore_label", namespace: "home", fr: "EXPLORER", en: "EXPLORE", ar: "استكشف" },
+{ key: "from_morocco", namespace: "home", fr: "DU MAROC", en: "FROM MOROCCO", ar: "من المغرب" },
+{ key: "our_story_link", namespace: "home", fr: "NOTRE HISTOIRE", en: "OUR STORY", ar: "قصتنا" },
+{ key: "crafted_in_morocco", namespace: "home", fr: "Fabriqué au Maroc · 2024", en: "Crafted in Morocco · 2024", ar: "مُصَنَّع في المغرب · ٢٠٢٤" },
+{ key: "customer_notes", namespace: "home", fr: "Ce qu'ils disent", en: "Customer notes", ar: "ماذا يقولون" },
+{ key: "what_customers_say", namespace: "home", fr: "Ce que nos clients disent", en: "What our customers say", ar: "ماذا يقول عملاؤنا" },
+{ key: "the_moment_label", namespace: "home", fr: "LE MOMENT MONADATY", en: "THE MONADATY MOMENT", ar: "لحظة MONADATY" },
+{ key: "the_moment_title", namespace: "home", fr: "Verse. Sers. Savoure.", en: "Pour. Serve. Savor.", ar: "اسكب. قدم. تذوّق." },
+{ key: "the_moment_desc", namespace: "home", fr: "MONADATY est conçu pour les beaux moments — autour d'une table, entre amis.", en: "MONADATY is designed for the good moments — around a table, with friends.", ar: "MONADATY مصمم للحظات الجيدة — حول طاولة، مع الأصدقاء." },
+{ key: "pour_serve_savor", namespace: "home", fr: "VERSE · SERS · SAVOURE", en: "POUR · SERVE · SAVOR", ar: "اسكب · قدم · تذوّق" },
+{ key: "explore_drinks", namespace: "home", fr: "DÉCOUVRIR", en: "EXPLORE DRINKS", ar: "استكشف المشروبات" },
 
     // ── Products ──
     { key: "add_to_cart", namespace: "products", fr: "Ajouter au panier", en: "Add to cart", ar: "أضف إلى السلة" },
@@ -196,6 +229,7 @@ export async function seedTranslations(prisma: PrismaClient) {
     { key: "drink_unit", namespace: "products", fr: "boisson", en: "drink", ar: "مشروب" },
     { key: "drink_unit_plural", namespace: "products", fr: "boissons", en: "drinks", ar: "مشروبات" },
     { key: "unit_label", namespace: "products", fr: "Qty", en: "Qty", ar: "الكمية" },
+    { key: "view_product", namespace: "products", fr: "Voir le produit", en: "View Product", ar: "عرض المنتج" },
 
     // ── Wishlist ──
     { key: "wishlist_title", namespace: "wishlist", fr: "Mes favoris", en: "My Wishlist", ar: "المفضلة" },
@@ -253,10 +287,11 @@ export async function seedTranslations(prisma: PrismaClient) {
 
     // ── Hero (home namespace additions) ──
     { key: "discover_more", namespace: "home", fr: "NOTRE HISTOIRE", en: "OUR STORY", ar: "قصتنا" },
-    { key: "scroll_label", namespace: "home", fr: "Défiler", en: "Scroll", ar: "تمرير" },
-    { key: "hero_eyebrow", namespace: "home", fr: "CHAPITRE I", en: "CHAPTER I", ar: "الفصل الأول" },
-    { key: "hero_chapter", namespace: "home", fr: "CASABLANCA · MAROC", en: "CASABLANCA · MOROCCO", ar: "الدار البيضاء · المغرب" },
-    { key: "hero_subheadline", namespace: "home", fr: "FABRIQUÉ AU MAROC. PENSÉ AUTOUR DU GOÛT.", en: "CRAFTED IN MOROCCO. BUILT AROUND TASTE.", ar: "مصنوع في المغرب. ومبني حول الذوق." },
+    { key: "hero_eyebrow", namespace: "home", fr: "FABRIQUÉ AU MAROC", en: "CRAFTED IN MOROCCO", ar: "مصنوع في المغرب" },
+    { key: "hero_title", namespace: "home", fr: "UN NOUVEAU GOÛT\nDU MAROC.", en: "A NEW TASTE\nOF MOROCCO.", ar: "طعم جديد\nمن المغرب." },
+    { key: "hero_description", namespace: "home", fr: "Une boisson marocaine premium conçue pour les moments modernes, inspirée des saveurs, de la chaleur et de l'esprit de la maison.", en: "A premium Moroccan beverage crafted for modern moments, inspired by the flavors, warmth, and spirit of home.", ar: "مشروب مغربي فاخر صُنع للحظات العصرية، مستوحى من النكهات والدفء وروح المنزل." },
+    { key: "hero_cta_primary", namespace: "home", fr: "ACHETER LES BOISSONS", en: "SHOP THE DRINKS", ar: "تسوق المشروبات" },
+    { key: "hero_cta_secondary", namespace: "home", fr: "DÉCOUVRIR NOTRE HISTOIRE", en: "DISCOVER OUR STORY", ar: "اكتشف قصتنا" },
 
     // ── Quiet Transition ──
     { key: "quiet_chapter", namespace: "home", fr: "CHAPITRE II", en: "CHAPTER II", ar: "الفصل الثاني" },
@@ -1248,10 +1283,32 @@ export async function seedTranslations(prisma: PrismaClient) {
     { key: "stock_adjusted", namespace: "inventory", fr: "Stock ajusté avec succès", en: "Stock adjusted successfully", ar: "تم تعديل المخزون بنجاح" },
     { key: "error_occurred", namespace: "inventory", fr: "Une erreur est survenue", en: "An error occurred", ar: "حدث خطأ" },
 
-    // ── Additional common keys ──
-    { key: "hidden", namespace: "common", fr: "Masqué", en: "Hidden", ar: "مخفي" },
-    { key: "print", namespace: "common", fr: "Imprimer", en: "Print", ar: "طباعة" },
-  ];
+// ── Additional common keys ──
+{ key: "hidden", namespace: "common", fr: "Masqué", en: "Hidden", ar: "مخفي" },
+{ key: "print", namespace: "common", fr: "Imprimer", en: "Print", ar: "طباعة" },
+
+// ── Home — Trust/Benefits strip (benefit_1..4) ──
+{ key: "benefit_1", namespace: "home", fr: "Sélection marocaine premium", en: "PREMIUM MOROCCAN SELECTION", ar: "اختيار مغربي ممتاز" },
+{ key: "benefit_2", namespace: "home", fr: "Qualité soigneusement sélectionnée", en: "CAREFULLY CURATED QUALITY", ar: "جودة مختارة بعناية" },
+{ key: "benefit_3", namespace: "home", fr: "Livraison rapide dans tout le Maroc", en: "FAST DELIVERY ACROSS MOROCCO", ar: "توصيل سريع في جميع أنحاء المغرب" },
+{ key: "benefit_4", namespace: "home", fr: "Paiement sécurisé et facile", en: "SECURE & EASY CHECKOUT", ar: "دفع آمن وسهل" },
+
+// ── Home — Build Your Box (bundle_*) ──
+{ key: "bundle_eyebrow", namespace: "home", fr: "L'ÉDITION MONADATY", en: "THE MONADATY EDIT", ar: "إصدار MONADATY" },
+{ key: "bundle_title", namespace: "home", fr: "CRÉEZ VOTRE SÉLECTION PARFAITE", en: "CREATE YOUR PERFECT SELECTION", ar: "أنشئ اختيارك المثالي" },
+{ key: "bundle_desc", namespace: "home", fr: "Choisissez vos favoris, composez votre sélection et profitez-en davantage.", en: "Choose your favorites, build your selection, and enjoy more of what you love.", ar: "اختر مفضلاتك، أنشئ اختيارك، واستمتع بالمزيد مما تحب." },
+{ key: "bundle_select", namespace: "home", fr: "CHOISISSEZ VOTRE SÉLECTION", en: "CHOOSE YOUR SELECTION", ar: "اختر اختيارك" },
+
+// ── Home — How It Works (how_*, step_*) ──
+{ key: "how_label", namespace: "home", fr: "L'EXPÉRIENCE MONADATY", en: "THE MONADATY EXPERIENCE", ar: "تجربة MONADATY" },
+{ key: "how_title", namespace: "home", fr: "DÉCOUVREZ. CHOISISSEZ. SAVOUREZ.", en: "DISCOVER. CHOOSE. ENJOY.", ar: "اكتشف. اختر. استمتع." },
+{ key: "step_1_title", namespace: "home", fr: "DÉCOUVRIR", en: "DISCOVER", ar: "اكتشف" },
+{ key: "step_1_desc", namespace: "home", fr: "Explorez notre sélection soigneusement composée.", en: "Explore our carefully curated selection.", ar: "استكشف مجموعتنا المختارة بعناية." },
+{ key: "step_2_title", namespace: "home", fr: "CHOISIR", en: "CHOOSE", ar: "اختر" },
+{ key: "step_2_desc", namespace: "home", fr: "Sélectionnez les produits qui correspondent à vos goûts.", en: "Pick the products that match your taste.", ar: "اختر المنتجات التي تناسب ذوقك." },
+{ key: "step_3_title", namespace: "home", fr: "SAVOURER", en: "ENJOY", ar: "استمتع" },
+{ key: "step_3_desc", namespace: "home", fr: "Recevez votre sélection MONADATY et savourez-la chez vous.", en: "Receive your MONADATY selection and enjoy it at home.", ar: "استلم اختيار MONADATY واستمتع به في المنزل." },
+];
 
   let count = 0;
   for (const t of translations) {

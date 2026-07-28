@@ -40,7 +40,7 @@ export function CollectionsClient({
             </div>
             <Field label={t("description_label")} name="description" defaultValue={editing?.description} rows={2} />
             <div className="grid grid-cols-2 gap-4">
-              <Field label="Accent Color" name="accent" defaultValue={editing?.accent || "#C8A96A"} type="color" />
+              <Field label="Accent Color" name="accent" defaultValue={editing?.accent || "#D5B87D"} type="color" />
               <Field label="Preview Label" name="previewLabel" defaultValue={editing?.previewLabel} />
             </div>
             <SingleImageUploader label="Collection Image" value={editing?.image || ""} onChange={(_url) => {}} folder="monadaty/collections" />

@@ -224,7 +224,7 @@ export function SingleImageUploader({ value, onChange, label, folder = "products
           {processing && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/60">
               <div className="text-center">
-                <svg className="mx-auto mb-2 animate-spin" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2">
+                <svg className="mx-auto mb-2 animate-spin" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D5B87D" strokeWidth="2">
                   <path d="M21 12a9 9 0 1 1-6.219-8.56" />
                 </svg>
                 <p className="text-xs text-white">{t("processing", "Processing...")}</p>
@@ -274,7 +274,7 @@ export function SingleImageUploader({ value, onChange, label, folder = "products
           onClick={() => inputRef.current?.click()}
         >
           <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-white/5">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="1.5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D5B87D" strokeWidth="1.5">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
               <polyline points="17 8 12 3 7 8" />
               <line x1="12" y1="3" x2="12" y2="15" />

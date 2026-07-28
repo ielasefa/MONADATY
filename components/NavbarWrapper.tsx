@@ -1,16 +1,18 @@
 import { Navbar } from "@/components/Navbar";
+import { isAuthenticated } from "@/lib/auth";
 import type { CollectionData } from "@/types";
 
 export async function NavbarWrapper() {
   let mapped: CollectionData[] = [];
   let websiteName = "MONADATY";
+  let isAdmin = false;
 
   try {
     const [{ prisma }, { getSiteSettings }] = await Promise.all([
       import("@/lib/prisma"),
       import("@/lib/db"),
     ]);
-    const [collections, settings] = await Promise.all([
+    const [collections, settings, authResult] = await Promise.all([
       prisma.collection.findMany({
         orderBy: { order: "asc" },
         select: {
@@ -19,6 +21,7 @@ export async function NavbarWrapper() {
         },
       }),
       getSiteSettings(),
+      isAuthenticated(),
     ]);
 
     mapped = collections.map((c) => ({
@@ -32,9 +35,10 @@ export async function NavbarWrapper() {
       order: c.order,
     }));
     websiteName = settings.websiteName;
+    isAdmin = !!authResult;
   } catch {
     // DB unavailable (build time, etc.) — render navbar with minimal defaults
   }
 
-  return <Navbar collections={mapped} websiteName={websiteName} />;
+  return <Navbar collections={mapped} websiteName={websiteName} isAdmin={isAdmin} />;
 }

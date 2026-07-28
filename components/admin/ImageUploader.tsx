@@ -513,7 +513,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
         } ${!canAddMore ? "pointer-events-none opacity-50" : ""}`}
       >
         <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-white/5">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="1.5">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D5B87D" strokeWidth="1.5">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
             <polyline points="17 8 12 3 7 8" />
             <line x1="12" y1="3" x2="12" y2="15" />
@@ -623,7 +623,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
                 )}
                 {item.status === "duplicate" && (
                   <span className="flex items-center gap-1 text-xs text-yellow" data-testid="upload-status-duplicate">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2.5">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D5B87D" strokeWidth="2.5">
                       <circle cx="12" cy="12" r="10" />
                       <line x1="12" y1="8" x2="12" y2="12" />
                       <line x1="12" y1="16" x2="12.01" y2="16" />

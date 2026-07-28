@@ -12,9 +12,9 @@
     "db:push": "npm run db:start && prisma db push",
     "db:seed": "npm run db:start && npx tsx prisma/seed.ts",
     "db:studio": "npm run db:start && prisma studio",
-    "db:start": "pg_isready -h 127.0.0.1 -p 5432 >/dev/null 2>&1 || (mkdir -p /home/ielasef/.monadaty-pg-sock && pg_ctl -D /home/ielasef/.monadaty-pg -l /home/ielasef/.monadaty-pg/logfile -o \"-k /home/ielasef/.monadaty-pg-sock\" start)",
-    "db:stop": "pg_ctl -D /home/ielasef/.monadaty-pg stop -m fast",
-    "db:status": "pg_isready -h 127.0.0.1 -p 5432",
+    "db:start": "bash scripts/db-start.sh",
+    "db:stop": "bash scripts/db-stop.sh",
+    "db:status": "nc -z 127.0.0.1 5432 && echo 'postgres running' || echo 'postgres not running'",
     "postinstall": "prisma generate",
     "db:fix-images": "npx tsx scripts/fix-product-images.ts"
   },

@@ -4,27 +4,42 @@ import { useTranslation } from "@/hooks/useTranslation";
 
 export default function GlobalError({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
   const { t } = useTranslation("errors");
-  return (
-    <html lang="en">
-      <body style={{ margin: 0, minHeight: "100vh", background: "#050505", color: "#F2EEE6", fontFamily: "system-ui, sans-serif", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem", WebkitFontSmoothing: "antialiased" }}>
-        <div style={{ textAlign: "center", maxWidth: "28rem" }}>
-          <div style={{ margin: "0 auto 1.5rem", width: "64px", height: "64px", borderRadius: "50%", border: "1px solid rgba(116,24,39,0.2)", background: "rgba(116,24,39,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <svg style={{ width: "28px", height: "28px", color: "#7A1F2B" }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
-            </svg>
-          </div>
-          <h2 style={{ fontSize: "1.5rem", fontWeight: 600, marginBottom: "0.5rem" }}>{t("critical_error")}</h2>
-          <p style={{ fontSize: "0.875rem", color: "rgba(242,238,229,0.4)", marginBottom: "2rem" }}>{t("critical_error_desc")}</p>
-          <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
-            <button onClick={reset} style={{ height: "3rem", padding: "0 2rem", background: "#7A1F2B", color: "#F2EEE6", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase" as const, border: "none", borderRadius: "3px", cursor: "pointer" }}>
-              {t("try_again")}
-            </button>
-            <button onClick={() => (window.location.href = "/")} style={{ height: "3rem", padding: "0 2rem", background: "transparent", color: "#F2EEE6", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase" as const, border: "1px solid rgba(242,238,229,0.1)", borderRadius: "3px", cursor: "pointer" }}>
-              {t("go_home")}
-            </button>
-          </div>
-        </div>
-      </body>
-    </html>
+return (
+<html lang="en">
+<body className="m-0 flex min-h-screen items-center justify-center bg-black p-8 text-ivory antialiased">
+  <div className="mx-auto max-w-md text-center">
+    <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-burgundy/18 bg-burgundy/8">
+    <svg
+      className="h-7 w-7 text-burgundy/70"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+    </svg>
+    </div>
+  <h2 className="mb-2 text-xl font-semibold">{t("critical_error")}</h2>
+  <p className="mx-auto mb-8 max-w-sm text-sm text-ivory/35">{t("critical_error_desc")}</p>
+  <div className="flex flex-wrap items-center justify-center gap-4">
+  <button
+    onClick={reset}
+    className="h-12 rounded-btn bg-burgundy px-8 text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-ivory transition-all duration-300 hover:bg-burgundy-hover active:scale-[0.97]"
+  >
+    {t("try_again")}
+  </button>
+  <button
+    onClick={() => (window.location.href = "/")}
+    className="h-12 rounded-btn border border-gold/30 bg-transparent px-8 text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-gold transition-all duration-300 hover:bg-gold/[0.06] active:scale-[0.97]"
+  >
+    {t("go_home")}
+  </button>
+  </div>
+  </div>
+  </body>
+</html>
   );
 }
