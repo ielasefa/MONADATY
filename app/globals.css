@@ -9,9 +9,9 @@
   --gold: #C8A96A;
   --gold-light: #D4BC7E;
   --gold-dark: #A88A4A;
-  --rouge: #8F1020;
-  --rouge-hover: #A5152A;
-  --rouge-dark: #650A14;
+  --rouge: #9B2638;
+  --rouge-hover: #9B2638;
+  --rouge-dark: #741A28;
   --black: #171717;
   --ivory: #F8F6F2;
   --muted: #7A7670;
@@ -71,11 +71,11 @@ body {
 
 @layer components {
   .btn-primary {
-    @apply inline-flex h-11 items-center justify-center gap-2.5 rounded-btn bg-gold px-7 text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-black transition-all duration-300 hover:bg-gold-dark hover:translate-y-[-1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white active:scale-[0.97] active:translate-y-0;
+    @apply inline-flex h-11 items-center justify-center gap-2.5 rounded-btn bg-rouge px-7 text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-white transition-all duration-300 hover:bg-rouge-dark hover:translate-y-[-1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rouge/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-[0.97] active:translate-y-0;
   }
 
   .l-input {
-    @apply h-11 w-full border-0 border-b border-black/[0.08] bg-transparent px-0 text-[0.85rem] text-black outline-none transition-all duration-200 focus:border-gold/40;
+    @apply h-11 w-full border-0 border-b border-black/[0.08] bg-transparent px-0 text-[0.85rem] text-black outline-none transition-all duration-200 focus:border-rouge/40;
     &::placeholder {
       color: rgba(23,23,23,0.25);
     }
@@ -86,11 +86,11 @@ body {
   }
 
   .btn-primary-sm {
-    @apply inline-flex h-9 items-center justify-center gap-2 rounded-btn bg-gold px-5 text-[0.42rem] font-semibold uppercase tracking-[0.2em] text-black transition-all duration-300 hover:bg-gold-dark hover:translate-y-[-1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white active:scale-[0.97] active:translate-y-0;
+    @apply inline-flex h-9 items-center justify-center gap-2 rounded-btn bg-rouge px-5 text-[0.42rem] font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-rouge-dark hover:translate-y-[-1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rouge/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-[0.97] active:translate-y-0;
   }
 
   .btn-secondary {
-    @apply inline-flex h-11 items-center justify-center gap-2.5 rounded-btn border border-gold/40 bg-transparent px-7 text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-gold transition-all duration-300 hover:bg-gold/[0.06] hover:border-gold/60 hover:translate-y-[-1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white active:scale-[0.97];
+    @apply inline-flex h-11 items-center justify-center gap-2.5 rounded-btn border border-gold/40 bg-transparent px-7 text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-gold transition-all duration-300 hover:bg-gold/[0.06] hover:border-gold/60 hover:translate-y-[-1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-[0.97];
   }
 
   .btn-link {

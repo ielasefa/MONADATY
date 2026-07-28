@@ -912,7 +912,7 @@ export function FAQSection({ faqs }: { faqs: { question: string; answer: string 
     return (
       <section className="relative w-full overflow-hidden bg-black border-t border-white/[0.06]">
         <div className="mx-auto max-w-[1400px] px-6 py-16 md:px-10 md:py-20 lg:px-16 lg:py-24">
-          <div className="mx-auto max-w-2xl">
+          <div className="mx-auto max-w-3xl">
             <Reveal>
               <span className="label-utility tracking-[0.55em] text-gold/60">{t("faq_title", "FAQ")}</span>
               <h2 className="mt-3 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] leading-[0.95] tracking-[-0.03em] text-white">
@@ -928,15 +928,19 @@ export function FAQSection({ faqs }: { faqs: { question: string; answer: string 
   return (
     <section className="relative w-full overflow-hidden bg-black border-t border-white/[0.06]">
       <div className="mx-auto max-w-[1400px] px-6 py-16 md:px-10 md:py-20 lg:px-16 lg:py-24">
-        <div className="mx-auto max-w-2xl">
+        {/* Wide title wrapper — separate from the accordion column */}
+        <div className="mx-auto max-w-3xl text-center">
           <Reveal>
             <span className="label-utility tracking-[0.55em] text-gold/60">{t("faq_title", "FAQ")}</span>
             <h2 className="mt-3 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] leading-[0.95] tracking-[-0.03em] text-white">
               {t("faq_subtitle", "Frequently asked questions")}
             </h2>
           </Reveal>
+        </div>
 
-          <Reveal delay={0.1} className="mt-10">
+        {/* Accordion stays in its own narrower column */}
+        <div className="mx-auto mt-10 max-w-2xl">
+          <Reveal delay={0.1}>
             <div className="space-y-0">
               {faqs.map((faq, i) => (
                 <FAQItem key={i} question={faq.question} answer={faq.answer} isFirst={i === 0} />
