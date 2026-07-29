@@ -3,7 +3,6 @@ import {
   FeaturedProducts,
   CollectionsShowcase,
   BrandStory,
-  BestSellers,
   SocialProof,
   MoroccanMoment,
   Newsletter,
@@ -29,7 +28,6 @@ export default async function HomePage() {
     .map((t) => ({ id: t.id, name: t.name, role: t.role, content: t.content }));
 
   const shopProducts = allProducts.slice(0, 4);
-  const bestSellers = allProducts.slice(0, 4);
 
   return (
   <div className="bg-black">
@@ -44,10 +42,7 @@ export default async function HomePage() {
         <CollectionsShowcase collections={landingCollections} />
       )}
 
-{/* 07 — Best Sellers */}
-  {bestSellers.length > 0 && <BestSellers products={bestSellers} />}
-
-  {/* 06 — Brand Story */}
+{/* 06 — Brand Story */}
       {settings.aboutSection.enabled && (
         <BrandStory
           title={settings.aboutSection.title}

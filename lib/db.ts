@@ -156,7 +156,12 @@ export const getLandingCollections = cache(async (): Promise<CollectionData[]> =
       where: { landingEnabled: true },
       orderBy: { landingOrder: "asc" },
     });
-    return rows.map(mapCollectionData);
+    if (rows.length > 0) return rows.map(mapCollectionData);
+    const fallback = await prisma.collection.findMany({
+      orderBy: { order: "asc" },
+      take: 3,
+    });
+    return fallback.map(mapCollectionData);
   } catch (error) {
     logError(error, "Database error in getLandingCollections");
     return [];

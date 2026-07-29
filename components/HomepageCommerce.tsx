@@ -86,7 +86,7 @@ export function BrandStatement() {
             <h2 className="max-w-[16ch] font-display text-[clamp(2rem,4.5vw,3.5rem)] leading-[0.92] tracking-[-0.04em] text-white whitespace-pre-line">
               {t("brand_statement_headline", "ROOTED IN MOROCCO.\nCRAFTED FOR TODAY.")}
             </h2>
-            <p className="mt-2 max-w-lg text-[0.82rem] leading-[1.85] text-white/40">
+            <p className="mt-2 max-w-lg text-[0.82rem] leading-[1.85] text-white/55">
               {t("brand_statement_desc", "A modern Moroccan beverage brand built around exceptional ingredients, masterful craft, and the hospitality that makes Morocco extraordinary.")}
             </p>
           </div>
@@ -119,13 +119,13 @@ export function FeaturedProducts({ products }: { products: ProductData[] }) {
               <h2 className="mt-3 font-display text-[clamp(1.875rem,3.5vw,2.5rem)] leading-[0.95] tracking-[-0.03em] text-white">
                 {t("shop_the_drinks_headline", "Signature selection")}
               </h2>
-              <p className="mt-3 max-w-md text-[0.78rem] leading-[1.7] text-white/35">
+              <p className="mt-3 max-w-md text-[0.78rem] leading-[1.7] text-white/50">
                 {t("shop_the_drinks_desc", "Discover our signature selection, crafted with premium ingredients from Morocco.")}
               </p>
             </div>
             <Link
               href="/shop"
-              className="hidden items-center gap-2 label-utility text-[0.42rem] tracking-[0.2em] text-white/30 transition-colors duration-300 hover:text-gold md:flex"
+              className="hidden items-center gap-2 label-utility text-[0.42rem] tracking-[0.2em] text-white/50 transition-colors duration-300 hover:text-gold md:flex"
             >
               {t("view_all_drinks", "VIEW ALL PRODUCTS")}
               <ArrowRight />
@@ -211,7 +211,7 @@ function ProductCardLite({ product }: { product: ProductData }) {
               className={`absolute end-2.5 top-2.5 z-20 inline-flex items-center justify-center rounded-full p-2 transition-all duration-300 ${
                 isWishlisted
                   ? "text-gold opacity-100"
-                  : "text-white/20 opacity-0 group-hover:opacity-100 hover:text-gold"
+                  : "text-white/20 opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:text-gold"
               }`}
             >
               <svg
@@ -236,11 +236,11 @@ function ProductCardLite({ product }: { product: ProductData }) {
 
       <div className="mt-4 space-y-2">
         {product.shortDescription ? (
-          <p className="text-[0.6rem] font-medium uppercase tracking-[0.2em] text-white/30">
+          <p className="text-[0.6rem] font-medium uppercase tracking-[0.2em] text-white/45">
             {product.shortDescription}
           </p>
         ) : product.category ? (
-          <p className="text-[0.6rem] font-medium uppercase tracking-[0.2em] text-white/30">{product.category}</p>
+          <p className="text-[0.6rem] font-medium uppercase tracking-[0.2em] text-white/45">{product.category}</p>
         ) : null}
         <h3 className="font-display text-base leading-[0.95] tracking-[-0.015em] text-white">
           <Link
@@ -276,7 +276,7 @@ function ProductCardLite({ product }: { product: ProductData }) {
         </button>
         <Link
           href={`/product/${product.id}`}
-          className="btn-link w-full justify-center text-white/35 hover:text-gold"
+          className="btn-link w-full justify-center text-white/50 hover:text-gold"
         >
           {t("view_product", "VIEW PRODUCT")}
           <ArrowRight />
@@ -302,99 +302,100 @@ export function CollectionsShowcase({ collections }: { collections: CollectionDa
         <Reveal>
           <div className="flex items-center gap-3">
             <span className="h-px w-8 bg-gold" />
-            <span className="label-utility tracking-[0.55em] text-gold/60">
-              {t("explore_label", "EXPLORE")}
+            <span className="text-[0.75rem] font-semibold uppercase tracking-[0.2em] text-gold">
+              {t("curated_collections", "CURATED COLLECTIONS")}
             </span>
           </div>
-          <h2 className="mt-5 font-display text-[clamp(1.875rem,3.5vw,2.75rem)] leading-[0.95] tracking-[-0.03em] text-white">
-            {t("collections_title", "OUR COLLECTIONS")}
+          <h2 className="mt-5 font-display text-[clamp(1.75rem,4vw,3rem)] leading-[1.0] tracking-[-0.02em] text-white">
+            {t("collections_title", "DISCOVER THE MONADATY COLLECTIONS")}
           </h2>
-          <p className="mt-3 max-w-lg text-[0.78rem] leading-[1.7] text-white/35">
-            {t("collections_desc", "Curated selections made for every taste and occasion.")}
+          <p className="mt-3 max-w-[600px] text-[0.9rem] leading-[1.6] text-white/80">
+            {t("collections_desc", "Explore carefully selected Moroccan products, crafted to bring premium quality and authentic character to your everyday moments.")}
           </p>
         </Reveal>
 
-{/* Editorial mosaic — one dominant collection + two stacked secondaries */}
-<div className="mx-auto mt-12 max-w-[1160px] sm:px-2 lg:px-4">
-<div className="grid grid-cols-1 gap-4 lg:gap-6 lg:grid-cols-[3fr_2fr]">
+        <div className="mx-auto mt-12">
+          <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-[2.2fr_1fr] lg:gap-6">
+            {featured && (
+              <Reveal>
+                <Link href={`/shop?category=${featured.slug}`} className="group block h-full">
+                  <div className="relative h-[460px] w-full overflow-hidden rounded-2xl sm:h-[500px] md:h-[540px] lg:h-[620px]">
+                    <ProductImageOrFallback
+                      src={featured.image}
+                      alt={featured.title}
+                      sizes="(min-width: 1024px) 52vw, 100vw"
+                      className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+                      fallback={
+                        <div className="flex h-full w-full items-center justify-center bg-black-soft">
+                          <span className="font-display text-[5rem] font-light text-white/[0.05]">{featured.title.charAt(0)}</span>
+                        </div>
+                      }
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
+                    <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-8 lg:p-10">
+                      <p className="text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-gold/80">
+                        {featured.previewLabel || t("collection_label", "COLLECTION")}
+                      </p>
+                      <h3 className="mt-2 font-display text-[1.25rem] leading-[1.0] tracking-[-0.015em] text-white sm:text-[1.5rem] lg:text-[1.75rem]">
+                        {featured.title}
+                      </h3>
+                      {featured.description && (
+                        <p className="mt-2 max-w-md text-[0.78rem] leading-relaxed text-white/70">
+                          {featured.description}
+                        </p>
+                      )}
+                      <span className="mt-4 inline-flex items-center gap-2 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white/60 transition-colors duration-300 group-hover:text-gold">
+                        {t("view_collection", "VIEW COLLECTION")} <ArrowRight />
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              </Reveal>
+            )}
 
-{/* Collection 01 — large, dominant (left column) */}
-{featured && (
-<Reveal>
-<Link href={`/shop?category=${featured.slug}`} className="group block h-full">
-<div className="relative h-[480px] w-full overflow-hidden rounded-xl sm:h-[520px] lg:h-[600px]">
-<ProductImageOrFallback
-src={featured.image}
-alt={featured.title}
-sizes="(min-width: 1024px) 52vw, 100vw"
-className="object-cover transition-transform duration-[1600ms] ease-out group-hover:scale-[1.02]"
-fallback={
-<div className="flex h-full w-full items-center justify-center bg-black-soft">
-<span className="font-display text-[5rem] font-light text-white/[0.05]">{featured.title.charAt(0)}</span>
-</div>
-}
-/>
-<div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-<div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-8 lg:p-10">
-<p className="label-utility text-[0.38rem] tracking-[0.35em] text-ivory/50">
-{featured.previewLabel || t("collection_label", "COLLECTION")}
-</p>
-<h3 className="mt-2 font-display text-xl leading-[0.95] tracking-[-0.02em] text-ivory sm:text-2xl lg:text-[1.65rem]">
-{featured.title}
-</h3>
-{featured.description && (
-<p className="mt-2 max-w-md text-[0.72rem] leading-relaxed text-ivory/45">
-{featured.description}
-</p>
-)}
-<span className="mt-4 inline-flex items-center gap-2 label-utility text-[0.38rem] tracking-[0.2em] text-ivory/45 transition-colors duration-300 group-hover:text-gold">
-{t("view_collection", "VIEW COLLECTION")} <ArrowRight />
-</span>
-</div>
-</div>
-</Link>
-</Reveal>
-)}
-
-{/* Collection 02 & 03 — smaller, stacked (right column) */}
-{secondary.length > 0 && (
-          <div className="flex flex-col gap-4 lg:gap-6">
-{secondary.slice(0, 2).map((col, i) => (
-<Reveal key={col.slug} delay={0.08 * (i + 1)}>
-<Link href={`/shop?category=${col.slug}`} className="group block h-full">
-<div className="relative h-[230px] w-full overflow-hidden rounded-xl sm:h-[250px] lg:h-[285px]">
-<ProductImageOrFallback
-src={col.image}
-alt={col.title}
-sizes="(min-width: 1024px) 30vw, 100vw"
-className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
-fallback={
-<div className="flex h-full w-full items-center justify-center bg-black-soft">
-<span className="font-display text-[3rem] font-light text-white/[0.05]">{col.title.charAt(0)}</span>
-</div>
-}
-/>
-<div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/15 to-transparent" />
-<div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6 lg:p-7">
-<p className="label-utility text-[0.32rem] tracking-[0.3em] text-ivory/40">
-{col.previewLabel || t("collection_label", "COLLECTION")}
-</p>
-<h3 className="mt-1 font-display text-base leading-[0.95] tracking-[-0.015em] text-ivory sm:text-lg lg:text-lg">
-{col.title}
-</h3>
-<span className="mt-1.5 inline-flex items-center gap-1.5 label-utility text-[0.32rem] tracking-[0.18em] text-ivory/35 transition-colors duration-300 group-hover:text-gold">
-{t("view_collection", "VIEW")} <ArrowRight />
-</span>
-</div>
-</div>
-</Link>
-</Reveal>
-))}
-</div>
-)}
-</div>
-</div>
-</div>
+            {secondary.length > 0 && (
+              <div className="flex flex-col gap-4 md:grid md:grid-cols-2 md:gap-5 lg:flex lg:flex-col lg:gap-6">
+                {secondary.slice(0, 2).map((col, i) => (
+                  <Reveal key={col.slug} delay={0.08 * (i + 1)}>
+                    <Link href={`/shop?category=${col.slug}`} className="group block h-full">
+                      <div className="relative h-[280px] w-full overflow-hidden rounded-2xl sm:h-[300px] md:h-[320px] lg:h-[298px]">
+                        <ProductImageOrFallback
+                          src={col.image}
+                          alt={col.title}
+                          sizes="(min-width: 1024px) 30vw, 100vw"
+                          className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+                          fallback={
+                            <div className="flex h-full w-full items-center justify-center bg-black-soft">
+                              <span className="font-display text-[3rem] font-light text-white/[0.05]">{col.title.charAt(0)}</span>
+                            </div>
+                          }
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                        <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6 lg:p-7">
+                          <p className="text-[0.55rem] font-semibold uppercase tracking-[0.2em] text-gold/80">
+                            {col.previewLabel || t("collection_label", "COLLECTION")}
+                          </p>
+                          <h3 className="mt-1 font-display text-[1rem] leading-[1.0] tracking-[-0.01em] text-white sm:text-[1.125rem] lg:text-[1.25rem]">
+                            {col.title}
+                          </h3>
+                          {col.description && (
+                            <p className="mt-1 max-w-[22ch] text-[0.68rem] leading-relaxed text-white/65 line-clamp-2">
+                              {col.description}
+                            </p>
+                          )}
+                          <span className="mt-2 inline-flex items-center gap-1.5 text-[0.5rem] font-semibold uppercase tracking-[0.16em] text-white/50 transition-colors duration-300 group-hover:text-gold">
+                            {t("view_collection", "VIEW")} <ArrowRight />
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  </Reveal>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
@@ -429,12 +430,12 @@ export function BrandStory({
               </h2>
               {description && (
                 <div
-                  className="mt-6 max-w-md text-[0.82rem] leading-[1.85] text-white/40"
+                  className="mt-6 max-w-md text-[0.82rem] leading-[1.85] text-white/55"
                   dangerouslySetInnerHTML={{ __html: description.replace(/\n/g, "<br/>") }}
                 />
               )}
               <div className="mt-7">
-                <Link href="/about" className="btn-link text-white/40 hover:text-gold">
+                <Link href="/about" className="btn-link text-white/50 hover:text-gold">
                   {t("our_story_link", "DISCOVER OUR STORY")} <ArrowRight />
                 </Link>
               </div>
@@ -720,58 +721,50 @@ export function SocialProof({
   const { t } = useTranslation("home");
   if (testimonials.length === 0) return null;
 
-  const primary = testimonials[0];
-  const others = testimonials.slice(1, 4);
+  const displayTestimonials = testimonials.slice(0, 3);
 
   return (
     <section className="relative w-full overflow-hidden bg-black-soft">
       <div className="mx-auto max-w-[1400px] px-6 py-16 md:px-10 md:py-20 lg:px-16 lg:py-24">
-        <div className="mx-auto max-w-3xl">
-          <Reveal>
-            <div className="flex items-center gap-3">
-              <span className="h-px w-8 bg-gold" />
-              <span className="label-utility tracking-[0.55em] text-gold/60">
-                {subtitle || t("what_customers_say", "CUSTOMER NOTES")}
-              </span>
-            </div>
-            <h2 className="mt-6 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] leading-[0.95] tracking-[-0.03em] text-white">
-              {title || t("customer_notes", "Loved by customers across Morocco.")}
-            </h2>
-          </Reveal>
+        <Reveal>
+          <div className="flex items-center gap-3">
+            <span className="h-px w-8 bg-gold" />
+            <span className="text-[0.75rem] font-semibold uppercase tracking-[0.2em] text-gold">
+              {subtitle || t("what_customers_say", "WHAT THEY SAY")}
+            </span>
+          </div>
+          <h2 className="mt-5 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] leading-[0.95] tracking-[-0.03em] text-white">
+            {title || t("customer_notes", "Loved by customers across Morocco.")}
+          </h2>
+        </Reveal>
 
-          <Reveal delay={0.1} className="mt-12">
-            <div className="relative rounded-xl border border-white/[0.06] bg-black-surface p-8 md:p-10 shadow-premium">
-              <p className="max-w-[680px] text-[1rem] leading-[1.7] tracking-[-0.01em] text-white">
-                {primary.content}
-              </p>
-              <div className="mt-6 flex items-center gap-3">
-                <span className="text-[0.55rem] tracking-[0.15em] text-gold">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-                <span className="h-px w-4 bg-white/[0.08]" />
-                <span className="text-[0.65rem] tracking-[0.15em] text-white/50">{primary.name}</span>
-                {primary.role && (
-                  <>
-                    <span className="text-[0.65rem] text-white/20">·</span>
-                    <span className="text-[0.65rem] tracking-[0.15em] text-white/40">{primary.role}</span>
-                  </>
-                )}
+        <Reveal delay={0.1} className="mt-12">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+            {displayTestimonials.map((tItem) => (
+              <div
+                key={tItem.id}
+                className="flex flex-col rounded-xl border border-white/[0.06] bg-black-surface p-7 md:p-8"
+              >
+                <span className="text-[1rem] tracking-[0.1em] text-gold leading-none">
+                  &#9733;&#9733;&#9733;&#9733;&#9733;
+                </span>
+                <p className="mt-4 flex-1 text-[1rem] leading-[1.6] text-white">
+                  {tItem.content}
+                </p>
+                <div className="mt-5 space-y-0.5">
+                  <p className="text-[0.85rem] font-semibold leading-none text-white">
+                    {tItem.name}
+                  </p>
+                  {tItem.role && (
+                    <p className="text-[0.75rem] leading-none text-gold">
+                      {tItem.role}
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
-
-            {others.length > 0 && (
-              <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
-                {others.map((tItem) => (
-                  <div key={tItem.id} className="rounded-xl border border-white/[0.06] bg-black-surface p-6 shadow-premium">
-                    <p className="text-[0.72rem] leading-[1.8] text-white/40">&ldquo;{tItem.content}&rdquo;</p>
-                    <div className="mt-4 flex items-center gap-2">
-                      <span className="text-[0.55rem] tracking-[0.15em] text-gold/70">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-                      <span className="text-[0.6rem] tracking-[0.15em] text-white/40">{tItem.name}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </Reveal>
-        </div>
+            ))}
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -805,14 +798,14 @@ export function MoroccanMoment() {
             <h2 className="mt-6 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] leading-[0.95] tracking-[-0.03em] text-white">
               {t("the_moment_title", "Pour. Serve. Savor.")}
             </h2>
-            <p className="mt-5 text-[0.78rem] leading-[1.85] text-white/40">
+            <p className="mt-5 text-[0.78rem] leading-[1.85] text-white/55">
               {t(
                 "the_moment_desc",
                 "MONADATY is designed for the good moments — around a table with friends, chilled and ready to share. Welcome to genuine Moroccan hospitality.",
               )}
             </p>
             <div className="mt-8">
-              <Link href="/shop" className="btn-link text-white/40 hover:text-gold">
+              <Link href="/shop" className="btn-link text-white/50 hover:text-gold">
                 {t("explore_drinks", "EXPLORE DRINKS")} <ArrowRight />
               </Link>
             </div>
@@ -867,7 +860,7 @@ export function Newsletter({
                 <input
                   type="email"
                   placeholder={placeholder || t("newsletter_label", "Your email")}
-                  className="h-11 w-full border-0 border-b border-white/[0.15] bg-transparent px-0 text-[0.82rem] text-white outline-none transition-all duration-200 placeholder:text-white/30 focus:border-gold"
+                  className="h-11 w-full border-0 border-b border-white/[0.15] bg-transparent px-0 text-[0.82rem] text-white outline-none transition-all duration-200 placeholder:text-white/40 focus:border-gold"
                 />
               </label>
               <button
@@ -969,38 +962,32 @@ function FAQItem({ question, answer, isFirst }: { question: string; answer: stri
 14 — FINAL CTA
 ============================================================ */
 export function FinalCTA() {
-  const { t } = useTranslation("home");
   return (
     <section className="relative w-full overflow-hidden bg-black border-t border-white/[0.06]">
       <div className="mx-auto max-w-[1400px] px-6 py-16 md:px-10 md:py-20 lg:px-16 lg:py-24">
-        <Reveal>
+        <div className="animate-fade-up">
           <div className="mx-auto max-w-2xl text-center">
             <div className="flex items-center justify-center gap-3">
               <span className="h-px w-8 bg-gold" />
-              <span className="label-utility tracking-[0.55em] text-gold/60">
-                {t("cta_marker", "BEGIN THE POUR")}
-              </span>
+              <span className="label-utility tracking-[0.55em] text-gold/60">BEGIN THE POUR</span>
               <span className="h-px w-8 bg-gold" />
             </div>
             <h2 className="mt-7 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] leading-[0.95] tracking-[-0.02em] text-white">
-              {t("cta_headline", "YOUR NEXT FAVORITE TASTE IS WAITING.")}
+              YOUR NEXT FAVORITE TASTE IS WAITING.
             </h2>
-            <p className="mx-auto mt-4 max-w-md text-[0.78rem] leading-[1.7] text-white/40">
-              {t(
-                "cta_desc",
-                "Discover the MONADATY collection. Premium Moroccan refreshment, delivered to your door.",
-              )}
+            <p className="mx-auto mt-4 max-w-md text-[0.78rem] leading-[1.7] text-white/55">
+              Discover the MONADATY collection. Premium Moroccan refreshment, delivered to your door.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link href="/shop" className="btn-primary">
-                {t("cta_button", "SHOP NOW")} <ArrowRight />
+                SHOP NOW <ArrowRight />
               </Link>
-              <Link href="/about" className="btn-link text-white/40 hover:text-gold">
-                {t("our_story", "OUR STORY")}
+              <Link href="/about" className="btn-link text-white/50 hover:text-gold">
+                OUR STORY
               </Link>
             </div>
           </div>
-        </Reveal>
+        </div>
       </div>
     </section>
   );

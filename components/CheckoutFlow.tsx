@@ -207,7 +207,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link href="/shop" className="btn-primary">
-              {t("explore_drinks")}
+              {t("explore_drinks", "Explore Drinks")}
             </Link>
             <Link href="/" className="btn-secondary">
               {t("back_to_home")}
@@ -249,7 +249,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
               <div className="mb-6 flex items-center gap-3">
                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-burgundy text-[0.5rem] font-semibold text-ivory">1</span>
                 <div>
-                  <p className="text-[0.4rem] font-semibold uppercase tracking-[0.35em] text-ivory/20">{t("step_delivery")}</p>
+                  <p className="text-[0.4rem] font-semibold uppercase tracking-[0.35em] text-ivory/20">{t("step_delivery", "Delivery")}</p>
                   <h2 className="text-lg font-medium text-ivory">{t("deliver_to_door")}</h2>
                 </div>
               </div>
@@ -370,7 +370,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
               <div className="mb-6 flex items-center gap-3">
                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-burgundy text-[0.5rem] font-semibold text-ivory">2</span>
                 <div>
-                  <p className="text-[0.4rem] font-semibold uppercase tracking-[0.35em] text-ivory/20">{t("step_payment")}</p>
+                  <p className="text-[0.4rem] font-semibold uppercase tracking-[0.35em] text-ivory/20">{t("step_payment", "Payment")}</p>
                   <h2 className="text-lg font-medium text-ivory">{t("cash_on_delivery")}</h2>
                 </div>
               </div>

@@ -174,16 +174,16 @@ const isShopPage = pathname === "/shop";
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-500 ${
+      className={`sticky top-0 z-50 bg-black transition-all duration-500 ${
         scrolled
-          ? "liquid-glass border-b border-ivory/[0.06]"
-          : "bg-transparent border-b border-transparent"
+          ? "border-b border-white/[0.06]"
+          : "border-b border-transparent"
       }`}
     >
-        <div className="mx-auto flex h-20 items-center justify-between gap-6 max-w-[1400px] px-6 md:px-10 lg:px-16">
+        <div className="mx-auto flex h-16 md:h-20 items-center justify-between gap-6 max-w-[1400px] px-6 md:px-10 lg:px-16">
         <Link
           href="/"
-          className="group shrink-0 font-display text-[0.8rem] font-normal uppercase tracking-[0.55em] text-gold transition-colors duration-500 hover:text-gold/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-4 focus-visible:ring-offset-white"
+          className="group shrink-0 font-display text-[0.8rem] font-normal uppercase tracking-[0.55em] text-gold transition-colors duration-500 hover:text-gold/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-4 focus-visible:ring-offset-black"
           aria-label={`${websiteName} — Home`}
         >
           <span>{websiteName}</span>
@@ -198,7 +198,7 @@ const isShopPage = pathname === "/shop";
               <Link
                 href="/"
               className={`relative py-2 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none ${
-                pathname === "/" ? "text-white" : "text-white/45"
+                pathname === "/" ? "text-white" : "text-white/60"
               }`}
               >
                 {t("home")}
@@ -211,7 +211,7 @@ const isShopPage = pathname === "/shop";
               <Link
                 href="/shop"
               className={`relative py-2 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none ${
-                isShopPage ? "text-white" : "text-white/45"
+                isShopPage ? "text-white" : "text-white/60"
               }`}
               >
                 {t("shop")}
@@ -235,8 +235,8 @@ const isShopPage = pathname === "/shop";
                   isCollectionsOpen ? closeDropdown() : openDropdown()
                 }
                 onMouseEnter={openWithDelay}
-                className={`relative inline-flex items-center gap-2 py-2 transition-colors duration-300 hover:text-ivory focus-visible:text-ivory focus-visible:outline-none ${
-                  isCollectionsOpen ? "text-ivory" : "text-ivory/35"
+                className={`relative inline-flex items-center gap-2 py-2 transition-colors duration-300 hover:text-white focus-visible:text-white focus-visible:outline-none ${
+                  isCollectionsOpen ? "text-white" : "text-white/50"
                 }`}
               >
                 {t("collections")}
@@ -272,9 +272,9 @@ const isShopPage = pathname === "/shop";
                   onMouseLeave={closeWithDelay}
                   className="absolute left-1/2 top-full z-40 -translate-x-1/2 pt-5 animate-fade-in"
                 >
-                  <div className="w-[680px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-input border border-black/[0.05] bg-white/95 backdrop-blur-xl shadow-premium">
+                  <div className="w-[680px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-input border border-white/[0.1] bg-black/95 backdrop-blur-xl shadow-premium">
                     <div className="p-7">
-                      <p className="mb-5 label-utility tracking-[0.32em] text-ivory/20">
+                      <p className="mb-5 label-utility tracking-[0.32em] text-white/40">
                         {t("our_collections")}
                       </p>
                       <div className="grid grid-cols-3 gap-5">
@@ -296,8 +296,8 @@ const isShopPage = pathname === "/shop";
             <li>
               <Link
                 href="/about"
-                className={`relative py-2 transition-colors duration-300 hover:text-ivory focus-visible:text-ivory focus-visible:outline-none ${
-                  pathname === "/about" ? "text-ivory" : "text-ivory/35"
+                className={`relative py-2 transition-colors duration-300 hover:text-white focus-visible:text-white focus-visible:outline-none ${
+                  pathname === "/about" ? "text-white" : "text-white/50"
                 }`}
               >
                 {t("about")}
@@ -325,7 +325,7 @@ const isShopPage = pathname === "/shop";
           <button
             type="button"
             onClick={() => setCmdOpen(true)}
-            className="hidden lg:inline-flex h-8 w-8 items-center justify-center rounded-input text-ivory/25 transition-colors duration-300 hover:text-ivory focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/10 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            className="hidden lg:inline-flex h-8 w-8 items-center justify-center rounded-input text-white/50 transition-colors duration-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/10 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             aria-label={t("open_search")}
           >
             <svg
@@ -353,10 +353,10 @@ const isShopPage = pathname === "/shop";
                 ? `, ${wishlistCount} item${wishlistCount !== 1 ? "s" : ""}`
                 : ""
             }`}
-            className={`relative hidden lg:inline-flex h-8 w-8 items-center justify-center rounded-input transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/10 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+            className={`relative hidden lg:inline-flex h-8 w-8 items-center justify-center rounded-input transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/10 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
               wishlistCount > 0
                 ? "text-gold"
-                : "text-ivory/25 hover:text-ivory"
+                : "text-white/50 hover:text-white"
             }`}
           >
             <svg
@@ -373,7 +373,7 @@ const isShopPage = pathname === "/shop";
             {wishlistCount > 0 && (
               <span
                 key={`wish-${wishlistCount}`}
-                className="absolute -end-1 -top-1 inline-flex h-3.5 min-w-[0.8rem] items-center justify-center rounded-full bg-gold px-1 text-[0.42rem] font-bold text-ivory"
+                className="absolute -end-1 -top-1 inline-flex h-3.5 min-w-[0.8rem] items-center justify-center rounded-full bg-gold px-1 text-[0.42rem] font-bold text-white"
               >
                 {wishlistCount}
               </span>
@@ -389,8 +389,8 @@ const isShopPage = pathname === "/shop";
                 : ""
             }`}
             id="cart-button"
-            className={`relative hidden lg:inline-flex h-10 w-10 items-center justify-center rounded-input transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rouge/30 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
-              itemCount > 0 ? "text-gold" : "text-ivory/25 hover:text-ivory"
+            className={`relative hidden lg:inline-flex h-10 w-10 items-center justify-center rounded-input transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rouge/30 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
+              itemCount > 0 ? "text-gold" : "text-white/50 hover:text-white"
             }`}
           >
             <svg
@@ -411,7 +411,7 @@ const isShopPage = pathname === "/shop";
             {itemCount > 0 && (
               <span
                 key={`cart-${itemCount}`}
-                className="absolute -end-1 -top-1 inline-flex h-3.5 min-w-[0.8rem] items-center justify-center rounded-full bg-gold px-1 text-[0.42rem] font-bold text-ivory"
+                className="absolute -end-1 -top-1 inline-flex h-3.5 min-w-[0.8rem] items-center justify-center rounded-full bg-gold px-1 text-[0.42rem] font-bold text-white"
               >
                 {itemCount}
               </span>
@@ -434,7 +434,7 @@ const isShopPage = pathname === "/shop";
                 placeholder={tCommon("search")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="h-8 w-28 rounded-input border border-black/[0.06] bg-black/[0.015] px-3 pe-7 text-[0.6rem] text-ivory outline-none transition-all duration-300 placeholder:text-ivory/25 focus:w-36 focus:border-black/15 focus:bg-black/[0.02]"
+                className="h-8 w-28 rounded-input border border-white/[0.15] bg-white/[0.06] px-3 pe-7 text-[0.6rem] text-white outline-none transition-all duration-300 placeholder:text-white/40 focus:w-36 focus:border-white/30 focus:bg-white/[0.1]"
               />
             </form>
           )}
@@ -443,7 +443,7 @@ const isShopPage = pathname === "/shop";
             ref={hamburgerRef}
             type="button"
             onClick={() => setIsMenuOpen((c) => !c)}
-            className="relative inline-flex h-8 w-8 items-center justify-center rounded-input text-ivory/25 transition-colors duration-300 hover:text-ivory lg:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/10 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            className="relative inline-flex h-8 w-8 items-center justify-center rounded-input text-white/50 transition-colors duration-300 hover:text-white lg:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/10 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             aria-label={t("toggle_menu")}
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
@@ -489,7 +489,7 @@ const isShopPage = pathname === "/shop";
           role="dialog"
           aria-modal="true"
           aria-label="Navigation menu"
-          className="lg:hidden border-t border-black/[0.04] liquid-glass-heavy animate-fade-in"
+          className="lg:hidden border-t border-white/[0.06] bg-black liquid-glass-heavy animate-fade-in"
         >
           <div className="max-h-[85vh] overflow-y-auto">
             <div className="flex items-center justify-between px-6 pt-4 pb-2">
@@ -503,7 +503,7 @@ const isShopPage = pathname === "/shop";
               <button
                 type="button"
                 onClick={() => setIsMenuOpen(false)}
-                className="flex h-9 w-9 items-center justify-center rounded-input text-ivory/30 transition-colors duration-300 hover:text-ivory focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/15"
+                className="flex h-9 w-9 items-center justify-center rounded-input text-white/50 transition-colors duration-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/15"
                 aria-label={t("toggle_menu")}
               >
                 <svg
@@ -527,10 +527,10 @@ const isShopPage = pathname === "/shop";
                 <Link
                   href="/"
                   onClick={() => setIsMenuOpen(false)}
-                  className={`rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] transition-colors duration-200 hover:bg-black/[0.03] hover:text-ivory ${
+                  className={`rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] transition-colors duration-200 hover:bg-white/[0.06] hover:text-white ${
                     pathname === "/"
-                      ? "text-ivory bg-black/[0.03]"
-                      : "text-ivory/30"
+                      ? "text-white bg-white/[0.06]"
+                      : "text-white/50"
                   }`}
                 >
                   {t("home")}
@@ -538,17 +538,17 @@ const isShopPage = pathname === "/shop";
                 <Link
                   href="/shop"
                   onClick={() => setIsMenuOpen(false)}
-                  className={`rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] transition-colors duration-200 hover:bg-black/[0.03] hover:text-ivory ${
+                  className={`rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] transition-colors duration-200 hover:bg-white/[0.06] hover:text-white ${
                     isShopPage
-                      ? "text-ivory bg-black/[0.03]"
-                      : "text-ivory/30"
+                      ? "text-white bg-white/[0.06]"
+                      : "text-white/50"
                   }`}
                 >
                   {t("shop")}
                 </Link>
 
                 <details className="group rounded-input">
-                  <summary className="flex cursor-pointer items-center justify-between rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] text-ivory/30 transition-colors duration-200 hover:bg-black/[0.03] hover:text-ivory [&::-webkit-details-marker]:hidden [&::marker]:hidden">
+                  <summary className="flex cursor-pointer items-center justify-between rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] text-white/50 transition-colors duration-200 hover:bg-white/[0.06] hover:text-white [&::-webkit-details-marker]:hidden [&::marker]:hidden">
                     {t("collections")}
                     <svg
                       aria-hidden="true"
@@ -573,7 +573,7 @@ const isShopPage = pathname === "/shop";
                         key={col.slug}
                         href={`/shop?category=${col.slug}`}
                         onClick={() => setIsMenuOpen(false)}
-                        className="block rounded-input px-5 py-3 text-[0.68rem] text-ivory/25 transition-colors duration-200 hover:bg-black/[0.03] hover:text-ivory"
+                        className="block rounded-input px-5 py-3 text-[0.68rem] text-white/50 transition-colors duration-200 hover:bg-white/[0.06] hover:text-white"
                       >
                         {col.title}
                       </Link>
@@ -584,10 +584,10 @@ const isShopPage = pathname === "/shop";
                 <Link
                   href="/about"
                   onClick={() => setIsMenuOpen(false)}
-                  className={`rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] transition-colors duration-200 hover:bg-black/[0.03] hover:text-ivory ${
+                  className={`rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] transition-colors duration-200 hover:bg-white/[0.06] hover:text-white ${
                     pathname === "/about"
-                      ? "text-ivory bg-black/[0.03]"
-                      : "text-ivory/30"
+                      ? "text-white bg-white/[0.06]"
+                      : "text-white/50"
                   }`}
                 >
                   {t("about")}
@@ -596,14 +596,14 @@ const isShopPage = pathname === "/shop";
         <Link
           href="/admin/dashboard"
           onClick={() => setIsMenuOpen(false)}
-          className="rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] text-gold/55 transition-colors duration-200 hover:bg-black/[0.03] hover:text-gold"
+          className="rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] text-gold/55 transition-colors duration-200 hover:bg-white/[0.06] hover:text-gold"
         >
           Admin
         </Link>
       )}
               </div>
 
-              <div className="mx-5 my-5 h-px bg-ivory/[0.05]" />
+              <div className="mx-5 my-5 h-px bg-white/[0.08]" />
 
               <div className="flex flex-col gap-2.5 px-2">
                 <button
@@ -612,7 +612,7 @@ const isShopPage = pathname === "/shop";
                     setIsMenuOpen(false);
                     setCmdOpen(true);
                   }}
-                  className="flex w-full items-center gap-3 rounded-input border border-black/[0.06] bg-black/[0.015] px-4 py-3.5 text-left text-[0.68rem] text-ivory/20 transition-colors duration-200 hover:border-ivory/[0.08] hover:text-ivory/35"
+                  className="flex w-full items-center gap-3 rounded-input border border-white/[0.12] bg-white/[0.04] px-4 py-3.5 text-left text-[0.68rem] text-white/40 transition-colors duration-200 hover:border-white/[0.2] hover:text-white/50"
                 >
                   <svg
                     aria-hidden="true"
@@ -634,7 +634,7 @@ const isShopPage = pathname === "/shop";
                   <Link
                     href="/wishlist"
                     onClick={() => setIsMenuOpen(false)}
-                    className="flex h-11 flex-1 items-center justify-center gap-2.5 rounded-input border border-black/[0.06] bg-black/[0.015] text-ivory/25 transition-colors duration-200 hover:border-ivory/[0.08] hover:text-gold"
+                    className="flex h-11 flex-1 items-center justify-center gap-2.5 rounded-input border border-white/[0.12] bg-white/[0.04] text-white/50 transition-colors duration-200 hover:border-white/[0.2] hover:text-gold"
                   >
                     <svg
                       aria-hidden="true"
@@ -657,7 +657,7 @@ const isShopPage = pathname === "/shop";
                       setIsMenuOpen(false);
                       toggleDrawer();
                     }}
-                    className="relative flex h-11 flex-1 items-center justify-center gap-2.5 rounded-input border border-black/[0.06] bg-black/[0.015] text-ivory/25 transition-colors duration-200 hover:border-ivory/[0.08] hover:text-gold"
+                    className="relative flex h-11 flex-1 items-center justify-center gap-2.5 rounded-input border border-white/[0.12] bg-white/[0.04] text-white/50 transition-colors duration-200 hover:border-white/[0.2] hover:text-gold"
                   >
                     <svg
                       aria-hidden="true"
@@ -678,7 +678,7 @@ const isShopPage = pathname === "/shop";
                       Cart
                     </span>
                     {itemCount > 0 && (
-                      <span className="absolute -end-1.5 -top-1.5 flex h-3.5 min-w-[0.8rem] items-center justify-center rounded-full bg-gold px-1 text-[0.42rem] font-bold text-ivory">
+                      <span className="absolute -end-1.5 -top-1.5 flex h-3.5 min-w-[0.8rem] items-center justify-center rounded-full bg-gold px-1 text-[0.42rem] font-bold text-white">
                         {itemCount}
                       </span>
                     )}
@@ -686,7 +686,7 @@ const isShopPage = pathname === "/shop";
                 </div>
               </div>
 
-<div className="mx-5 mt-5 h-px bg-ivory/[0.04]" />
+<div className="mx-5 mt-5 h-px bg-white/[0.06]" />
   <div className="mt-4 px-2">
     <MobileLanguageSwitcher onSelect={() => setIsMenuOpen(false)} />
   </div>

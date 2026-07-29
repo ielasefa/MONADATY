@@ -59,7 +59,7 @@ export const ProductCard = memo(function ProductCard({
             className={`absolute left-3 top-3 z-20 inline-flex items-center justify-center p-2.5 transition-all duration-300 ${
               isWishlisted
                 ? "text-burgundy opacity-100"
-                : "text-ivory/15 opacity-0 group-hover:opacity-100"
+                : "text-ivory/15 opacity-100 md:opacity-0 md:group-hover:opacity-100"
             }`}
           >
             <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 24 24" fill={isWishlisted ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.6">

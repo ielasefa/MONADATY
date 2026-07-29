@@ -74,6 +74,10 @@ body {
     @apply inline-flex h-11 items-center justify-center gap-2.5 rounded-btn bg-rouge px-7 text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-white transition-all duration-300 hover:bg-rouge-dark hover:translate-y-[-1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rouge/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-[0.97] active:translate-y-0;
   }
 
+  .btn-gold {
+    @apply inline-flex items-center justify-center bg-rouge text-white transition-all duration-300 hover:bg-rouge-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rouge/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-[0.97] disabled:opacity-50;
+  }
+
   .l-input {
     @apply h-11 w-full border-0 border-b border-black/[0.08] bg-transparent px-0 text-[0.85rem] text-black outline-none transition-all duration-200 focus:border-rouge/40;
     &::placeholder {
@@ -94,7 +98,7 @@ body {
   }
 
   .btn-link {
-    @apply inline-flex items-center gap-2 text-[0.52rem] font-semibold uppercase tracking-[0.32em] text-white/40 transition-colors duration-300 hover:text-gold;
+    @apply inline-flex items-center gap-2 text-[0.52rem] font-semibold uppercase tracking-[0.32em] text-white/50 transition-colors duration-300 hover:text-gold;
   }
 
   .label-utility {
@@ -139,6 +143,42 @@ body {
   .rule-asymmetric {
     height: 1px;
     background: linear-gradient(90deg, rgba(200,169,106,0.25) 0%, rgba(200,169,106,0.05) 100%);
+  }
+
+  .rounded-button {
+    @apply rounded-lg;
+  }
+
+  .container-shell {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-6;
+  }
+
+  .luxury-card {
+    @apply rounded-card border border-white/[0.06] bg-black-surface;
+  }
+
+  .luxury-label {
+    @apply text-xs font-semibold uppercase tracking-[0.15em] text-muted;
+  }
+
+  .badge-gold {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.12em] bg-gold/10 text-gold;
+  }
+
+  .badge-emerald {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.12em] bg-emerald-500/10 text-emerald-500;
+  }
+
+  .badge-red {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.12em] bg-rouge/10 text-rouge;
+  }
+
+  .glass {
+    @apply bg-white/[0.04] backdrop-blur-xl border border-white/[0.06];
+  }
+
+  .glass-strong {
+    @apply bg-white/[0.08] backdrop-blur-2xl border border-white/[0.08];
   }
 }
 

@@ -38,7 +38,7 @@ className="rtl:rotate-180"
 }
 
 export function Hero({ settings }: HeroProps) {
-const heroImage = settings.media?.[0] || "";
+  const heroImage = settings.media?.[0] || "/uploads/monadaty/hero/8236e9ab9f624611.png";
 const { t } = useTranslation("home");
 const [isLoaded, setIsLoaded] = useState(false);
 const [isVisible, setIsVisible] = useState(false);
@@ -78,8 +78,8 @@ return (
         <div
           className="
             order-2
-            relative flex w-[85%] max-w-[360px] items-center justify-center
-            lg:order-1 lg:col-span-1 lg:w-[45%] lg:max-w-[500px]
+            relative flex w-[85%] max-w-[420px] items-center justify-center mx-auto
+            lg:order-1 lg:col-span-1 lg:w-full lg:max-w-[620px] lg:mx-auto
           "
         >
           <div className="relative w-full">
@@ -100,13 +100,13 @@ return (
               <div className="absolute -inset-4 rounded-3xl bg-gradient-to-tr from-transparent via-transparent to-gold/[0.04] opacity-60" />
 
               {heroImage ? (
-                <div className="relative aspect-[4/5] w-full">
+                <div className="relative aspect-[4/5] w-full lg:aspect-auto lg:min-h-[580px]">
                   <SafeImage
                     src={heroImage}
                     alt="MONADATY — premium Moroccan beverage"
                     priority
                     fill
-                    sizes="(min-width: 1024px) 45vw, (min-width: 768px) 70vw, 85vw"
+                    sizes="(min-width: 1024px) 620px, (min-width: 768px) 70vw, 85vw"
                     className="relative z-10 object-contain drop-shadow-[0_20px_60px_rgba(0,0,0,0.4)]"
                     fallback={
                       <div className="flex h-full w-full items-center justify-center">
@@ -125,7 +125,7 @@ return (
         </div>
 
         {/* ── BREATHING SPACE (desktop only) ── */}
-        <div className="hidden lg:block lg:col-span-1" />
+        <div className="hidden lg:block lg:col-span-1 lg:order-2" />
 
         {/* ── TEXT ZONE (right on desktop, top on mobile) ── */}
         <div className="order-1 flex flex-col justify-center lg:order-3 lg:col-span-1">
@@ -138,7 +138,7 @@ return (
           >
             <div className="flex items-center gap-3">
               <span className="h-px w-8 bg-gold" />
-              <span className="label-utility tracking-[0.55em] text-gold/60">
+              <span className="label-utility tracking-[0.55em] text-gold">
                 {eyebrowText}
               </span>
             </div>
@@ -150,7 +150,7 @@ return (
             </h1>
 
             {descText && (
-              <p className="mt-6 max-w-lg text-[0.82rem] leading-[1.85] text-white/40">
+              <p className="mt-6 max-w-lg text-[0.82rem] leading-[1.85] text-white/65">
                 {descText}
               </p>
             )}

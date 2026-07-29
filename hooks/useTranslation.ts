@@ -65,7 +65,7 @@ export function useTranslation(namespace = "common") {
       const entry = (translationsRef.current as Record<string, unknown>)[key] as Record<string, string> | undefined;
       const resolved = resolveTranslation(entry, langRef.current as Language, fb, key);
 
-      return interpolate(resolved ?? key, replacements);
+      return interpolate(resolved ?? fb ?? key, replacements);
     },
     [],
   );

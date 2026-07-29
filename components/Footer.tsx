@@ -99,7 +99,7 @@ export function Footer({
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={key.charAt(0).toUpperCase() + key.slice(1)}
-                    className="text-white/18 transition-colors duration-300 hover:text-gold/70"
+                    className="text-white/40 transition-colors duration-300 hover:text-gold/70"
                   >
                     {key === "instagram" && (
                       <svg width={14} height={14} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -137,7 +137,7 @@ export function Footer({
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="text-[0.7rem] tracking-[0.04em] text-white/22 transition-colors duration-300 hover:text-gold/70"
+                        className="text-[0.7rem] tracking-[0.04em] text-white/50 transition-colors duration-300 hover:text-gold/70"
                       >
                         {link.label}
                       </Link>
@@ -155,7 +155,7 @@ export function Footer({
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="text-[0.7rem] tracking-[0.04em] text-white/22 transition-colors duration-300 hover:text-gold/70"
+                        className="text-[0.7rem] tracking-[0.04em] text-white/50 transition-colors duration-300 hover:text-gold/70"
                       >
                         {link.label}
                       </Link>
@@ -173,7 +173,7 @@ export function Footer({
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="text-[0.7rem] tracking-[0.04em] text-white/22 transition-colors duration-300 hover:text-gold/70"
+                        className="text-[0.7rem] tracking-[0.04em] text-white/50 transition-colors duration-300 hover:text-gold/70"
                       >
                         {link.label}
                       </Link>
@@ -187,7 +187,7 @@ export function Footer({
 
         {/* Bottom bar */}
         <div className="flex flex-col items-start justify-between gap-5 border-t border-white/[0.06] py-8 md:flex-row md:items-center">
-          <p className="text-[0.48rem] tracking-[0.15em] text-white/25">
+          <p className="text-[0.48rem] tracking-[0.15em] text-white/50">
             {copyright}
           </p>
           <div className="flex items-center gap-6">
@@ -196,14 +196,14 @@ export function Footer({
                 <Link
                   key={link.label}
                   href={link.href}
-                  className="text-[0.48rem] tracking-[0.15em] text-white/25 transition-colors duration-300 hover:text-[#C8A96A]"
+                  className="text-[0.48rem] tracking-[0.15em] text-white/50 transition-colors duration-300 hover:text-gold"
                 >
                   {link.label}
                 </Link>
               ))}
             </nav>
             <span className="h-px w-px bg-ivory/[0.06]" />
-            <span className="text-[0.42rem] tracking-[0.18em] text-white/20">
+            <span className="text-[0.42rem] tracking-[0.18em] text-white/40">
               Casablanca · Morocco
             </span>
             <LanguageSwitcher />

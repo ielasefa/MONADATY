@@ -153,14 +153,14 @@ export function CartDrawer() {
               </div>
               <p className="font-display text-lg text-ivory">{t("your_box_empty")}</p>
               <p className="mt-3 max-w-[14rem] text-[0.72rem] leading-relaxed text-ivory/15">
-                {t("explore_collection_desc")}
+                {t("explore_collection_desc", "Browse our selection of premium Moroccan drinks.")}
               </p>
               <Link
                 href="/shop"
                 onClick={closeDrawer}
                 className="btn-primary"
               >
-                {t("explore_collection")}
+                {t("explore_collection", "Explore Collection")}
               </Link>
             </div>
           ) : (
