@@ -8,3 +8,5 @@ node_modules
 
 /generated/prisma
 .next/
+.next/
+node_modules/
