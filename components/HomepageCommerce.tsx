@@ -310,80 +310,86 @@ export function CollectionsShowcase({ collections }: { collections: CollectionDa
           </p>
         </Reveal>
 
-        {/* Cards — narrower to create breathing space */}
-        <div className="mx-auto mt-12 max-w-[1200px]">
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[7fr_5fr] lg:gap-6">
-          {featured && (
-            <Reveal>
-              <Link href={`/shop?category=${featured.slug}`} className="group block h-full">
-                <div className="relative aspect-[4/3] lg:aspect-auto lg:h-[520px] w-full overflow-hidden rounded-xl">
-                  {featured.image ? (
-                    <ProductImageOrFallback
-                      src={featured.image}
-                      alt={featured.title}
-                      sizes="(min-width: 1024px) 55vw, 100vw"
-                      className="object-cover transition-transform duration-[1600ms] ease-out group-hover:scale-[1.02]"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-black-soft">
-                      <span className="font-display text-[6rem] font-light text-white/[0.06]">{featured.title.charAt(0)}</span>
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                  <div className="absolute bottom-6 left-6 right-6 md:bottom-8 md:left-8">
-                    <p className="label-utility text-[0.4rem] tracking-[0.4em] text-ivory/60">
-                      {featured.previewLabel || t("collection_label", "COLLECTION")}
-                    </p>
-                    <h3 className="mt-2 font-display text-2xl leading-[0.95] tracking-[-0.02em] text-ivory md:text-3xl">{featured.title}</h3>
-                    {featured.description && (
-                      <p className="mt-2 max-w-md text-[0.75rem] leading-relaxed text-ivory/50">{featured.description}</p>
-                    )}
-                    <span className="mt-4 inline-flex items-center gap-2 label-utility text-[0.42rem] tracking-[0.2em] text-ivory/50 transition-colors duration-300 group-hover:text-gold">
-                      {t("view_collection", "VIEW COLLECTION")} <ArrowRight />
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            </Reveal>
-          )}
+{/* Compact editorial composition — slightly narrower than the main container */}
+<div className="mx-auto mt-12 max-w-[1160px] px-4 sm:px-6 lg:px-8">
+<div className="grid grid-cols-1 gap-5 lg:grid-cols-[1.58fr_1fr] lg:gap-7">
 
-          {secondary.length > 0 && (
-            <div className="flex flex-col gap-6 h-full">
-              {secondary.map((col, i) => (
-                <Reveal key={col.slug} delay={0.08 * (i + 1)}>
-                  <Link href={`/shop?category=${col.slug}`} className="group block h-full">
-                    <div className="relative aspect-[16/10] lg:aspect-[3/2] w-full overflow-hidden rounded-xl">
-                      {col.image ? (
-                        <ProductImageOrFallback
-                          src={col.image}
-                          alt={col.title}
-                          sizes="(min-width: 1024px) 35vw, 100vw"
-                          className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
-                        />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center bg-black-soft">
-                          <span className="font-display text-[3rem] font-light text-white/[0.06]">{col.title.charAt(0)}</span>
-                        </div>
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
-                      <div className="absolute inset-0 flex flex-col justify-end p-5 md:p-6">
-                        <p className="label-utility text-[0.38rem] tracking-[0.35em] text-ivory/40">
-                          {col.previewLabel || t("collection_label", "COLLECTION")}
-                        </p>
-                        <h3 className="mt-1.5 font-display text-lg leading-[0.95] tracking-[-0.015em] text-ivory md:text-xl">{col.title}</h3>
-                        <span className="mt-2 inline-flex items-center gap-1.5 label-utility text-[0.38rem] tracking-[0.2em] text-ivory/35 transition-colors duration-300 group-hover:text-gold">
-                          {t("view_collection", "VIEW")} <ArrowRight />
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                </Reveal>
-              ))}
-            </div>
-          )}
-        </div>
-        </div>
-      </div>
+{/* Collection 01 — large, dominant (left column) */}
+{featured && (
+<Reveal>
+<Link href={`/shop?category=${featured.slug}`} className="group block h-full">
+<div className="relative h-[420px] w-full overflow-hidden rounded-xl sm:h-[460px] lg:h-[520px]">
+<ProductImageOrFallback
+src={featured.image}
+alt={featured.title}
+sizes="(min-width: 1024px) 42vw, 100vw"
+className="object-contain transition-transform duration-[1600ms] ease-out group-hover:scale-[1.02]"
+fallback={
+<div className="flex h-full w-full items-center justify-center bg-black-soft">
+<span className="font-display text-[5rem] font-light text-white/[0.05]">{featured.title.charAt(0)}</span>
+</div>
+}
+/>
+<div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+<div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-7 lg:p-8">
+<p className="label-utility text-[0.38rem] tracking-[0.35em] text-ivory/50">
+{featured.previewLabel || t("collection_label", "COLLECTION")}
+</p>
+<h3 className="mt-2 font-display text-xl leading-[0.95] tracking-[-0.02em] text-ivory sm:text-2xl lg:text-[1.65rem]">
+{featured.title}
+</h3>
+{featured.description && (
+<p className="mt-2 max-w-md text-[0.72rem] leading-relaxed text-ivory/45">
+{featured.description}
+</p>
+)}
+<span className="mt-4 inline-flex items-center gap-2 label-utility text-[0.38rem] tracking-[0.2em] text-ivory/45 transition-colors duration-300 group-hover:text-gold">
+{t("view_collection", "VIEW COLLECTION")} <ArrowRight />
+</span>
+</div>
+</div>
+</Link>
+</Reveal>
+)}
+
+{/* Collection 02 & 03 — smaller, stacked (right column) */}
+{secondary.length > 0 && (
+<div className="flex flex-col gap-5 lg:gap-5">
+{secondary.slice(0, 2).map((col, i) => (
+<Reveal key={col.slug} delay={0.08 * (i + 1)}>
+<Link href={`/shop?category=${col.slug}`} className="group block h-full">
+<div className="relative h-[200px] w-full overflow-hidden rounded-xl sm:h-[220px] lg:h-[250px]">
+<ProductImageOrFallback
+src={col.image}
+alt={col.title}
+sizes="(min-width: 1024px) 30vw, 100vw"
+className="object-contain transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
+fallback={
+<div className="flex h-full w-full items-center justify-center bg-black-soft">
+<span className="font-display text-[3rem] font-light text-white/[0.05]">{col.title.charAt(0)}</span>
+</div>
+}
+/>
+<div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/15 to-transparent" />
+<div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-5 lg:p-6">
+<p className="label-utility text-[0.32rem] tracking-[0.3em] text-ivory/40">
+{col.previewLabel || t("collection_label", "COLLECTION")}
+</p>
+<h3 className="mt-1 font-display text-base leading-[0.95] tracking-[-0.015em] text-ivory sm:text-lg lg:text-lg">
+{col.title}
+</h3>
+<span className="mt-1.5 inline-flex items-center gap-1.5 label-utility text-[0.32rem] tracking-[0.18em] text-ivory/35 transition-colors duration-300 group-hover:text-gold">
+{t("view_collection", "VIEW")} <ArrowRight />
+</span>
+</div>
+</div>
+</Link>
+</Reveal>
+))}
+</div>
+)}
+</div>
+</div>
     </section>
   );
 }
