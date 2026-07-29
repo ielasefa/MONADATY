@@ -79,7 +79,7 @@ return (
           className="
             order-2
             relative flex w-[85%] max-w-[360px] items-center justify-center
-            lg:order-1 lg:col-span-1 lg:w-full lg:max-w-[500px]
+            lg:order-1 lg:col-span-1 lg:w-[45%] lg:max-w-[500px]
           "
         >
           <div className="relative w-full">
