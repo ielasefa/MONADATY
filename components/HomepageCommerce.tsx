@@ -35,9 +35,11 @@ function ArrowRight() {
   );
 }
 
-function ProductImageOrFallback(props: { src: string; alt: string; sizes?: string; className?: string }) {
+function ProductImageOrFallback(props: { src: string; alt: string; sizes?: string; className?: string; fallback?: React.ReactNode }) {
   if (!props.src) {
-    return (
+    return props.fallback ? (
+      <>{props.fallback}</>
+    ) : (
       <div className="flex h-full w-full items-center justify-center">
         <span className="font-display text-[2.5rem] font-light tracking-[0.08em] text-white/[0.06]">
           {props.alt}
@@ -53,11 +55,13 @@ function ProductImageOrFallback(props: { src: string; alt: string; sizes?: strin
       sizes={props.sizes}
       className={props.className}
       fallback={
-        <div className="flex h-full w-full items-center justify-center">
-          <span className="font-display text-[2.5rem] font-light tracking-[0.08em] text-white/[0.06]">
-            {props.alt}
-          </span>
-        </div>
+        props.fallback || (
+          <div className="flex h-full w-full items-center justify-center">
+            <span className="font-display text-[2.5rem] font-light tracking-[0.08em] text-white/[0.06]">
+              {props.alt}
+            </span>
+          </div>
+        )
       }
     />
   );
@@ -310,20 +314,20 @@ export function CollectionsShowcase({ collections }: { collections: CollectionDa
           </p>
         </Reveal>
 
-{/* Compact editorial composition — slightly narrower than the main container */}
-<div className="mx-auto mt-12 max-w-[1160px] px-4 sm:px-6 lg:px-8">
-<div className="grid grid-cols-1 gap-5 lg:grid-cols-[1.58fr_1fr] lg:gap-7">
+{/* Editorial mosaic — one dominant collection + two stacked secondaries */}
+<div className="mx-auto mt-12 max-w-[1160px] sm:px-2 lg:px-4">
+<div className="grid grid-cols-1 gap-4 lg:gap-6 lg:grid-cols-[3fr_2fr]">
 
 {/* Collection 01 — large, dominant (left column) */}
 {featured && (
 <Reveal>
 <Link href={`/shop?category=${featured.slug}`} className="group block h-full">
-<div className="relative h-[420px] w-full overflow-hidden rounded-xl sm:h-[460px] lg:h-[520px]">
+<div className="relative h-[480px] w-full overflow-hidden rounded-xl sm:h-[520px] lg:h-[600px]">
 <ProductImageOrFallback
 src={featured.image}
 alt={featured.title}
-sizes="(min-width: 1024px) 42vw, 100vw"
-className="object-contain transition-transform duration-[1600ms] ease-out group-hover:scale-[1.02]"
+sizes="(min-width: 1024px) 52vw, 100vw"
+className="object-cover transition-transform duration-[1600ms] ease-out group-hover:scale-[1.02]"
 fallback={
 <div className="flex h-full w-full items-center justify-center bg-black-soft">
 <span className="font-display text-[5rem] font-light text-white/[0.05]">{featured.title.charAt(0)}</span>
@@ -331,7 +335,7 @@ fallback={
 }
 />
 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-<div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-7 lg:p-8">
+<div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-8 lg:p-10">
 <p className="label-utility text-[0.38rem] tracking-[0.35em] text-ivory/50">
 {featured.previewLabel || t("collection_label", "COLLECTION")}
 </p>
@@ -354,16 +358,16 @@ fallback={
 
 {/* Collection 02 & 03 — smaller, stacked (right column) */}
 {secondary.length > 0 && (
-<div className="flex flex-col gap-5 lg:gap-5">
+          <div className="flex flex-col gap-4 lg:gap-6">
 {secondary.slice(0, 2).map((col, i) => (
 <Reveal key={col.slug} delay={0.08 * (i + 1)}>
 <Link href={`/shop?category=${col.slug}`} className="group block h-full">
-<div className="relative h-[200px] w-full overflow-hidden rounded-xl sm:h-[220px] lg:h-[250px]">
+<div className="relative h-[230px] w-full overflow-hidden rounded-xl sm:h-[250px] lg:h-[285px]">
 <ProductImageOrFallback
 src={col.image}
 alt={col.title}
 sizes="(min-width: 1024px) 30vw, 100vw"
-className="object-contain transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
+className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
 fallback={
 <div className="flex h-full w-full items-center justify-center bg-black-soft">
 <span className="font-display text-[3rem] font-light text-white/[0.05]">{col.title.charAt(0)}</span>
@@ -371,7 +375,7 @@ fallback={
 }
 />
 <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/15 to-transparent" />
-<div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-5 lg:p-6">
+<div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6 lg:p-7">
 <p className="label-utility text-[0.32rem] tracking-[0.3em] text-ivory/40">
 {col.previewLabel || t("collection_label", "COLLECTION")}
 </p>
@@ -388,6 +392,7 @@ fallback={
 ))}
 </div>
 )}
+</div>
 </div>
 </div>
     </section>

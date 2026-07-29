@@ -4,7 +4,6 @@ import {
   CollectionsShowcase,
   BrandStory,
   BestSellers,
-  HowItWorks,
   SocialProof,
   MoroccanMoment,
   Newsletter,
@@ -47,9 +46,6 @@ export default async function HomePage() {
 
 {/* 07 — Best Sellers */}
   {bestSellers.length > 0 && <BestSellers products={bestSellers} />}
-
-  {/* 09 — How It Works */}
-  <HowItWorks />
 
   {/* 06 — Brand Story */}
       {settings.aboutSection.enabled && (
