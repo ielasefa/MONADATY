@@ -569,7 +569,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
             >
               <div className="h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-white/5">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={item.preview} alt="" className="h-full w-full object-cover" />
+                <img src={item.preview} alt={item.file.name} className="h-full w-full object-cover" />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-xs font-medium text-white">{item.file.name}</p>

@@ -428,12 +428,15 @@ export function BrandStory({
               <h2 className="mt-5 font-display text-[clamp(1.875rem,3.5vw,2.75rem)] leading-[0.95] tracking-[-0.03em] text-white">
                 {title || t("our_story", "OUR STORY")}
               </h2>
-              {description && (
-                <div
-                  className="mt-6 max-w-md text-[0.82rem] leading-[1.85] text-white/55"
-                  dangerouslySetInnerHTML={{ __html: description.replace(/\n/g, "<br/>") }}
-                />
-              )}
+        {description && (
+          <div className="mt-6 max-w-md text-[0.82rem] leading-[1.85] text-white/55">
+            {(description || "").split("\n").map((line, i, arr) => (
+              <p key={i} className={i < arr.length - 1 ? "mb-3" : ""}>
+                {line}
+              </p>
+            ))}
+          </div>
+        )}
               <div className="mt-7">
                 <Link href="/about" className="btn-link text-white/50 hover:text-gold">
                   {t("our_story_link", "DISCOVER OUR STORY")} <ArrowRight />

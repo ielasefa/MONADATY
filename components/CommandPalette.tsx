@@ -122,7 +122,7 @@ export function CommandPalette({ open, onClose, brandName = "MONADATY" }: Comman
                   value={search}
                   onValueChange={setSearch}
                   placeholder={tCommon("search_drinks_commands")}
-                  className="h-14 flex-1 bg-transparent text-[0.8rem] text-ivory outline-none placeholder:text-ivory/20 focus:ring-0"
+                  className="h-14 flex-1 bg-transparent text-[0.8rem] text-ivory outline-none placeholder:text-ivory/20 focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                   aria-label={tCommon("search_commands")}
                 />
                 <kbd className="hidden rounded-md border border-ivory/[0.05] bg-ivory/[0.02] px-2 py-1 text-[0.55rem] font-medium text-ivory/25 sm:inline">
