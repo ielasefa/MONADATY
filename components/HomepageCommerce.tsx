@@ -64,38 +64,6 @@ function ProductImageOrFallback(props: { src: string; alt: string; sizes?: strin
 }
 
 /* ============================================================
-03 — TRUST / BENEFITS STRIP
-============================================================ */
-export function TrustStrip() {
-  const { t } = useTranslation("home");
-  const items = [
-    { icon: "✦", key: "benefit_1", fallback: "PREMIUM MOROCCAN SELECTION" },
-    { icon: "✦", key: "benefit_2", fallback: "CAREFULLY CURATED QUALITY" },
-    { icon: "✦", key: "benefit_3", fallback: "FAST DELIVERY ACROSS MOROCCO" },
-    { icon: "✦", key: "benefit_4", fallback: "SECURE & EASY CHECKOUT" },
-  ];
-
-  return (
-    <section className="relative w-full overflow-hidden bg-black border-b border-white/[0.06]">
-      <div className="mx-auto max-w-[1400px] px-6 py-6 md:px-10 lg:px-16">
-        <div className="flex flex-wrap items-center justify-center gap-6 md:gap-8 lg:gap-14">
-          {items.map((item, i) => (
-            <Reveal key={item.key} delay={0.05 * i}>
-              <div className="flex items-center gap-2.5">
-                <span className="text-[0.5rem] text-gold">{item.icon}</span>
-                <span className="text-[0.6rem] font-medium uppercase tracking-[0.2em] text-white/40">
-                  {t(item.key, item.fallback)}
-                </span>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ============================================================
 BRAND STATEMENT — editorial brand positioning
 ============================================================ */
 export function BrandStatement() {
@@ -342,20 +310,22 @@ export function CollectionsShowcase({ collections }: { collections: CollectionDa
           </p>
         </Reveal>
 
-        <div className="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10">
+        {/* Cards — narrower to create breathing space */}
+        <div className="mx-auto mt-12 max-w-[1200px]">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[7fr_5fr] lg:gap-6">
           {featured && (
-            <Reveal className="lg:col-span-7">
-              <Link href={`/shop?category=${featured.slug}`} className="group block">
-                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl">
+            <Reveal>
+              <Link href={`/shop?category=${featured.slug}`} className="group block h-full">
+                <div className="relative aspect-[4/3] lg:aspect-auto lg:h-[520px] w-full overflow-hidden rounded-xl">
                   {featured.image ? (
                     <ProductImageOrFallback
                       src={featured.image}
                       alt={featured.title}
-                      sizes="(min-width: 1024px) 60vw, 100vw"
+                      sizes="(min-width: 1024px) 55vw, 100vw"
                       className="object-cover transition-transform duration-[1600ms] ease-out group-hover:scale-[1.02]"
                     />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-black/[0.02]">
+                    <div className="flex h-full w-full items-center justify-center bg-black-soft">
                       <span className="font-display text-[6rem] font-light text-white/[0.06]">{featured.title.charAt(0)}</span>
                     </div>
                   )}
@@ -378,20 +348,20 @@ export function CollectionsShowcase({ collections }: { collections: CollectionDa
           )}
 
           {secondary.length > 0 && (
-            <div className="flex flex-col gap-8 lg:col-span-5 lg:gap-10">
+            <div className="flex flex-col gap-6 h-full">
               {secondary.map((col, i) => (
                 <Reveal key={col.slug} delay={0.08 * (i + 1)}>
-                  <Link href={`/shop?category=${col.slug}`} className="group flex flex-1">
-                    <div className="relative flex flex-1 overflow-hidden rounded-xl">
+                  <Link href={`/shop?category=${col.slug}`} className="group block h-full">
+                    <div className="relative aspect-[16/10] lg:aspect-[3/2] w-full overflow-hidden rounded-xl">
                       {col.image ? (
                         <ProductImageOrFallback
                           src={col.image}
                           alt={col.title}
-                          sizes="(min-width: 1024px) 40vw, 100vw"
+                          sizes="(min-width: 1024px) 35vw, 100vw"
                           className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
                         />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center bg-black/[0.02]">
+                        <div className="flex h-full w-full items-center justify-center bg-black-soft">
                           <span className="font-display text-[3rem] font-light text-white/[0.06]">{col.title.charAt(0)}</span>
                         </div>
                       )}
@@ -411,6 +381,7 @@ export function CollectionsShowcase({ collections }: { collections: CollectionDa
               ))}
             </div>
           )}
+        </div>
         </div>
       </div>
     </section>
