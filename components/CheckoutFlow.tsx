@@ -254,15 +254,15 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                 </div>
               </div>
               <div className="ml-10 space-y-5">
-                <label className="block space-y-2">
-                  <span className="text-[0.62rem] font-medium text-ivory/45">{t("full_name")} *</span>
-                  <input
+ <label className="block space-y-2">
+  <span className="text-[0.62rem] font-medium text-white/60">{t("full_name")} *</span>
+  <input
                     type="text"
                     name="fullName"
                     value={deliveryState.fullName}
                     onChange={(e) => handleChange("fullName", e.target.value)}
                     placeholder={t("full_name_placeholder")}
-                    className="h-11 w-full border-0 border-b border-ivory/[0.08] bg-transparent px-0 text-[0.85rem] text-ivory outline-none transition-all duration-200 placeholder:text-ivory/12 focus:border-gold/40"
+                    className="h-11 w-full border-0 border-b border-white/10 bg-transparent px-0 text-[0.85rem] text-white outline-none transition-all duration-200 placeholder:text-white/35 focus:border-gold/50"
                     aria-invalid={Boolean(errors.fullName)}
                     aria-describedby={errors.fullName ? "err-fullName" : undefined}
                     required
@@ -278,7 +278,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                     value={deliveryState.email}
                     onChange={(e) => handleChange("email", e.target.value)}
                     placeholder={t("email_placeholder")}
-                    className="h-11 w-full border-0 border-b border-ivory/[0.08] bg-transparent px-0 text-[0.85rem] text-ivory outline-none transition-all duration-200 placeholder:text-ivory/12 focus:border-gold/40"
+                    className="h-11 w-full border-0 border-b border-white/10 bg-transparent px-0 text-[0.85rem] text-white outline-none transition-all duration-200 placeholder:text-white/35 focus:border-gold/50"
                     aria-invalid={Boolean(errors.email)}
                     aria-describedby={errors.email ? "err-email" : undefined}
                     required
@@ -294,7 +294,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                     value={deliveryState.phone}
                     onChange={(e) => handleChange("phone", e.target.value)}
                     placeholder={t("phone_placeholder")}
-                    className="h-11 w-full border-0 border-b border-ivory/[0.08] bg-transparent px-0 text-[0.85rem] text-ivory outline-none transition-all duration-200 placeholder:text-ivory/12 focus:border-gold/40"
+                    className="h-11 w-full border-0 border-b border-white/10 bg-transparent px-0 text-[0.85rem] text-white outline-none transition-all duration-200 placeholder:text-white/35 focus:border-gold/50"
                     aria-invalid={Boolean(errors.phone)}
                     aria-describedby={errors.phone ? "err-phone" : undefined}
                     required
@@ -309,7 +309,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                       name="city"
                       value={deliveryState.city}
                       onChange={(e) => handleChange("city", e.target.value)}
-                      className="h-11 w-full border-0 border-b border-ivory/[0.08] bg-transparent px-0 text-[0.85rem] text-ivory outline-none transition-all duration-200 focus:border-gold/40"
+                      className="h-11 w-full border-0 border-b border-white/10 bg-transparent px-0 text-[0.85rem] text-white outline-none transition-all duration-200 focus:border-gold/50"
                       aria-invalid={Boolean(errors.city)}
                       aria-describedby={errors.city ? "err-city" : undefined}
                       required
@@ -330,7 +330,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                       value={deliveryState.address}
                       onChange={(e) => handleChange("address", e.target.value)}
                       placeholder={t("address_placeholder")}
-                      className="h-11 w-full border-0 border-b border-ivory/[0.08] bg-transparent px-0 text-[0.85rem] text-ivory outline-none transition-all duration-200 placeholder:text-ivory/12 focus:border-gold/40"
+                      className="h-11 w-full border-0 border-b border-white/10 bg-transparent px-0 text-[0.85rem] text-white outline-none transition-all duration-200 placeholder:text-white/35 focus:border-gold/50"
                       aria-invalid={Boolean(errors.address)}
                       aria-describedby={errors.address ? "err-address" : undefined}
                       required
@@ -348,7 +348,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                       value={deliveryState.postalCode}
                       onChange={(e) => handleChange("postalCode", e.target.value)}
                       placeholder={t("postal_placeholder")}
-                      className="h-11 w-full border-0 border-b border-ivory/[0.08] bg-transparent px-0 text-[0.85rem] text-ivory outline-none transition-all duration-200 placeholder:text-ivory/12 focus:border-gold/40"
+                      className="h-11 w-full border-0 border-b border-white/10 bg-transparent px-0 text-[0.85rem] text-white outline-none transition-all duration-200 placeholder:text-white/35 focus:border-gold/50"
                     />
                     {errors.postalCode && <p className="text-[0.6rem] text-burgundy">{errors.postalCode}</p>}
                   </label>
@@ -359,7 +359,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                       type="text"
                       value={t("morocco")}
                       readOnly
-                      className="h-11 w-full border-0 border-b border-ivory/[0.08] bg-transparent px-0 text-[0.85rem] text-ivory/40 outline-none"
+                      className="h-11 w-full border-0 border-b border-white/10 bg-transparent px-0 text-[0.85rem] text-white/40 outline-none"
                     />
                   </label>
                 </div>
@@ -447,7 +447,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                       {item.category && (
                         <p className="text-[0.38rem] uppercase tracking-[0.28em] text-ivory/12">{item.category}</p>
                       )}
-                      <p className="truncate font-display text-[0.85rem] text-ivory">{item.name}</p>
+                      <p className="truncate font-display text-[0.85rem] text-white">{item.name}</p>
                     </div>
                     <div className="flex items-center justify-between gap-2 text-[0.6rem] text-ivory/25">
                       <span>{t("qty_label")} {item.quantity}</span>

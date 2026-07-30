@@ -45,7 +45,7 @@ export default function AuditLogsPage() {
               key={a}
               onClick={() => setFilter(a)}
               className={`inline-flex h-8 items-center rounded-button px-3 text-[11px] font-semibold uppercase tracking-[0.1em] transition ${
-                filter === a ? "bg-red text-white" : "border border-white/[0.12] bg-white/5 text-muted hover:bg-white/10"
+                filter === a ? "bg-burgundy text-white" : "border border-white/[0.12] bg-white/5 text-muted hover:bg-white/10"
               }`}
             >
               {a || t("all")}
@@ -67,9 +67,9 @@ export default function AuditLogsPage() {
                   </div>
                   {(log.oldValue || log.newValue) && (
                     <div className="mt-1 text-[10px] text-muted">
-                      {log.oldValue && <span className="text-red">Old: {log.oldValue}</span>}
+                      {log.oldValue && <span className="text-burgundy">Old: {log.oldValue}</span>}
                       {log.oldValue && log.newValue && <span className="mx-1">→</span>}
-                      {log.newValue && <span className="text-emerald">New: {log.newValue}</span>}
+                      {log.newValue && <span className="text-gold">New: {log.newValue}</span>}
                     </div>
                   )}
                   {log.browser && <p className="text-[10px] text-muted mt-0.5">{log.browser} | IP: {log.ip} | Duration: {log.duration}ms</p>}

@@ -75,7 +75,7 @@ export default function SecurityPage() {
             key={item.id}
             onClick={() => setSection(item.id)}
             className={`inline-flex h-9 items-center rounded-button px-4 text-xs font-semibold uppercase tracking-[0.1em] transition ${
-              section === item.id ? "bg-red text-white" : "border border-white/[0.12] bg-white/5 text-muted hover:bg-white/10"
+              section === item.id ? "bg-burgundy text-white" : "border border-white/[0.12] bg-white/5 text-muted hover:bg-white/10"
             }`}
           >
             {item.label}
@@ -142,11 +142,11 @@ export default function SecurityPage() {
           <div className="max-h-[600px] space-y-2 overflow-y-auto">
             {loginHistory.map((h, i) => (
               <div key={i} className={`flex items-start justify-between rounded border px-3 py-2 ${
-                h.success ? "border-white/[0.04]" : "border-red/20 bg-red/[0.03]"
+                h.success ? "border-white/[0.04]" : "border-burgundy/20 bg-burgundy/[0.03]"
               }`}>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className={`h-2 w-2 rounded-full ${h.success ? "bg-emerald" : "bg-red"}`} />
+                    <span className={`h-2 w-2 rounded-full ${h.success ? "bg-emerald" : "bg-burgundy"}`} />
                     <span className="text-xs text-white/80">{h.browser} / {h.os}</span>
                     {h.suspicious && <span className="badge-red text-[9px]">{t("suspicious")}</span>}
                   </div>
@@ -172,7 +172,7 @@ export default function SecurityPage() {
                 await fetch("/api/admin/device-sessions?allExceptCurrent=true", { method: "DELETE" });
                 fetchSection("sessions");
               }}
-              className="text-xs font-semibold text-red hover:text-red/80"
+              className="text-xs font-semibold text-burgundy hover:text-burgundy/80"
             >
               {t("terminate_all_other")}
             </button>
@@ -189,7 +189,7 @@ export default function SecurityPage() {
                     await fetch(`/api/admin/device-sessions?id=${s.id}`, { method: "DELETE" });
                     fetchSection("sessions");
                   }}
-                  className="text-xs font-semibold text-red hover:text-red/80"
+                  className="text-xs font-semibold text-burgundy hover:text-burgundy/80"
                 >
                   {t("terminate")}
                 </button>
@@ -242,7 +242,7 @@ export default function SecurityPage() {
                   </div>
                   <div className="flex gap-2">
                     <button className="text-xs text-gold hover:text-gold/80">{t("regenerate")}</button>
-                    <button className="text-xs text-red hover:text-red/80">{t("delete")}</button>
+                    <button className="text-xs text-burgundy hover:text-burgundy/80">{t("delete")}</button>
                   </div>
                 </div>
               ))}
@@ -261,7 +261,7 @@ export default function SecurityPage() {
             </div>
             <div className="rounded-card border border-white/[0.06] bg-card p-4">
               <p className="text-[10px] text-muted">{t("blocked")}</p>
-              <p className="mt-1 text-xl font-semibold text-red">{rateLimitData.blockedCount}</p>
+              <p className="mt-1 text-xl font-semibold text-burgundy">{rateLimitData.blockedCount}</p>
             </div>
             <div className="rounded-card border border-white/[0.06] bg-card p-4">
               <p className="text-[10px] text-muted">{t("slow_requests")}</p>

@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 :root {
+  --bg: #171717;
+  --surface: #1E1E1E;
+  --card: #252525;
   --bg-1: #171717;
   --bg-2: #1E1E1E;
   --bg-3: #252525;
@@ -26,8 +29,32 @@ body {
 }
 
 body {
-  @apply bg-white text-black antialiased;
-  font-family: var(--font-dm-sans, "DM Sans", ui-sans-serif, system-ui);
+@apply bg-[#171717] text-white antialiased;
+font-family: var(--font-dm-sans, "DM Sans", ui-sans-serif, system-ui);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: #FFFFFF !important;
+  -webkit-background-clip: text;
+  background-clip: text;
+  caret-color: #FFFFFF;
+}
+
+input:-webkit-autofill {
+  background-color: #1E1E1E !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+select {
+  color: #FFFFFF;
+}
+
+select option {
+  background-color: #171717;
+  color: #FFFFFF;
 }
 
 ::selection {
@@ -79,18 +106,22 @@ body {
   }
 
   .l-input {
-    @apply h-11 w-full border-0 border-b border-black/[0.08] bg-transparent px-0 text-[0.85rem] text-black outline-none transition-all duration-200 focus:border-rouge/40;
-    &::placeholder {
-      color: rgba(23,23,23,0.25);
-    }
+  @apply h-11 w-full border-0 border-b border-white/[0.1] bg-transparent px-0 text-[0.85rem] text-white outline-none transition-all duration-200 focus:border-gold/50;
+  &::placeholder {
+    color: rgba(255,255,255,0.25);
   }
+}
+
+.input-premium {
+  @apply h-12 w-full rounded-input border border-white/[0.06] bg-[#1E1E1E] px-4 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/35 focus:border-gold/50 focus:ring-1 focus:ring-gold/20;
+}
 
   .l-input-error {
     @apply border-b border-rouge/60 text-rouge;
   }
 
   .btn-primary-sm {
-    @apply inline-flex h-9 items-center justify-center gap-2 rounded-btn bg-rouge px-5 text-[0.42rem] font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-rouge-dark hover:translate-y-[-1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rouge/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-[0.97] active:translate-y-0;
+    @apply inline-flex h-9 items-center justify-center gap-2 rounded-btn bg-rouge px-5 text-[0.5rem] font-semibold uppercase tracking-[0.18em] text-white transition-all duration-300 hover:bg-rouge-dark hover:translate-y-[-1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rouge/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-[0.97] active:translate-y-0;
   }
 
   .btn-secondary {
@@ -165,9 +196,9 @@ body {
     @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.12em] bg-gold/10 text-gold;
   }
 
-  .badge-emerald {
-    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.12em] bg-emerald-500/10 text-emerald-500;
-  }
+.badge-emerald {
+  @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.12em] bg-gold/10 text-gold;
+}
 
   .badge-red {
     @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.12em] bg-rouge/10 text-rouge;

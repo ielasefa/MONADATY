@@ -326,7 +326,7 @@ export function EditProductForm({
                       checkSlug(newSlug);
                     }
                   }}
-                  className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-4 py-2.5 text-sm text-white outline-none transition focus:border-yellow/30"
+                  className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
                   placeholder={t("product_name_placeholder")}
                   required
                 />
@@ -340,7 +340,7 @@ export function EditProductForm({
                     type="text"
                     value={form.slug}
                     onChange={(e) => handleSlugChange(e.target.value)}
-                    className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-4 py-2.5 pr-10 text-sm text-white outline-none transition focus:border-yellow/30"
+                    className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 pr-10 text-sm text-white outline-none transition focus:border-gold/30"
                     placeholder="product-slug"
                     required
                   />
@@ -367,7 +367,7 @@ export function EditProductForm({
                   type="text"
                   value={form.shortDescription}
                   onChange={(e) => updateField("shortDescription", e.target.value)}
-                  className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-4 py-2.5 text-sm text-white outline-none transition focus:border-yellow/30"
+                  className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
                   placeholder={t("product_desc_placeholder")}
                 />
               </div>
@@ -379,7 +379,7 @@ export function EditProductForm({
                   rows={4}
                   value={form.description}
                   onChange={(e) => updateField("description", e.target.value)}
-                  className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-4 py-2.5 text-sm text-white outline-none transition focus:border-yellow/30"
+                  className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
                   placeholder={t("product_detail_placeholder")}
                 />
               </div>
@@ -392,7 +392,7 @@ export function EditProductForm({
                     type="text"
                     value={form.sku}
                     onChange={(e) => updateField("sku", e.target.value)}
-                    className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-4 py-2.5 text-sm text-white outline-none transition focus:border-yellow/30"
+                    className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
                     placeholder={t("sku_placeholder")}
                   />
                 </div>
@@ -404,7 +404,7 @@ export function EditProductForm({
                     type="text"
                     value={form.barcode}
                     onChange={(e) => updateField("barcode", e.target.value)}
-                    className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-4 py-2.5 text-sm text-white outline-none transition focus:border-yellow/30"
+                    className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
                     placeholder={t("optional")}
                   />
                 </div>
@@ -425,7 +425,7 @@ export function EditProductForm({
                     inputMode="decimal"
                     value={form.regularPrice}
                     onChange={(e) => handlePriceChange("regularPrice", e.target.value)}
-                    className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-4 py-2.5 pr-14 text-sm text-white outline-none transition focus:border-yellow/30"
+                    className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 pr-14 text-sm text-white outline-none transition focus:border-gold/30"
                     placeholder="0.00"
                     required
                   />
@@ -442,7 +442,7 @@ export function EditProductForm({
                     inputMode="decimal"
                     value={form.salePrice}
                     onChange={(e) => handlePriceChange("salePrice", e.target.value)}
-                    className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-4 py-2.5 pr-14 text-sm text-white outline-none transition focus:border-yellow/30"
+                    className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 pr-14 text-sm text-white outline-none transition focus:border-gold/30"
                     placeholder="0.00"
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-white/50">{form.currency}</span>
@@ -458,7 +458,7 @@ export function EditProductForm({
                     inputMode="decimal"
                     value={form.costPrice}
                     onChange={(e) => handlePriceChange("costPrice", e.target.value)}
-                    className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-4 py-2.5 pr-14 text-sm text-white outline-none transition focus:border-yellow/30"
+                    className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 pr-14 text-sm text-white outline-none transition focus:border-gold/30"
                     placeholder="0.00"
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-white/50">{form.currency}</span>
@@ -471,7 +471,7 @@ export function EditProductForm({
                 <select
                   value={form.currency}
                   onChange={(e) => updateField("currency", e.target.value)}
-                  className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-4 py-2.5 text-sm text-white outline-none transition focus:border-yellow/30"
+                  className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
                 >
                   {CURRENCIES.map((c) => (
                     <option key={c} value={c}>{c}</option>
@@ -480,13 +480,13 @@ export function EditProductForm({
               </div>
             </div>
             <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
-              <div className="rounded-lg border border-white/[0.06] bg-[#0A0A0A] p-3">
+              <div className="rounded-lg border border-white/[0.06] bg-[#171717] p-3">
                 <p className="text-xs text-white/50">{t("profit")}</p>
                 <p className={`mt-1 text-sm font-semibold ${profit >= 0 ? "text-emerald-400" : "text-red"}`}>
                   {profit.toFixed(2)} {form.currency}
                 </p>
               </div>
-              <div className="rounded-lg border border-white/[0.06] bg-[#0A0A0A] p-3">
+              <div className="rounded-lg border border-white/[0.06] bg-[#171717] p-3">
                 <p className="text-xs text-white/50">{t("margin")}</p>
                 <p className={`mt-1 text-sm font-semibold ${margin >= 0 ? "text-emerald-400" : "text-red"}`}>
                   {margin.toFixed(1)}%
@@ -507,7 +507,7 @@ export function EditProductForm({
                   min={0}
                   value={form.stock}
                   onChange={(e) => updateField("stock", Math.max(0, parseInt(e.target.value) || 0))}
-                  className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-4 py-2.5 text-sm text-white outline-none transition focus:border-yellow/30"
+                  className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
                 />
               </div>
               <div>
@@ -519,7 +519,7 @@ export function EditProductForm({
                   min={1}
                   value={form.lowStockThreshold}
                   onChange={(e) => updateField("lowStockThreshold", Math.max(1, parseInt(e.target.value) || 1))}
-                  className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-4 py-2.5 text-sm text-white outline-none transition focus:border-yellow/30"
+                  className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
                 />
               </div>
             </div>
@@ -539,7 +539,7 @@ export function EditProductForm({
                 <select
                   value={form.categoryId}
                   onChange={(e) => updateField("categoryId", e.target.value)}
-                  className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-4 py-2.5 text-sm text-white outline-none transition focus:border-yellow/30"
+                  className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
                 >
                   <option value="">{t("no_category")}</option>
                   {categories.map((cat) => (
@@ -554,7 +554,7 @@ export function EditProductForm({
                 <select
                   value={form.collectionId}
                   onChange={(e) => updateField("collectionId", e.target.value)}
-                  className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-4 py-2.5 text-sm text-white outline-none transition focus:border-yellow/30"
+                  className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
                 >
                   <option value="">{t("no_collection")}</option>
                   {collections.map((col) => (
@@ -570,7 +570,7 @@ export function EditProductForm({
                   type="text"
                   value={form.brand}
                   onChange={(e) => updateField("brand", e.target.value)}
-                  className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-4 py-2.5 text-sm text-white outline-none transition focus:border-yellow/30"
+                  className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
                   placeholder={t("brand_placeholder")}
                 />
               </div>
@@ -587,7 +587,7 @@ export function EditProductForm({
                 <select
                   value={form.status}
                   onChange={(e) => updateField("status", e.target.value)}
-                  className="w-40 rounded-md border border-white/[0.06] bg-[#0A0A0A] px-4 py-2.5 text-sm text-white outline-none transition focus:border-yellow/30"
+                  className="w-40 rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
                 >
                   <option value="Draft">{t("draft")}</option>
                   <option value="Active">{t("active")}</option>

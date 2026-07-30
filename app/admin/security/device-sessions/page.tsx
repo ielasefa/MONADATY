@@ -59,13 +59,13 @@ export default function DeviceSessionsPage() {
                 <div className="flex items-center gap-2">
                   <span className={`h-2 w-2 rounded-full ${s.isCurrent ? "bg-emerald" : "bg-white/20"}`} />
                   <p className="font-medium text-white">{s.browser} on {s.os}</p>
-                  {s.isCurrent && <span className="rounded bg-emerald/10 px-2 py-0.5 text-[10px] font-medium text-emerald">{t("current")}</span>}
+                  {s.isCurrent && <span className="rounded bg-emerald/10 px-2 py-0.5 text-[10px] font-medium text-gold">{t("current")}</span>}
                 </div>
                 <p className="mt-1 text-xs text-muted">IP: {s.ip} | Device: {s.device} | Country: {s.country || "N/A"}</p>
                 <p className="text-[10px] text-muted">Created: {new Date(s.createdAt).toLocaleString()} | Last Active: {new Date(s.lastActiveAt).toLocaleString()}</p>
               </div>
               {!s.isCurrent && (
-                <button onClick={() => handleTerminate(s.id)} className="text-xs font-semibold text-red hover:text-red/80">{t("terminate")}</button>
+                <button onClick={() => handleTerminate(s.id)} className="text-xs font-semibold text-burgundy hover:text-burgundy/80">{t("terminate")}</button>
               )}
             </div>
           ))}

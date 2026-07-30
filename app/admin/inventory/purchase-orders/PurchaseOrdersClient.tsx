@@ -18,8 +18,8 @@ type PO = {
 const statusColors: Record<string, string> = {
   Draft: "bg-white/10 text-white/60 border border-white/10",
   Pending: "badge-gold",
-  Approved: "bg-emerald/10 text-emerald border border-emerald/20",
-  Ordered: "bg-blue-500/10 text-blue-400 border border-blue-500/20",
+  Approved: "bg-gold/10 text-gold border border-emerald/20",
+  Ordered: "bg-gold/30 text-gold border border-blue-500/20",
   Received: "badge-emerald",
   Cancelled: "badge-red",
 };

@@ -52,12 +52,12 @@ export function ShopForm({ products, categories, collections, saveProduct }: Pro
 
       <div className="space-y-3">
         {visibleProducts.map((p) => {
-          const stockStatus = p.stock === 0 ? "out" : p.stock <= 10 ? "low" : "in";
-          const statusStyles = {
-            out: "border-red/20 bg-red/10 text-red",
-            low: "border-orange-500/20 bg-orange-500/10 text-orange-400",
-            in: "border-emerald/20 bg-emerald/10 text-emerald-400",
-          };
+  const stockStatus = p.stock === 0 ? "out" : p.stock <= 10 ? "low" : "in";
+  const statusStyles = {
+  out: "border-burgundy/30 bg-burgundy/10 text-burgundy",
+  low: "border-gold/30 bg-gold/10 text-gold",
+  in: "border-white/[0.06] bg-white/[0.04] text-ivory/60",
+};
           const statusIcons = {
             out: "\u274C",
             low: "\u26A0\uFE0F",
@@ -113,7 +113,7 @@ export function ShopForm({ products, categories, collections, saveProduct }: Pro
                 }
               }}
               disabled={deleting === p.id}
-              className="badge-red rounded-full bg-red/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-red transition hover:bg-red/20 disabled:opacity-50"
+              className="badge-red rounded-full bg-burgundy/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-burgundy transition hover:bg-burgundy/20 disabled:opacity-50"
               aria-label={`${t("delete")} ${p.name}`}
             >
               {deleting === p.id ? "..." : t("delete")}
@@ -202,7 +202,7 @@ function ProductEditor({ product, categories, collections, onSave, onCancel }: {
           </label>
         </div>
         <div className="flex gap-3">
-          <button type="submit" disabled={isPending} className="btn-primary h-12 rounded-button bg-red px-6 text-sm font-medium text-white transition hover:bg-red/90 disabled:opacity-50">
+          <button type="submit" disabled={isPending} className="btn-primary h-12 rounded-button bg-burgundy px-6 text-sm font-medium text-white transition hover:bg-burgundy/90 disabled:opacity-50">
             {isPending ? tc("saving", "Saving...") : isNew ? tc("create_product", "Create Product") : tc("update_product", "Update Product")}
           </button>
           <button type="button" onClick={onCancel} disabled={isPending} className="btn-secondary h-12 rounded-button border border-white/[0.06] bg-card px-6 text-sm text-muted transition hover:bg-surface hover:text-white disabled:opacity-50">{tc("cancel")}</button>

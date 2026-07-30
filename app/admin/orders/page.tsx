@@ -26,16 +26,16 @@ function StatsBar({ orders }: { orders: StoredOrder[] }) {
   const cards = [
     { label: t("total_orders"), value: total, accent: "" },
     { label: t("revenue_label"), value: `${revenue.toFixed(2)} DH`, accent: "text-yellow" },
-    { label: t("pending"), value: pending, accent: "text-red" },
+    { label: t("pending"), value: pending, accent: "text-burgundy" },
     { label: t("paid"), value: paid, accent: "text-white/65" },
     { label: t("delivered"), value: delivered, accent: "text-white/65" },
-    { label: t("cancelled"), value: cancelled, accent: "text-red" },
+    { label: t("cancelled"), value: cancelled, accent: "text-burgundy" },
   ];
 
   return (
     <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
       {cards.map((card) => (
-          <div key={card.label} className="luxury-card rounded-xl border border-white/[0.06] bg-[#141414] p-5">
+          <div key={card.label} className="luxury-card rounded-xl border border-white/[0.06] bg-[#171717] p-5">
           <p className="luxury-label text-[10px] text-white/50">{card.label}</p>
           <p className={`mt-1 font-display text-xl font-semibold ${card.accent || "text-white"}`}>{card.value}</p>
       </div>
@@ -121,7 +121,7 @@ export default function AdminOrdersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A]">
+    <div className="min-h-screen bg-[#171717]">
       <div className="container-shell mx-auto px-6 py-10">
         <div className="mb-8">
           <h1 className="font-display text-3xl font-semibold tracking-tight text-white">{t("order_management")}</h1>
@@ -137,13 +137,13 @@ export default function AdminOrdersPage() {
               placeholder={t("search_orders_placeholder")}
               value={search}
               onChange={(e) => { setSearch(e.target.value); setPage(0); }}
-              className="input-premium h-12 w-56 rounded-md border border-white/[0.06] bg-[#0A0A0A] px-4 text-sm text-white outline-none transition focus:border-yellow/40 focus:ring-1 focus:ring-yellow/20"
+              className="input-premium h-12 w-56 rounded-md border border-white/[0.06] bg-[#171717] px-4 text-sm text-white outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-yellow/20"
               aria-label={t("search_orders_aria")}
             />
             <select
               value={orderStatusFilter}
               onChange={(e) => { setOrderStatusFilter(e.target.value); setPage(0); }}
-              className="input-premium h-12 rounded-md border border-white/[0.06] bg-[#0A0A0A] px-3 text-sm text-white outline-none transition focus:border-yellow/40 focus:ring-1 focus:ring-yellow/20"
+              className="input-premium h-12 rounded-md border border-white/[0.06] bg-[#171717] px-3 text-sm text-white outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-yellow/20"
               aria-label={t("filter_status_aria")}
             >
               <option value="all">{t("all_statuses")}</option>
@@ -154,7 +154,7 @@ export default function AdminOrdersPage() {
             <select
               value={paymentStatusFilter}
               onChange={(e) => { setPaymentStatusFilter(e.target.value); setPage(0); }}
-              className="input-premium h-12 rounded-md border border-white/[0.06] bg-[#0A0A0A] px-3 text-sm text-white outline-none transition focus:border-yellow/40 focus:ring-1 focus:ring-yellow/20"
+              className="input-premium h-12 rounded-md border border-white/[0.06] bg-[#171717] px-3 text-sm text-white outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-yellow/20"
               aria-label={t("filter_payment_aria")}
             >
               <option value="all">{t("all_payments")}</option>
@@ -272,7 +272,7 @@ export default function AdminOrdersPage() {
                   type="button"
                   disabled={page === 0}
                   onClick={() => setPage((p) => p - 1)}
-                  className="btn-secondary h-12 rounded-md border border-white/[0.06] bg-[#141414] px-4 text-sm text-white/50 transition hover:bg-[#0A0A0A] hover:text-white disabled:opacity-30"
+                  className="btn-secondary h-12 rounded-md border border-white/[0.06] bg-[#171717] px-4 text-sm text-white/50 transition hover:bg-[#171717] hover:text-white disabled:opacity-30"
                   aria-label={t("previous_page")}
                 >
                   {t("previous")}
@@ -284,7 +284,7 @@ export default function AdminOrdersPage() {
                   type="button"
                   disabled={page >= totalPages - 1}
                   onClick={() => setPage((p) => p + 1)}
-                  className="btn-secondary h-12 rounded-md border border-white/[0.06] bg-[#141414] px-4 text-sm text-white/50 transition hover:bg-[#0A0A0A] hover:text-white disabled:opacity-30"
+                  className="btn-secondary h-12 rounded-md border border-white/[0.06] bg-[#171717] px-4 text-sm text-white/50 transition hover:bg-[#171717] hover:text-white disabled:opacity-30"
                   aria-label={t("next_page")}
                 >
                   {t("next")}

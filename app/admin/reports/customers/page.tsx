@@ -37,7 +37,7 @@ export default function CustomersReportPage() {
         </div>
         <div className="rounded-card border border-white/[0.06] bg-card p-4">
           <p className="text-[10px] text-muted">Avg Spent / Customer</p>
-          <p className="mt-1 text-xl font-semibold text-emerald">{data.avgSpentPerCustomer.toFixed(2)} DH</p>
+          <p className="mt-1 text-xl font-semibold text-gold">{data.avgSpentPerCustomer.toFixed(2)} DH</p>
         </div>
       </div>
 

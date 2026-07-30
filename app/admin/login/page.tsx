@@ -50,10 +50,10 @@ function AdminLoginForm() {
     }
   }
 
-  const inputClass =
-    "h-12 w-full rounded-input border border-white/[0.06] bg-surface px-4 text-sm text-white outline-none transition placeholder:text-muted/50 focus:border-red focus:ring-1 focus:ring-red/30 disabled:opacity-50";
-  const inputPasswordClass =
-    "h-12 w-full rounded-input border border-white/[0.06] bg-surface px-4 pr-12 text-sm text-white outline-none transition placeholder:text-muted/50 focus:border-red focus:ring-1 focus:ring-red/30 disabled:opacity-50";
+const inputClass = 
+"h-12 w-full rounded-input border border-white/[0.06] bg-surface px-4 text-sm text-white outline-none transition placeholder:text-muted/50 focus:border-burgundy focus:ring-1 focus:ring-burgundy/30 disabled:opacity-50";
+const inputPasswordClass = 
+"h-12 w-full rounded-input border border-white/[0.06] bg-surface px-4 pr-12 text-sm text-white outline-none transition placeholder:text-muted/50 focus:border-burgundy focus:ring-1 focus:ring-burgundy/30 disabled:opacity-50";
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-bg px-4 py-10">
@@ -106,7 +106,7 @@ function AdminLoginForm() {
                 onClick={() => setShowPassword((s) => !s)}
                 aria-label={showPassword ? t("hide_password") : t("show_password")}
                 aria-pressed={showPassword}
-                className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-muted transition hover:bg-white/5 hover:text-white focus:outline-none focus-visible:ring-1 focus-visible:ring-red/30"
+                className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-muted transition hover:bg-white/5 hover:text-white focus:outline-none focus-visible:ring-1 focus-visible:ring-burgundy/30"
               >
                 {showPassword ? (
                   <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
@@ -126,7 +126,7 @@ function AdminLoginForm() {
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
-              className="rounded-xl border border-red/20 bg-red/10 px-4 py-3 text-sm text-red" role="alert"
+              className="rounded-xl border border-burgundy/20 bg-burgundy/10 px-4 py-3 text-sm text-burgundy" role="alert"
             >
               {error}
             </motion.div>

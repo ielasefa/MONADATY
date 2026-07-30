@@ -67,7 +67,7 @@ export function CategoryCreateModal({ open, onClose, onCreated }: Props) {
       aria-modal="true"
       aria-label={t("create_category")}
     >
-      <div className="w-full max-w-md rounded-xl border border-white/[0.06] bg-[#141414] p-6 shadow-2xl">
+      <div className="w-full max-w-md rounded-xl border border-white/[0.06] bg-[#171717] p-6 shadow-2xl">
         <div className="mb-5 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-white">{t("create_category")}</h2>
           <button onClick={onClose} className="text-white/50 transition hover:text-white" aria-label={t("close")}>
@@ -86,7 +86,7 @@ export function CategoryCreateModal({ open, onClose, onCreated }: Props) {
               type="text"
               value={name}
               onChange={(e) => handleNameChange(e.target.value)}
-              className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-4 py-2.5 text-sm text-white outline-none transition focus:border-yellow/30"
+              className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
               placeholder={t("category_name_placeholder")}
               required
               autoFocus
@@ -101,7 +101,7 @@ export function CategoryCreateModal({ open, onClose, onCreated }: Props) {
               type="text"
               value={slug}
               onChange={(e) => setSlug(generateSlug(e.target.value))}
-              className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-4 py-2.5 text-sm text-white outline-none transition focus:border-yellow/30"
+              className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
               placeholder={t("category_slug_placeholder")}
               required
             />

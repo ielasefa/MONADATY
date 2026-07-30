@@ -208,7 +208,7 @@ export function SingleImageUploader({ value, onChange, label, folder = "products
       <input ref={cameraRef} type="file" accept="image/jpeg,image/png,image/webp,image/avif" capture="environment" className="hidden" onChange={handleCameraCapture} />
 
       {preview ? (
-        <div className="relative overflow-hidden rounded-xl border border-white/[0.06] bg-[#0A0A0A]" style={aspectRatio ? { aspectRatio } : {}}>
+        <div className="relative overflow-hidden rounded-xl border border-white/[0.06] bg-[#171717]" style={aspectRatio ? { aspectRatio } : {}}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={preview} alt={t("preview")} className="h-48 w-full object-cover" />
           {uploading && (

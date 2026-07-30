@@ -88,7 +88,7 @@ export function WarehouseForm({
       </div>
 
       {error && (
-        <div className="mb-6 rounded-card border border-red/20 bg-red/10 px-4 py-3 text-sm text-red">
+        <div className="mb-6 rounded-card border border-burgundy/20 bg-burgundy/10 px-4 py-3 text-sm text-burgundy">
           {error}
         </div>
       )}
@@ -170,7 +170,7 @@ export function WarehouseForm({
                       <td className="px-5 py-4 font-mono text-xs text-muted">{s.sku || "\u2014"}</td>
                       <td className="px-5 py-4 text-right text-white">{s.stock}</td>
                       <td className="px-5 py-4 text-right text-muted">{s.reservedStock}</td>
-                      <td className="px-5 py-4 text-right font-medium text-emerald">
+                      <td className="px-5 py-4 text-right font-medium text-gold">
                         {s.stock - s.reservedStock}
                       </td>
                     </motion.tr>

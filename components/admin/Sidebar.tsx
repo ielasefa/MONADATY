@@ -44,14 +44,14 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
     pathname === href || pathname.startsWith(href + "/");
 
   return (
-    <aside className="flex w-64 flex-col border-r border-white/[0.06] bg-[#0A0A0A]">
+    <aside className="flex w-64 flex-col border-r border-white/[0.06] bg-[#171717]">
       <div className="flex h-16 items-center gap-3 border-b border-white/[0.06] px-5">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gold/15">
           <span className="text-sm font-bold text-gold">M</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="font-display text-lg tracking-wide text-gold">{displayName}</span>
-          <span className="rounded-full border border-red/20 bg-red/10 px-2 py-0.5 text-[0.6rem] font-medium uppercase tracking-widest text-red">
+          <span className="rounded-full border border-burgundy/20 bg-burgundy/10 px-2 py-0.5 text-[0.6rem] font-medium uppercase tracking-widest text-burgundy">
             {t("admin_role")}
           </span>
         </div>

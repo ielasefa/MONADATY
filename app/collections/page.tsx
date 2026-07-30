@@ -28,8 +28,8 @@ export default async function CollectionsPage() {
 
   const [featured, ...rest] = collections;
 
-  return (
-    <div className="bg-black">
+return (
+<div className="bg-[#171717]">
       {/* ═══ HERO — editorial headline ═══ */}
       <section className="relative overflow-hidden">
         <div className="mx-auto max-w-[1600px] px-6 py-28 md:px-10 md:py-40 lg:px-16 lg:py-56">

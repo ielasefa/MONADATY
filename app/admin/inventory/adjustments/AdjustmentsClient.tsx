@@ -123,10 +123,10 @@ export function AdjustmentsClient({
       </div>
 
       {error && (
-        <div className="mb-6 rounded-card border border-red/20 bg-red/10 px-4 py-3 text-sm text-red">{error}</div>
+        <div className="mb-6 rounded-card border border-burgundy/20 bg-burgundy/10 px-4 py-3 text-sm text-burgundy">{error}</div>
       )}
       {success && (
-        <div className="mb-6 rounded-card border border-emerald/20 bg-emerald/10 px-4 py-3 text-sm text-emerald">{success}</div>
+        <div className="mb-6 rounded-card border border-emerald/20 bg-emerald/10 px-4 py-3 text-sm text-gold">{success}</div>
       )}
 
       <div className="mb-10 luxury-card rounded-card border border-white/[0.06] bg-card p-6">
@@ -182,7 +182,7 @@ export function AdjustmentsClient({
               )}
               {selectedProduct && (
                 <div className="mt-1 flex items-center gap-2 rounded-lg bg-emerald/10 px-3 py-2">
-                  <span className="text-sm text-emerald">{selectedProduct.name}</span>
+                  <span className="text-sm text-gold">{selectedProduct.name}</span>
                   <button
                     type="button"
                     onClick={() => {
@@ -190,7 +190,7 @@ export function AdjustmentsClient({
                       setProductQuery("");
                       setCurrentStock(null);
                     }}
-                    className="ml-auto text-xs text-red"
+                    className="ml-auto text-xs text-burgundy"
                   >
                     Remove
                   </button>
@@ -214,7 +214,7 @@ export function AdjustmentsClient({
                 required
               />
               {currentStock !== null && newStock !== "" && (
-                <p className={`text-xs ${adjustment > 0 ? "text-emerald" : adjustment < 0 ? "text-red" : "text-muted"}`}>
+                <p className={`text-xs ${adjustment > 0 ? "text-gold" : adjustment < 0 ? "text-burgundy" : "text-muted"}`}>
                   {adjustment > 0 ? "+" : ""}{adjustment} unit{Math.abs(adjustment) !== 1 ? "s" : ""}
                 </p>
               )}
@@ -277,7 +277,7 @@ export function AdjustmentsClient({
                     <td className="px-5 py-4 text-muted">{a.warehouseName}</td>
                     <td className="px-5 py-4 text-right text-muted">{a.previousStock}</td>
                     <td className="px-5 py-4 text-right text-white">{a.newStock}</td>
-                    <td className={`px-5 py-4 text-right font-medium ${a.quantity > 0 ? "text-emerald" : a.quantity < 0 ? "text-red" : "text-muted"}`}>
+                    <td className={`px-5 py-4 text-right font-medium ${a.quantity > 0 ? "text-gold" : a.quantity < 0 ? "text-burgundy" : "text-muted"}`}>
                       {a.quantity > 0 ? `+${a.quantity}` : a.quantity}
                     </td>
                     <td className="px-5 py-4 text-muted">{a.reason || "\u2014"}</td>

@@ -180,13 +180,13 @@ export default function ProductsPage() {
       Active: "badge-emerald",
       Draft: "badge-gold",
       Hidden: "bg-white/10 text-white/60",
-      Archived: "bg-red/10 text-red",
+      Archived: "bg-burgundy/10 text-burgundy",
     };
     return `inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] ${map[status] || "bg-white/10 text-white/60"}`;
   };
 
   const stockDot = (stock: number, threshold: number) => {
-    if (stock <= 0) return "bg-red";
+    if (stock <= 0) return "bg-burgundy";
     if (stock < threshold) return "bg-gold";
     return "bg-emerald";
   };
@@ -223,7 +223,7 @@ export default function ProductsPage() {
                 disabled={runningBulk}
                 className={`h-10 rounded-button px-4 text-xs font-semibold uppercase tracking-[0.1em] ${
                   bulkAction === "delete"
-                    ? "bg-red text-white hover:bg-red/80"
+                    ? "bg-burgundy text-white hover:bg-burgundy/80"
                     : "btn-gold"
                 } disabled:opacity-50`}
               >
@@ -458,7 +458,7 @@ export default function ProductsPage() {
                         <td className="px-4 py-3">
                           {coverImg ? (
                             // eslint-disable-next-line @next/next/no-img-element
-                            <img src={coverImg} alt="" className="h-10 w-10 rounded-lg object-cover" />
+                            <img src={coverImg} alt={p.name || "Product cover"} className="h-10 w-10 rounded-lg object-cover" />
                           ) : (
                             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/5 text-xs text-muted">
                               —
@@ -479,7 +479,7 @@ export default function ProductsPage() {
                               </span>
                             )}
                             {p.isBestSeller && (
-                              <span className="inline-flex shrink-0 rounded bg-emerald/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-emerald">
+                              <span className="inline-flex shrink-0 rounded bg-emerald/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-gold">
                                 Best
                               </span>
                             )}

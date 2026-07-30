@@ -473,10 +473,10 @@ function FeaturedForm({ featured, onChange, onSave, featuredEntries, searchQuery
               <span className="text-xs text-muted mr-1">#{entry.position}</span>
               <button type="button" onClick={() => onMoveProduct(entry.id, "up")} disabled={idx === 0} className="p-1 text-muted hover:text-white disabled:opacity-30 transition-colors">&#8593;</button>
               <button type="button" onClick={() => onMoveProduct(entry.id, "down")} disabled={idx === featuredEntries.length - 1} className="p-1 text-muted hover:text-white disabled:opacity-30 transition-colors">&#8595;</button>
-              <button type="button" onClick={() => onToggleProduct(entry.id, !entry.enabled)} className={`p-1 transition-colors ${entry.enabled ? "text-emerald" : "text-muted hover:text-white"}`}>
+              <button type="button" onClick={() => onToggleProduct(entry.id, !entry.enabled)} className={`p-1 transition-colors ${entry.enabled ? "text-gold" : "text-muted hover:text-white"}`}>
                 {entry.enabled ? "\u25CF" : "\u25CB"}
               </button>
-              <button type="button" onClick={() => onRemoveProduct(entry.id)} className="p-1 text-red/60 hover:text-red transition-colors">{"\u2715"}</button>
+              <button type="button" onClick={() => onRemoveProduct(entry.id)} className="p-1 text-burgundy/60 hover:text-burgundy transition-colors">{"\u2715"}</button>
             </div>
           ))}
         </div>
@@ -521,7 +521,7 @@ function CollectionsSectionForm({ section, onChange, onSave, allCollections, ena
                 <span className="text-xs text-muted mr-1">#{col.landingOrder}</span>
                 <button type="button" onClick={() => onMoveCollection(col.id, "up")} disabled={idx === 0} className="p-1 text-muted hover:text-white disabled:opacity-30 transition-colors">&#8593;</button>
                 <button type="button" onClick={() => onMoveCollection(col.id, "down")} disabled={idx === enabledCollections.length - 1} className="p-1 text-muted hover:text-white disabled:opacity-30 transition-colors">&#8595;</button>
-                <button type="button" onClick={() => onToggleCollection(col.id, false)} className="p-1 text-red/60 hover:text-red transition-colors">{"\u2715"}</button>
+                <button type="button" onClick={() => onToggleCollection(col.id, false)} className="p-1 text-burgundy/60 hover:text-burgundy transition-colors">{"\u2715"}</button>
               </div>
             ))}
           </div>

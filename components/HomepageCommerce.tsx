@@ -785,7 +785,7 @@ export function MoroccanMoment() {
           <Reveal className="lg:col-span-7">
             <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-black-soft flex items-center justify-center">
               <div className="text-center">
-                <span className="label-utility tracking-[0.5em] text-white/[0.1]">
+                <span className="label-utility tracking-[0.5em] text-white/40">
                   {t("pour_serve_savor", "POUR · SERVE · SAVOR")}
                 </span>
               </div>
@@ -860,11 +860,11 @@ export function Newsletter({
             >
               <label className="flex-1 max-w-xs">
                 <span className="sr-only">{placeholder || t("newsletter_label", "Your email")}</span>
-                <input
-                  type="email"
-                  placeholder={placeholder || t("newsletter_label", "Your email")}
-                  className="h-11 w-full border-0 border-b border-white/[0.15] bg-transparent px-0 text-[0.82rem] text-white outline-none transition-all duration-200 placeholder:text-white/40 focus:border-gold"
-                />
+<input
+type="email"
+placeholder={placeholder || t("newsletter_label", "Your email")}
+className="h-11 w-full border-0 border-b border-white/[0.15] bg-transparent px-0 text-[0.82rem] text-white outline-none transition-all duration-200 placeholder:text-white/40 focus:border-gold caret-white"
+style={{ WebkitTextFillColor: "#FFFFFF" }} />
               </label>
               <button
                 type="submit"

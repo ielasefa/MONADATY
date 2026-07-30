@@ -57,7 +57,7 @@ export default function RevenueReportPage() {
         </div>
         <div className="rounded-card border border-white/[0.06] bg-card p-4">
           <p className="text-[10px] text-muted">Net Revenue</p>
-          <p className="mt-1 text-xl font-semibold text-emerald">{summary.netRevenue.toFixed(2)} DH</p>
+          <p className="mt-1 text-xl font-semibold text-gold">{summary.netRevenue.toFixed(2)} DH</p>
         </div>
         <div className="rounded-card border border-white/[0.06] bg-card p-4">
           <p className="text-[10px] text-muted">Shipping</p>
@@ -65,7 +65,7 @@ export default function RevenueReportPage() {
         </div>
         <div className="rounded-card border border-white/[0.06] bg-card p-4">
           <p className="text-[10px] text-muted">Discounts</p>
-          <p className="mt-1 text-xl font-semibold text-red">{summary.discountTotal.toFixed(2)} DH</p>
+          <p className="mt-1 text-xl font-semibold text-burgundy">{summary.discountTotal.toFixed(2)} DH</p>
         </div>
       </div>
 

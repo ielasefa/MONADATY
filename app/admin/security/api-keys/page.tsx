@@ -76,7 +76,7 @@ export default function ApiKeysPage() {
         <div className="mb-6 rounded-card border border-gold/20 bg-gold/5 p-4">
           <p className="text-sm font-semibold text-gold">{t("new_api_key_generated")}</p>
           <p className="mt-1 text-xs text-white/80 break-all font-mono">{newKey}</p>
-          <p className="mt-1 text-xs text-red">{t("save_key_warning")}</p>
+          <p className="mt-1 text-xs text-burgundy">{t("save_key_warning")}</p>
           <button onClick={() => setNewKey(null)} className="mt-2 text-xs text-muted hover:text-white">{t("dismiss")}</button>
         </div>
       )}
@@ -102,7 +102,7 @@ export default function ApiKeysPage() {
                 </div>
                 <div className="flex gap-2">
                   <button onClick={() => handleRegenerate(key.id)} className="text-xs font-semibold text-gold hover:text-gold/80">{t("regenerate")}</button>
-                  <button onClick={() => handleDelete(key.id)} className="text-xs font-semibold text-red hover:text-red/80">{t("delete")}</button>
+                  <button onClick={() => handleDelete(key.id)} className="text-xs font-semibold text-burgundy hover:text-burgundy/80">{t("delete")}</button>
                 </div>
               </div>
             ))}

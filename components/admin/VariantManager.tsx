@@ -147,7 +147,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
   if (variants.length === 0 && !showAddForm) {
     return (
       <div className="space-y-4">
-        <div className="flex flex-col items-center gap-3 rounded-lg border border-white/[0.06] bg-[#0A0A0A]/50 py-8">
+        <div className="flex flex-col items-center gap-3 rounded-lg border border-white/[0.06] bg-[#171717]/50 py-8">
           <p className="text-sm text-white/50">{t("no_variants")}</p>
           <p className="text-xs text-white/50">Add sizes like 250ml, 330ml, 500ml, 1L</p>
           <button
@@ -204,7 +204,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
                 type="text"
                 value={newVariant.name}
                 onChange={(e) => setNewVariant((prev) => ({ ...prev, name: e.target.value }))}
-                className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-3 py-2 text-sm text-white outline-none transition focus:border-yellow/30"
+                className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-3 py-2 text-sm text-white outline-none transition focus:border-gold/30"
                 placeholder={t("variant_name_placeholder")}
               />
            </div>
@@ -214,7 +214,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
                 type="text"
                 value={newVariant.size}
                 onChange={(e) => setNewVariant((prev) => ({ ...prev, size: e.target.value }))}
-                className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-3 py-2 text-sm text-white outline-none transition focus:border-yellow/30"
+                className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-3 py-2 text-sm text-white outline-none transition focus:border-gold/30"
                 placeholder={t("variant_size_placeholder")}
               />
            </div>
@@ -228,7 +228,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
                   const val = stripCurrency(e.target.value);
                   setNewVariant((prev) => ({ ...prev, price: val }));
                 }}
-                className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-3 py-2 text-sm text-white outline-none transition focus:border-yellow/30"
+                className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-3 py-2 text-sm text-white outline-none transition focus:border-gold/30"
                 placeholder="0.00"
               />
            </div>
@@ -239,7 +239,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
                 min={0}
                 value={newVariant.stock}
                 onChange={(e) => setNewVariant((prev) => ({ ...prev, stock: Math.max(0, parseInt(e.target.value) || 0) }))}
-                className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-3 py-2 text-sm text-white outline-none transition focus:border-yellow/30"
+                className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-3 py-2 text-sm text-white outline-none transition focus:border-gold/30"
               />
            </div>
             <div>
@@ -248,7 +248,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
                 type="text"
                 value={newVariant.sku}
                 onChange={(e) => setNewVariant((prev) => ({ ...prev, sku: e.target.value }))}
-                className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-3 py-2 text-sm text-white outline-none transition focus:border-yellow/30"
+                className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-3 py-2 text-sm text-white outline-none transition focus:border-gold/30"
                 placeholder={t("optional")}
               />
            </div>
@@ -258,7 +258,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
                 type="text"
                 value={newVariant.barcode}
                 onChange={(e) => setNewVariant((prev) => ({ ...prev, barcode: e.target.value }))}
-                className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-3 py-2 text-sm text-white outline-none transition focus:border-yellow/30"
+                className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-3 py-2 text-sm text-white outline-none transition focus:border-gold/30"
                 placeholder="Optional"
               />
            </div>
@@ -272,7 +272,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
                   const val = stripCurrency(e.target.value);
                   setNewVariant((prev) => ({ ...prev, salePrice: val }));
                 }}
-                className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-3 py-2 text-sm text-white outline-none transition focus:border-yellow/30"
+                className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-3 py-2 text-sm text-white outline-none transition focus:border-gold/30"
                 placeholder="0.00"
               />
            </div>
@@ -282,7 +282,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
                 type="text"
                 value={newVariant.weight}
                 onChange={(e) => setNewVariant((prev) => ({ ...prev, weight: e.target.value }))}
-                className="w-full rounded-md border border-white/[0.06] bg-[#0A0A0A] px-3 py-2 text-sm text-white outline-none transition focus:border-yellow/30"
+                className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-3 py-2 text-sm text-white outline-none transition focus:border-gold/30"
                 placeholder={t("variant_weight_placeholder")}
               />
            </div>
@@ -301,7 +301,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
               <select
                 value={newVariant.status}
                 onChange={(e) => setNewVariant((prev) => ({ ...prev, status: e.target.value }))}
-                className="rounded-md border border-white/[0.06] bg-[#0A0A0A] px-3 py-1.5 text-xs text-white outline-none"
+                className="rounded-md border border-white/[0.06] bg-[#171717] px-3 py-1.5 text-xs text-white outline-none"
               >
                 <option value="Active">{t("active")}</option>
                 <option value="Inactive">{t("inactive")}</option>
@@ -387,13 +387,13 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
                             type="text"
                             value={variant.name}
                             onChange={(e) => handleInlineEdit(variant.id!, "name", e.target.value)}
-                            className="w-24 rounded border border-transparent bg-transparent px-1 py-0.5 text-white outline-none transition hover:border-white/10 focus:border-yellow/30"
+                            className="w-24 rounded border border-transparent bg-transparent px-1 py-0.5 text-white outline-none transition hover:border-white/10 focus:border-gold/30"
                           />
                           <input
                             type="text"
                             value={variant.size}
                             onChange={(e) => handleInlineEdit(variant.id!, "size", e.target.value)}
-                            className="block w-20 rounded border border-transparent bg-transparent px-1 py-0.5 text-white/50 outline-none transition hover:border-white/10 focus:border-yellow/30"
+                            className="block w-20 rounded border border-transparent bg-transparent px-1 py-0.5 text-white/50 outline-none transition hover:border-white/10 focus:border-gold/30"
                             placeholder={t("size")}
                           />
                         </div>
@@ -410,7 +410,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
                         inputMode="decimal"
                         value={variant.price}
                         onChange={(e) => handleInlineEdit(variant.id!, "price", stripCurrency(e.target.value))}
-                        className="w-16 rounded border border-transparent bg-transparent px-1 py-0.5 text-white outline-none transition hover:border-white/10 focus:border-yellow/30"
+                        className="w-16 rounded border border-transparent bg-transparent px-1 py-0.5 text-white outline-none transition hover:border-white/10 focus:border-gold/30"
                       />
                     </td>
                     <td className="px-3 py-2">
@@ -419,7 +419,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
                         inputMode="decimal"
                         value={variant.salePrice}
                         onChange={(e) => handleInlineEdit(variant.id!, "salePrice", stripCurrency(e.target.value))}
-                        className="w-16 rounded border border-transparent bg-transparent px-1 py-0.5 text-white outline-none transition hover:border-white/10 focus:border-yellow/30"
+                        className="w-16 rounded border border-transparent bg-transparent px-1 py-0.5 text-white outline-none transition hover:border-white/10 focus:border-gold/30"
                       />
                     </td>
                     <td className="px-3 py-2 text-center">
@@ -432,7 +432,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
                           min={0}
                           value={variant.stock}
                           onChange={(e) => handleInlineEdit(variant.id!, "stock", Math.max(0, parseInt(e.target.value) || 0))}
-                          className="w-12 rounded border border-transparent bg-transparent px-1 py-0.5 text-center text-white outline-none transition hover:border-white/10 focus:border-yellow/30"
+                          className="w-12 rounded border border-transparent bg-transparent px-1 py-0.5 text-center text-white outline-none transition hover:border-white/10 focus:border-gold/30"
                         />
                       </div>
                     </td>
@@ -441,7 +441,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
                         type="text"
                         value={variant.sku}
                         onChange={(e) => handleInlineEdit(variant.id!, "sku", e.target.value)}
-                        className="w-20 rounded border border-transparent bg-transparent px-1 py-0.5 font-mono text-xs text-white outline-none transition hover:border-white/10 focus:border-yellow/30"
+                        className="w-20 rounded border border-transparent bg-transparent px-1 py-0.5 font-mono text-xs text-white outline-none transition hover:border-white/10 focus:border-gold/30"
                       />
                     </td>
                     <td className="px-3 py-2">
@@ -449,14 +449,14 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
                         type="text"
                         value={variant.barcode}
                         onChange={(e) => handleInlineEdit(variant.id!, "barcode", e.target.value)}
-                        className="w-16 rounded border border-transparent bg-transparent px-1 py-0.5 font-mono text-xs text-white outline-none transition hover:border-white/10 focus:border-yellow/30"
+                        className="w-16 rounded border border-transparent bg-transparent px-1 py-0.5 font-mono text-xs text-white outline-none transition hover:border-white/10 focus:border-gold/30"
                       />
                     </td>
                     <td className="px-3 py-2">
                       <select
                         value={variant.status}
                         onChange={(e) => handleInlineEdit(variant.id!, "status", e.target.value)}
-                        className="rounded border border-transparent bg-transparent px-1 py-0.5 text-xs text-white outline-none transition hover:border-white/10 focus:border-yellow/30"
+                        className="rounded border border-transparent bg-transparent px-1 py-0.5 text-xs text-white outline-none transition hover:border-white/10 focus:border-gold/30"
                       >
                         <option value="Active">{t("active")}</option>
                         <option value="Inactive">{t("inactive")}</option>

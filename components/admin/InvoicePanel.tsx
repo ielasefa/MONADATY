@@ -134,7 +134,7 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
             type="button"
             disabled={loading}
             onClick={handleCreate}
-            className="btn-secondary mt-4 h-12 rounded-md border border-white/[0.06] bg-[#141414] px-5 text-sm font-medium text-white transition hover:bg-[#0A0A0A] disabled:opacity-50"
+            className="btn-secondary mt-4 h-12 rounded-md border border-white/[0.06] bg-[#171717] px-5 text-sm font-medium text-white transition hover:bg-[#0A0A0A] disabled:opacity-50"
             aria-label={t("create_invoice")}
           >
             {loading ? (
@@ -206,7 +206,7 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
                 type="button"
                 disabled={loading}
                 onClick={handlePrint}
-                className="btn-secondary h-12 flex-1 rounded-md border border-white/[0.06] bg-[#141414] px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-[#0A0A0A] disabled:opacity-50"
+                className="btn-secondary h-12 flex-1 rounded-md border border-white/[0.06] bg-[#171717] px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-[#0A0A0A] disabled:opacity-50"
                 aria-label={t("print_invoice_aria", { number: invoice.invoiceNumber })}
               >
                 <span className="flex items-center justify-center gap-2">

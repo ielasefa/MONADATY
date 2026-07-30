@@ -112,7 +112,7 @@ export default function AdminInvoicesPage() {
     const map: Record<string, string> = {
       Issued: "badge-emerald",
       Draft: "badge-gold",
-      Cancelled: "bg-red/10 text-red",
+      Cancelled: "bg-burgundy/10 text-burgundy",
     };
     return `inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] ${map[status] || "bg-white/10 text-white/60"}`;
   };
@@ -263,7 +263,7 @@ export default function AdminInvoicesPage() {
                                   fetchInvoices();
                                 }
                               }}
-                              className="text-xs font-semibold uppercase tracking-[0.1em] text-red transition hover:brightness-110"
+                              className="text-xs font-semibold uppercase tracking-[0.1em] text-burgundy transition hover:brightness-110"
                             >
                               {t("cancel")}
                             </button>

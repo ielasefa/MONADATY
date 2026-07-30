@@ -64,7 +64,7 @@ function AnimatedCounter({ value, duration = 1200 }: { value: number; duration?:
 function StatCard({ label, value, href, accent }: { label: string; value: React.ReactNode; href: string; accent?: "gold" | "red" | "emerald" }) {
   const accentMap = {
     gold: "text-gold",
-    red: "text-red",
+    red: "text-burgundy",
     emerald: "text-secondary",
   };
   return (
@@ -297,7 +297,7 @@ export function DashboardClient(props: Props) {
                   className="flex items-center justify-between py-3 first:pt-0 last:pb-0"
                 >
                   <span className="text-sm font-medium text-white">{p.name}</span>
-                  <span className="badge-red rounded-full bg-red/10 px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.15em] text-red">
+                  <span className="badge-red rounded-full bg-burgundy/10 px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.15em] text-burgundy">
                     {p.stock}{t("left_label")}
                   </span>
                 </motion.div>

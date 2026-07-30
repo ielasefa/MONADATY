@@ -6,13 +6,6 @@ import { loadProducts } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
 
-/* ============================================================
-   SHOP PAGE — editorial catalogue
-   Massive title left-aligned
-   Numbered chapter indicator
-   Clean product grid below
-   ============================================================ */
-
 export default async function ShopPage() {
   const lang = await getLanguage();
   const translations = await loadTranslations("shop");
@@ -25,63 +18,54 @@ export default async function ShopPage() {
   const categoriesData = categories.map(c => ({ slug: c.slug, name: c.name }));
 
   return (
-    <div className="bg-black">
-      {/* Editorial header */}
+    <div className="bg-black-soft">
       <section className="relative overflow-hidden">
-        <div className="mx-auto max-w-[1600px] px-6 py-24 md:px-10 md:py-32 lg:px-16 lg:py-40">
+        <div className="mx-auto max-w-[1400px] px-6 md:px-10 lg:px-16 py-16 md:py-20 lg:py-24">
           <div className="flex items-center gap-3">
-            <span className="h-px w-8 bg-gold/30" />
-            <span className="label-utility tracking-[0.55em] text-gold/35">
+            <span className="h-px w-8 bg-gold" />
+            <span className="label-utility tracking-[0.55em] text-gold/60">
               {t(translations, "the_collection", lang)}
-        </span>
-      </div>
+            </span>
+          </div>
 
-          <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-16">
-            <div className="lg:col-span-2">
-              <span className="font-display text-[4.5rem] font-light leading-none tracking-[-0.04em] text-ivory/[0.04] md:text-[6rem]">
-                COLLECTION
-          </span>
-        </div>
-
-            <div className="lg:col-span-9">
-              <h1 className="font-display text-[clamp(2.5rem,6.5vw,6.5rem)] leading-[0.85] tracking-[-0.05em] text-ivory">
+          <div className="mt-5 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-2xl">
+              <h1
+                className="font-display text-[clamp(1.875rem,3.5vw,2.5rem)] leading-[0.95] tracking-[-0.03em] text-white"
+              >
                 {t(translations, "shop_our_range", lang)}
-          </h1>
+              </h1>
+              <p className="mt-3 max-w-lg text-[0.82rem] leading-[1.85] text-white/55">
+                Discover our curated selection of premium Moroccan beverages,
+                crafted with exceptional ingredients and delivered to your door.
+              </p>
+            </div>
+
+            <p className="label-utility tracking-[0.4em] text-white/30">
+              {products.length} {products.length === 1 ? "DRINK" : "DRINKS"}
+            </p>
+          </div>
         </div>
-      </div>
+      </section>
 
-          {/* Bottom markers — count + chapter */}
-          <div className="mt-16 flex items-center justify-between md:mt-20 lg:mt-24">
-            <span className="label-utility tracking-[0.4em] text-ivory/12">
-              {products.length} {products.length === 1 ? "drink" : "drinks"}
-        </span>
-            <span className="hidden h-px flex-1 mx-6 bg-ivory/[0.04] md:block" />
-            <span className="label-utility tracking-[0.4em] text-ivory/12">
-              2024 — 2026
-        </span>
-      </div>
-    </div>
-  </section>
-
-      {/* Products grid with filters */}
-      <section className="relative overflow-hidden border-t border-ivory/[0.03]">
-        <div className="mx-auto max-w-[1600px] px-6 py-16 md:px-10 md:py-20 lg:px-16 lg:py-24">
+      <section className="relative border-t border-white/[0.06]">
+        <div className="mx-auto max-w-[1400px] px-6 md:px-10 lg:px-16 py-16 md:py-20 lg:py-24">
           <Suspense
             fallback={
-              <div className="flex items-center justify-center py-40">
+              <div className="flex items-center justify-center py-32">
                 <div className="text-center">
-                  <div className="mx-auto mb-3 h-6 w-6 animate-spin rounded-full border border-ivory/[0.06] border-t-ivory/20" />
-                  <p className="mt-3 label-utility tracking-[0.4em] text-ivory/15">
+                  <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-white/[0.06] border-t-gold/40" />
+                  <p className="label-utility tracking-[0.4em] text-white/30">
                     {t(translations, "loading_collection", lang)}
-            </p>
-            </div>
-          </div>
+                  </p>
+                </div>
+              </div>
             }
           >
             <ProductFiltersSync categories={categoriesData} products={products} />
-      </Suspense>
+          </Suspense>
+        </div>
+      </section>
     </div>
-  </section>
-</div>
   );
 }

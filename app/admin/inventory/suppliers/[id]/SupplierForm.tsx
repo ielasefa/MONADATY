@@ -71,7 +71,7 @@ export function SupplierForm({ supplier }: { supplier: Supplier | null }) {
       </div>
 
       {error && (
-        <div className="mb-6 rounded-card border border-red/20 bg-red/10 px-4 py-3 text-sm text-red">
+        <div className="mb-6 rounded-card border border-burgundy/20 bg-burgundy/10 px-4 py-3 text-sm text-burgundy">
           {error}
         </div>
       )}

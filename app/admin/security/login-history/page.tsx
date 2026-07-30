@@ -51,10 +51,10 @@ export default function LoginHistoryPage() {
       {loading ? <div className="h-32 animate-pulse rounded-card bg-white/[0.04]" /> : (
         <div className="space-y-2">
           {filtered.map((h, i) => (
-            <div key={i} className={`luxury-card flex items-start justify-between p-4 ${h.suspicious ? "border-red/20" : ""}`}>
+            <div key={i} className={`luxury-card flex items-start justify-between p-4 ${h.suspicious ? "border-burgundy/20" : ""}`}>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className={`h-2 w-2 rounded-full ${h.success ? "bg-emerald" : "bg-red"}`} />
+                  <span className={`h-2 w-2 rounded-full ${h.success ? "bg-emerald" : "bg-burgundy"}`} />
                   <span className="font-medium text-white">{h.browser} on {h.os}</span>
                   {h.suspicious && <span className="badge-red text-[9px]">{t("suspicious")}</span>}
                 </div>

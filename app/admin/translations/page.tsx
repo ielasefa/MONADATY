@@ -172,7 +172,7 @@ export default function AdminTranslationsPage() {
       </div>
 
       {message && (
-        <div className="mb-4 rounded-card border border-emerald/20 bg-emerald/5 p-3 text-sm text-emerald">{message}</div>
+        <div className="mb-4 rounded-card border border-emerald/20 bg-emerald/5 p-3 text-sm text-gold">{message}</div>
       )}
 
       {stats && (
@@ -304,7 +304,7 @@ export default function AdminTranslationsPage() {
                       </td>
                       <td className="px-4 py-2">
                         <div className="flex gap-1">
-                          <button onClick={() => handleSave(row.id)} disabled={saving} className="text-xs font-semibold text-emerald hover:text-emerald/80">{t("save")}</button>
+                          <button onClick={() => handleSave(row.id)} disabled={saving} className="text-xs font-semibold text-gold hover:text-gold/80">{t("save")}</button>
                           <button onClick={() => setEditingId(null)} className="text-xs font-semibold text-muted hover:text-white">{t("cancel")}</button>
                         </div>
                       </td>
@@ -313,9 +313,9 @@ export default function AdminTranslationsPage() {
                     <>
                       <td className="px-4 py-2.5 text-xs text-gold font-mono">{row.key}</td>
                       <td className="px-4 py-2.5 text-xs text-muted">{row.namespace}</td>
-                      <td className={`px-4 py-2.5 text-xs ${row.fr ? "text-white/80" : "text-red/50 italic"}`}>{row.fr || "—"}</td>
-                      <td className={`px-4 py-2.5 text-xs ${row.en ? "text-white/80" : "text-red/50 italic"}`}>{row.en || "—"}</td>
-                      <td className={`px-4 py-2.5 text-xs ${row.ar ? "text-white/80" : "text-red/50 italic"}`} dir="rtl">{row.ar || "—"}</td>
+                      <td className={`px-4 py-2.5 text-xs ${row.fr ? "text-white/80" : "text-burgundy/50 italic"}`}>{row.fr || "—"}</td>
+                      <td className={`px-4 py-2.5 text-xs ${row.en ? "text-white/80" : "text-burgundy/50 italic"}`}>{row.en || "—"}</td>
+                      <td className={`px-4 py-2.5 text-xs ${row.ar ? "text-white/80" : "text-burgundy/50 italic"}`} dir="rtl">{row.ar || "—"}</td>
                       <td className="px-4 py-2.5">
                         <div className="flex gap-2">
                           <button
@@ -327,7 +327,7 @@ export default function AdminTranslationsPage() {
                           >
                             {t("edit")}
                           </button>
-                          <button onClick={() => handleDelete(row.id)} className="text-xs font-semibold text-red hover:text-red/80">{t("delete")}</button>
+                          <button onClick={() => handleDelete(row.id)} className="text-xs font-semibold text-burgundy hover:text-burgundy/80">{t("delete")}</button>
                         </div>
                       </td>
                     </>

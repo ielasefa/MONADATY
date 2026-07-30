@@ -180,16 +180,32 @@ const isShopPage = pathname === "/shop";
           : "border-b border-transparent"
       }`}
     >
-        <div className="mx-auto flex h-16 md:h-20 items-center justify-between gap-6 max-w-[1400px] px-6 md:px-10 lg:px-16">
-        <Link
-          href="/"
-          className="group shrink-0 font-display text-[0.8rem] font-normal uppercase tracking-[0.55em] text-gold transition-colors duration-500 hover:text-gold/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-4 focus-visible:ring-offset-black"
-          aria-label={`${websiteName} — Home`}
-        >
-          <span>{websiteName}</span>
-       </Link>
+  <div className="mx-auto flex h-16 md:h-20 items-center justify-between gap-2 md:gap-4 max-w-[1400px] px-6 md:px-10 lg:px-16">
+  <Link
+    href="/admin/login"
+    className="shrink-0 inline-flex h-9 items-center rounded-btn bg-burgundy px-4 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-white shadow-rouge transition-all duration-300 hover:bg-burgundy-dark hover:translate-y-[-0.5px] active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rouge/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+    aria-label={t("admin_login")}
+  >
+    {t("admin_login")}
+  </Link>
 
-        <nav
+  <Link
+    href="/"
+    className="group shrink-0 font-display text-[0.8rem] font-normal uppercase tracking-[0.55em] text-gold transition-colors duration-500 hover:text-gold/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-4 focus-visible:ring-offset-black hidden md:inline-block"
+    aria-label={`${websiteName} — Home`}
+  >
+    <span>{websiteName}</span>
+  </Link>
+
+  <Link
+    href="/"
+    className="group md:hidden shrink-0 font-display text-[0.65rem] font-normal uppercase tracking-[0.45em] text-gold transition-colors duration-500 hover:text-gold/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-4 focus-visible:ring-offset-black"
+    aria-label={`${websiteName} — Home`}
+  >
+    <span>{websiteName}</span>
+  </Link>
+
+  <nav
           aria-label="Primary"
           className="hidden lg:flex lg:flex-1 lg:justify-center"
         >
@@ -306,17 +322,17 @@ const isShopPage = pathname === "/shop";
                 )}
               </Link>
             </li>
-      {isAdmin && (
-        <li>
-          <Link
-            href="/admin/dashboard"
-            className="relative py-2 text-[0.52rem] font-medium uppercase tracking-[0.2em] text-gold/55 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none"
-          >
-            Admin
-          </Link>
-        </li>
-      )}
-          </ul>
+ {isAdmin && (
+ <li>
+   <Link
+     href="/admin/dashboard"
+     className="relative py-2 text-[0.52rem] font-medium uppercase tracking-[0.2em] text-gold transition-colors duration-300 hover:text-gold/70 focus-visible:text-gold focus-visible:outline-none"
+   >
+     {t("admin_dashboard", "Dashboard")}
+   </Link>
+ </li>
+ )}
+ </ul>
         </nav>
 
         <div className="flex shrink-0 items-center gap-0.5">
@@ -435,6 +451,7 @@ const isShopPage = pathname === "/shop";
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="h-8 w-28 rounded-input border border-white/[0.15] bg-white/[0.06] px-3 pe-7 text-[0.6rem] text-white outline-none transition-all duration-300 placeholder:text-white/40 focus:w-36 focus:border-white/30 focus:bg-white/[0.1]"
+style={{ WebkitTextFillColor: "#FFFFFF", caretColor: "#FFFFFF" }}
               />
             </form>
           )}
@@ -483,14 +500,15 @@ const isShopPage = pathname === "/shop";
       </div>
 
       {isMenuOpen && (
-        <div
-          ref={mobileMenuRef}
-          id="mobile-menu"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Navigation menu"
-          className="lg:hidden border-t border-white/[0.06] bg-black liquid-glass-heavy animate-fade-in"
-        >
+  <div
+    ref={mobileMenuRef}
+    id="mobile-menu"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Navigation menu"
+    className="lg:hidden border-t border-white/[0.06] bg-black animate-fade-in"
+    style={{ background: "rgba(23,23,23,0.97)", backdropFilter: "blur(28px) saturate(1.3)", borderTop: "1px solid rgba(255,255,255,0.06)" }}
+  >
           <div className="max-h-[85vh] overflow-y-auto">
             <div className="flex items-center justify-between px-6 pt-4 pb-2">
               <Link
@@ -592,15 +610,22 @@ const isShopPage = pathname === "/shop";
                 >
                   {t("about")}
                 </Link>
-      {isAdmin && (
-        <Link
-          href="/admin/dashboard"
-          onClick={() => setIsMenuOpen(false)}
-          className="rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] text-gold/55 transition-colors duration-200 hover:bg-white/[0.06] hover:text-gold"
-        >
-          Admin
-        </Link>
-      )}
+ {isAdmin && (
+ <Link
+   href="/admin/dashboard"
+   onClick={() => setIsMenuOpen(false)}
+   className="rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] text-gold transition-colors duration-200 hover:bg-white/[0.06] hover:text-gold/70"
+ >
+   {t("admin_dashboard", "Dashboard")}
+ </Link>
+ )}
+ <Link
+   href="/admin/login"
+   onClick={() => setIsMenuOpen(false)}
+   className="inline-flex h-10 w-full items-center justify-center rounded-btn bg-burgundy text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-white shadow-rouge transition-all duration-300 hover:bg-burgundy-dark active:translate-y-0"
+ >
+   {t("admin_login")}
+ </Link>
               </div>
 
               <div className="mx-5 my-5 h-px bg-white/[0.08]" />

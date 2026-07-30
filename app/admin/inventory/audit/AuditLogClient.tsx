@@ -26,11 +26,11 @@ const MOVEMENT_TYPES = [
 const typeColors: Record<string, string> = {
   IN: "badge-emerald",
   OUT: "badge-red",
-  SALE: "bg-red/10 text-red border border-red/20",
+  SALE: "bg-burgundy/10 text-burgundy border border-burgundy/20",
   RETURN: "badge-emerald",
   ADJUSTMENT: "badge-gold",
-  TRANSFER: "bg-blue-500/10 text-blue-400 border border-blue-500/20",
-  PURCHASE: "bg-emerald/10 text-emerald border border-emerald/20",
+  TRANSFER: "bg-gold/30 text-gold border border-blue-500/20",
+  PURCHASE: "bg-gold/10 text-gold border border-emerald/20",
   REFUND: "bg-amber-500/10 text-amber-400 border border-amber-500/20",
   DAMAGED: "badge-red",
 };
@@ -183,7 +183,7 @@ export function AuditLogClient({
                       {m.movementType}
                     </span>
                   </td>
-                  <td className={`px-5 py-4 text-right font-medium ${m.quantity > 0 ? "text-emerald" : m.quantity < 0 ? "text-red" : "text-muted"}`}>
+                  <td className={`px-5 py-4 text-right font-medium ${m.quantity > 0 ? "text-gold" : m.quantity < 0 ? "text-burgundy" : "text-muted"}`}>
                     {m.quantity > 0 ? `+${m.quantity}` : m.quantity}
                   </td>
                   <td className="px-5 py-4 text-muted max-w-[160px] truncate" title={m.reason}>

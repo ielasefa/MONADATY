@@ -11,8 +11,8 @@ export default async function AboutPage() {
   const lang = await getLanguage();
   const translations = await loadTranslations("about");
 
-  return (
-    <div className="bg-black">
+return (
+<div className="bg-[#171717]">
       {/* ═══ HERO — massive editorial headline ═══ */}
       <section className="relative overflow-hidden">
         <div className="mx-auto max-w-[1600px] px-6 py-32 md:px-10 md:py-44 lg:px-16 lg:py-56">

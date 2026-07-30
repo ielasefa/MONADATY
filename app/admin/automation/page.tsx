@@ -102,7 +102,7 @@ export default function AutomationPage() {
       </div>
 
       {result && (
-        <div className="mb-4 rounded-card border border-emerald/20 bg-emerald/5 p-4 text-sm text-emerald">{result}</div>
+        <div className="mb-4 rounded-card border border-emerald/20 bg-emerald/5 p-4 text-sm text-gold">{result}</div>
       )}
 
       {showLogs && (
@@ -128,8 +128,8 @@ export default function AutomationPage() {
               <div className="flex items-center gap-2">
                 <p className="font-medium text-white">{job.name.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase())}</p>
                 <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${
-                  job.lastStatus === "success" ? "bg-emerald/10 text-emerald" :
-                  job.lastStatus === "failed" ? "bg-red/10 text-red" :
+                  job.lastStatus === "success" ? "bg-gold/10 text-gold" :
+                  job.lastStatus === "failed" ? "bg-burgundy/10 text-burgundy" :
                   "bg-white/5 text-muted"
                 }`}>{job.lastStatus}</span>
               </div>
@@ -147,7 +147,7 @@ export default function AutomationPage() {
               <button
                 onClick={() => handleToggle(job.id, !job.enabled)}
                 className={`inline-flex h-8 items-center rounded-button px-3 text-[11px] font-semibold transition ${
-                  job.enabled ? "bg-emerald/10 text-emerald hover:bg-emerald/20" : "bg-white/5 text-muted hover:bg-white/10"
+                  job.enabled ? "bg-gold/10 text-gold hover:bg-emerald/20" : "bg-white/5 text-muted hover:bg-white/10"
                 }`}
               >
                 {job.enabled ? "Enabled" : "Disabled"}

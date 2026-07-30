@@ -135,7 +135,7 @@ export function AdminManagement({ admins: initialAdmins }: { admins: AdminRecord
               </div>
             </div>
 
-            {error && <p className="text-sm text-red">{error}</p>}
+            {error && <p className="text-sm text-burgundy">{error}</p>}
 
             <button
               type="submit"
@@ -165,19 +165,21 @@ export function AdminManagement({ admins: initialAdmins }: { admins: AdminRecord
               <tr key={a.id} className="border-b border-white/[0.06] text-sm">
                 <td className="px-6 py-4 font-medium text-white">{a.name}</td>
                 <td className="px-6 py-4 text-muted">{a.email}</td>
-                <td className="px-6 py-4">
-                  <span className={a.role === "SUPER_ADMIN" ? "badge-gold" : "badge-emerald"}>
-                    {a.role === "SUPER_ADMIN" ? t("super_admin") : t("admin_role")}
-                  </span>
-                </td>
-                <td className="px-6 py-4">
-                  <span className={a.mustChangePassword ? "badge-red" : "badge-emerald"}>
-                    {a.mustChangePassword ? t("must_change") : t("active_status")}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-muted">
-                  {a.lastLoginAt ? new Date(a.lastLoginAt).toLocaleDateString() : t("never_logged")}
-                </td>
+        <td className="px-6 py-4">
+  <span className={a.role === "SUPER_ADMIN" ? "badge-gold" : "inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.12em] border border-white/[0.06] bg-white/[0.04] text-ivory/70"}>
+    {a.role === "SUPER_ADMIN" ? t("super_admin") : t("admin_role")}
+  </span>
+</td>
+        <td className="px-6 py-4">
+  <span className={a.mustChangePassword ? "badge-red" : "inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.12em] border border-gold/20 bg-gold/[0.06] text-gold"}>
+    {a.mustChangePassword ? t("must_change") : t("active_status")}
+  </span>
+</td>
+        <td className="px-6 py-4">
+ <span className={a.lastLoginAt ? "text-sm font-medium text-white/60" : "text-sm font-bold tracking-wider uppercase text-burgundy"}>
+  {a.lastLoginAt ? new Date(a.lastLoginAt).toLocaleDateString() : t("never_logged")}
+ </span>
+</td>
                 <td className="px-6 py-4">
                   <button
                     onClick={() => handleDelete(a.id)}

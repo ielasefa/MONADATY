@@ -48,8 +48,8 @@ const statusFlow: Record<string, string[]> = {
 const statusColors: Record<string, string> = {
   Draft: "bg-white/10 text-white/60 border border-white/10",
   Pending: "badge-gold",
-  Approved: "bg-emerald/10 text-emerald border border-emerald/20",
-  Ordered: "bg-blue-500/10 text-blue-400 border border-blue-500/20",
+  Approved: "bg-gold/10 text-gold border border-emerald/20",
+  Ordered: "bg-gold/30 text-gold border border-blue-500/20",
   Received: "badge-emerald",
   Cancelled: "badge-red",
 };
@@ -158,7 +158,7 @@ export function PurchaseOrderDetailClient({
           </Link>
           <h1 className="text-3xl font-semibold tracking-tight text-white">New Purchase Order</h1>
         </div>
-        {error && <div className="mb-6 rounded-card border border-red/20 bg-red/10 px-4 py-3 text-sm text-red">{error}</div>}
+        {error && <div className="mb-6 rounded-card border border-burgundy/20 bg-burgundy/10 px-4 py-3 text-sm text-burgundy">{error}</div>}
         <form action={handleSave} className="space-y-8">
           <div className="luxury-card rounded-card border border-white/[0.06] bg-card p-6">
             <p className="luxury-label mb-6 text-[10px] text-muted">Order Details</p>
@@ -219,7 +219,7 @@ export function PurchaseOrderDetailClient({
       </div>
 
       {error && (
-        <div className="mb-6 rounded-card border border-red/20 bg-red/10 px-4 py-3 text-sm text-red">{error}</div>
+        <div className="mb-6 rounded-card border border-burgundy/20 bg-burgundy/10 px-4 py-3 text-sm text-burgundy">{error}</div>
       )}
 
       <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
@@ -251,7 +251,7 @@ export function PurchaseOrderDetailClient({
               disabled={saving}
               className={`h-10 rounded-button px-4 text-xs font-semibold uppercase tracking-[0.1em] transition-all disabled:opacity-50 ${
                 s === "Cancelled"
-                  ? "bg-red/10 text-red border border-red/20 hover:bg-red/20"
+                  ? "bg-burgundy/10 text-burgundy border border-burgundy/20 hover:bg-burgundy/20"
                   : "btn-gold"
               }`}
             >
@@ -287,7 +287,7 @@ export function PurchaseOrderDetailClient({
                       <td className="px-5 py-4 font-mono text-xs text-muted">{item.sku || "\u2014"}</td>
                       <td className="px-5 py-4 text-right text-white">{item.quantity}</td>
                       <td className="px-5 py-4 text-right text-muted">{item.cost}</td>
-                      <td className="px-5 py-4 text-right text-emerald">{item.receivedQuantity}</td>
+                      <td className="px-5 py-4 text-right text-gold">{item.receivedQuantity}</td>
                       <td className="px-5 py-4 text-right text-muted">{item.remainingQuantity}</td>
                       <td className="px-5 py-4 text-right font-medium text-white">{subtotal.toFixed(2)} DH</td>
                     </motion.tr>

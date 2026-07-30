@@ -95,8 +95,8 @@ export function WarehousesClient({ warehouses: initial }: { warehouses: Warehous
                       onClick={() => toggleStatus(w.id, w.isActive)}
                       className={`inline-flex rounded-full px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.15em] transition-all ${
                         w.isActive
-                          ? "badge-emerald bg-emerald/10 text-emerald border border-emerald/20"
-                          : "badge-red bg-red/10 text-red border border-red/20"
+                          ? "badge-emerald bg-gold/10 text-gold border border-emerald/20"
+                          : "badge-red bg-burgundy/10 text-burgundy border border-burgundy/20"
                       }`}
                     >
                       {w.isActive ? "Active" : "Inactive"}

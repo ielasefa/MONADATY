@@ -43,7 +43,7 @@ function StatCard({
   href: string;
   accent?: "gold" | "red" | "emerald";
 }) {
-  const accentMap = { gold: "text-gold", red: "text-red", emerald: "text-emerald" };
+  const accentMap = { gold: "text-gold", red: "text-burgundy", emerald: "text-gold" };
   return (
     <motion.div
       whileHover={{ y: -4, borderColor: "rgba(212,175,55,0.15)", transition: { duration: 0.25 } }}
@@ -68,10 +68,10 @@ function StatCard({
 const typeColors: Record<string, string> = {
   IN: "badge-emerald",
   OUT: "badge-red",
-  SALE: "bg-red/10 text-red border border-red/20",
+  SALE: "bg-burgundy/10 text-burgundy border border-burgundy/20",
   RETURN: "badge-emerald",
   ADJUSTMENT: "badge-gold",
-  TRANSFER: "bg-blue-500/10 text-blue-400 border border-blue-500/20",
+  TRANSFER: "bg-gold/30 text-gold border border-blue-500/20",
   PURCHASE: "badge-emerald",
   REFUND: "badge-gold",
   DAMAGED: "badge-red",
@@ -124,7 +124,7 @@ export function InventoryDashboardClient(props: Props) {
                       </span>
                     </div>
                     <div className="text-right text-sm">
-                      <span className={m.quantity > 0 ? "text-emerald" : "text-red"}>
+                      <span className={m.quantity > 0 ? "text-gold" : "text-burgundy"}>
                         {m.quantity > 0 ? `+${m.quantity}` : m.quantity}
                       </span>
                       <span className="ml-2 text-xs text-muted">{m.warehouseName}</span>
@@ -157,7 +157,7 @@ export function InventoryDashboardClient(props: Props) {
                     className="flex items-center justify-between py-3 first:pt-0 last:pb-0"
                   >
                     <span className="text-sm font-medium text-white">{p.name}</span>
-                    <span className="badge-red rounded-full bg-red/10 px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.15em] text-red">
+                    <span className="badge-red rounded-full bg-burgundy/10 px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.15em] text-burgundy">
                       {p.stock} left
                     </span>
                   </motion.div>

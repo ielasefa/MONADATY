@@ -333,7 +333,7 @@ export default function AdminOrderDetailPage() {
                       type="button"
                       disabled={updating || trackingNumber === (order.trackingNumber || "")}
                       onClick={() => saveDeliveryField("trackingNumber", trackingNumber)}
-                      className="btn-primary h-12 rounded-button bg-red px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-red/90 disabled:opacity-50"
+                      className="btn-primary h-12 rounded-button bg-burgundy px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-burgundy/90 disabled:opacity-50"
                       aria-label={t("save")}
                     >
                       {t("save")}
@@ -356,7 +356,7 @@ export default function AdminOrderDetailPage() {
                       type="button"
                       disabled={updating || deliveryCompany === (order.deliveryCompany || "")}
                       onClick={() => saveDeliveryField("deliveryCompany", deliveryCompany)}
-                      className="btn-primary h-12 rounded-button bg-red px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-red/90 disabled:opacity-50"
+                      className="btn-primary h-12 rounded-button bg-burgundy px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-burgundy/90 disabled:opacity-50"
                       aria-label={t("save")}
                     >
                       {t("save")}
@@ -379,7 +379,7 @@ export default function AdminOrderDetailPage() {
                       type="button"
                       disabled={updating || deliveryNotes === (order.deliveryNotes || "")}
                       onClick={() => saveDeliveryField("deliveryNotes", deliveryNotes)}
-                      className="btn-primary h-12 rounded-button bg-red px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-red/90 disabled:opacity-50"
+                      className="btn-primary h-12 rounded-button bg-burgundy px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-burgundy/90 disabled:opacity-50"
                       aria-label={t("save")}
                     >
                       {t("save")}
@@ -401,7 +401,7 @@ export default function AdminOrderDetailPage() {
                       type="button"
                       disabled={updating || actualDeliveryDate === toDateInputValue(order.actualDeliveryDate)}
                       onClick={() => saveDeliveryField("actualDeliveryDate", actualDeliveryDate)}
-                      className="btn-primary h-12 rounded-button bg-red px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-red/90 disabled:opacity-50"
+                      className="btn-primary h-12 rounded-button bg-burgundy px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-burgundy/90 disabled:opacity-50"
                       aria-label={t("save")}
                     >
                       {t("save")}
@@ -441,7 +441,7 @@ export default function AdminOrderDetailPage() {
                       type="button"
                       disabled={updating || !deliveryDate}
                       onClick={saveDeliveryDate}
-                      className="btn-primary h-12 rounded-button bg-red px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-red/90 disabled:opacity-50"
+                      className="btn-primary h-12 rounded-button bg-burgundy px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-burgundy/90 disabled:opacity-50"
                       aria-label={t("save")}
                     >
                       {dateSaved ? t("saved_label") : t("save")}

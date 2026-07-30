@@ -115,10 +115,10 @@ export function TransfersClient({
       </div>
 
       {error && (
-        <div className="mb-6 rounded-card border border-red/20 bg-red/10 px-4 py-3 text-sm text-red">{error}</div>
+        <div className="mb-6 rounded-card border border-burgundy/20 bg-burgundy/10 px-4 py-3 text-sm text-burgundy">{error}</div>
       )}
       {success && (
-        <div className="mb-6 rounded-card border border-emerald/20 bg-emerald/10 px-4 py-3 text-sm text-emerald">{success}</div>
+        <div className="mb-6 rounded-card border border-emerald/20 bg-emerald/10 px-4 py-3 text-sm text-gold">{success}</div>
       )}
 
       <div className="mb-10 luxury-card rounded-card border border-white/[0.06] bg-card p-6">
@@ -187,7 +187,7 @@ export function TransfersClient({
               )}
               {selectedProduct && (
                 <div className="mt-1 flex items-center gap-2 rounded-lg bg-emerald/10 px-3 py-2">
-                  <span className="text-sm text-emerald">{selectedProduct.name}</span>
+                  <span className="text-sm text-gold">{selectedProduct.name}</span>
                   <span className="text-xs text-muted">(Stock: {selectedProduct.stock})</span>
                   <button
                     type="button"
@@ -195,7 +195,7 @@ export function TransfersClient({
                       setSelectedProduct(null);
                       setProductQuery("");
                     }}
-                    className="ml-auto text-xs text-red"
+                    className="ml-auto text-xs text-burgundy"
                   >
                     Remove
                   </button>

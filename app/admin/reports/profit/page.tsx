@@ -29,19 +29,19 @@ export default function ProfitReportPage() {
       <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
         <div className="rounded-card border border-white/[0.06] bg-card p-4">
           <p className="text-[10px] text-muted">{t("total_revenue")}</p>
-          <p className="mt-1 text-xl font-semibold text-emerald">{data.totalRevenue.toFixed(2)} DH</p>
+          <p className="mt-1 text-xl font-semibold text-gold">{data.totalRevenue.toFixed(2)} DH</p>
         </div>
         <div className="rounded-card border border-white/[0.06] bg-card p-4">
           <p className="text-[10px] text-muted">{t("total_cost")}</p>
-          <p className="mt-1 text-xl font-semibold text-red">{data.totalCost.toFixed(2)} DH</p>
+          <p className="mt-1 text-xl font-semibold text-burgundy">{data.totalCost.toFixed(2)} DH</p>
         </div>
         <div className="rounded-card border border-white/[0.06] bg-card p-4">
           <p className="text-[10px] text-muted">Net Profit</p>
-          <p className={`mt-1 text-xl font-semibold ${data.profit >= 0 ? "text-emerald" : "text-red"}`}>{data.profit.toFixed(2)} DH</p>
+          <p className={`mt-1 text-xl font-semibold ${data.profit >= 0 ? "text-gold" : "text-burgundy"}`}>{data.profit.toFixed(2)} DH</p>
         </div>
         <div className="rounded-card border border-white/[0.06] bg-card p-4">
           <p className="text-[10px] text-muted">{t("margin")}</p>
-          <p className={`mt-1 text-xl font-semibold ${data.margin >= 0 ? "text-gold" : "text-red"}`}>{data.margin}%</p>
+          <p className={`mt-1 text-xl font-semibold ${data.margin >= 0 ? "text-gold" : "text-burgundy"}`}>{data.margin}%</p>
         </div>
       </div>
     </div>
