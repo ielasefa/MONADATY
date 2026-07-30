@@ -18,17 +18,17 @@ const ACTION_ICONS: Record<string, string> = {
 };
 
 const ACTION_COLORS: Record<string, string> = {
-  Created: "text-emerald-400",
-  Edited: "text-blue",
-  "Price Changed": "text-yellow",
-  "Stock Changed": "text-yellow",
-  "Status Changed": "text-yellow",
-  "Deleted Image": "text-red",
-  "Uploaded Image": "text-emerald-400",
-  "Cover Changed": "text-yellow",
-  "Variant Added": "text-emerald-400",
-  "Variant Updated": "text-blue",
-  "Variant Deleted": "text-red",
+  Created: "text-gold",
+  Edited: "text-white/70",
+  "Price Changed": "text-gold",
+  "Stock Changed": "text-gold",
+  "Status Changed": "text-gold/80",
+  "Deleted Image": "text-burgundy",
+  "Uploaded Image": "text-gold",
+  "Cover Changed": "text-gold",
+  "Variant Added": "text-gold",
+  "Variant Updated": "text-white/70",
+  "Variant Deleted": "text-burgundy",
 };
 
 export function ProductHistory({ productId }: { productId: string }) {
@@ -91,7 +91,7 @@ export function ProductHistory({ productId }: { productId: string }) {
             )}
 
             {/* Icon */}
-            <div className={`relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/[0.06] bg-[#0A0A0A] ${color}`}>
+            <div className={`relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/[0.06] bg-bg ${color}`}>
               <span className="text-xs">{icon}</span>
             </div>
 
@@ -120,7 +120,7 @@ export function ProductHistory({ productId }: { productId: string }) {
               {(entry.oldValue || entry.newValue) && (
                 <div className="mt-1 flex items-center gap-2 text-xs">
                   {entry.oldValue && (
-                    <span className="rounded bg-red/10 px-1.5 py-0.5 text-red line-through">
+                    <span className="rounded bg-burgundy/10 px-1.5 py-0.5 text-burgundy line-through">
                       {entry.oldValue.length > 60
                         ? entry.oldValue.slice(0, 60) + "..."
                         : entry.oldValue}
@@ -130,7 +130,7 @@ export function ProductHistory({ productId }: { productId: string }) {
                     <span className="text-white/50">→</span>
                   )}
                   {entry.newValue && (
-                    <span className="rounded bg-emerald-400/10 px-1.5 py-0.5 text-emerald-400">
+                    <span className="rounded bg-gold/10 px-1.5 py-0.5 text-gold">
                       {entry.newValue.length > 60
                         ? entry.newValue.slice(0, 60) + "..."
                         : entry.newValue}

@@ -68,7 +68,7 @@ export function PurchaseOrdersClient({
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="mr-2">
             <path d="M12 5v14M5 12h14" />
           </svg>
-          New Purchase Order
+          t("new_purchase_order", "New Purchase Order")
         </Link>
       </div>
 
@@ -85,7 +85,7 @@ export function PurchaseOrdersClient({
           onChange={(e) => setStatusFilter(e.target.value)}
           className="input-premium w-44"
         >
-          <option value="">All Statuses</option>
+          <option value="">{t("all_statuses", "All Statuses")}</option>
           {statuses.map((s) => (
             <option key={s} value={s}>{s}</option>
           ))}
@@ -95,7 +95,7 @@ export function PurchaseOrdersClient({
           onChange={(e) => setSupplierFilter(e.target.value)}
           className="input-premium w-48"
         >
-          <option value="">All Suppliers</option>
+          <option value="">{t("all_suppliers", "All Suppliers")}</option>
           {suppliers.map((s) => (
             <option key={s.id} value={s.name}>{s.name}</option>
           ))}

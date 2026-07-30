@@ -55,7 +55,7 @@ export function NotificationBell({ initialNotifications, initialUnread }: Props)
     <div ref={dropdownRef} className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.06] bg-[#141414] text-lg text-white/50 transition hover:border-white/20 hover:text-white"
+        className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.06] bg-surface text-lg text-white/50 transition hover:border-white/20 hover:text-white"
         aria-label={unread > 0 ? t("notifications_unread", { count: unread }) : t("notifications")}
         aria-expanded={open}
         aria-haspopup="true"
@@ -73,7 +73,7 @@ export function NotificationBell({ initialNotifications, initialUnread }: Props)
 
       {open && (
         <div
-          className="absolute right-0 top-full z-50 mt-2 w-[380px] overflow-hidden rounded-xl border border-white/[0.06] bg-[#141414] shadow-2xl animate-fade-in"
+          className="absolute right-0 top-full z-50 mt-2 w-[380px] overflow-hidden rounded-xl border border-white/[0.06] bg-surface shadow-2xl animate-fade-in"
           role="menu"
           aria-label={t("notifications")}
         >

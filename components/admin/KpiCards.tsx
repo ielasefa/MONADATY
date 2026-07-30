@@ -47,7 +47,7 @@ export function KpiCards({ cards }: Props) {
         return (
           <div
             key={card.title}
-            className="group relative overflow-hidden rounded-xl border border-white/[0.06] bg-[#141414] p-5 transition-all duration-300 hover:border-yellow/20 hover:shadow-lg hover:shadow-yellow/5 animate-fade-in"
+            className="group relative overflow-hidden rounded-xl border border-white/[0.06] bg-surface p-5 transition-all duration-300 hover:border-gold/20 hover:shadow-lg hover:shadow-gold/5 animate-fade-in"
             style={{ animationDelay: `${i * 50}ms` }}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
@@ -115,7 +115,7 @@ export function KpiCardsSkeleton() {
   return (
     <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
       {Array.from({ length: 10 }).map((_, i) => (
-        <div key={i} className="animate-pulse rounded-xl border border-white/[0.06] bg-[#141414] p-5">
+        <div key={i} className="animate-pulse rounded-xl border border-white/[0.06] bg-surface p-5">
           <div className="mb-3 h-3 w-8 rounded bg-white/5" />
           <div className="mb-2 h-2 w-16 rounded bg-white/5" />
           <div className="h-6 w-24 rounded bg-white/5" />

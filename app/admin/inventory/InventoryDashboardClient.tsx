@@ -137,7 +137,7 @@ export function InventoryDashboardClient(props: Props) {
               href="/admin/inventory/audit"
               className="mt-4 inline-flex text-xs font-medium text-gold transition hover:text-gold/80"
             >
-              View All Movements &rarr;
+              t("view_all_movements", "View All Movements") &rarr;
             </Link>
           </div>
         </div>

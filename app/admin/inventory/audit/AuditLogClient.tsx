@@ -112,7 +112,7 @@ export function AuditLogClient({
           onChange={(e) => { setWarehouseFilter(e.target.value); setPage(0); }}
           className="input-premium w-48"
         >
-          <option value="">All Warehouses</option>
+          <option value="">{t("all_warehouses", "All Warehouses")}</option>
           {warehouses.map((w) => (
             <option key={w.id} value={w.id}>{w.name}</option>
           ))}
@@ -122,7 +122,7 @@ export function AuditLogClient({
           onChange={(e) => { setTypeFilter(e.target.value); setPage(0); }}
           className="input-premium w-44"
         >
-          <option value="">All Types</option>
+          <option value="">{t("all_types", "All Types")}</option>
           {MOVEMENT_TYPES.map((t) => (
             <option key={t} value={t}>{t}</option>
           ))}

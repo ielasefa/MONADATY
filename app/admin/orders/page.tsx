@@ -116,8 +116,8 @@ export default function AdminOrdersPage() {
     const up = String.fromCharCode(8593);
     const down = String.fromCharCode(8595);
     const both = String.fromCharCode(8597);
-    if (sortField !== field) return <span aria-hidden="true" className="ml-1 text-white/20">{both}</span>;
-    return <span aria-hidden="true" className="ml-1 text-yellow">{sortDir === "desc" ? down : up}</span>;
+    if (sortField !== field) return <span aria-hidden="true" className="ml-1 text-white/35">{both}</span>;
+    return <span aria-hidden="true" className="ml-1 text-gold">{sortDir === "desc" ? down : up}</span>;
   }
 
   return (

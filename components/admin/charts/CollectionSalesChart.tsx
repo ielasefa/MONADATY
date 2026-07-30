@@ -17,7 +17,7 @@ const COLORS = ["#D5B87D", "#8F1F30", "#0F8B6F", "#3B82F6", "#8B5CF6", "#D5B87D"
 export default function CollectionSalesChart({ data }: Props) {
   if (data.length === 0) {
     return (
-      <div className="rounded-xl border border-white/[0.06] bg-[#141414] p-6">
+      <div className="rounded-xl border border-white/[0.06] bg-surface p-6">
         <p className="mb-4 text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-white/50">
           Sales by Collection
         </p>
@@ -29,7 +29,7 @@ export default function CollectionSalesChart({ data }: Props) {
   }
 
   return (
-    <div className="rounded-xl border border-white/[0.06] bg-[#141414] p-6">
+    <div className="rounded-xl border border-white/[0.06] bg-surface p-6">
       <p className="mb-4 text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-white/50">
         Sales by Collection
       </p>

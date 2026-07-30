@@ -61,8 +61,8 @@ export default async function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.svg" sizes="180x180" />
         <meta name="msapplication-TileColor" content="#0B0B0A" />
         <meta name="theme-color" content="#0B0B0A" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link rel="prefetch" href="/shop" as="document" />
       </head>
       <body>

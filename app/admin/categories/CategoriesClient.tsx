@@ -28,10 +28,10 @@ export function CategoriesClient({
       </div>
 
       {(editingSlug === "__new__" || editing) && (
-        <div className="mb-8 luxury-card p-8">
-          <h2 className="luxury-label mb-4">
-            {editingSlug === "__new__" ? "New Category" : `Edit: ${editing?.name}`}
-          </h2>
+<div className="mb-8 luxury-card p-8">
+  <h2 className="luxury-label mb-4">
+    {editingSlug === "__new__" ? t("new_category", "New Category") : `${t("edit")}: ${editing?.name}`}
+  </h2>
           <form action={saveCategory} className="space-y-4">
             {editing && <input type="hidden" name="original" value={editing.slug} />}
             <div className="grid grid-cols-2 gap-4">
@@ -56,10 +56,10 @@ export function CategoriesClient({
       <div className="space-y-3">
         {categories.map((c) => (
           <div key={c.slug} className="luxury-card flex items-center gap-4 p-5">
-            <div className="flex-1">
-              <p className="font-medium text-white">{c.name}</p>
-              <p className="text-sm text-muted">{c.slug}</p>
-            </div>
+<div className="flex-1">
+  <p className="font-medium text-white">{c.name}</p>
+  <p className="text-sm text-white/50">{c.slug}</p>
+</div>
             <button
               onClick={() => setEditingSlug(c.slug)}
               className="text-sm font-medium text-gold hover:text-gold/80 transition-colors"
@@ -87,7 +87,7 @@ export function CategoriesClient({
           onClick={() => setEditingSlug("__new__")}
           className="btn-primary mt-6"
         >
-          + Add Category
+          + {t("add_category", "Add Category")}
         </button>
       )}
     </div>

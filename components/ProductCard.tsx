@@ -2,9 +2,7 @@
 
 import Link from "next/link";
 import { memo } from "react";
-import { SodaCan } from "@/components/visuals/SodaCan";
-import { SodaBottle } from "@/components/visuals/SodaBottle";
-import { GlassDrink } from "@/components/visuals/GlassDrink";
+
 import type { Product } from "@/types";
 import { useCart } from "@/components/cart-context";
 import { useWishlist } from "@/components/wishlist-context";
@@ -29,17 +27,7 @@ export const ProductCard = memo(function ProductCard({
   const { contains, toggle } = useWishlist();
   const { t } = useTranslation("products");
 
-  const cartProduct: Product = {
-    id,
-    name,
-    price,
-    image,
-    category,
-    visual,
-    accent,
-    description: shortDescription ?? "",
-    gallery: [],
-  };
+
 
   const isWishlisted = contains(id);
 
@@ -121,16 +109,16 @@ export const ProductCard = memo(function ProductCard({
         </Link>
       </div>
 
-      <div className="mt-4 space-y-2">
-        {shortDescription ? (
-          <p className="text-[0.6rem] font-medium uppercase tracking-[0.2em] text-white/45">
-            {shortDescription}
-          </p>
-        ) : category ? (
-          <p className="text-[0.6rem] font-medium uppercase tracking-[0.2em] text-white/45">
-            {category}
-          </p>
-        ) : null}
+<div className="mt-4 space-y-2">
+  {shortDescription ? (
+    <p className="text-[0.6rem] font-medium uppercase tracking-[0.2em] text-muted">
+      {shortDescription}
+    </p>
+  ) : category ? (
+    <p className="text-[0.6rem] font-medium uppercase tracking-[0.2em] text-muted">
+      {category}
+    </p>
+  ) : null}
         <h3 className="font-display text-base leading-[0.95] tracking-[-0.015em] text-white">
           <Link
             href={`/product/${id}`}

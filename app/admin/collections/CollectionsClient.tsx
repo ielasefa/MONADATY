@@ -30,7 +30,7 @@ export function CollectionsClient({
       {(editingSlug === "__new__" || editing) && (
         <div className="mb-8 luxury-card p-8">
           <h2 className="luxury-label mb-4">
-            {editingSlug === "__new__" ? "New Collection" : `Edit: ${editing?.title}`}
+            {editingSlug === "__new__" ? t("new_collection", "New Collection") : `Edit: ${editing?.title}`}
           </h2>
           <form action={saveCollection} className="space-y-4">
             {editing && <input type="hidden" name="original" value={editing.slug} />}
@@ -83,7 +83,7 @@ export function CollectionsClient({
           onClick={() => setEditingSlug("__new__")}
           className="btn-primary mt-6"
         >
-          + Add Collection
+          + {t("add_collection", "Add Collection")}
         </button>
       )}
     </div>

@@ -82,7 +82,7 @@ export function WarehouseForm({
             &larr; Back to Warehouses
           </Link>
           <h1 className="text-3xl font-semibold tracking-tight text-white">
-            {isNew ? "Add Warehouse" : `Edit: ${warehouse.name}`}
+            {isNew ? t("add_warehouse", "Add Warehouse") : `${t("edit")}: ${warehouse.name}`}
           </h1>
         </div>
       </div>
@@ -137,7 +137,7 @@ export function WarehouseForm({
             disabled={saving}
             className="btn-primary h-12 rounded-button px-6 text-xs font-semibold uppercase tracking-[0.1em] disabled:opacity-50"
           >
-            {saving ? "Saving..." : isNew ? "Create Warehouse" : "Update Warehouse"}
+            {saving ? t("saving") : : isNew ? "Create Warehouse" : `${t("update")} ${t("warehouse").toLowerCase()}`}
           </button>
           <Link
             href="/admin/inventory/warehouses"

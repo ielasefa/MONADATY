@@ -82,10 +82,10 @@ export const FilterSidebar = memo(function FilterSidebar({
               value={localMin || ""}
               onChange={(e) => setLocalMin(Number(e.target.value))}
               className="h-10 w-full rounded-input border border-white/[0.08] bg-[#1E1E1E] px-3 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/30 focus:border-gold/50 focus:ring-1 focus:ring-gold/20 caret-white"
-              style={{ WebkitTextFillColor: "#FFFFFF" }}
+              style={{ WebkitTextFillColor: "#FFFFFF", caretColor: "#FFFFFF" }}
             />
           </div>
-          <span className="text-white/20">—</span>
+          <span className="text-white/35">—</span>
           <div className="relative flex-1">
             <input
               type="number"
@@ -95,7 +95,7 @@ export const FilterSidebar = memo(function FilterSidebar({
               value={localMax || ""}
               onChange={(e) => setLocalMax(Number(e.target.value))}
               className="h-10 w-full rounded-input border border-white/[0.08] bg-[#1E1E1E] px-3 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/30 focus:border-gold/50 focus:ring-1 focus:ring-gold/20 caret-white"
-              style={{ WebkitTextFillColor: "#FFFFFF" }}
+              style={{ WebkitTextFillColor: "#FFFFFF", caretColor: "#FFFFFF" }}
             />
           </div>
         </div>

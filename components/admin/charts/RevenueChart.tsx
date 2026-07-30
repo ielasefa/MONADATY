@@ -17,7 +17,7 @@ type Props = {
 export default function RevenueChart({ data }: Props) {
   if (data.length === 0) {
     return (
-      <div className="rounded-xl border border-white/[0.06] bg-[#141414] p-6">
+      <div className="rounded-xl border border-white/[0.06] bg-surface p-6">
         <p className="mb-4 text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-white/50">
           Revenue (30 days)
         </p>
@@ -29,7 +29,7 @@ export default function RevenueChart({ data }: Props) {
   }
 
   return (
-    <div className="rounded-xl border border-white/[0.06] bg-[#141414] p-6">
+    <div className="rounded-xl border border-white/[0.06] bg-surface p-6">
       <p className="mb-4 text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-white/50">
         Revenue (30 days)
       </p>

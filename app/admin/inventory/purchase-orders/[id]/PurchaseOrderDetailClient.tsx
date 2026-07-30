@@ -154,7 +154,7 @@ export function PurchaseOrderDetailClient({
       <div>
         <div className="mb-8">
           <Link href="/admin/inventory/purchase-orders" className="mb-2 inline-flex items-center gap-1 text-xs text-muted transition hover:text-white">
-            &larr; Back to Purchase Orders
+            {t("back_to_purchase_orders", "← Back to Purchase Orders")}
           </Link>
           <h1 className="text-3xl font-semibold tracking-tight text-white">New Purchase Order</h1>
         </div>
@@ -191,7 +191,7 @@ export function PurchaseOrderDetailClient({
           </div>
           <div className="flex items-center gap-3">
             <button type="submit" disabled={saving} className="btn-primary h-12 rounded-button px-6 text-xs font-semibold uppercase tracking-[0.1em] disabled:opacity-50">
-              {saving ? "Saving..." : "Create Purchase Order"}
+              {saving ? t("saving") : : `${t("create")} ${t("purchase_order").toLowerCase()}`}
             </button>
             <Link href="/admin/inventory/purchase-orders" className="btn-secondary h-12 rounded-button px-6 text-xs font-semibold uppercase tracking-[0.1em]">
               Cancel
@@ -207,7 +207,7 @@ export function PurchaseOrderDetailClient({
       <div className="mb-8 flex items-center justify-between">
         <div>
           <Link href="/admin/inventory/purchase-orders" className="mb-2 inline-flex items-center gap-1 text-xs text-muted transition hover:text-white">
-            &larr; Back to Purchase Orders
+            {t("back_to_purchase_orders", "← Back to Purchase Orders")}
           </Link>
           <h1 className="text-3xl font-semibold tracking-tight text-white">
             {localOrder!.orderNumber}
@@ -330,7 +330,7 @@ export function PurchaseOrderDetailClient({
               disabled={saving || Object.values(receiveQuantities).every((v) => v === 0)}
               className="btn-primary h-12 rounded-button px-6 text-xs font-semibold uppercase tracking-[0.1em] disabled:opacity-50"
             >
-              {saving ? "Processing..." : "Receive Items"}
+              {saving ? t("processing") : : `${t("receive_items", "Receive Items")}`}
             </button>
           </div>
         </div>

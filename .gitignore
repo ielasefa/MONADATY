@@ -9,3 +9,4 @@ node_modules
 /generated/prisma
 .next/
 node_modules/
+AGENTS.md

@@ -10,7 +10,7 @@ const MonthlyRevenueChart = lazy(() => import("./charts/MonthlyRevenueChart"));
 
 function ChartSkeleton() {
   return (
-    <div className="animate-pulse rounded-xl border border-white/[0.06] bg-[#141414] p-6">
+    <div className="animate-pulse rounded-xl border border-white/[0.06] bg-surface p-6">
       <div className="mb-4 h-4 w-32 rounded bg-white/5" />
       <div className="h-48 rounded bg-white/5" />
     </div>

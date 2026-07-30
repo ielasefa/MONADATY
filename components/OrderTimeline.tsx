@@ -65,8 +65,8 @@ export function OrderTimeline({ orderStatus, updatedAt, createdAt, actualDeliver
                     done
                       ? `${step.iconBg} border-transparent ${step.dotColor.replace("bg-", "text-")}`
                       : current
-                        ? `${step.iconBg} ${step.dotColor.replace("bg-", "ring-2 ring-")}/30 border-transparent`
-                        : "bg-ivory/[0.03] border-ivory/[0.06] text-ivory/20"
+? `${step.iconBg} ${step.dotColor.replace("bg-", "ring-2 ring-")}/30 border-transparent`
+  : "bg-ivory/[0.03] border-ivory/[0.06] text-ivory/35"
                   }`}
                 >
                   {done ? (
@@ -108,7 +108,7 @@ export function OrderTimeline({ orderStatus, updatedAt, createdAt, actualDeliver
                     </span>
                   )}
                 </div>
-                <p className={`mt-0.5 text-xs leading-relaxed ${done || current ? "text-ivory/50" : "text-ivory/20"}`}>
+                <p className={`mt-0.5 text-xs leading-relaxed ${done || current ? "text-ivory/50" : "text-ivory/35"}`}>
                   {current && !done ? `${step.description}` : done ? `${step.description}` : step.description}
                 </p>
                 {(() => {
@@ -116,7 +116,7 @@ export function OrderTimeline({ orderStatus, updatedAt, createdAt, actualDeliver
                   if (!date) return null;
                   return (
                     <p
-                      className="mt-1 text-[0.6rem] font-medium uppercase tracking-[0.15em] text-ivory/30"
+className="mt-1 text-[0.6rem] font-medium uppercase tracking-[0.15em] text-ivory/40"
                     >
                       {date}
                     </p>

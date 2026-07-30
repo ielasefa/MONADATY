@@ -561,8 +561,8 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
                 item.status === "done"
                   ? "border-emerald-400/30 bg-emerald-400/10"
                   : item.status === "error"
-                    ? "border-red/20 bg-red/5"
-                    : "border-white/[0.06] bg-[#0A0A0A]"
+                    ? "border-burgundy/20 bg-burgundy/5"
+                    : "border-white/[0.06] bg-bg"
               }`}
               data-upload-status={item.status}
               data-testid={`upload-item-${item.status}`}

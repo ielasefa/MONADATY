@@ -95,7 +95,7 @@ export default function AutomationPage() {
         </div>
         <div className="flex gap-3">
           <button onClick={() => { setShowLogs(!showLogs); if (!showLogs) fetchLogs(); }} className="btn-secondary text-xs">
-            {showLogs ? "Hide Logs" : "Job Logs"}
+            {showLogs ? t("hide_logs") : : `${t("job_logs", "Job Logs")}`}
           </button>
           <button onClick={handleInit} className="btn-primary text-xs">Initialize Default Jobs</button>
         </div>

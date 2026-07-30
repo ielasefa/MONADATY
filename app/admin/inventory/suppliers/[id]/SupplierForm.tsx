@@ -65,7 +65,7 @@ export function SupplierForm({ supplier }: { supplier: Supplier | null }) {
             &larr; Back to Suppliers
           </Link>
           <h1 className="text-3xl font-semibold tracking-tight text-white">
-            {isNew ? "Add Supplier" : `Edit: ${supplier.name}`}
+            {isNew ? t("add_supplier", "Add Supplier") : `${t("edit")}: ${supplier.name}`}
           </h1>
         </div>
       </div>
@@ -122,7 +122,7 @@ export function SupplierForm({ supplier }: { supplier: Supplier | null }) {
             disabled={saving}
             className="btn-primary h-12 rounded-button px-6 text-xs font-semibold uppercase tracking-[0.1em] disabled:opacity-50"
           >
-            {saving ? "Saving..." : isNew ? "Create Supplier" : "Update Supplier"}
+            {saving ? t("saving") : : isNew ? "Create Supplier" : `${t("update")} ${t("supplier").toLowerCase()}`}
           </button>
           <Link
             href="/admin/inventory/suppliers"

@@ -134,12 +134,12 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
             type="button"
             disabled={loading}
             onClick={handleCreate}
-            className="btn-secondary mt-4 h-12 rounded-md border border-white/[0.06] bg-[#171717] px-5 text-sm font-medium text-white transition hover:bg-[#0A0A0A] disabled:opacity-50"
+            className="btn-secondary mt-4 h-12 rounded-button border border-white/[0.06] bg-surface px-5 text-sm font-medium text-white transition hover:bg-bg disabled:opacity-50"
             aria-label={t("create_invoice")}
           >
             {loading ? (
               <span className="flex items-center gap-2">
-                <span className="h-4 w-4 animate-spin rounded-full border-2 border-yellow border-t-transparent" />
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-gold border-t-transparent" />
                 {t("creating")}
              </span>
             ) : (
@@ -148,7 +148,7 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
              </span>
             )}
          </button>
-          {error && <p className="mt-2 text-xs text-red-400" role="alert">{error}</p>}
+          {error && <p className="mt-2 text-xs text-burgundy" role="alert">{error}</p>}
       </div>
       ) : (
         <div className="mt-4 space-y-4">
@@ -174,8 +174,8 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
           </div>
 
           {invoice.status === "Cancelled" ? (
-            <div className="rounded-[14px] border border-red/20 bg-red/5 p-4 text-center">
-              <p className="text-sm font-medium text-red-400">{t("invoice_cancelled")}</p>
+            <div className="rounded-[14px] border border-burgundy/20 bg-burgundy/5 p-4 text-center">
+              <p className="text-sm font-medium text-burgundy">{t("invoice_cancelled")}</p>
           </div>
           ) : (
             <div className="flex flex-wrap gap-2">
@@ -183,7 +183,7 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
                 type="button"
                 disabled={loading}
                 onClick={handleDownload}
-                className="btn-primary h-12 flex-1 rounded-md bg-red px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-red/90 disabled:opacity-50"
+                className="btn-primary h-12 flex-1 rounded-button bg-burgundy px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-burgundy-dark disabled:opacity-50"
                 aria-label={t("download_invoice_aria", { number: invoice.invoiceNumber })}
               >
                 {loading ? (
@@ -206,7 +206,7 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
                 type="button"
                 disabled={loading}
                 onClick={handlePrint}
-                className="btn-secondary h-12 flex-1 rounded-md border border-white/[0.06] bg-[#171717] px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-[#0A0A0A] disabled:opacity-50"
+                className="btn-secondary h-12 flex-1 rounded-button border border-white/[0.06] bg-surface px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-bg disabled:opacity-50"
                 aria-label={t("print_invoice_aria", { number: invoice.invoiceNumber })}
               >
                 <span className="flex items-center justify-center gap-2">
@@ -222,7 +222,7 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
                 type="button"
                 disabled={loading}
                 onClick={handleCancel}
-                className="h-12 flex-1 rounded-md border border-red/20 bg-red/5 px-4 text-xs font-semibold uppercase tracking-[0.1em] text-red transition hover:bg-red/10 disabled:opacity-50"
+                className="h-12 flex-1 rounded-button border border-burgundy/20 bg-burgundy/5 px-4 text-xs font-semibold uppercase tracking-[0.1em] text-burgundy transition hover:bg-burgundy/10 disabled:opacity-50"
                 aria-label={t("cancel_invoice_aria", { number: invoice.invoiceNumber })}
               >
                 {t("cancel_invoice")}

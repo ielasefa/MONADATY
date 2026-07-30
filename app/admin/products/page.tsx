@@ -313,7 +313,7 @@ export default function ProductsPage() {
           onChange={(e) => setFilterFeatured(e.target.value)}
           className="rounded-button border border-white/[0.06] bg-bg px-3 py-2 text-xs text-white outline-none"
         >
-          <option value="">Featured: All</option>
+          <option value="">{t("featured_all", "Featured: All")}</option>
           <option value="true">{t("featured_only")}</option>
           <option value="false">Non-Featured</option>
         </select>
@@ -324,7 +324,7 @@ export default function ProductsPage() {
         >
           <option value="">Best Seller: All</option>
           <option value="true">{t("best_seller_only")}</option>
-          <option value="false">Non-Best Seller</option>
+          <option value="false">{t("non_best_seller", "Non-Best Seller")}</option>
         </select>
       </div>
 
@@ -517,7 +517,7 @@ export default function ProductsPage() {
                       <span className="text-4xl">📦</span>
                       <p>{t("no_products")}</p>
                       <Link href="/admin/products/add" className="btn-gold h-10 rounded-button px-5 text-xs font-semibold uppercase tracking-[0.1em]">
-                        Add Your First Product
+                        t("add_your_first_product", "Add Your First Product")
                       </Link>
                     </div>
                   </td>

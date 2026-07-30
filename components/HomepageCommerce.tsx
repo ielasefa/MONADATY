@@ -211,7 +211,7 @@ function ProductCardLite({ product }: { product: ProductData }) {
               className={`absolute end-2.5 top-2.5 z-20 inline-flex items-center justify-center rounded-full p-2 transition-all duration-300 ${
                 isWishlisted
                   ? "text-gold opacity-100"
-                  : "text-white/20 opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:text-gold"
+                  : "text-white/25 opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:text-gold"
               }`}
             >
               <svg
@@ -302,9 +302,9 @@ export function CollectionsShowcase({ collections }: { collections: CollectionDa
         <Reveal>
           <div className="flex items-center gap-3">
             <span className="h-px w-8 bg-gold" />
-            <span className="text-[0.75rem] font-semibold uppercase tracking-[0.2em] text-gold">
-              {t("curated_collections", "CURATED COLLECTIONS")}
-            </span>
+  <span className="label-utility tracking-[0.55em] text-gold/60">
+            {t("curated_collections", "CURATED COLLECTIONS")}
+          </span>
           </div>
           <h2 className="mt-5 font-display text-[clamp(1.75rem,4vw,3rem)] leading-[1.0] tracking-[-0.02em] text-white">
             {t("collections_title", "DISCOVER THE MONADATY COLLECTIONS")}
@@ -496,7 +496,7 @@ export function BestSellers({ products }: { products: ProductData[] }) {
               <h2 className="font-display text-[clamp(1.875rem,3.5vw,2.5rem)] leading-[0.95] tracking-[-0.03em] text-white">
                 {t("bestsellers_title", "BEST SELLERS")}
               </h2>
-              <p className="mt-3 max-w-md text-[0.78rem] leading-[1.7] text-white/35">
+              <p className="mt-3 max-w-md text-[0.78rem] leading-[1.7] text-white/50">
                 {t("bestsellers_desc", "The products our customers keep coming back for.")}
               </p>
             </div>
