@@ -36,7 +36,9 @@ export default async function HomePage() {
     .map((t) => ({ id: t.id, name: t.name, role: t.role, content: t.content }));
 
   const shopProducts = allProducts.slice(0, 4);
-  const sectionOrder = content.sectionOrder;
+  const sectionOrder = (content.sectionOrder || []).length > 0
+    ? content.sectionOrder
+    : ["hero", "featured", "collections", "about", "testimonials", "moroccan_moment", "newsletter", "final_cta"];
 
   return (
     <>

@@ -432,7 +432,7 @@ export function BrandStory({
         {description && (
           <div className="mt-6 max-w-md text-[0.82rem] leading-[1.85] text-white/55">
             {(description || "").split("\n").map((line, i, arr) => (
-              <p key={i} className={i < arr.length - 1 ? "mb-3" : ""}>
+              <p key={line.trim() + String(i)} className={i < arr.length - 1 ? "mb-3" : ""}>
                 {line}
               </p>
             ))}
@@ -922,7 +922,7 @@ export function FAQSection({ faqs }: { faqs: { question: string; answer: string 
           <Reveal delay={0.1}>
             <div className="space-y-0">
               {faqs.map((faq, i) => (
-                <FAQItem key={i} question={faq.question} answer={faq.answer} isFirst={i === 0} />
+                <FAQItem key={faq.question + faq.answer} question={faq.question} answer={faq.answer} isFirst={i === 0} />
               ))}
             </div>
           </Reveal>

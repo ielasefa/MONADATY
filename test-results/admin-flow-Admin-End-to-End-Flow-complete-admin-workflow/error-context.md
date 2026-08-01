@@ -12,45 +12,118 @@
 # Error details
 
 ```
-Test timeout of 120000ms exceeded.
-```
+Error: expect(locator).toBeVisible() failed
 
-```
-Error: page.goto: Test timeout of 120000ms exceeded.
+Locator: locator('svg polyline[points="20 6 9 17 4 12"]').first()
+Expected: visible
+Timeout: 30000ms
+Error: element(s) not found
+
 Call log:
-  - navigating to "http://localhost:3458/admin/login", waiting until "load"
+  - Expect "toBeVisible" with timeout 30000ms
+  - waiting for locator('svg polyline[points="20 6 9 17 4 12"]').first()
 
 ```
-
-# Page snapshot
 
 ```yaml
-- generic [active] [ref=e1]:
-  - link "Skip to main content" [ref=e2] [cursor=pointer]:
-    - /url: "#main-content"
-  - main [ref=e3]:
-    - main [ref=e4]:
-      - generic [ref=e6]:
-        - generic [ref=e7]:
-          - button "MONADATY — back to store" [ref=e8] [cursor=pointer]:
-            - generic [ref=e10]: M
-            - generic [ref=e11]: MONADATY
-          - heading "admin_login" [level=1] [ref=e12]
-          - paragraph [ref=e13]: sign_in_dashboard
-        - generic [ref=e15]:
-          - generic [ref=e16]:
-            - generic [ref=e17]: email_label
-            - textbox "email_label" [ref=e18]:
-              - /placeholder: email_placeholder_admin
-          - generic [ref=e19]:
-            - generic [ref=e20]: password_label
-            - generic [ref=e21]:
-              - textbox "password_label" [ref=e22]:
-                - /placeholder: password_placeholder
-              - button "show_password" [ref=e23] [cursor=pointer]:
-                - img [ref=e24]
-          - button "sign_in" [ref=e27] [cursor=pointer]
-  - region "Notifications alt+T"
+- link "Skip to main content":
+  - /url: "#main-content"
+- main:
+  - main:
+    - heading "Add Product" [level=1]
+    - paragraph: Créer un nouveau produit dans votre catalogue
+    - button "Annuler"
+    - button "Enregistrer le produit"
+    - heading "Informations de base" [level=2]
+    - text: Product Name *
+    - textbox "Product Name *":
+      - /placeholder: "ex: Soda Citron Pétillant"
+      - text: E2E Test Product 1785620032818
+    - text: Slug
+    - textbox "Slug":
+      - /placeholder: soda-citron-petillant
+      - text: e2e-test-product-1785620032818
+    - img
+    - text: Short Description
+    - textbox "Short Description":
+      - /placeholder: Une brève description pour les fiches produit
+    - text: Full Description
+    - textbox "Full Description":
+      - /placeholder: Description détaillée du produit
+    - text: SKU
+    - textbox "SKU":
+      - /placeholder: Généré automatiquement
+      - text: E2E-TEST-PRODUCT-MHI4KF
+    - text: Barcode
+    - textbox "Barcode":
+      - /placeholder: optional
+    - heading "pricing" [level=2]
+    - text: Regular Price *
+    - textbox "Regular Price *":
+      - /placeholder: "0.00"
+      - text: "99.99"
+    - text: MAD sale_price
+    - textbox "sale_price":
+      - /placeholder: "0.00"
+    - text: MAD Prix de revient
+    - textbox "Prix de revient":
+      - /placeholder: "0.00"
+    - text: MAD currency
+    - combobox "currency":
+      - option "MAD" [selected]
+      - option "EUR"
+      - option "USD"
+    - paragraph: profit
+    - paragraph: 99.99 MAD
+    - paragraph: margin
+    - paragraph: 100.0%
+    - heading "Stock" [level=2]
+    - text: Quantité en stock
+    - spinbutton "Quantité en stock": "10"
+    - text: Seuil de stock faible
+    - spinbutton "Seuil de stock faible": "5"
+    - text: En stock
+    - heading "Organisation" [level=2]
+    - text: category
+    - combobox "category":
+      - option "Aucune catégorie" [selected]
+    - button "create_category": + Nouveau
+    - text: collection
+    - combobox "collection":
+      - option "Aucune collection" [selected]
+    - text: brand
+    - textbox "brand":
+      - /placeholder: "ex: MONADATY"
+    - heading "Statut et indicateurs" [level=2]
+    - text: status
+    - combobox "status":
+      - option "Brouillon"
+      - option "active" [selected]
+      - option "hidden"
+      - option "archived"
+    - checkbox "featured"
+    - text: featured
+    - checkbox "best_seller"
+    - text: best_seller
+    - heading "images" [level=2]
+    - img
+    - paragraph: Glissez-déposez les images ici
+    - paragraph: JPG, PNG, WebP, AVIF — Up to 10 MB each — Max 10 images
+    - button "Browse Files":
+      - img
+      - text: Browse Files
+    - button "Camera":
+      - img
+      - text: Camera
+    - img "test-image.png"
+    - paragraph: test-image.png
+    - paragraph: 0.0 MB
+    - paragraph: "Upload failed: 401"
+    - button "Réessayer le téléversement"
+    - button "Annuler"
+    - button "Enregistrer le produit"
+- region "Notifications alt+T"
+- alert
 ```
 
 # Test source
@@ -58,8 +131,8 @@ Call log:
 ```ts
   1   | import { test, expect, type Page } from "@playwright/test";
   2   | 
-  3   | const ADMIN_EMAIL = "ilyass@gmail.com";
-  4   | const ADMIN_PASSWORD = "ilyass123ilyass123";
+  3   | const ADMIN_EMAIL = process.env.TEST_ADMIN_EMAIL || "admin@monadaty.com";
+  4   | const ADMIN_PASSWORD = process.env.TEST_ADMIN_PASSWORD || "change-this-to-a-strong-password";
   5   | const IMAGE_PATH = "/tmp/opencode/test-image.png";
   6   | const TEST_PRODUCT_NAME = `E2E Test Product ${Date.now()}`;
   7   | 
@@ -100,8 +173,7 @@ Call log:
   42  | }
   43  | 
   44  | async function login(page: Page) {
-> 45  |   await page.goto("/admin/login");
-      |              ^ Error: page.goto: Test timeout of 120000ms exceeded.
+  45  |   await page.goto("/admin/login");
   46  |   await page.waitForLoadState("domcontentloaded");
   47  |   const ok = await page.evaluate(async ({ email, password }) => {
   48  |     const res = await fetch("/api/admin/login", {
@@ -149,7 +221,8 @@ Call log:
   90  | 
   91  |     // Wait for done status (green checkmark SVG)
   92  |     const doneIcon = page.locator('svg polyline[points="20 6 9 17 4 12"]').first();
-  93  |     await expect(doneIcon).toBeVisible({ timeout: 30000 });
+> 93  |     await expect(doneIcon).toBeVisible({ timeout: 30000 });
+      |                            ^ Error: expect(locator).toBeVisible() failed
   94  |     console.log("✅ Upload reached 100% and status is DONE");
   95  | 
   96  |     // Wait for uploading items to be cleared from the DOM
@@ -202,4 +275,52 @@ Call log:
   143 | 
   144 |     // ===== Logout =====
   145 |     // First call logout API from the page context to clear the cookie
+  146 |     await page.evaluate(async () => {
+  147 |       await fetch("/api/admin/logout", { method: "POST" });
+  148 |     });
+  149 |     // Now navigate to login - the layout should see no auth and show the login form
+  150 |     await page.goto("/admin/login");
+  151 |     await page.waitForURL(/\/admin\/login/);
+  152 |     await expect(page.locator("#login-email")).toBeVisible({ timeout: 10000 });
+  153 |     console.log("✅ Logout page loaded");
+  154 | 
+  155 |     // ===== Login again via API =====
+  156 |     const ok2 = await page.evaluate(async ({ email, password }) => {
+  157 |       const res = await fetch("/api/admin/login", {
+  158 |         method: "POST",
+  159 |         headers: { "Content-Type": "application/json" },
+  160 |         body: JSON.stringify({ email, password }),
+  161 |       });
+  162 |       return res.ok;
+  163 |     }, { email: ADMIN_EMAIL, password: ADMIN_PASSWORD });
+  164 |     expect(ok2).toBe(true);
+  165 | 
+  166 |     await page.goto("/admin/dashboard");
+  167 |     await page.waitForURL(/\/admin\/dashboard/);
+  168 |     await page.waitForLoadState("networkidle", { timeout: 15000 });
+  169 |     console.log("✅ Re-login successful");
+  170 | 
+  171 |     // ===== Navigate to shop =====
+  172 |     await page.goto("/shop");
+  173 |     await page.waitForURL(/\/shop/);
+  174 |     await page.waitForLoadState("networkidle", { timeout: 15000 });
+  175 |     console.log("✅ Shop page loaded");
+  176 | 
+  177 |     // ===== Network monitoring =====
+  178 |     console.log("Monitoring network for 30 seconds...");
+  179 |     await page.waitForTimeout(30000);
+  180 | 
+  181 |     const analysis = monitor.analyze();
+  182 |     const requests = monitor.getRequests();
+  183 |     const requestCounts = monitor.getRequestCounts();
+  184 | 
+  185 |     console.log(`\n=== Network Report ===`);
+  186 |     console.log(`Total requests: ${requests.length}`);
+  187 |     console.log(`Failed requests: ${analysis.failed.length}`);
+  188 |     analysis.failed.forEach((r) =>
+  189 |       console.log(`  FAILED: ${r.method} ${r.url} -> ${r.status}`)
+  190 |     );
+  191 |     console.log(`\nRepeated requests (>5x): ${analysis.repeated.length}`);
+  192 |     analysis.repeated.forEach((r) => console.log(`  REPEATED: ${r}`));
+  193 | 
 ```

@@ -144,8 +144,8 @@ return (
             </div>
 
             <h1 className="mt-6 font-display text-[clamp(2.25rem,4.5vw,4rem)] leading-[0.9] tracking-[-0.04em] text-white">
-              {titleLines.map((line, i) => (
-                <span key={i} className="block">{line}</span>
+              {titleLines.map((line) => (
+                <span key={line} className="block">{line}</span>
               ))}
             </h1>
 

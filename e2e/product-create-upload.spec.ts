@@ -1,7 +1,7 @@
 import { test, expect, type Page } from "@playwright/test";
 
-const ADMIN_EMAIL = "ilyass@gmail.com";
-const ADMIN_PASSWORD = "ilyass123ilyass123";
+const ADMIN_EMAIL = process.env.TEST_ADMIN_EMAIL || "admin@monadaty.com";
+const ADMIN_PASSWORD = process.env.TEST_ADMIN_PASSWORD || "change-this-to-a-strong-password";
 const IMAGE_PATH = "/tmp/opencode/test-image.png";
 const TEST_PRODUCT_NAME = `E2E-UX-Improve-${Date.now()}`;
 

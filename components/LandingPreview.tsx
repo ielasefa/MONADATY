@@ -19,7 +19,7 @@
  * container, so Next.js image optimization is unnecessary overhead.
  */
 
-/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @next/next/no-img-element, react/no-array-index-key */
 
 import Link from "next/link";
 
@@ -267,7 +267,7 @@ export function CollectionsPreview({
           <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-3">
             {safeCollections.slice(0, 6).map((collection) => (
               <div
-                key={collection.slug || Math.random()}
+                key={collection.slug}
                 className="group relative aspect-[4/5] overflow-hidden rounded-xl bg-black-soft"
               >
                 {collection.image ? (
@@ -401,7 +401,7 @@ export function SocialProofPreview({
           <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {safeTestimonials.slice(0, 6).map((t) => (
               <article
-                key={t.id || Math.random()}
+                key={t.id}
                 className="flex flex-col rounded-xl border border-white/[0.06] bg-black-soft p-6"
               >
                 <p className="text-[0.82rem] leading-[1.85] text-white/55">

@@ -342,7 +342,7 @@ export function LandingCMS({ configId, landingData, testimonials, featuredEntrie
       </div>
 
       {/* ── RIGHT PANEL (Live Preview) ── */}
-      <aside className="w-[380px] shrink-0 border-l border-white/[0.06] bg-[#0a0a0a] flex flex-col">
+      <aside className="w-[380px] shrink-0 border-l border-white/[0.06] bg-black flex flex-col">
         {/* Device selector */}
         <div className="border-b border-white/[0.06] px-4 py-2 flex items-center justify-between bg-[#171717]">
           <span className="text-[0.55rem] font-medium uppercase tracking-[0.15em] text-white/30">Preview</span>
@@ -354,7 +354,7 @@ export function LandingCMS({ configId, landingData, testimonials, featuredEntrie
             ))}
           </div>
         </div>
-        <div className="flex-1 overflow-auto bg-[#0a0a0a] p-4 flex justify-center">
+        <div className="flex-1 overflow-auto bg-black p-4 flex justify-center">
           <div
             className="bg-white transition-all duration-300 overflow-hidden shadow-2xl"
             style={{

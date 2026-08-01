@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { AdminLogo } from "@/components/admin/AdminLogo";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -9,6 +9,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 function AdminLoginForm() {
   const { t } = useTranslation("auth");
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -33,11 +34,11 @@ function AdminLoginForm() {
         const redirect = searchParams?.get("redirect");
         await new Promise((r) => setTimeout(r, 50));
         if (data.mustChangePassword) {
-          window.location.href = "/admin/change-password";
+          router.replace("/admin/change-password");
         } else if (redirect && redirect.startsWith("/admin/")) {
-          window.location.href = redirect;
+          router.replace(redirect);
         } else {
-          window.location.href = "/admin/dashboard";
+          router.replace("/admin/dashboard");
         }
       } else {
         const data = await res.json().catch(() => ({}));

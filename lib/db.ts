@@ -399,7 +399,7 @@ export type LandingContent = {
 };
 export const getLandingContent = cache(async (): Promise<LandingContent> => {
   try {
-    const config = await prisma.landingConfig.findFirst({
+    let config = await prisma.landingConfig.findFirst({
       where: { status: "published" },
       orderBy: { publishedAt: "desc" },
       include: {
@@ -415,17 +415,33 @@ export const getLandingContent = cache(async (): Promise<LandingContent> => {
     });
 
     if (!config) {
+      config = await prisma.landingConfig.findFirst({
+        orderBy: { createdAt: "desc" },
+        include: {
+          hero: true,
+          brandStory: true,
+          featured: true,
+          collectionHeader: true,
+          testimonialHeader: true,
+          moroccanMoment: true,
+          finalCta: true,
+          newsletter: true,
+        },
+      });
+    }
+
+    if (!config) {
       return {
-        hero: { enabled: false, title: "TASTE\nREDEFINED.", subtitle: "Premium Soda — Moroccan Craft", description: "", ctaText: "Shop MONADATY", ctaLink: "/shop", media: [] },
-        featuredProducts: { enabled: false, title: "Featured", subtitle: "SELECTED FLAVORS" },
-        collectionsSection: { enabled: false, title: "Shop by Collection", subtitle: "THE COLLECTIONS" },
-        aboutSection: { enabled: false, title: "Our Story", subtitle: "BORN IN MOROCCO", description: "", image: "" },
-        testimonialsSection: { enabled: false, title: "Testimonials", subtitle: "WHAT THEY SAY" },
+        hero: { enabled: true, title: "TASTE\nREDEFINED.", subtitle: "Premium Soda — Moroccan Craft", description: "A refined soda experience shaped in Morocco.", ctaText: "Shop MONADATY", ctaLink: "/shop", media: [] },
+        featuredProducts: { enabled: true, title: "Featured", subtitle: "SELECTED FLAVORS" },
+        collectionsSection: { enabled: true, title: "Shop by Collection", subtitle: "THE COLLECTIONS" },
+        aboutSection: { enabled: true, title: "Our Story", subtitle: "BORN IN MOROCCO", description: "", image: "" },
+        testimonialsSection: { enabled: true, title: "Testimonials", subtitle: "WHAT THEY SAY" },
         newsletter: { enabled: false, title: "Stay Close.", subtitle: "THE INNER CIRCLE", description: "", placeholder: "Your email", buttonText: "Join" },
-        moroccanMoment: { enabled: false, title: "Pour. Serve. Savor.", subtitle: "THE MONADATY MOMENT", description: "" },
-        finalCta: { enabled: false, subtitle: "BEGIN THE POUR", title: "YOUR NEXT FAVORITE TASTE IS WAITING.", description: "", buttonText: "SHOP NOW", buttonLink: "/shop" },
+        moroccanMoment: { enabled: true, title: "Pour. Serve. Savor.", subtitle: "THE MONADATY MOMENT", description: "" },
+        finalCta: { enabled: true, subtitle: "BEGIN THE POUR", title: "YOUR NEXT FAVORITE TASTE IS WAITING.", description: "", buttonText: "SHOP NOW", buttonLink: "/shop" },
         seo: null,
-        sectionOrder: [],
+        sectionOrder: ["hero", "featured", "collections", "about", "testimonials", "moroccan_moment", "newsletter", "final_cta"],
       };
     }
 
@@ -462,16 +478,16 @@ export const getLandingContent = cache(async (): Promise<LandingContent> => {
   } catch (error) {
     logError(error, "Database error in getLandingContent");
     return {
-      hero: { enabled: false, title: "", subtitle: "", description: "", ctaText: "", ctaLink: "", media: [] },
-      featuredProducts: { enabled: false, title: "", subtitle: "" },
-      collectionsSection: { enabled: false, title: "", subtitle: "" },
-      aboutSection: { enabled: false, title: "", subtitle: "", description: "", image: "" },
-      testimonialsSection: { enabled: false, title: "", subtitle: "" },
-      newsletter: { enabled: false, title: "", subtitle: "", description: "", placeholder: "", buttonText: "" },
-      moroccanMoment: { enabled: false, title: "", subtitle: "", description: "" },
-      finalCta: { enabled: false, subtitle: "", title: "", description: "", buttonText: "", buttonLink: "" },
+      hero: { enabled: true, title: "TASTE\nREDEFINED.", subtitle: "Premium Soda — Moroccan Craft", description: "A refined soda experience shaped in Morocco.", ctaText: "Shop MONADATY", ctaLink: "/shop", media: [] },
+      featuredProducts: { enabled: true, title: "Featured", subtitle: "SELECTED FLAVORS" },
+      collectionsSection: { enabled: true, title: "Shop by Collection", subtitle: "THE COLLECTIONS" },
+      aboutSection: { enabled: true, title: "Our Story", subtitle: "BORN IN MOROCCO", description: "", image: "" },
+      testimonialsSection: { enabled: true, title: "Testimonials", subtitle: "WHAT THEY SAY" },
+      newsletter: { enabled: false, title: "Stay Close.", subtitle: "THE INNER CIRCLE", description: "", placeholder: "Your email", buttonText: "Join" },
+      moroccanMoment: { enabled: true, title: "Pour. Serve. Savor.", subtitle: "THE MONADATY MOMENT", description: "" },
+      finalCta: { enabled: true, subtitle: "BEGIN THE POUR", title: "YOUR NEXT FAVORITE TASTE IS WAITING.", description: "", buttonText: "SHOP NOW", buttonLink: "/shop" },
       seo: null,
-      sectionOrder: [],
+      sectionOrder: ["hero", "featured", "collections", "about", "testimonials", "moroccan_moment", "newsletter", "final_cta"],
     };
   }
 });
