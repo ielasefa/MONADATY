@@ -1,6 +1,7 @@
 import { logError } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthenticatedAdmin } from "@/lib/auth";
+import { requireOrigin } from "@/lib/csrf";
 import { createApiKey, getApiKeys, regenerateApiKey, deleteApiKey, getAllApiKeys } from "@/lib/api-keys";
 
 export async function GET() {
@@ -22,6 +23,9 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    const csrfError = requireOrigin(request);
+    if (csrfError) return csrfError;
+
     const admin = await getAuthenticatedAdmin();
     if (!admin) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -45,6 +49,9 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
+    const csrfError = requireOrigin(request);
+    if (csrfError) return csrfError;
+
     const admin = await getAuthenticatedAdmin();
     if (!admin) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -66,6 +73,9 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
+    const csrfError = requireOrigin(request);
+    if (csrfError) return csrfError;
+
     const admin = await getAuthenticatedAdmin();
     if (!admin) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

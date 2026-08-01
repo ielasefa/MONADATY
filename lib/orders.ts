@@ -107,6 +107,33 @@ export async function createOrder(input: OrderCreateInput): Promise<{ orderNumbe
 
   try {
     const order = await prisma.$transaction(async (tx) => {
+      const productIds = input.items
+        .map((item) => item.productId)
+        .filter((id): id is string => typeof id === "string" && id.length > 0);
+
+      const products = productIds.length > 0
+        ? await tx.product.findMany({
+            where: { id: { in: productIds } },
+            select: { id: true, name: true, stock: true, available: true, status: true },
+          })
+        : [];
+      const productMap = new Map(products.map((p) => [p.id, p]));
+
+      for (const item of input.items) {
+        if (!item.productId) continue;
+
+        const product = productMap.get(item.productId);
+        if (!product) {
+          throw new Error(`Product "${item.name}" no longer exists`);
+        }
+        if (!product.available || product.status !== "Active") {
+          throw new Error(`Product "${product.name}" is not available for purchase`);
+        }
+        if (product.stock < item.quantity) {
+          throw new Error(`Insufficient stock for "${product.name}": only ${product.stock} left, requested ${item.quantity}`);
+        }
+      }
+
       for (const item of input.items) {
         if (!item.productId) continue;
         const updateResult = await tx.product.updateMany({

@@ -8,10 +8,14 @@ import { generateInvoiceNumber, generateSignedToken, recordInvoiceEvent } from "
 import { InvoiceDocument } from "@/components/admin/InvoicePDF";
 import React from "react";
 import { isAuthenticated } from "@/lib/auth";
+import { requireOrigin } from "@/lib/csrf";
 import { sendInvoiceEmail } from "@/lib/email-invoice";
 import QRCode from "qrcode";
 
 export async function POST(req: NextRequest) {
+  const csrfError = requireOrigin(req);
+  if (csrfError) return csrfError;
+
   const authed = await isAuthenticated();
   if (!authed) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

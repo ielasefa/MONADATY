@@ -4,10 +4,12 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import type { Product } from "@/types";
 import { formatMoney, parseMoney } from "@/lib/money";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export type CartItem = {
   id: string;
   name: string;
+  slug: string;
   image: string;
   price: string;
   category: Product["category"];
@@ -41,6 +43,7 @@ const CartDrawer = dynamic(() => import("@/components/CartDrawer").then((mod) =>
 const CartContext = createContext<CartContextValue | undefined>(undefined);
 
 export function CartProvider({ children }: Readonly<{ children: React.ReactNode }>) {
+  const { t } = useTranslation("products");
   const [items, setItems] = useState<CartItem[]>([]);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -51,7 +54,9 @@ export function CartProvider({ children }: Readonly<{ children: React.ReactNode 
 
     if (storedCart) {
       try {
-        setItems(JSON.parse(storedCart) as CartItem[]);
+        const parsed = JSON.parse(storedCart) as CartItem[];
+        // Backfill slug for legacy carts stored before the slug field existed
+        setItems(parsed.map((item) => ({ ...item, slug: item.slug ?? "" })));
       } catch {
         window.localStorage.removeItem(STORAGE_KEY);
       }
@@ -88,6 +93,23 @@ export function CartProvider({ children }: Readonly<{ children: React.ReactNode 
   );
 
   function addItem(product: Product, quantity: number) {
+    // Stock validation: never allow adding more than available stock.
+    const availableStock = typeof product.stock === "number" ? product.stock : Number.POSITIVE_INFINITY;
+    const isAvailable = typeof product.available === "boolean" ? product.available : true;
+
+    if (!isAvailable || availableStock <= 0) {
+      setToastMessage(t("out_of_stock", "Out of stock"));
+      return;
+    }
+
+    const currentInCart =
+      items.find((item) => item.id === product.id)?.quantity ?? 0;
+
+    if (currentInCart + quantity > availableStock) {
+      setToastMessage(t("product_unavailable", "This product is unavailable"));
+      return;
+    }
+
     setItems((currentItems) => {
       const existingItem = currentItems.find((item) => item.id === product.id);
 
@@ -102,6 +124,7 @@ export function CartProvider({ children }: Readonly<{ children: React.ReactNode 
         {
           id: product.id,
           name: product.name,
+          slug: product.slug ?? product.id,
           image: product.image ?? "",
           // Coerce visual into the explicit cart union; leave undefined if not present
           visual: (product.visual as "can" | "bottle" | "glass") ?? undefined,

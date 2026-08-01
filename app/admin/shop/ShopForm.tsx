@@ -56,7 +56,7 @@ export function ShopForm({ products, categories, collections, saveProduct }: Pro
   const statusStyles = {
   out: "border-burgundy/30 bg-burgundy/10 text-burgundy",
   low: "border-gold/30 bg-gold/10 text-gold",
-  in: "border-white/[0.06] bg-white/[0.04] text-ivory/60",
+  in: "border-white/[0.06] bg-white/[0.04] text-white/60",
 };
           const statusIcons = {
             out: "\u274C",

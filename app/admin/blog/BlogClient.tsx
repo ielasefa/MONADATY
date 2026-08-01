@@ -58,7 +58,7 @@ onChange={(_url) => {}} folder="monadaty/blog" />
             <div className="grid grid-cols-2 gap-4">
               <label className="flex items-center gap-3 cursor-pointer pt-6">
                 <input type="hidden" name="published" value="false" />
-                <input type="checkbox" name="published" value="true" defaultChecked={editing?.published} className="h-4 w-4 rounded border-white/20 accent-red" /> <span className="text-sm text-muted">Published</span>
+                <input type="checkbox" name="published" value="true" defaultChecked={editing?.published} className="h-4 w-4 rounded border-white/20 accent-gold" /> <span className="text-sm text-muted">Published</span>
               </label>
               <Field label={t("order_label")} name="order" type="number" defaultValue={editing?.order?.toString()} />
             </div>

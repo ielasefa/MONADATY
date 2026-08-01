@@ -25,7 +25,7 @@ function StatsBar({ orders }: { orders: StoredOrder[] }) {
 
   const cards = [
     { label: t("total_orders"), value: total, accent: "" },
-    { label: t("revenue_label"), value: `${revenue.toFixed(2)} DH`, accent: "text-yellow" },
+    { label: t("revenue_label"), value: `${revenue.toFixed(2)} DH`, accent: "text-gold" },
     { label: t("pending"), value: pending, accent: "text-burgundy" },
     { label: t("paid"), value: paid, accent: "text-white/65" },
     { label: t("delivered"), value: delivered, accent: "text-white/65" },
@@ -137,13 +137,13 @@ export default function AdminOrdersPage() {
               placeholder={t("search_orders_placeholder")}
               value={search}
               onChange={(e) => { setSearch(e.target.value); setPage(0); }}
-              className="input-premium h-12 w-56 rounded-md border border-white/[0.06] bg-[#171717] px-4 text-sm text-white outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-yellow/20"
+              className="input-premium h-12 w-56 rounded-md border border-white/[0.06] bg-[#171717] px-4 text-sm text-white outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-gold/20"
               aria-label={t("search_orders_aria")}
             />
             <select
               value={orderStatusFilter}
               onChange={(e) => { setOrderStatusFilter(e.target.value); setPage(0); }}
-              className="input-premium h-12 rounded-md border border-white/[0.06] bg-[#171717] px-3 text-sm text-white outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-yellow/20"
+              className="input-premium h-12 rounded-md border border-white/[0.06] bg-[#171717] px-3 text-sm text-white outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-gold/20"
               aria-label={t("filter_status_aria")}
             >
               <option value="all">{t("all_statuses")}</option>
@@ -154,7 +154,7 @@ export default function AdminOrdersPage() {
             <select
               value={paymentStatusFilter}
               onChange={(e) => { setPaymentStatusFilter(e.target.value); setPage(0); }}
-              className="input-premium h-12 rounded-md border border-white/[0.06] bg-[#171717] px-3 text-sm text-white outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-yellow/20"
+              className="input-premium h-12 rounded-md border border-white/[0.06] bg-[#171717] px-3 text-sm text-white outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-gold/20"
               aria-label={t("filter_payment_aria")}
             >
               <option value="all">{t("all_payments")}</option>
@@ -167,7 +167,7 @@ export default function AdminOrdersPage() {
 
         {loading ? (
           <div className="flex items-center justify-center py-20" role="status">
-            <div className="h-8 w-8 animate-spin rounded-full border-2 border-yellow border-t-transparent" />
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-gold border-t-transparent" />
             <span className="sr-only">{t("loading_orders")}</span>
           </div>
         ) : filtered.length === 0 ? (
@@ -254,7 +254,7 @@ export default function AdminOrdersPage() {
                         <button
                           type="button"
                           onClick={() => router.push(`/admin/orders/${order.id}`)}
-                          className="h-12 rounded-md px-3 py-1.5 text-sm font-medium text-yellow transition hover:bg-yellow/10"
+                          className="h-12 rounded-md px-3 py-1.5 text-sm font-medium text-gold transition hover:bg-gold/10"
                           aria-label={`${t("view_button")} ${order.orderNumber}`}
                         >
                           {t("view_button")}

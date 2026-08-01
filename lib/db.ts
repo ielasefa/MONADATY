@@ -339,3 +339,140 @@ export const getEmailTemplate = cache(async (key: string) => {
     return null;
   }
 });
+
+function parseLandingHero(hero: { enabled: boolean; title: string; subtitle: string; description: string; ctaText: string; ctaLink: string; media: string[] }) {
+  return {
+    enabled: hero.enabled,
+    title: hero.title,
+    subtitle: hero.subtitle,
+    description: hero.description,
+    ctaText: hero.ctaText,
+    ctaLink: hero.ctaLink,
+    media: hero.media,
+  };
+}
+
+function parseLandingBrandStory(bs: { enabled: boolean; title: string; subtitle: string; description: string; image: string }) {
+  return {
+    enabled: bs.enabled,
+    title: bs.title,
+    subtitle: bs.subtitle,
+    description: bs.description,
+    image: bs.image,
+  };
+}
+
+function parseLandingFeatured(f: { enabled: boolean; title: string; subtitle: string }) {
+  return { enabled: f.enabled, title: f.title, subtitle: f.subtitle };
+}
+
+function parseLandingCollectionHeader(ch: { enabled: boolean; title: string; subtitle: string }) {
+  return { enabled: ch.enabled, title: ch.title, subtitle: ch.subtitle };
+}
+
+function parseLandingTestimonialHeader(th: { enabled: boolean; title: string; subtitle: string }) {
+  return { enabled: th.enabled, title: th.title, subtitle: th.subtitle };
+}
+
+function parseLandingNewsletter(nl: { enabled: boolean; title: string; subtitle: string; description: string; placeholder: string; buttonText: string }) {
+  return {
+    enabled: nl.enabled,
+    title: nl.title,
+    subtitle: nl.subtitle,
+    description: nl.description,
+    placeholder: nl.placeholder,
+    buttonText: nl.buttonText,
+  };
+}
+
+export type LandingContent = {
+  hero: ReturnType<typeof parseLandingHero>;
+  featuredProducts: ReturnType<typeof parseLandingFeatured>;
+  collectionsSection: ReturnType<typeof parseLandingCollectionHeader>;
+  aboutSection: ReturnType<typeof parseLandingBrandStory>;
+  testimonialsSection: ReturnType<typeof parseLandingTestimonialHeader>;
+  newsletter: ReturnType<typeof parseLandingNewsletter>;
+  moroccanMoment: { enabled: boolean; title: string; subtitle: string; description: string };
+  finalCta: { enabled: boolean; subtitle: string; title: string; description: string; buttonText: string; buttonLink: string };
+  seo: { title: string; metaDescription: string; ogTitle: string; ogDescription: string; ogImage: string; canonicalUrl: string } | null;
+  sectionOrder: string[];
+};
+export const getLandingContent = cache(async (): Promise<LandingContent> => {
+  try {
+    const config = await prisma.landingConfig.findFirst({
+      where: { status: "published" },
+      orderBy: { publishedAt: "desc" },
+      include: {
+        hero: true,
+        brandStory: true,
+        featured: true,
+        collectionHeader: true,
+        testimonialHeader: true,
+        moroccanMoment: true,
+        finalCta: true,
+        newsletter: true,
+      },
+    });
+
+    if (!config) {
+      return {
+        hero: { enabled: false, title: "TASTE\nREDEFINED.", subtitle: "Premium Soda — Moroccan Craft", description: "", ctaText: "Shop MONADATY", ctaLink: "/shop", media: [] },
+        featuredProducts: { enabled: false, title: "Featured", subtitle: "SELECTED FLAVORS" },
+        collectionsSection: { enabled: false, title: "Shop by Collection", subtitle: "THE COLLECTIONS" },
+        aboutSection: { enabled: false, title: "Our Story", subtitle: "BORN IN MOROCCO", description: "", image: "" },
+        testimonialsSection: { enabled: false, title: "Testimonials", subtitle: "WHAT THEY SAY" },
+        newsletter: { enabled: false, title: "Stay Close.", subtitle: "THE INNER CIRCLE", description: "", placeholder: "Your email", buttonText: "Join" },
+        moroccanMoment: { enabled: false, title: "Pour. Serve. Savor.", subtitle: "THE MONADATY MOMENT", description: "" },
+        finalCta: { enabled: false, subtitle: "BEGIN THE POUR", title: "YOUR NEXT FAVORITE TASTE IS WAITING.", description: "", buttonText: "SHOP NOW", buttonLink: "/shop" },
+        seo: null,
+        sectionOrder: [],
+      };
+    }
+
+    const seoRow = await prisma.landingSeo.findUnique({ where: { configId: config.id } });
+    const seo = seoRow
+      ? {
+          title: seoRow.title,
+          metaDescription: seoRow.metaDescription,
+          ogTitle: seoRow.ogTitle,
+          ogDescription: seoRow.ogDescription,
+          ogImage: seoRow.ogImage,
+          canonicalUrl: seoRow.canonicalUrl,
+        }
+      : null;
+
+    const sectionOrder: string[] = JSON.parse(config.sectionOrder || "[]");
+
+    return {
+      hero: config.hero ? parseLandingHero(config.hero) : { enabled: false, title: "", subtitle: "", description: "", ctaText: "", ctaLink: "", media: [] },
+      featuredProducts: config.featured ? parseLandingFeatured(config.featured) : { enabled: false, title: "", subtitle: "" },
+      collectionsSection: config.collectionHeader ? parseLandingCollectionHeader(config.collectionHeader) : { enabled: false, title: "", subtitle: "" },
+      aboutSection: config.brandStory ? parseLandingBrandStory(config.brandStory) : { enabled: false, title: "", subtitle: "", description: "", image: "" },
+      testimonialsSection: config.testimonialHeader ? parseLandingTestimonialHeader(config.testimonialHeader) : { enabled: false, title: "", subtitle: "" },
+      newsletter: config.newsletter ? parseLandingNewsletter(config.newsletter) : { enabled: false, title: "", subtitle: "", description: "", placeholder: "", buttonText: "" },
+      moroccanMoment: config.moroccanMoment
+        ? { enabled: config.moroccanMoment.enabled, title: config.moroccanMoment.title, subtitle: config.moroccanMoment.subtitle, description: config.moroccanMoment.description }
+        : { enabled: false, title: "", subtitle: "", description: "" },
+      finalCta: config.finalCta
+        ? { enabled: config.finalCta.enabled, subtitle: config.finalCta.subtitle, title: config.finalCta.title, description: config.finalCta.description, buttonText: config.finalCta.buttonText, buttonLink: config.finalCta.buttonLink }
+        : { enabled: false, subtitle: "", title: "", description: "", buttonText: "", buttonLink: "" },
+      seo,
+      sectionOrder,
+    };
+  } catch (error) {
+    logError(error, "Database error in getLandingContent");
+    return {
+      hero: { enabled: false, title: "", subtitle: "", description: "", ctaText: "", ctaLink: "", media: [] },
+      featuredProducts: { enabled: false, title: "", subtitle: "" },
+      collectionsSection: { enabled: false, title: "", subtitle: "" },
+      aboutSection: { enabled: false, title: "", subtitle: "", description: "", image: "" },
+      testimonialsSection: { enabled: false, title: "", subtitle: "" },
+      newsletter: { enabled: false, title: "", subtitle: "", description: "", placeholder: "", buttonText: "" },
+      moroccanMoment: { enabled: false, title: "", subtitle: "", description: "" },
+      finalCta: { enabled: false, subtitle: "", title: "", description: "", buttonText: "", buttonLink: "" },
+      seo: null,
+      sectionOrder: [],
+    };
+  }
+});
+

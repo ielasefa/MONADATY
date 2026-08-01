@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type Supplier = {
   id: string;
@@ -16,6 +17,7 @@ type Supplier = {
 
 export function SuppliersClient({ suppliers: initial }: { suppliers: Supplier[] }) {
   const router = useRouter();
+  const { t } = useTranslation("inventory");
   const [search, setSearch] = useState("");
   const [suppliers, setSuppliers] = useState(initial);
 
@@ -38,18 +40,18 @@ export function SuppliersClient({ suppliers: initial }: { suppliers: Supplier[] 
     <div>
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="luxury-label mb-2">Inventory</p>
-          <h1 className="text-3xl font-semibold tracking-tight text-white">Suppliers</h1>
-          <p className="mt-1 text-sm text-muted">{suppliers.length} suppliers</p>
+          <p className="luxury-label mb-2">{t("inventory", "Inventory")}</p>
+          <h1 className="text-3xl font-semibold tracking-tight text-white">{t("suppliers", "Suppliers")}</h1>
+          <p className="mt-1 text-sm text-muted">{suppliers.length} {t("suppliers_count", "suppliers")}</p>
         </div>
         <Link
           href="/admin/inventory/suppliers/new"
           className="btn-primary inline-flex h-12 items-center rounded-button px-5 text-xs font-semibold uppercase tracking-[0.1em]"
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="mr-2">
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="mr-2">
             <path d="M12 5v14M5 12h14" />
           </svg>
-          t("add_supplier", "Add Supplier")
+          {t("add_supplier", "Add Supplier")}
         </Link>
       </div>
 
@@ -92,6 +94,7 @@ export function SuppliersClient({ suppliers: initial }: { suppliers: Supplier[] 
                   <td className="px-5 py-4 text-muted">{s.phone || "\u2014"}</td>
                   <td className="px-5 py-4">
                     <button
+                      aria-label={`${s.active ? "Deactivate" : "Activate"} ${s.name}`}
                       onClick={() => toggleStatus(s.id, s.active)}
                       className={`inline-flex rounded-full px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.15em] transition-all ${
                         s.active

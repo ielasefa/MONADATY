@@ -9,7 +9,7 @@ export default function ProductError({ reset }: { error: Error & { digest?: stri
     <div className="container-premium flex min-h-[60vh] items-center justify-center py-20 animate-fade-in">
       <div className="border border-ivory/[0.06] bg-black-surface rounded-md px-12 py-16 max-w-lg text-center stagger-1">
         <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-md border border-burgundy/20 bg-burgundy/10">
-          <svg className="h-7 w-7 text-burgundy" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <svg aria-hidden="true" className="h-7 w-7 text-burgundy" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <circle cx="12" cy="12" r="10" />
             <path d="M12 8v4M12 16h.01" strokeLinecap="round" strokeLinejoin="round" />
           </svg>

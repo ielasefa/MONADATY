@@ -1,6 +1,7 @@
 import { logError } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthenticatedAdmin } from "@/lib/auth";
+import { requireOrigin } from "@/lib/csrf";
 import { getDeviceSessions, terminateSession, terminateOtherSessions } from "@/lib/device-sessions";
 import { SESSION_COOKIE } from "@/lib/auth";
 
@@ -20,6 +21,9 @@ export async function GET() {
 }
 
 export async function DELETE(request: NextRequest) {
+  const csrfError = requireOrigin(request);
+  if (csrfError) return csrfError;
+
   const admin = await getAuthenticatedAdmin();
   if (!admin) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

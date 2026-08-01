@@ -59,9 +59,9 @@ export function KpiCards({ cards }: Props) {
                   <span
                     className={`flex items-center gap-0.5 text-[0.6rem] font-medium ${
                       card.trendDir === "up"
-                        ? "text-emerald-400"
+                        ? "text-white/80"
                         : card.trendDir === "down"
-                          ? "text-red-400"
+                          ? "text-burgundy"
                           : "text-white/50"
                     }`}
                   >

@@ -10,6 +10,7 @@ return (
   <div className="mx-auto max-w-md text-center">
     <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-burgundy/18 bg-burgundy/8">
     <svg
+      aria-hidden="true"
       className="h-7 w-7 text-burgundy/70"
       viewBox="0 0 24 24"
       fill="none"
@@ -17,7 +18,6 @@ return (
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
-      aria-hidden="true"
     >
       <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
     </svg>

@@ -1,6 +1,7 @@
 import { logError } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthenticatedAdmin } from "@/lib/auth";
+import { requireOrigin } from "@/lib/csrf";
 import {
   getAllTranslations,
   getTranslationStats,
@@ -36,6 +37,9 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const csrfError = requireOrigin(request);
+    if (csrfError) return csrfError;
+
     const admin = await getAuthenticatedAdmin();
     if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     if (admin.role !== "SUPER_ADMIN") {
@@ -81,6 +85,9 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
+    const csrfError = requireOrigin(request);
+    if (csrfError) return csrfError;
+
     const admin = await getAuthenticatedAdmin();
     if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     if (admin.role !== "SUPER_ADMIN") {

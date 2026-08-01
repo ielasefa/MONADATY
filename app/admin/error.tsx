@@ -14,7 +14,7 @@ export default function AdminError({
     <div className="flex min-h-screen items-center justify-center p-8">
       <div className="max-w-md text-center">
         <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-burgundy/10">
-          <svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-8 w-8 text-burgundy">
+          <svg aria-hidden="true" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-8 w-8 text-burgundy">
             <circle cx="12" cy="12" r="10" />
             <path d="M15 9l-6 6M9 9l6 6" />
           </svg>

@@ -339,7 +339,7 @@ function Toggle({ name, checked, onChange, label }: { name: string; checked?: bo
   const isControlled = checked !== undefined;
   return (
     <label className="flex items-center gap-3 cursor-pointer">
-      <input type="checkbox" name={name} defaultChecked={!isControlled ? checked : undefined} checked={isControlled ? checked : undefined} onChange={isControlled ? (e) => onChange?.(e.target.checked) : undefined} value="true" className="h-4 w-4 rounded border-white/20 accent-red" />
+      <input type="checkbox" name={name} defaultChecked={!isControlled ? checked : undefined} checked={isControlled ? checked : undefined} onChange={isControlled ? (e) => onChange?.(e.target.checked) : undefined} value="true" className="h-4 w-4 rounded border-white/20 accent-gold" />
       <span className="text-sm text-muted">{label}</span>
     </label>
   );
@@ -596,7 +596,7 @@ function TestimonialsSectionForm({ section, onChange, onSave, testimonials, onSa
                 <Input label={t("order")} name="order" defaultValue={String(testimonial.order)} type="number" />
                 <label className="flex items-center gap-2 text-sm text-muted pt-6">
                   <input type="hidden" name="visible" value="false" />
-                  <input type="checkbox" name="visible" defaultChecked={testimonial.visible} value="true" className="h-4 w-4 rounded border-white/20 accent-red" />
+                  <input type="checkbox" name="visible" defaultChecked={testimonial.visible} value="true" className="h-4 w-4 rounded border-white/20 accent-gold" />
                   {t("visible")}
                 </label>
                 <button type="submit" className="btn-primary">{t("update")}</button>

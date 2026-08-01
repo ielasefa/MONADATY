@@ -64,16 +64,16 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
             href={item.href}
             className={`group relative flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
               isActive(item.href)
-                ? "border-l-[3px] border-red bg-red/10 pl-[9px] text-white"
-                : "border-l-[3px] border-transparent text-white/50 hover:border-red/40 hover:bg-red/5 hover:text-white"
+                ? "border-l-[3px] border-burgundy bg-burgundy/10 pl-[9px] text-white"
+                : "border-l-[3px] border-transparent text-white/50 hover:border-burgundy/40 hover:bg-burgundy/5 hover:text-white"
             }`}
           >
-            <span aria-hidden="true" className={`w-5 text-center text-base transition-colors ${isActive(item.href) ? "text-red" : "text-white/50 group-hover:text-red"}`}>
+            <span aria-hidden="true" className={`w-5 text-center text-base transition-colors ${isActive(item.href) ? "text-burgundy" : "text-white/50 group-hover:text-burgundy"}`}>
               {item.icon}
             </span>
             {item.label}
             {isActive(item.href) && (
-              <div className="absolute right-3 h-1.5 w-1.5 rounded-full bg-red shadow-[0_0_6px_rgba(193,18,31,0.5)]" />
+              <div className="absolute right-3 h-1.5 w-1.5 rounded-full bg-burgundy shadow-[0_0_6px_rgba(155,38,56,0.5)]" />
             )}
           </Link>
         ))}
@@ -85,9 +85,9 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
         <button
           onClick={handleSignOut}
           disabled={isSigningOut}
-          className="group flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-white/50 transition-all duration-200 hover:bg-red/10 hover:text-red disabled:opacity-50 disabled:pointer-events-none"
+          className="group flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-white/50 transition-all duration-200 hover:bg-burgundy/10 hover:text-burgundy disabled:opacity-50 disabled:pointer-events-none"
         >
-          <span aria-hidden="true" className="w-5 text-center text-base transition-colors group-hover:text-red">&#9211;</span>
+          <span aria-hidden="true" className="w-5 text-center text-base transition-colors group-hover:text-burgundy">&#9211;</span>
           {t("sign_out")}
         </button>
       </div>

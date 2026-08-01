@@ -1,6 +1,7 @@
 import { logError } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthenticatedAdmin } from "@/lib/auth";
+import { requireOrigin } from "@/lib/csrf";
 import { getAllLoginHistory, countLoginHistory } from "@/lib/login-history";
 
 export async function GET(request: NextRequest) {
@@ -11,8 +12,8 @@ export async function GET(request: NextRequest) {
 
   try {
     const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get("limit") ?? "100");
-    const offset = parseInt(searchParams.get("offset") ?? "0");
+    const limit = parseInt(searchParams.get("limit") ?? "100", 10);
+    const offset = parseInt(searchParams.get("offset") ?? "0", 10);
 
     const [history, total] = await Promise.all([
       getAllLoginHistory(limit, offset),
@@ -27,6 +28,9 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const csrfError = requireOrigin(request);
+  if (csrfError) return csrfError;
+
   const admin = await getAuthenticatedAdmin();
   if (!admin) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

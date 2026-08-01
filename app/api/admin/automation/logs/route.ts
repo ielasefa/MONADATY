@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get("limit") ?? "100");
+    const limit = parseInt(searchParams.get("limit") ?? "100", 10);
 
     const logs = await getAllJobLogs(limit);
     return NextResponse.json({ logs });

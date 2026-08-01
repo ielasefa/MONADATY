@@ -122,7 +122,7 @@ export function SupplierForm({ supplier }: { supplier: Supplier | null }) {
             disabled={saving}
             className="btn-primary h-12 rounded-button px-6 text-xs font-semibold uppercase tracking-[0.1em] disabled:opacity-50"
           >
-            {saving ? t("saving") : : isNew ? "Create Supplier" : `${t("update")} ${t("supplier").toLowerCase()}`}
+            {saving ? t("saving") : isNew ? "Create Supplier" : `${t("update")} ${t("supplier").toLowerCase()}`}
           </button>
           <Link
             href="/admin/inventory/suppliers"

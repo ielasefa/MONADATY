@@ -176,9 +176,9 @@ export function ProductForm() {
   };
 
   const inventoryStatus = (() => {
-    if (form.stock <= 0) return { label: t("out_of_stock_label"), color: "text-red", dot: "bg-red" };
+    if (form.stock <= 0) return { label: t("out_of_stock_label"), color: "text-burgundy", dot: "bg-burgundy" };
     if (form.stock < form.lowStockThreshold) return { label: t("low_stock"), color: "text-gold", dot: "bg-gold" };
-    return { label: t("in_stock_label"), color: "text-emerald", dot: "bg-emerald" };
+    return { label: t("in_stock_label"), color: "text-white/80", dot: "bg-white/20" };
   })();
 
   const profit = (() => {
@@ -302,7 +302,7 @@ export function ProductForm() {
         <div className="space-y-4">
           <div>
             <label htmlFor="p-name" className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-muted">
-              Product Name <span className="text-red">*</span>
+              Product Name <span className="text-burgundy">*</span>
             </label>
             <input
               id="p-name"
@@ -406,7 +406,7 @@ export function ProductForm() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <label htmlFor="p-regular" className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-muted">
-              Regular Price <span className="text-red">*</span>
+              Regular Price <span className="text-burgundy">*</span>
             </label>
             <div className="relative">
               <input
@@ -475,13 +475,13 @@ export function ProductForm() {
         <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
           <div className="rounded-lg border border-white/[0.06] bg-bg p-3">
             <p className="text-xs text-muted">{t("profit")}</p>
-            <p className={`mt-1 text-sm font-semibold ${profit >= 0 ? "text-emerald" : "text-red"}`}>
+            <p className={`mt-1 text-sm font-semibold ${profit >= 0 ? "text-white/80" : "text-burgundy"}`}>
               {profit.toFixed(2)} {form.currency}
             </p>
           </div>
           <div className="rounded-lg border border-white/[0.06] bg-bg p-3">
             <p className="text-xs text-muted">{t("margin")}</p>
-            <p className={`mt-1 text-sm font-semibold ${margin >= 0 ? "text-emerald" : "text-red"}`}>
+            <p className={`mt-1 text-sm font-semibold ${margin >= 0 ? "text-white/80" : "text-burgundy"}`}>
               {margin.toFixed(1)}%
             </p>
           </div>

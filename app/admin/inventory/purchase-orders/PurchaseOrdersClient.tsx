@@ -65,10 +65,10 @@ export function PurchaseOrdersClient({
           href="/admin/inventory/purchase-orders/new"
           className="btn-primary inline-flex h-12 items-center rounded-button px-5 text-xs font-semibold uppercase tracking-[0.1em]"
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="mr-2">
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="mr-2">
             <path d="M12 5v14M5 12h14" />
           </svg>
-          t("new_purchase_order", "New Purchase Order")
+          {t("new_purchase_order", "New Purchase Order")}
         </Link>
       </div>
 

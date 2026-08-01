@@ -251,7 +251,7 @@ export default function ProductsPage() {
           href="/admin/products/add"
           className="btn-gold inline-flex h-10 items-center rounded-button px-5 text-xs font-semibold uppercase tracking-[0.1em]"
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="mr-2">
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="mr-2">
             <path d="M12 5v14M5 12h14" />
           </svg>
           {t("add_product")}
@@ -265,12 +265,12 @@ export default function ProductsPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder={t("search_products")}
-          className="min-w-[200px] flex-1 rounded-button border border-white/[0.06] bg-bg px-4 py-2 text-sm text-white outline-none transition focus:border-gold/30"
+          className="input-premium min-w-[200px] flex-1"
         />
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
-          className="rounded-button border border-white/[0.06] bg-bg px-3 py-2 text-xs text-white outline-none"
+          className="input-premium w-auto min-w-[130px]"
         >
           <option value="">{t("all_statuses")}</option>
           <option value="Active">{t("active")}</option>
@@ -340,7 +340,7 @@ export default function ProductsPage() {
               setBulkAction(e.target.value);
               setBulkValue("");
             }}
-            className="rounded-button border border-white/[0.06] bg-bg px-3 py-1.5 text-xs text-white outline-none"
+            className="rounded-button border border-white/[0.06] bg-[#171717] px-3 py-1.5 text-xs text-white outline-none transition focus:border-gold/30 focus:ring-1 focus:ring-gold/20"
           >
             <option value="">{t("bulk_actions")}</option>
             <option value="delete">{t("delete")}</option>
@@ -355,7 +355,7 @@ export default function ProductsPage() {
             <select
               value={bulkValue}
               onChange={(e) => setBulkValue(e.target.value)}
-              className="rounded-button border border-white/[0.06] bg-bg px-3 py-1.5 text-xs text-white outline-none"
+              className="rounded-button border border-white/[0.06] bg-[#171717] px-3 py-1.5 text-xs text-white outline-none transition focus:border-gold/30 focus:ring-1 focus:ring-gold/20"
             >
               <option value="">Select category...</option>
               {categories.map((cat) => (
@@ -367,7 +367,7 @@ export default function ProductsPage() {
             <select
               value={bulkValue}
               onChange={(e) => setBulkValue(e.target.value)}
-              className="rounded-button border border-white/[0.06] bg-bg px-3 py-1.5 text-xs text-white outline-none"
+              className="rounded-button border border-white/[0.06] bg-[#171717] px-3 py-1.5 text-xs text-white outline-none transition focus:border-gold/30 focus:ring-1 focus:ring-gold/20"
             >
               <option value="">Select collection...</option>
               {collections.map((col) => (
@@ -517,7 +517,7 @@ export default function ProductsPage() {
                       <span className="text-4xl">📦</span>
                       <p>{t("no_products")}</p>
                       <Link href="/admin/products/add" className="btn-gold h-10 rounded-button px-5 text-xs font-semibold uppercase tracking-[0.1em]">
-                        t("add_your_first_product", "Add Your First Product")
+                        {t("add_your_first_product", "Add Your First Product")}
                       </Link>
                     </div>
                   </td>

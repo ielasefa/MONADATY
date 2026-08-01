@@ -166,7 +166,7 @@ export function AdminManagement({ admins: initialAdmins }: { admins: AdminRecord
                 <td className="px-6 py-4 font-medium text-white">{a.name}</td>
                 <td className="px-6 py-4 text-muted">{a.email}</td>
         <td className="px-6 py-4">
-  <span className={a.role === "SUPER_ADMIN" ? "badge-gold" : "inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.12em] border border-white/[0.06] bg-white/[0.04] text-ivory/70"}>
+  <span className={a.role === "SUPER_ADMIN" ? "badge-gold" : "inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.12em] border border-white/[0.06] bg-white/[0.04] text-white/70"}>
     {a.role === "SUPER_ADMIN" ? t("super_admin") : t("admin_role")}
   </span>
 </td>

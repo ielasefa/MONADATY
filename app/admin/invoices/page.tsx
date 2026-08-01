@@ -128,11 +128,11 @@ export default function AdminInvoicesPage() {
         </div>
         <div className="flex gap-3">
           {selected.size > 0 && (
-            <button onClick={handleBulkCancel} className="btn-secondary h-10 rounded-button px-4 text-xs font-semibold uppercase tracking-[0.1em]">
+            <button aria-label={t("cancel")} onClick={handleBulkCancel} className="btn-secondary h-10 rounded-button px-4 text-xs font-semibold uppercase tracking-[0.1em]">
               {t("cancel")} ({selected.size})
-            </button>
+           </button>
           )}
-          <button onClick={handleExportCsv} className="btn-secondary h-10 rounded-button px-4 text-xs font-semibold uppercase tracking-[0.1em]">
+          <button aria-label={t("export_csv")} onClick={handleExportCsv} className="btn-secondary h-10 rounded-button px-4 text-xs font-semibold uppercase tracking-[0.1em]">
             {t("csv_export")}
           </button>
         </div>
@@ -141,7 +141,7 @@ export default function AdminInvoicesPage() {
       {/* Search & Filters */}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row">
         <div className="relative flex-1">
-          <svg className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg aria-hidden="true" className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="11" cy="11" r="8" />
             <path d="m21 21-4.35-4.35" />
           </svg>
@@ -150,13 +150,13 @@ export default function AdminInvoicesPage() {
             placeholder={t("search_invoices")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-button border border-white/[0.06] bg-card py-2.5 pl-10 pr-4 text-sm text-white placeholder-muted outline-none transition focus:border-gold/30"
+            className="input-premium w-full pl-10"
           />
         </div>
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="w-full rounded-button border border-white/[0.06] bg-card px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30 sm:w-40"
+          className="input-premium w-full sm:w-40"
         >
           <option value="all">{t("all_status")}</option>
           <option value="Issued">{t("issued")}</option>
@@ -174,6 +174,7 @@ export default function AdminInvoicesPage() {
                 <th className="w-10 px-4 py-3">
                   <input
                     type="checkbox"
+                    aria-label={t("select_all")}
                     checked={data ? data.invoices.length > 0 && selected.size === data.invoices.length : false}
                     onChange={handleSelectAll}
                     className="h-4 w-4 rounded border-white/20 bg-white/5 accent-gold"
@@ -257,6 +258,7 @@ export default function AdminInvoicesPage() {
                           )}
                           {inv.status === "Issued" && (
                             <button
+                              aria-label={`${t("cancel")} ${inv.invoiceNumber}`}
                               onClick={async () => {
                                 if (confirm(t("cancel_invoice_confirm"))) {
                                   await fetch(`/api/admin/invoices/${inv.id}/cancel`, { method: "POST" });
@@ -266,7 +268,7 @@ export default function AdminInvoicesPage() {
                               className="text-xs font-semibold uppercase tracking-[0.1em] text-burgundy transition hover:brightness-110"
                             >
                               {t("cancel")}
-                            </button>
+                           </button>
                           )}
                         </div>
                       </td>
@@ -288,12 +290,13 @@ export default function AdminInvoicesPage() {
       {data && data.totalPages > 1 && (
         <div className="mt-6 flex items-center justify-center gap-2">
           <button
+            aria-label={t("previous")}
             disabled={page === 0}
             onClick={() => setPage((p) => p - 1)}
             className="btn-secondary h-10 rounded-button px-4 text-xs font-semibold uppercase tracking-[0.1em] disabled:opacity-30"
           >
             {t("previous")}
-          </button>
+         </button>
           <span className="px-4 text-sm text-muted">
             {t("page")} {page + 1} {t("of")} {data.totalPages}
           </span>

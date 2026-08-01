@@ -165,7 +165,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
   return (
     <div className="space-y-4">
       {error && (
-        <div className="rounded-lg border border-red/20 bg-red/10 px-4 py-2 text-xs text-red">
+        <div className="rounded-lg border border-burgundy/20 bg-burgundy/10 px-4 py-2 text-xs text-burgundy">
           {error}
         </div>
       )}
@@ -293,7 +293,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
                 type="checkbox"
                 checked={newVariant.isDefault}
                 onChange={(e) => setNewVariant((prev) => ({ ...prev, isDefault: e.target.checked }))}
-                className="h-4 w-4 rounded border-white/20 bg-white/5 accent-yellow"
+                className="h-4 w-4 rounded border-white/20 bg-white/5 accent-gold"
               />
               <span className="text-xs text-white">{t("default_variant")}</span>
            </label>
@@ -425,7 +425,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
                     <td className="px-3 py-2 text-center">
                       <div className="flex items-center justify-center gap-1.5">
                         <span className={`inline-flex h-2 w-2 rounded-full ${
-                          variant.stock <= 0 ? "bg-red" : variant.stock < 5 ? "bg-yellow" : "bg-emerald-400/10"
+                          variant.stock <= 0 ? "bg-burgundy" : variant.stock < 5 ? "bg-gold" : "bg-white/20"
                         }`} />
                         <input
                           type="number"
@@ -487,7 +487,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
                         <button
                           type="button"
                           onClick={() => handleDeleteVariant(variant.id!)}
-                          className="rounded px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.1em] text-red/60 transition hover:text-red"
+                          className="rounded px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.1em] text-burgundy/60 transition hover:text-burgundy"
                           title={t("delete_variant")}
                         >
                           ✕

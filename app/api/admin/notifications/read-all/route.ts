@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth-guard";
+import { requireOrigin } from "@/lib/csrf";
 
-export async function POST() {
+export async function POST(request: Request) {
+  const csrfError = requireOrigin(request);
+  if (csrfError) return csrfError;
+
   const authError = await requireAdmin();
   if (authError) return authError;
 

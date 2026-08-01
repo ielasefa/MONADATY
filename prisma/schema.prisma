@@ -991,3 +991,187 @@ model LandingSection {
   @@index([section, enabled, position])
   @@map("landing_sections")
 }
+
+model LandingConfig {
+  id           String    @id @default(uuid())
+  status       String    @default("draft")
+  sectionOrder String    @default("[]")
+  createdAt    DateTime  @default(now())
+  publishedAt  DateTime?
+  publishedBy  String    @default("")
+  updatedAt    DateTime  @updatedAt
+
+  hero             LandingHero?
+  brandStory       LandingBrandStory?
+  featured         LandingFeatured?
+  collectionHeader LandingCollectionHeader?
+  testimonialHeader LandingTestimonialHeader?
+  moroccanMoment   LandingMoroccanMoment?
+  finalCta         LandingFinalCta?
+  newsletter       LandingNewsletter?
+  seo              LandingSeo?
+  versions         LandingVersion[]
+
+  @@index([status])
+  @@map("landing_configs")
+}
+
+model LandingSeo {
+  id             String   @id @default(uuid())
+  configId       String   @unique
+  config         LandingConfig @relation(fields: [configId], references: [id], onDelete: Cascade)
+  title          String   @default("")
+  metaDescription String  @default("")
+  ogTitle        String   @default("")
+  ogDescription  String   @default("")
+  ogImage        String   @default("")
+  canonicalUrl   String   @default("")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("landing_seo")
+}
+
+model LandingVersion {
+  id           String   @id @default(uuid())
+  configId     String
+  config       LandingConfig @relation(fields: [configId], references: [id], onDelete: Cascade)
+  version      Int      @default(1)
+  status       String   @default("draft")
+  label        String   @default("")
+  data         String   @default("{}")
+  createdBy    String   @default("")
+  createdAt    DateTime @default(now())
+
+  @@unique([configId, version])
+  @@index([configId, createdAt])
+  @@map("landing_versions")
+}
+
+model LandingHero {
+  id              String   @id @default(uuid())
+  configId        String   @unique
+  config          LandingConfig @relation(fields: [configId], references: [id], onDelete: Cascade)
+  enabled         Boolean  @default(true)
+  title           String   @default("")
+  subtitle        String   @default("")
+  description     String   @default("")
+  ctaText         String   @default("")
+  ctaLink         String   @default("")
+  ctaTarget       String   @default("_self")
+  ctaVariant      String   @default("primary")
+  ctaIcon         String   @default("")
+  secondaryCtaText    String   @default("")
+  secondaryCtaLink    String   @default("")
+  secondaryCtaTarget  String   @default("_self")
+  alignment       String   @default("left")
+  overlayOpacity  Float    @default(0.0)
+  background      String   @default("")
+  media           String[] @default([])
+
+  @@map("landing_heroes")
+}
+
+model LandingBrandStory {
+  id          String   @id @default(uuid())
+  configId    String   @unique
+  config      LandingConfig @relation(fields: [configId], references: [id], onDelete: Cascade)
+  enabled     Boolean  @default(true)
+  title       String   @default("")
+  subtitle    String   @default("")
+  description String   @default("")
+  image       String   @default("")
+  buttonText  String   @default("")
+  buttonLink  String   @default("")
+  buttonTarget String  @default("_self")
+
+  @@map("landing_brand_stories")
+}
+
+model LandingFeatured {
+  id        String   @id @default(uuid())
+  configId  String   @unique
+  config    LandingConfig @relation(fields: [configId], references: [id], onDelete: Cascade)
+  enabled   Boolean  @default(true)
+  title     String   @default("")
+  subtitle  String   @default("")
+  buttonText  String   @default("")
+  buttonLink  String   @default("")
+
+  @@map("landing_featured")
+}
+
+model LandingCollectionHeader {
+  id        String   @id @default(uuid())
+  configId  String   @unique
+  config    LandingConfig @relation(fields: [configId], references: [id], onDelete: Cascade)
+  enabled   Boolean  @default(true)
+  title     String   @default("")
+  subtitle  String   @default("")
+  buttonText  String   @default("")
+  buttonLink  String   @default("")
+
+  @@map("landing_collection_headers")
+}
+
+model LandingTestimonialHeader {
+  id        String   @id @default(uuid())
+  configId  String   @unique
+  config    LandingConfig @relation(fields: [configId], references: [id], onDelete: Cascade)
+  enabled   Boolean  @default(true)
+  title     String   @default("")
+  subtitle  String   @default("")
+  buttonText  String   @default("")
+  buttonLink  String   @default("")
+
+  @@map("landing_testimonial_headers")
+}
+
+model LandingMoroccanMoment {
+  id          String   @id @default(uuid())
+  configId    String   @unique
+  config      LandingConfig @relation(fields: [configId], references: [id], onDelete: Cascade)
+  enabled     Boolean  @default(true)
+  title       String   @default("")
+  subtitle    String   @default("")
+  description String   @default("")
+  media       String   @default("")
+  quote       String   @default("")
+  buttonText  String   @default("")
+  buttonLink  String   @default("")
+  buttonTarget String  @default("_self")
+
+  @@map("landing_moroccan_moments")
+}
+
+model LandingFinalCta {
+  id          String   @id @default(uuid())
+  configId    String   @unique
+  config      LandingConfig @relation(fields: [configId], references: [id], onDelete: Cascade)
+  enabled     Boolean  @default(true)
+  subtitle    String   @default("")
+  title       String   @default("")
+  description String   @default("")
+  buttonText  String   @default("")
+  buttonLink  String   @default("")
+  buttonTarget String  @default("_self")
+  buttonVariant String @default("primary")
+  background  String   @default("")
+
+  @@map("landing_final_ctas")
+}
+
+model LandingNewsletter {
+  id          String   @id @default(uuid())
+  configId    String   @unique
+  config      LandingConfig @relation(fields: [configId], references: [id], onDelete: Cascade)
+  enabled     Boolean  @default(true)
+  title       String   @default("")
+  subtitle    String   @default("")
+  description String   @default("")
+  placeholder String   @default("")
+  buttonText  String   @default("")
+  buttonTarget String  @default("_self")
+
+  @@map("landing_newsletters")
+}

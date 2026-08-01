@@ -113,8 +113,8 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
   const statusBadge = (status: string) => {
     const colors: Record<string, string> = {
       Draft: "bg-white/10 text-white/50 border-white/[0.06]",
-      Issued: "bg-yellow/10 text-yellow border-yellow/20",
-      Cancelled: "bg-red/10 text-red border-red/20",
+      Issued: "bg-gold/10 text-gold border-gold/20",
+      Cancelled: "bg-burgundy/10 text-burgundy border-burgundy/20",
     };
     return (
       <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[0.6rem] font-semibold uppercase tracking-[0.1em] ${colors[status] || colors.Draft}`}>

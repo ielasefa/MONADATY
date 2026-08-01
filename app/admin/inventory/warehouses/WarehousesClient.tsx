@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type Warehouse = {
   id: string;
@@ -16,6 +17,7 @@ type Warehouse = {
 
 export function WarehousesClient({ warehouses: initial }: { warehouses: Warehouse[] }) {
   const router = useRouter();
+  const { t } = useTranslation("inventory");
   const [search, setSearch] = useState("");
   const [warehouses, setWarehouses] = useState(initial);
 
@@ -38,18 +40,18 @@ export function WarehousesClient({ warehouses: initial }: { warehouses: Warehous
     <div>
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="luxury-label mb-2">Inventory</p>
-          <h1 className="text-3xl font-semibold tracking-tight text-white">Warehouses</h1>
-          <p className="mt-1 text-sm text-muted">{warehouses.length} warehouses</p>
+          <p className="luxury-label mb-2">{t("inventory", "Inventory")}</p>
+          <h1 className="text-3xl font-semibold tracking-tight text-white">{t("warehouses", "Warehouses")}</h1>
+          <p className="mt-1 text-sm text-muted">{warehouses.length} {t("warehouses_count", "warehouses")}</p>
         </div>
         <Link
           href="/admin/inventory/warehouses/new"
           className="btn-primary inline-flex h-12 items-center rounded-button px-5 text-xs font-semibold uppercase tracking-[0.1em]"
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="mr-2">
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="mr-2">
             <path d="M12 5v14M5 12h14" />
           </svg>
-          t("add_warehouse", "Add Warehouse")
+          {t("add_warehouse", "Add Warehouse")}
         </Link>
       </div>
 
@@ -92,6 +94,7 @@ export function WarehousesClient({ warehouses: initial }: { warehouses: Warehous
                   <td className="px-5 py-4 text-muted">{w.manager || "\u2014"}</td>
                   <td className="px-5 py-4">
                     <button
+                      aria-label={`${w.isActive ? "Deactivate" : "Activate"} ${w.name}`}
                       onClick={() => toggleStatus(w.id, w.isActive)}
                       className={`inline-flex rounded-full px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.15em] transition-all ${
                         w.isActive
@@ -99,7 +102,7 @@ export function WarehousesClient({ warehouses: initial }: { warehouses: Warehous
                           : "badge-red bg-burgundy/10 text-burgundy border border-burgundy/20"
                       }`}
                     >
-                      {w.isActive ? "Active" : "Inactive"}
+                      {w.isActive ? t("active", "Active") : t("inactive", "Inactive")}
                     </button>
                   </td>
                   <td className="px-5 py-4 text-right">
@@ -107,7 +110,7 @@ export function WarehousesClient({ warehouses: initial }: { warehouses: Warehous
                       href={`/admin/inventory/warehouses/${w.id}`}
                       className="rounded-button px-3 py-1.5 text-sm font-medium text-gold transition hover:bg-gold/10"
                     >
-                      t("edit")
+                      {t("edit")}
                     </Link>
                   </td>
                 </motion.tr>

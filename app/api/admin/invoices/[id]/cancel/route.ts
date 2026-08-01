@@ -2,12 +2,16 @@ import { logError } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { isAuthenticated } from "@/lib/auth";
+import { requireOrigin } from "@/lib/csrf";
 import { recordInvoiceEvent } from "@/lib/invoice";
 
 export async function POST(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  const csrfError = requireOrigin(req);
+  if (csrfError) return csrfError;
+
   const authed = await isAuthenticated();
   if (!authed) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

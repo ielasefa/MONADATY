@@ -47,6 +47,7 @@ export function WishlistPageClient({ products }: { products: Product[] }) {
           <ProductCard
             key={p.id}
             id={p.id}
+            slug={p.slug ?? p.id}
             name={p.name}
             price={p.price}
             image={p.image}

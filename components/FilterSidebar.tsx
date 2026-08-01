@@ -81,7 +81,7 @@ export const FilterSidebar = memo(function FilterSidebar({
               aria-label="Minimum price"
               value={localMin || ""}
               onChange={(e) => setLocalMin(Number(e.target.value))}
-              className="h-10 w-full rounded-input border border-white/[0.08] bg-[#1E1E1E] px-3 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/30 focus:border-gold/50 focus:ring-1 focus:ring-gold/20 caret-white"
+              className="h-10 w-full rounded-input border border-white/[0.08] bg-[#1E1E1E] px-3 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/35 focus:border-gold/50 focus:ring-1 focus:ring-gold/20 caret-white"
               style={{ WebkitTextFillColor: "#FFFFFF", caretColor: "#FFFFFF" }}
             />
           </div>
@@ -94,7 +94,7 @@ export const FilterSidebar = memo(function FilterSidebar({
               aria-label="Maximum price"
               value={localMax || ""}
               onChange={(e) => setLocalMax(Number(e.target.value))}
-              className="h-10 w-full rounded-input border border-white/[0.08] bg-[#1E1E1E] px-3 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/30 focus:border-gold/50 focus:ring-1 focus:ring-gold/20 caret-white"
+              className="h-10 w-full rounded-input border border-white/[0.08] bg-[#1E1E1E] px-3 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/35 focus:border-gold/50 focus:ring-1 focus:ring-gold/20 caret-white"
               style={{ WebkitTextFillColor: "#FFFFFF", caretColor: "#FFFFFF" }}
             />
           </div>
@@ -120,7 +120,7 @@ export const FilterSidebar = memo(function FilterSidebar({
               onChange={(e) => onAvailabilityChange(e.target.checked)}
               className="peer sr-only"
             />
-            <div className="h-full w-full rounded-full border border-white/[0.1] bg-[#252525] transition-colors duration-200 peer-checked:border-burgundy peer-checked:bg-burgundy" />
+            <div className="h-full w-full rounded-full border border-white/[0.1] bg-surface transition-colors duration-200 peer-checked:border-burgundy peer-checked:bg-burgundy" />
             <div className="absolute inset-y-0 start-0.5 m-auto h-3 w-3 rounded-full bg-white/50 transition-all duration-200 peer-checked:translate-x-4 peer-checked:bg-white" />
           </div>
           <span className="text-[0.68rem] text-white/55">{t("in_stock_only")}</span>

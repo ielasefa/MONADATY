@@ -8,73 +8,108 @@ import {
   Newsletter,
   FinalCTA,
 } from "@/components/HomepageCommerce";
-import { getProducts, getTestimonials, getSiteSettings, getLandingCollections } from "@/lib/db";
+import { getProducts, getTestimonials, getLandingCollections, getLandingContent } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
+export const metadata = {
+  title: "MONADATY — Premium Moroccan Beverages",
+  description: "Premium Moroccan beverages, crafted with intention. Born in Casablanca.",
+};
+
 export default async function HomePage() {
-  const [settings, testimonialRows, allProducts, landingCollections] =
+  const [content, testimonialRows, allProducts, landingCollections] =
     await Promise.all([
-      getSiteSettings(),
+      getLandingContent(),
       getTestimonials(),
       getProducts(),
       getLandingCollections(),
     ]);
 
-  const hero = settings.hero;
+  // Apply SEO overrides
+  const seoTitle = content.seo?.title;
+  const seoDesc = content.seo?.metaDescription;
+  const ogImage = content.seo?.ogImage;
 
   const testimonials = testimonialRows
     .filter((t) => t.visible)
     .map((t) => ({ id: t.id, name: t.name, role: t.role, content: t.content }));
 
   const shopProducts = allProducts.slice(0, 4);
+  const sectionOrder = content.sectionOrder;
 
   return (
-  <div className="bg-black">
-{/* 02 — Hero */}
-{hero.enabled && <Hero settings={hero} />}
+    <>
+      {seoTitle && <meta property="og:title" content={seoTitle} />}
+      {seoDesc && <meta name="description" content={seoDesc} />}
+      {seoTitle && <meta property="og:title" content={seoTitle} />}
+      {seoDesc && <meta property="og:description" content={seoDesc} />}
+      {ogImage && <meta property="og:image" content={ogImage} />}
+      <div className="bg-black">
+        {(() => {
+          const map: Record<string, React.ReactNode> = {};
 
-{/* 04 — Featured Products */}
-      {shopProducts.length > 0 && <FeaturedProducts products={shopProducts} />}
+          if (content.hero.enabled) {
+            map.hero = <Hero settings={{
+              title: content.hero.title,
+              subtitle: content.hero.subtitle,
+              description: content.hero.description,
+              ctaText: content.hero.ctaText,
+              ctaLink: content.hero.ctaLink,
+              media: content.hero.media,
+            }} />;
+          }
 
-      {/* 05 — Collections */}
-      {landingCollections.length > 0 && (
-        <CollectionsShowcase collections={landingCollections} />
-      )}
+          if (shopProducts.length > 0 && content.featuredProducts.enabled) {
+            map.featured = <FeaturedProducts products={shopProducts} />;
+          }
 
-{/* 06 — Brand Story */}
-      {settings.aboutSection.enabled && (
-        <BrandStory
-          title={settings.aboutSection.title}
-          description={settings.aboutSection.description}
-          image={settings.aboutSection.image}
-        />
-      )}
+          if (landingCollections.length > 0 && content.collectionsSection.enabled) {
+            map.collections = <CollectionsShowcase collections={landingCollections} />;
+          }
 
-      {/* 10 — Customer Notes */}
-      {testimonials.length > 0 && (
-        <SocialProof
-          testimonials={testimonials}
-          title={settings.testimonialsSection?.title ?? ""}
-          subtitle={settings.testimonialsSection?.subtitle ?? ""}
-        />
-      )}
+          if (content.aboutSection.enabled) {
+            map.about = (
+              <BrandStory
+                title={content.aboutSection.title}
+                description={content.aboutSection.description}
+                image={content.aboutSection.image}
+              />
+            );
+          }
 
-      {/* 11 — Moroccan Moment */}
-      <MoroccanMoment />
+          if (testimonials.length > 0 && content.testimonialsSection.enabled) {
+            map.testimonials = (
+              <SocialProof
+                testimonials={testimonials}
+                title={content.testimonialsSection.title}
+                subtitle={content.testimonialsSection.subtitle}
+              />
+            );
+          }
 
-{/* 12 — Newsletter */}
-{settings.newsletter.enabled && (
-  <Newsletter
-    title={settings.newsletter.title}
-    description={settings.newsletter.description}
-    placeholder={settings.newsletter.placeholder}
-    buttonText={settings.newsletter.buttonText}
-  />
-)}
+          if (content.moroccanMoment.enabled) {
+            map.moroccan_moment = <MoroccanMoment />;
+          }
 
-{/* 14 — Final CTA */}
-<FinalCTA />
-    </div>
+          if (content.newsletter.enabled) {
+            map.newsletter = (
+              <Newsletter
+                title={content.newsletter.title}
+                description={content.newsletter.description}
+                placeholder={content.newsletter.placeholder}
+                buttonText={content.newsletter.buttonText}
+              />
+            );
+          }
+
+          if (content.finalCta.enabled) {
+            map.final_cta = <FinalCTA />;
+          }
+
+          return sectionOrder.map((key) => map[key]).filter(Boolean);
+        })()}
+      </div>
+    </>
   );
 }

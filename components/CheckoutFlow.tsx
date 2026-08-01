@@ -158,7 +158,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
       items: items.map((item) => ({
         productId: item.id,
         name: item.name,
-        slug: item.id,
+        slug: item.slug || item.id,
         image: item.image || "",
         quantity: item.quantity,
         unitPrice: item.price,
@@ -192,289 +192,351 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
 
   if (!items.length) {
     return (
-      <div className="grid min-h-[60vh] place-items-center">
+      <motion.div
+        initial={shouldReduce ? false : { opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="flex min-h-[60vh] items-center justify-center"
+      >
         <div className="max-w-lg text-center">
-          <div className="mx-auto mb-8 flex h-16 w-16 items-center justify-center">
-            <svg className="h-8 w-8 text-ivory/8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.2}>
+          <div className="mx-auto mb-8 flex h-20 w-20 items-center justify-center rounded-full border border-white/[0.06] bg-[#1E1E1E]">
+            <svg className="h-8 w-8 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121 0 2.09-.773 2.34-1.872l1.836-8.046A1.125 1.125 0 0018.054 3H5.106m2.394 11.25l-1.5-6h13.5" />
             </svg>
           </div>
-          <h1 className="font-display text-2xl text-ivory md:text-3xl">
+          <h2 className="font-display text-2xl text-white md:text-3xl">
             {t("your_box_empty")}
-          </h1>
-          <p className="mx-auto mt-4 max-w-md text-[0.78rem] leading-relaxed text-ivory/25">
+          </h2>
+          <p className="mx-auto mt-4 max-w-md text-[0.82rem] leading-relaxed text-white/60">
             {t("add_drinks_before_checkout")}
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Link href="/shop" className="btn-primary">
+            <Link href="/shop" className="btn-primary h-12 px-8">
               {t("explore_drinks", "Explore Drinks")}
             </Link>
-            <Link href="/" className="btn-secondary">
+            <Link href="/" className="btn-secondary h-12 px-8">
               {t("back_to_home")}
             </Link>
           </div>
         </div>
-      </div>
+      </motion.div>
     );
   }
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.08 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 16 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const },
+    },
+  };
+
   return (
-    <motion.section
-      initial={shouldReduce ? false : { opacity: 0, y: 32 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+    <motion.div
+      variants={containerVariants}
+      initial={shouldReduce ? false : "hidden"}
+      animate="visible"
     >
-  <div className="mb-10">
-    <Link href="/shop" className="text-[0.5rem] font-semibold uppercase tracking-[0.3em] text-ivory/20 transition-colors duration-200 hover:text-ivory/40">
-      &larr; {t("back_to_drinks")}
-    </Link>
-  </div>
+      <motion.div variants={itemVariants} className="mb-8">
+        <Link
+          href="/shop"
+          className="inline-flex items-center gap-2 text-[0.52rem] font-semibold uppercase tracking-[0.32em] text-white/50 transition-colors duration-300 hover:text-gold"
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="rtl:rotate-180">
+            <path d="M19 12H5m7-7-7 7 7 7" />
+          </svg>
+          {t("back_to_drinks")}
+        </Link>
+      </motion.div>
 
-  {items.length > 0 && (
-    <div className="mb-8 sm:hidden">
-      <div className="flex items-center justify-between rounded-input border border-ivory/[0.04] bg-black-surface px-5 py-4">
-        <div>
-          <p className="text-[0.5rem] uppercase tracking-[0.22em] text-ivory/30">{t("order_summary_title")}</p>
-          <p className="mt-1 text-sm font-medium text-ivory">{items.length} {t("drinks_count")}</p>
-        </div>
-        <p className="font-display text-xl text-gold">{formatMoney(totalValue)}</p>
-      </div>
-    </div>
-  )}
-
-  <div className="grid gap-12 lg:grid-cols-[3fr_2fr] lg:items-start">
-        <section>
-          <form onSubmit={handleSubmit} className="space-y-10">
+      <div className="grid gap-10 lg:grid-cols-[65fr_35fr] lg:items-start">
+        <motion.div variants={itemVariants}>
+          <form onSubmit={handleSubmit} className="space-y-12">
             <div>
-              <div className="mb-6 flex items-center gap-3">
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-burgundy text-[0.5rem] font-semibold text-ivory">1</span>
+              <div className="mb-8 flex items-center gap-4">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#9B2638] text-[0.55rem] font-semibold text-white">1</span>
                 <div>
-                  <p className="text-[0.4rem] font-semibold uppercase tracking-[0.35em] text-ivory/20">{t("step_delivery", "Delivery")}</p>
-                  <h2 className="text-lg font-medium text-ivory">{t("deliver_to_door")}</h2>
+                  <p className="label-utility text-gold/60">{t("step_delivery", "Delivery")}</p>
+                  <h2 className="mt-1 font-display text-xl text-white">{t("deliver_to_door")}</h2>
                 </div>
               </div>
-              <div className="ml-10 space-y-5">
- <label className="block space-y-2">
-  <span className="text-[0.62rem] font-medium text-white/60">{t("full_name")} *</span>
-  <input
-                    type="text"
-                    name="fullName"
-                    value={deliveryState.fullName}
-                    onChange={(e) => handleChange("fullName", e.target.value)}
-                    placeholder={t("full_name_placeholder")}
-                    className="h-11 w-full border-0 border-b border-white/10 bg-transparent px-0 text-[0.85rem] text-white outline-none transition-all duration-200 placeholder:text-white/35 focus:border-gold/50"
-                    aria-invalid={Boolean(errors.fullName)}
-                    aria-describedby={errors.fullName ? "err-fullName" : undefined}
-                    required
-                  />
-                  {errors.fullName && <p id="err-fullName" className="text-[0.6rem] text-burgundy">{errors.fullName}</p>}
-                </label>
 
-                <label className="block space-y-2">
-                  <span className="text-[0.62rem] font-medium text-ivory/45">{t("email")} *</span>
-                  <input
-                    type="email"
-                    name="email"
-                    value={deliveryState.email}
-                    onChange={(e) => handleChange("email", e.target.value)}
-                    placeholder={t("email_placeholder")}
-                    className="h-11 w-full border-0 border-b border-white/10 bg-transparent px-0 text-[0.85rem] text-white outline-none transition-all duration-200 placeholder:text-white/35 focus:border-gold/50"
-                    aria-invalid={Boolean(errors.email)}
-                    aria-describedby={errors.email ? "err-email" : undefined}
-                    required
-                  />
-                  {errors.email && <p id="err-email" className="text-[0.6rem] text-burgundy">{errors.email}</p>}
-                </label>
+              <div className="space-y-5">
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <label htmlFor="checkout-name" className="text-[0.62rem] font-medium text-white/60">
+                      {t("full_name")} <span className="text-[#9B2638]">*</span>
+                    </label>
+                    <input
+                      id="checkout-name"
+                      type="text"
+                      name="fullName"
+                      value={deliveryState.fullName}
+                      onChange={(e) => handleChange("fullName", e.target.value)}
+                      placeholder={t("full_name_placeholder")}
+                      className="input-premium"
+                      style={{ caretColor: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                      aria-invalid={Boolean(errors.fullName)}
+                      aria-describedby={errors.fullName ? "err-fullName" : undefined}
+                      required
+                    />
+                    {errors.fullName && <p id="err-fullName" className="text-[0.6rem] text-[#9B2638]">{errors.fullName}</p>}
+                  </div>
 
-                <label className="block space-y-2">
-                  <span className="text-[0.62rem] font-medium text-ivory/45">{t("phone")} *</span>
+                  <div className="space-y-2">
+                    <label htmlFor="checkout-email" className="text-[0.62rem] font-medium text-white/60">
+                      {t("email")} <span className="text-[#9B2638]">*</span>
+                    </label>
+                    <input
+                      id="checkout-email"
+                      type="email"
+                      name="email"
+                      value={deliveryState.email}
+                      onChange={(e) => handleChange("email", e.target.value)}
+                      placeholder={t("email_placeholder")}
+                      className="input-premium"
+                      style={{ caretColor: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                      aria-invalid={Boolean(errors.email)}
+                      aria-describedby={errors.email ? "err-email" : undefined}
+                      required
+                    />
+                    {errors.email && <p id="err-email" className="text-[0.6rem] text-[#9B2638]">{errors.email}</p>}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="checkout-phone" className="text-[0.62rem] font-medium text-white/60">
+                    {t("phone")} <span className="text-[#9B2638]">*</span>
+                  </label>
                   <input
+                    id="checkout-phone"
                     type="tel"
                     name="phone"
                     value={deliveryState.phone}
                     onChange={(e) => handleChange("phone", e.target.value)}
                     placeholder={t("phone_placeholder")}
-                    className="h-11 w-full border-0 border-b border-white/10 bg-transparent px-0 text-[0.85rem] text-white outline-none transition-all duration-200 placeholder:text-white/35 focus:border-gold/50"
+                    className="input-premium"
+                    style={{ caretColor: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                     aria-invalid={Boolean(errors.phone)}
                     aria-describedby={errors.phone ? "err-phone" : undefined}
                     required
                   />
-                  {errors.phone && <p id="err-phone" className="text-[0.6rem] text-burgundy">{errors.phone}</p>}
-                </label>
+                  {errors.phone && <p id="err-phone" className="text-[0.6rem] text-[#9B2638]">{errors.phone}</p>}
+                </div>
 
                 <div className="grid gap-5 sm:grid-cols-2">
-                  <label className="block space-y-2">
-                    <span className="text-[0.62rem] font-medium text-ivory/45">{t("city")} *</span>
+                  <div className="space-y-2">
+                    <label htmlFor="checkout-city" className="text-[0.62rem] font-medium text-white/60">
+                      {t("city")} <span className="text-[#9B2638]">*</span>
+                    </label>
                     <select
+                      id="checkout-city"
                       name="city"
                       value={deliveryState.city}
                       onChange={(e) => handleChange("city", e.target.value)}
-                      className="h-11 w-full border-0 border-b border-white/10 bg-transparent px-0 text-[0.85rem] text-white outline-none transition-all duration-200 focus:border-gold/50"
+                      className="input-premium"
                       aria-invalid={Boolean(errors.city)}
                       aria-describedby={errors.city ? "err-city" : undefined}
                       required
                     >
-                      <option value="" className="bg-black">{t("select_city")}</option>
+                      <option value="" className="bg-[#171717]">{t("select_city")}</option>
                       {cities.map((city) => (
-                        <option key={city.name} value={city.name} className="bg-black">{city.name}</option>
+                        <option key={city.name} value={city.name} className="bg-[#171717]">{city.name}</option>
                       ))}
                     </select>
-                    {errors.city && <p id="err-city" className="text-[0.6rem] text-burgundy">{errors.city}</p>}
-                  </label>
+                    {errors.city && <p id="err-city" className="text-[0.6rem] text-[#9B2638]">{errors.city}</p>}
+                  </div>
 
-                  <label className="block space-y-2">
-                    <span className="text-[0.62rem] font-medium text-ivory/45">{t("address")} *</span>
+                  <div className="space-y-2">
+                    <label htmlFor="checkout-address" className="text-[0.62rem] font-medium text-white/60">
+                      {t("address")} <span className="text-[#9B2638]">*</span>
+                    </label>
                     <input
+                      id="checkout-address"
                       type="text"
                       name="address"
                       value={deliveryState.address}
                       onChange={(e) => handleChange("address", e.target.value)}
                       placeholder={t("address_placeholder")}
-                      className="h-11 w-full border-0 border-b border-white/10 bg-transparent px-0 text-[0.85rem] text-white outline-none transition-all duration-200 placeholder:text-white/35 focus:border-gold/50"
+                      className="input-premium"
+                      style={{ caretColor: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                       aria-invalid={Boolean(errors.address)}
                       aria-describedby={errors.address ? "err-address" : undefined}
                       required
                     />
-                    {errors.address && <p id="err-address" className="text-[0.6rem] text-burgundy">{errors.address}</p>}
-                  </label>
+                    {errors.address && <p id="err-address" className="text-[0.6rem] text-[#9B2638]">{errors.address}</p>}
+                  </div>
                 </div>
 
                 <div className="grid gap-5 sm:grid-cols-2">
-                  <label className="block space-y-2">
-                    <span className="text-[0.62rem] font-medium text-ivory/45">{t("postal_code")}</span>
+                  <div className="space-y-2">
+                    <label htmlFor="checkout-postal" className="text-[0.62rem] font-medium text-white/60">
+                      {t("postal_code")}
+                    </label>
                     <input
+                      id="checkout-postal"
                       type="text"
                       name="postalCode"
                       value={deliveryState.postalCode}
                       onChange={(e) => handleChange("postalCode", e.target.value)}
                       placeholder={t("postal_placeholder")}
-                      className="h-11 w-full border-0 border-b border-white/10 bg-transparent px-0 text-[0.85rem] text-white outline-none transition-all duration-200 placeholder:text-white/35 focus:border-gold/50"
+                      className="input-premium"
+                      style={{ caretColor: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                     />
-                    {errors.postalCode && <p className="text-[0.6rem] text-burgundy">{errors.postalCode}</p>}
-                  </label>
+                    {errors.postalCode && <p className="text-[0.6rem] text-[#9B2638]">{errors.postalCode}</p>}
+                  </div>
 
-                  <label className="block space-y-2">
-                    <span className="text-[0.62rem] font-medium text-ivory/45">{t("country_label")}</span>
+                  <div className="space-y-2">
+                    <label htmlFor="checkout-country" className="text-[0.62rem] font-medium text-white/60">
+                      {t("country_label")}
+                    </label>
                     <input
+                      id="checkout-country"
                       type="text"
                       value={t("morocco")}
                       readOnly
-                      className="h-11 w-full border-0 border-b border-white/10 bg-transparent px-0 text-[0.85rem] text-white/40 outline-none"
+                      className="input-premium cursor-default opacity-70"
+                      style={{ caretColor: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                     />
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <div className="mb-6 flex items-center gap-3">
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-burgundy text-[0.5rem] font-semibold text-ivory">2</span>
-                <div>
-                  <p className="text-[0.4rem] font-semibold uppercase tracking-[0.35em] text-ivory/20">{t("step_payment", "Payment")}</p>
-                  <h2 className="text-lg font-medium text-ivory">{t("cash_on_delivery")}</h2>
-                </div>
-              </div>
-              <div className="ml-10">
-                <div className="flex items-center gap-4 border-b border-ivory/[0.04] pb-4">
-                  <svg aria-hidden="true" width={18} height={18} viewBox="0 0 24 24" className="shrink-0 text-ivory/30" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 2a10 10 0 1 0 10 10" />
-                    <path d="M12 6v6l4 2" />
-                  </svg>
-                  <div>
-                    <p className="text-[0.75rem] font-medium text-ivory">{t("cash_on_delivery")}</p>
-                    <p className="text-[0.62rem] text-ivory/25">{t("cash_on_delivery_desc")}</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="mt-10 pt-6 border-t border-ivory/[0.04]">
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+
+            <div>
+              <div className="mb-8 flex items-center gap-4">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#9B2638] text-[0.55rem] font-semibold text-white">2</span>
+                <div>
+                  <p className="label-utility text-gold/60">{t("step_payment", "Payment")}</p>
+                  <h2 className="mt-1 font-display text-xl text-white">{t("cash_on_delivery")}</h2>
+                </div>
+              </div>
+
+              <div className="rounded-card border border-white/[0.06] bg-[#1E1E1E] p-5">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#9B2638]/10">
+                    <svg aria-hidden="true" width={18} height={18} viewBox="0 0 24 24" className="shrink-0 text-[#C8A96A]" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 2a10 10 0 1 0 10 10" />
+                      <path d="M12 6v6l4 2" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-[0.75rem] font-medium text-white">{t("cash_on_delivery")}</p>
+                    <p className="mt-0.5 text-[0.62rem] text-white/50">{t("cash_on_delivery_desc")}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-2">
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="btn-primary h-12 w-full text-[0.58rem]"
+                className="btn-primary h-12 w-full px-8 text-[0.58rem]"
               >
-                {isSubmitting ? t("confirming") : t("place_order")}
+                {isSubmitting ? (
+                  <span className="flex items-center gap-3">
+                    <svg className="h-3.5 w-3.5 animate-spin" viewBox="0 0 24 24" fill="none">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    {t("confirming")}
+                  </span>
+                ) : (
+                  t("place_order")
+                )}
               </button>
             </div>
           </form>
-        </section>
+        </motion.div>
 
-        <aside className="lg:sticky lg:top-28">
-          <div className="space-y-6">
-            <div className="border-b border-ivory/[0.04] pb-5">
-              <p className="text-[0.4rem] font-semibold uppercase tracking-[0.35em] text-ivory/20">{t("order_summary_title")}</p>
-              <p className="mt-1 font-display text-xl text-ivory">{items.length} {t("drinks_count")}</p>
+        <motion.aside
+          variants={itemVariants}
+          className="lg:sticky lg:top-28"
+        >
+          <div className="rounded-card border border-white/[0.06] bg-[#1E1E1E] p-6">
+            <div className="mb-6">
+              <p className="label-utility text-gold/60">{t("order_summary_title")}</p>
+              <h2 className="mt-1 font-display text-white">{items.length} {t("drinks_count")}</h2>
             </div>
 
             <div className="space-y-4">
               {lineItems.map((item) => (
-                <div key={item.id} className="flex gap-4">
-                  <div className="relative h-20 w-16 shrink-0 overflow-hidden">
+                <div key={item.id} className="flex gap-3">
+                  <div className="relative h-16 w-14 shrink-0 overflow-hidden rounded-md bg-[#171717]">
                     {item.image ? (
                       <SafeImage
                         src={item.image}
                         alt={item.name}
                         fill
-                        sizes="64px"
-                        className="object-contain"
+                        sizes="56px"
+                        className="object-contain p-1"
                         fallback={
-                          <div className="flex h-full w-full items-center justify-center text-[0.45rem] font-semibold tracking-[0.24em] text-ivory/8">
+                          <div className="flex h-full w-full items-center justify-center text-[0.4rem] font-semibold tracking-[0.24em] text-white/20">
                             {item.name.split(" ").slice(0, 2).map((part) => part[0]).join("")}
                           </div>
                         }
                       />
                     ) : item.visual ? (
-                      <div className="flex h-full w-full items-center justify-center p-1.5">
+                      <div className="flex h-full w-full items-center justify-center p-1">
                         {item.visual === "can" ? (
-                          <SodaCan width={56} height={72} accent={item.accent} label={item.name} />
+                          <SodaCan width={48} height={60} accent={item.accent} label={item.name} />
                         ) : item.visual === "bottle" ? (
-                          <SodaBottle width={48} height={84} accent={item.accent} label={item.name} />
+                          <SodaBottle width={40} height={72} accent={item.accent} label={item.name} />
                         ) : (
-                          <GlassDrink width={62} height={68} accent={item.accent} label={item.name} />
+                          <GlassDrink width={52} height={56} accent={item.accent} label={item.name} />
                         )}
                       </div>
                     ) : (
                       <div className="flex h-full w-full items-center justify-center">
-                        <span className="text-sm font-medium text-ivory/6">
+                        <span className="text-sm font-medium text-white/10">
                           {item.name.split(" ").slice(0, 2).map((s) => s[0]).join("")}
                         </span>
                       </div>
                     )}
                   </div>
-                  <div className="flex min-w-0 flex-1 flex-col justify-between py-1">
-                    <div>
-                      {item.category && (
-                        <p className="text-[0.38rem] uppercase tracking-[0.28em] text-ivory/12">{item.category}</p>
-                      )}
-                      <p className="truncate font-display text-[0.85rem] text-white">{item.name}</p>
-                    </div>
-                    <div className="flex items-center justify-between gap-2 text-[0.6rem] text-ivory/25">
+                  <div className="flex min-w-0 flex-1 flex-col justify-center">
+                    {item.category && (
+                      <p className="text-[0.38rem] uppercase tracking-[0.28em] text-white/30">{item.category}</p>
+                    )}
+                    <p className="truncate font-display text-[0.78rem] text-white">{item.name}</p>
+                    <div className="mt-1 flex items-center justify-between gap-2 text-[0.6rem] text-white/40">
                       <span>{t("qty_label")} {item.quantity}</span>
-                      <span className="font-medium text-gold">{item.lineTotal}</span>
+                      <span className="font-medium text-[#C8A96A]">{item.lineTotal}</span>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="border-t border-ivory/[0.04] pt-5 space-y-3">
-              <div className="flex items-center justify-between text-[0.68rem] text-ivory/35">
-                <span>{t("cart_subtotal")}</span>
-                <span className="font-medium text-ivory">{formatMoney(subtotalValue)}</span>
+            <div className="mt-6 space-y-3 border-t border-white/[0.06] pt-5">
+              <div className="flex items-center justify-between text-[0.7rem]">
+                <span className="text-white/50">{t("cart_subtotal")}</span>
+                <span className="font-medium text-white">{formatMoney(subtotalValue)}</span>
               </div>
-              <div className="flex items-center justify-between text-[0.68rem] text-ivory/35">
-                <span>{t("tax_rate")}</span>
-                <span className="font-medium text-ivory">{formatMoney(taxValue)}</span>
+              <div className="flex items-center justify-between text-[0.7rem]">
+                <span className="text-white/50">{t("tax_rate")}</span>
+                <span className="font-medium text-white">{formatMoney(taxValue)}</span>
               </div>
-              <div className="flex items-center justify-between border-t border-ivory/[0.04] pt-4">
-                <span className="label-utility tracking-[0.22em] text-ivory/25">{t("cart_total")}</span>
-                <span className="font-display text-xl text-gold">{formatMoney(totalValue)}</span>
+              <div className="flex items-center justify-between border-t border-white/[0.06] pt-4">
+                <span className="label-utility tracking-[0.22em] text-[#C8A96A]">{t("cart_total")}</span>
+                <span className="font-display text-xl text-[#C8A96A]">{formatMoney(totalValue)}</span>
               </div>
             </div>
           </div>
-        </aside>
+        </motion.aside>
       </div>
-    </motion.section>
+    </motion.div>
   );
 }

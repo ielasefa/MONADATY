@@ -217,7 +217,7 @@ export function OrderStatusWorkflow({ orderStatus, updating, onUpdateStatus }: O
                   <span
                     className={`text-sm font-semibold tracking-wide transition-colors duration-300 ${
                       isActive
-                        ? term.status === "cancelled" ? "text-red-400" : "text-orange-400"
+                        ? term.status === "cancelled" ? "text-burgundy" : "text-gold"
                         : "text-white/40 hover:text-white/60"
                     }`}
                   >

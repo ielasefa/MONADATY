@@ -84,7 +84,7 @@ class ShopErrorBoundary extends Component<
     if (this.state.hasError) {
       const fn = this.props.t ?? (k => k);
       return (
-        <div className="rounded-xl border border-white/[0.06] bg-[#252525] p-10 text-center">
+        <div className="rounded-xl border border-white/[0.06] bg-card p-10 text-center">
           <p className="label-utility">{fn("shop_unavailable")}</p>
           <h3 className="font-display mt-3 text-2xl text-white">{fn("shop_unavailable_desc")}</h3>
           <p className="mt-3 text-sm text-white/40">{fn("try_again")}</p>
@@ -433,7 +433,7 @@ export function ProductFilters({
   if (productsSafe.length === 0) {
     return (
       <section className="space-y-8">
-        <div className="rounded-xl border border-white/[0.06] bg-[#252525] p-10 text-center">
+        <div className="rounded-xl border border-white/[0.06] bg-card p-10 text-center">
           <p className="label-utility">{t("no_inventory")}</p>
           <h3 className="font-display mt-3 text-2xl text-white">{t("products_unavailable")}</h3>
           <p className="mt-3 text-sm text-white/40">{t("check_back_shortly")}</p>
@@ -482,7 +482,7 @@ export function ProductFilters({
               value={query}
               onChange={(e) => handleSearchChange(e.target.value)}
               placeholder={tShop("search_drinks", "Search drinks...")}
-              className="h-11 w-full rounded-xl border border-white/[0.08] bg-[#1E1E1E] px-4 ps-11 pr-10 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/30 focus:border-gold/40 focus:ring-2 focus:ring-gold/10 caret-white"
+              className="h-11 w-full rounded-xl border border-white/[0.08] bg-[#1E1E1E] px-4 ps-11 pr-10 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/35 focus:border-gold/40 focus:ring-2 focus:ring-gold/10 caret-white"
               style={{ WebkitTextFillColor: "#FFFFFF" }}
             />
             {query && (
@@ -634,7 +634,7 @@ export function ProductFilters({
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="rounded-xl border border-white/[0.06] bg-[#252525] p-10 text-center">
+                <div className="rounded-xl border border-white/[0.06] bg-card p-10 text-center">
                   <p className="label-utility">{tShop("no_matches")}</p>
                   <h3 className="font-display mt-3 text-2xl text-white">{tShop("no_matches_desc")}</h3>
                   <p className="mt-3 text-sm text-white/40">{tShop("no_results")}</p>

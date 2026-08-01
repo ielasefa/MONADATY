@@ -668,7 +668,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
               key={img.id}
               className={`group relative overflow-hidden rounded-lg border ${
                 img.isCover ? "border-yellow" : "border-white/[0.06]"
-              } bg-[#0A0A0A]`}
+              } bg-[#171717]`}
             >
               <div className="aspect-square overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}

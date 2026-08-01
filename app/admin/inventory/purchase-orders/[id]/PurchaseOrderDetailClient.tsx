@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type OrderInfo = {
   id: string;
@@ -65,6 +66,7 @@ export function PurchaseOrderDetailClient({
   suppliers: SelectOption[];
   warehouses: SelectOption[];
 }) {
+  const { t } = useTranslation("inventory");
   const router = useRouter();
   const isNew = !order;
   const [saving, setSaving] = useState(false);
@@ -191,7 +193,7 @@ export function PurchaseOrderDetailClient({
           </div>
           <div className="flex items-center gap-3">
             <button type="submit" disabled={saving} className="btn-primary h-12 rounded-button px-6 text-xs font-semibold uppercase tracking-[0.1em] disabled:opacity-50">
-              {saving ? t("saving") : : `${t("create")} ${t("purchase_order").toLowerCase()}`}
+              {saving ? t("saving") : `${t("create")} ${t("purchase_order").toLowerCase()}`}
             </button>
             <Link href="/admin/inventory/purchase-orders" className="btn-secondary h-12 rounded-button px-6 text-xs font-semibold uppercase tracking-[0.1em]">
               Cancel
@@ -330,7 +332,7 @@ export function PurchaseOrderDetailClient({
               disabled={saving || Object.values(receiveQuantities).every((v) => v === 0)}
               className="btn-primary h-12 rounded-button px-6 text-xs font-semibold uppercase tracking-[0.1em] disabled:opacity-50"
             >
-              {saving ? t("processing") : : `${t("receive_items", "Receive Items")}`}
+              {saving ? t("processing") : `${t("receive_items", "Receive Items")}`}
             </button>
           </div>
         </div>

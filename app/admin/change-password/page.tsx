@@ -56,7 +56,7 @@ export default function ChangePasswordPage() {
   }
 
   const inputClass =
-    "h-12 w-full rounded-input border border-white/[0.06] bg-surface px-4 pr-12 text-sm text-white outline-none transition placeholder:text-muted/50 focus:border-burgundy focus:ring-1 focus:ring-burgundy/30 disabled:opacity-50";
+    "h-12 w-full rounded-input border border-white/[0.06] bg-surface px-4 pr-12 text-sm text-white outline-none transition placeholder:text-white/40 focus:border-gold/50 focus:ring-1 focus:ring-gold/20 disabled:opacity-50";
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-bg px-4 py-10">
@@ -167,14 +167,14 @@ function ToggleButton({ on, onClick, label }: { on: boolean; onClick: () => void
       className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-muted transition hover:bg-white/5 hover:text-white focus:outline-none focus-visible:ring-1 focus-visible:ring-burgundy/30"
     >
       {on ? (
-        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+        <svg aria-hidden="true" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
           <path d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.4 4.7A9.5 9.5 0 0121 12a9.6 9.6 0 01-2.3 6.2M6.1 6.1A9.6 9.6 0 003 12a9.5 9.5 0 007 9.2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+       </svg>
       ) : (
-        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+        <svg aria-hidden="true" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
           <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" strokeLinecap="round" strokeLinejoin="round" />
           <circle cx="12" cy="12" r="3" />
-        </svg>
+       </svg>
       )}
     </button>
   );

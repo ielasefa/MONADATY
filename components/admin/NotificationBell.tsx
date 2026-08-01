@@ -65,7 +65,7 @@ export function NotificationBell({ initialNotifications, initialUnread }: Props)
           <path d="M13.73 21a2 2 0 0 1-3.46 0" />
         </svg>
         {unread > 0 && (
-          <span className="absolute -right-0.5 -top-0.5 flex h-4.5 min-w-[18px] items-center justify-center rounded-full bg-red px-1 text-[0.6rem] font-bold text-white shadow-lg shadow-red/30">
+          <span className="absolute -right-0.5 -top-0.5 flex h-4.5 min-w-[18px] items-center justify-center rounded-full bg-burgundy px-1 text-[0.6rem] font-bold text-white shadow-lg shadow-burgundy/30">
             {unread > 9 ? "9+" : unread}
           </span>
         )}
@@ -82,7 +82,7 @@ export function NotificationBell({ initialNotifications, initialUnread }: Props)
             {unread > 0 && (
               <button
                 onClick={handleMarkAllRead}
-                className="text-[0.65rem] font-medium uppercase tracking-widest text-white/50 transition hover:text-yellow"
+                className="text-[0.65rem] font-medium uppercase tracking-widest text-white/50 transition hover:text-gold"
               >
                 {t("mark_all_read")}
               </button>
@@ -113,7 +113,7 @@ export function NotificationBell({ initialNotifications, initialUnread }: Props)
                       setOpen(false);
                     }}
                     className={`flex gap-3 px-5 py-3 transition hover:bg-white/[0.02] ${
-                      !n.read ? "border-l-2 border-l-yellow" : "border-l-2 border-l-transparent"
+                      !n.read ? "border-l-2 border-l-gold/60" : "border-l-2 border-l-transparent"
                     }`}
                   >
                     <span className="mt-0.5 text-base leading-none">{typeIcon[n.type] || "\uD83D\uDD14"}</span>

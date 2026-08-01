@@ -33,6 +33,10 @@ body {
 font-family: var(--font-dm-sans, "DM Sans", ui-sans-serif, system-ui);
 }
 
+input, textarea, select {
+  caret-color: #FFFFFF;
+}
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,

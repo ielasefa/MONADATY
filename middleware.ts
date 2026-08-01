@@ -66,9 +66,28 @@ export async function middleware(request: NextRequest) {
   res.headers.set("Surrogate-Control", "no-store");
 
   const signed = request.cookies.get(SESSION_COOKIE)?.value;
+  const mustChange = request.cookies.get(MUST_CHANGE_COOKIE)?.value === "1";
 
-  // Login page: don't blindly redirect — the layout checks actual DB session validity
+  // Login page: an already-authenticated user gets a real redirect to their
+  // destination (change-password if pending, otherwise dashboard). This used
+  // to happen in the layout via redirect() which Next.js 15.5.x streams into
+  // the RSC payload (HTTP 200 + NEXT_REDIRECT marker) instead of emitting a
+  // 307, causing the observed login<->dashboard redirect loop.
   if (pathname === "/admin/login") {
+    if (signed) {
+      const token = await unsignToken(signed);
+      if (token) {
+        return NextResponse.redirect(
+          new URL(mustChange ? "/admin/change-password" : "/admin/dashboard", request.url),
+        );
+      }
+      const staleRes = NextResponse.next({
+        request: { headers: requestHeaders },
+      });
+      staleRes.cookies.delete(SESSION_COOKIE);
+      staleRes.cookies.delete(MUST_CHANGE_COOKIE);
+      return staleRes;
+    }
     return res;
   }
 
@@ -76,7 +95,9 @@ export async function middleware(request: NextRequest) {
   if (!signed) {
     const loginUrl = new URL("/admin/login", request.url);
     loginUrl.searchParams.set("redirect", pathname);
-    return NextResponse.redirect(loginUrl);
+    const redirectRes = NextResponse.redirect(loginUrl);
+    redirectRes.cookies.delete("x-admin-pathname");
+    return redirectRes;
   }
 
   const token = await unsignToken(signed);
@@ -84,13 +105,15 @@ export async function middleware(request: NextRequest) {
     const redirectRes = NextResponse.redirect(new URL("/admin/login", request.url));
     redirectRes.cookies.delete(SESSION_COOKIE);
     redirectRes.cookies.delete(MUST_CHANGE_COOKIE);
+    redirectRes.cookies.delete("x-admin-pathname");
     return redirectRes;
   }
 
   // mustChangePassword redirect
-  const mustChange = request.cookies.get(MUST_CHANGE_COOKIE)?.value === "1";
   if (mustChange && pathname !== "/admin/change-password") {
-    return NextResponse.redirect(new URL("/admin/change-password", request.url));
+    const redirectRes = NextResponse.redirect(new URL("/admin/change-password", request.url));
+    redirectRes.cookies.delete("x-admin-pathname");
+    return redirectRes;
   }
 
   // Allow API routes through after validation

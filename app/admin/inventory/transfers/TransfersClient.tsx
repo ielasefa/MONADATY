@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type Warehouse = { id: string; name: string };
 type RecentTransfer = {
@@ -24,6 +25,7 @@ export function TransfersClient({
   warehouses: Warehouse[];
   recentTransfers: RecentTransfer[];
 }) {
+  const { t } = useTranslation("inventory");
   const router = useRouter();
   const [fromWarehouse, setFromWarehouse] = useState("");
   const [toWarehouse, setToWarehouse] = useState("");
@@ -231,7 +233,7 @@ export function TransfersClient({
             disabled={saving}
             className="btn-primary h-12 rounded-button px-6 text-xs font-semibold uppercase tracking-[0.1em] disabled:opacity-50"
           >
-            {saving ? t("transferring") : : t("transfer_stock", "Transfer Stock")}
+            {saving ? t("transferring") : t("transfer_stock", "Transfer Stock")}
           </button>
         </form>
       </div>

@@ -9,12 +9,13 @@ import { useWishlist } from "@/components/wishlist-context";
 import { SafeImage } from "@/components/SafeImage";
 import { useTranslation } from "@/hooks/useTranslation";
 
-type ProductCardProps = Pick<Product, "id" | "name" | "price" | "image" | "category" | "visual" | "accent"> & {
+type ProductCardProps = Pick<Product, "id" | "slug" | "name" | "price" | "image" | "category" | "visual" | "accent"> & {
   shortDescription?: string;
 };
 
 export const ProductCard = memo(function ProductCard({
   id,
+  slug,
   name,
   price,
   image,
@@ -135,6 +136,7 @@ export const ProductCard = memo(function ProductCard({
             addItem(
               {
                 id,
+                slug,
                 name,
                 price,
                 image,

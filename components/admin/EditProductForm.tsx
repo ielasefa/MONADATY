@@ -163,9 +163,9 @@ export function EditProductForm({
   };
 
   const inventoryStatus = (() => {
-    if (form.stock <= 0) return { label: t("out_of_stock_label"), color: "text-red", dot: "bg-red" };
-    if (form.stock < form.lowStockThreshold) return { label: t("low_stock"), color: "text-yellow", dot: "bg-yellow" };
-    return { label: t("in_stock_label"), color: "text-emerald-400-400", dot: "bg-emerald-400/10" };
+    if (form.stock <= 0) return { label: t("out_of_stock_label"), color: "text-burgundy", dot: "bg-burgundy" };
+    if (form.stock < form.lowStockThreshold) return { label: t("low_stock"), color: "text-gold", dot: "bg-gold" };
+    return { label: t("in_stock_label"), color: "text-white/80", dot: "bg-white/20" };
   })();
 
   const profit = (() => {
@@ -246,7 +246,7 @@ export function EditProductForm({
   const tabClass = (tab: string) =>
     `rounded-md px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] transition ${
       activeTab === tab
-        ? "bg-yellow/20 text-yellow"
+        ? "bg-gold/20 text-gold"
         : "text-white/50 hover:text-white"
     }`;
 
@@ -312,7 +312,7 @@ export function EditProductForm({
             <div className="space-y-4">
               <div>
                 <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
-                  Product Name <span className="text-red">*</span>
+                  Product Name <span className="text-burgundy">*</span>
                 </label>
                 <input
                   type="text"
@@ -417,7 +417,7 @@ export function EditProductForm({
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <div>
                 <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
-                  Regular Price <span className="text-red">*</span>
+                  Regular Price <span className="text-burgundy">*</span>
                 </label>
                 <div className="relative">
                   <input
@@ -482,13 +482,13 @@ export function EditProductForm({
             <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
               <div className="rounded-lg border border-white/[0.06] bg-[#171717] p-3">
                 <p className="text-xs text-white/50">{t("profit")}</p>
-                <p className={`mt-1 text-sm font-semibold ${profit >= 0 ? "text-emerald-400" : "text-red"}`}>
+                <p className={`mt-1 text-sm font-semibold ${profit >= 0 ? "text-white/80" : "text-burgundy"}`}>
                   {profit.toFixed(2)} {form.currency}
                 </p>
               </div>
               <div className="rounded-lg border border-white/[0.06] bg-[#171717] p-3">
                 <p className="text-xs text-white/50">{t("margin")}</p>
-                <p className={`mt-1 text-sm font-semibold ${margin >= 0 ? "text-emerald-400" : "text-red"}`}>
+                <p className={`mt-1 text-sm font-semibold ${margin >= 0 ? "text-white/80" : "text-burgundy"}`}>
                   {margin.toFixed(1)}%
                 </p>
               </div>
@@ -600,7 +600,7 @@ export function EditProductForm({
                   type="checkbox"
                   checked={form.featured}
                   onChange={(e) => updateField("featured", e.target.checked)}
-                  className="h-4 w-4 rounded border-white/20 bg-white/5 accent-yellow"
+                  className="h-4 w-4 rounded border-white/20 bg-white/5 accent-gold"
                 />
                 <span className="text-sm text-white">{t("featured")}</span>
               </label>
@@ -609,7 +609,7 @@ export function EditProductForm({
                   type="checkbox"
                   checked={form.isBestSeller}
                   onChange={(e) => updateField("isBestSeller", e.target.checked)}
-                  className="h-4 w-4 rounded border-white/20 bg-white/5 accent-yellow"
+                  className="h-4 w-4 rounded border-white/20 bg-white/5 accent-gold"
                 />
                 <span className="text-sm text-white">{t("best_seller")}</span>
               </label>
