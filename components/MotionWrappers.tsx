@@ -2,9 +2,18 @@
 
 import { type ReactNode, useRef, useEffect, useState } from "react";
 
-type AnimProps = { children: ReactNode; className?: string; delay?: number };
+type AnimProps = {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+};
 
-function useInView(ref: React.RefObject<HTMLElement | null>, threshold = 0.12) {
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+function useInView(
+  ref: React.RefObject<HTMLElement | null>,
+  threshold = 0.12,
+) {
   const [inView, setInView] = useState(false);
 
   useEffect(() => {
@@ -21,7 +30,7 @@ function useInView(ref: React.RefObject<HTMLElement | null>, threshold = 0.12) {
           observer.unobserve(el);
         }
       },
-      { threshold, rootMargin: "0px 0px -40px 0px" },
+      { threshold, rootMargin: "0px 0px -60px 0px" },
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -30,30 +39,39 @@ function useInView(ref: React.RefObject<HTMLElement | null>, threshold = 0.12) {
   return inView;
 }
 
+const OFFSET = 24;
+
 function offset(dir: "up" | "down" | "left" | "right") {
-  const d = 32;
   switch (dir) {
-    case "up": return `translateY(${d}px)`;
-    case "down": return `translateY(-${d}px)`;
-    case "left": return `translateX(${d}px)`;
-    case "right": return `translateX(-${d}px)`;
+    case "up":
+      return `translateY(${OFFSET}px)`;
+    case "down":
+      return `translateY(-${OFFSET}px)`;
+    case "left":
+      return `translateX(${OFFSET}px)`;
+    case "right":
+      return `translateX(-${OFFSET}px)`;
   }
 }
 
-const EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
-
-export function FadeIn({ children, className, delay, direction = "up" }: AnimProps & { direction?: "up" | "down" | "left" | "right" }) {
+export function FadeIn({
+  children,
+  className,
+  delay = 0,
+  direction = "up",
+}: AnimProps & { direction?: "up" | "down" | "left" | "right" }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref);
-  const d = delay || 0;
-  return (
+
+    const easeStr = "cubic-bezier(0.22, 1, 0.36, 1)";
+    return (
     <div
       ref={ref}
       className={className}
       style={{
         opacity: inView ? 1 : 0,
         transform: inView ? "none" : offset(direction),
-        transition: `opacity 0.9s ${EASE} ${d}s, transform 0.9s ${EASE} ${d}s`,
+        transition: `opacity 0.7s ${easeStr} ${delay}s, transform 0.7s ${easeStr} ${delay}s`,
         willChange: inView ? "auto" : "opacity, transform",
       }}
     >
@@ -69,16 +87,17 @@ export function FadeInView({ children, className, delay }: AnimProps) {
 export function ScaleIn({ children, className, delay }: AnimProps) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref);
-  const d = delay || 0;
+
   return (
     <div
       ref={ref}
       className={className}
       style={{
         opacity: inView ? 1 : 0,
-        transform: inView ? "none" : "scale(0.95)",
-        transition: `opacity 0.8s ${EASE} ${d}s, transform 0.8s ${EASE} ${d}s`,
+        transform: inView ? "none" : "scale(0.96)",
+        transition: `opacity 0.6s ${EASE}, transform 0.6s ${EASE}`,
         willChange: inView ? "auto" : "opacity, transform",
+        transitionDelay: `${delay || 0}s`,
       }}
     >
       {children}

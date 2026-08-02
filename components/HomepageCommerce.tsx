@@ -1,5 +1,6 @@
 "use client";
 
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
 import { SafeImage } from "@/components/SafeImage";
@@ -18,47 +19,65 @@ type Testimonial = {
 
 function ArrowRight() {
   return (
-    <svg
-      width="11"
-      height="11"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="rtl:rotate-180"
+    <motion.span
+      className="rtl:rotate-180 inline-block"
+      initial={false}
+      whileHover={{ x: 3 }}
+      transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
     >
-      <path d="M5 12h14" />
-      <path d="M12 5l7 7-7 7" />
-    </svg>
+      <svg
+        width="11"
+        height="11"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M5 12h14" />
+        <path d="M12 5l7 7-7 7" />
+      </svg>
+    </motion.span>
   );
 }
 
-function ProductImageOrFallback(props: { src: string; alt: string; sizes?: string; className?: string; fallback?: React.ReactNode }) {
-  if (!props.src) {
-    return props.fallback ? (
-      <>{props.fallback}</>
+function ProductImageOrFallback({
+  src,
+  alt,
+  sizes,
+  className,
+  fallback,
+}: {
+  src: string;
+  alt: string;
+  sizes?: string;
+  className?: string;
+  fallback?: React.ReactNode;
+}) {
+  if (!src) {
+    return fallback ? (
+      <>{fallback}</>
     ) : (
       <div className="flex h-full w-full items-center justify-center">
         <span className="font-display text-[2.5rem] font-light tracking-[0.08em] text-white/[0.06]">
-          {props.alt}
+          {alt}
         </span>
       </div>
     );
   }
   return (
     <SafeImage
-      src={props.src}
-      alt={props.alt}
+      src={src}
+      alt={alt}
       fill
-      sizes={props.sizes}
-      className={props.className}
+      sizes={sizes}
+      className={className}
       fallback={
-        props.fallback || (
+        fallback || (
           <div className="flex h-full w-full items-center justify-center">
             <span className="font-display text-[2.5rem] font-light tracking-[0.08em] text-white/[0.06]">
-              {props.alt}
+              {alt}
             </span>
           </div>
         )
@@ -67,9 +86,11 @@ function ProductImageOrFallback(props: { src: string; alt: string; sizes?: strin
   );
 }
 
+const EASE = [0.22, 1, 0.36, 1] as const;
+
 /* ============================================================
-BRAND STATEMENT — editorial brand positioning
-============================================================ */
+   BRAND STATEMENT
+   ============================================================ */
 export function BrandStatement() {
   const { t } = useTranslation("home");
   return (
@@ -83,11 +104,19 @@ export function BrandStatement() {
                 {t("brand_statement_eyebrow")}
               </span>
             </div>
-            <h2 className="max-w-[16ch] font-display text-[clamp(2rem,4.5vw,3.5rem)] leading-[0.92] tracking-[-0.04em] text-white whitespace-pre-line">
+            <motion.h2
+              initial={{ opacity: 0.6 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, ease: EASE, delay: 0.15 }}
+              className="max-w-[16ch] font-display text-[clamp(2rem,4.5vw,3.5rem)] leading-[0.92] tracking-[-0.04em] text-white whitespace-pre-line"
+            >
               {t("brand_statement_headline", "ROOTED IN MOROCCO.\nCRAFTED FOR TODAY.")}
-            </h2>
+            </motion.h2>
             <p className="mt-2 max-w-lg text-[0.82rem] leading-[1.85] text-white/55">
-              {t("brand_statement_desc", "A modern Moroccan beverage brand built around exceptional ingredients, masterful craft, and the hospitality that makes Morocco extraordinary.")}
+              {t(
+                "brand_statement_desc",
+                "A modern Moroccan beverage brand built around exceptional ingredients, masterful craft, and the hospitality that makes Morocco extraordinary.",
+              )}
             </p>
           </div>
         </Reveal>
@@ -97,15 +126,18 @@ export function BrandStatement() {
 }
 
 /* ============================================================
-04 — FEATURED PRODUCTS
-============================================================ */
+   FEATURED PRODUCTS
+   ============================================================ */
 export function FeaturedProducts({ products }: { products: ProductData[] }) {
   const { t } = useTranslation("home");
   const displayProducts = products.slice(0, 4);
   if (displayProducts.length === 0) return null;
 
   return (
-    <section className="relative w-full overflow-hidden bg-black-soft" id="shop">
+    <section
+      className="relative w-full overflow-hidden bg-black-soft"
+      id="shop"
+    >
       <div className="mx-auto max-w-[1400px] px-6 py-16 md:px-10 md:py-20 lg:px-16 lg:py-24">
         <Reveal>
           <div className="flex items-end justify-between gap-6">
@@ -120,12 +152,15 @@ export function FeaturedProducts({ products }: { products: ProductData[] }) {
                 {t("shop_the_drinks_headline", "Signature selection")}
               </h2>
               <p className="mt-3 max-w-md text-[0.78rem] leading-[1.7] text-white/50">
-                {t("shop_the_drinks_desc", "Discover our signature selection, crafted with premium ingredients from Morocco.")}
+                {t(
+                  "shop_the_drinks_desc",
+                  "Discover our signature selection, crafted with premium ingredients from Morocco.",
+                )}
               </p>
             </div>
             <Link
               href="/shop"
-              className="hidden items-center gap-2 label-utility text-[0.42rem] tracking-[0.2em] text-white/50 transition-colors duration-300 hover:text-gold md:flex"
+              className="hidden items-center gap-2 label-utility text-[0.42rem] tracking-[0.2em] text-white/40 transition-colors duration-200 hover:text-gold md:flex"
             >
               {t("view_all_drinks", "VIEW ALL PRODUCTS")}
               <ArrowRight />
@@ -159,6 +194,7 @@ function ProductCardLite({ product }: { product: ProductData }) {
   const { addItem } = useCart();
   const { contains, toggle } = useWishlist();
   const { t } = useTranslation("products");
+
   const isWishlisted = contains(product.id);
 
   return (
@@ -166,24 +202,55 @@ function ProductCardLite({ product }: { product: ProductData }) {
       <div className="relative">
         <Link
           href={`/product/${product.id}`}
+          aria-label={`${t("view_flavor")} ${product.name}`}
           className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
         >
-          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-black-soft shadow-card transition-all duration-500 group-hover:shadow-premium group-hover:border group-hover:border-gold/15">
+          <motion.div
+            initial={false}
+            whileHover={{ y: -6, transition: { duration: 0.22, ease: EASE } }}
+            transition={{ duration: 0.22, ease: EASE }}
+            className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-black-soft shadow-card transition-shadow duration-500 ease-premium group-hover:shadow-card-hover group-hover:border group-hover:border-gold/12"
+          >
+            {/* Shimmer sweep on hover */}
+            <motion.div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 z-20 opacity-0"
+              initial={false}
+              whileHover={{ opacity: 1 }}
+              transition={{ duration: 0.25 }}
+            >
+              <div className="h-full w-full bg-gradient-to-r from-transparent via-gold/[0.07] to-transparent animate-shimmer-wave" />
+            </motion.div>
+
+            {/* Inner highlight on hover */}
+            <motion.div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 z-10 rounded-xl opacity-0"
+              initial={false}
+              whileHover={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              style={{
+                boxShadow:
+                  "inset 0 0 0 1px rgba(200,169,106,0.12), inset 0 1px 0 rgba(255,255,255,0.04)",
+              }}
+            />
+
             {product.image ? (
-              <SafeImage
-                src={product.image}
-                alt={product.name}
-                fill
-                sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 50vw"
-                className="object-contain p-6 transition-transform duration-700 ease-premium group-hover:scale-[1.04]"
-                fallback={
-                  <div className="flex h-full w-full items-center justify-center">
-                    <span className="font-display text-[2.5rem] font-light tracking-[0.08em] text-white/[0.08]">
-                      {product.name.charAt(0)}
-                    </span>
-                  </div>
-                }
-              />
+              <motion.div
+                initial={false}
+                whileHover={{ scale: 1.04, transition: { duration: 0.6, ease: EASE } }}
+                transition={{ duration: 0.6, ease: EASE }}
+                className="h-full w-full"
+              >
+                <SafeImage
+                  src={product.image}
+                  alt={product.name}
+                  fill
+                  sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 50vw"
+                  className="object-contain p-6"
+                  fallback={null}
+                />
+              </motion.div>
             ) : product.visual ? (
               <div className="flex h-full w-full items-center justify-center">
                 <span className="font-display text-[1.5rem] font-light text-white/[0.08]">
@@ -199,38 +266,50 @@ function ProductCardLite({ product }: { product: ProductData }) {
             )}
 
             {/* Wishlist */}
-            <button
+            <motion.button
               type="button"
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 toggle(product.id);
               }}
-              aria-label={isWishlisted ? `${t("remove_from_wishlist")} ${product.name}` : `${t("add_to_wishlist")} ${product.name}`}
-              aria-pressed={isWishlisted}
-              className={`absolute end-2.5 top-2.5 z-20 inline-flex items-center justify-center rounded-full p-2 transition-all duration-300 ${
+              aria-label={
                 isWishlisted
-                  ? "text-gold opacity-100"
-                  : "text-white/25 opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:text-gold"
+                  ? `${t("remove_from_wishlist")} ${product.name}`
+                  : `${t("add_to_wishlist")} ${product.name}`
+              }
+              aria-pressed={isWishlisted}
+              initial={false}
+              whileTap={{ scale: 0.9 }}
+              transition={{ duration: 0.13 }}
+              className={`absolute end-2.5 top-2.5 z-20 inline-flex items-center justify-center rounded-full p-2 transition-colors duration-200 ${
+                isWishlisted
+                  ? "text-gold"
+                  : "text-white/25 opacity-0 md:opacity-0 md:group-hover:opacity-100"
               }`}
             >
-              <svg
+              <motion.svg
                 aria-hidden="true"
                 className="h-3.5 w-3.5"
                 viewBox="0 0 24 24"
                 fill={isWishlisted ? "currentColor" : "none"}
                 stroke="currentColor"
                 strokeWidth="1.6"
+                animate={isWishlisted ? { scale: [1, 1.3, 1] } : { scale: 1 }}
+                transition={{
+                  duration: 0.45,
+                  ease: EASE,
+                }}
               >
                 <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 10-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z" />
-              </svg>
-            </button>
+              </motion.svg>
+            </motion.button>
 
             {/* Premium badge */}
-            <span className="absolute start-2.5 top-2.5 z-10 inline-flex items-center px-2 py-0.5 text-[0.32rem] font-semibold uppercase tracking-[0.2em] text-gold/70">
+            <span className="absolute start-2.5 top-2.5 z-10 inline-flex items-center px-2 py-0.5 text-[0.32rem] font-semibold uppercase tracking-[0.2em] text-gold/80 transition-opacity duration-300 group-hover:opacity-100">
               Premium
             </span>
-          </div>
+          </motion.div>
         </Link>
       </div>
 
@@ -240,7 +319,9 @@ function ProductCardLite({ product }: { product: ProductData }) {
             {product.shortDescription}
           </p>
         ) : product.category ? (
-          <p className="text-[0.6rem] font-medium uppercase tracking-[0.2em] text-white/45">{product.category}</p>
+          <p className="text-[0.6rem] font-medium uppercase tracking-[0.2em] text-white/45">
+            {product.category}
+          </p>
         ) : null}
         <h3 className="font-display text-base leading-[0.95] tracking-[-0.015em] text-white">
           <Link
@@ -251,7 +332,7 @@ function ProductCardLite({ product }: { product: ProductData }) {
           </Link>
         </h3>
         <p className="font-display text-sm font-light text-gold">{product.price}</p>
-        <button
+        <motion.button
           type="button"
           onClick={() =>
             addItem(
@@ -272,25 +353,26 @@ function ProductCardLite({ product }: { product: ProductData }) {
           }
           className="btn-primary-sm w-full"
           aria-label={`${t("add_to_cart")} ${product.name}`}
+          initial={false}
+          whileHover={{ scale: 1.02, y: -1 }}
+          whileTap={{ scale: 0.97 }}
+          transition={{ duration: 0.18, ease: EASE }}
         >
           {t("add_to_cart")}
-        </button>
-        <Link
-          href={`/product/${product.id}`}
-          className="btn-link w-full justify-center text-white/50 hover:text-gold"
-        >
-          {t("view_product", "VIEW PRODUCT")}
-          <ArrowRight />
-        </Link>
+        </motion.button>
       </div>
     </article>
   );
 }
 
 /* ============================================================
-05 — COLLECTIONS
-============================================================ */
-export function CollectionsShowcase({ collections }: { collections: CollectionData[] }) {
+   COLLECTIONS SHOWCASE
+   ============================================================ */
+export function CollectionsShowcase({
+  collections,
+}: {
+  collections: CollectionData[];
+}) {
   const { t } = useTranslation("home");
   if (collections.length === 0) return null;
 
@@ -303,53 +385,85 @@ export function CollectionsShowcase({ collections }: { collections: CollectionDa
         <Reveal>
           <div className="flex items-center gap-3">
             <span className="h-px w-8 bg-gold" />
-  <span className="label-utility tracking-[0.55em] text-gold/60">
-            {t("curated_collections", "CURATED COLLECTIONS")}
-          </span>
+            <span className="label-utility tracking-[0.55em] text-gold/60">
+              {t("curated_collections", "CURATED COLLECTIONS")}
+            </span>
           </div>
-          <h2 className="mt-5 font-display text-[clamp(1.75rem,4vw,3rem)] leading-[1.0] tracking-[-0.02em] text-white">
+          <motion.h2
+            initial={{ opacity: 0.7 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.7, ease: EASE, delay: 0.1 }}
+            className="mt-5 font-display text-[clamp(1.75rem,4vw,3rem)] leading-[1.0] tracking-[-0.02em] text-white"
+          >
             {t("collections_title", "DISCOVER THE MONADATY COLLECTIONS")}
-          </h2>
-          <p className="mt-3 max-w-[600px] text-[0.9rem] leading-[1.6] text-white/80">
-            {t("collections_desc", "Explore carefully selected Moroccan products, crafted to bring premium quality and authentic character to your everyday moments.")}
-          </p>
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.7, ease: EASE, delay: 0.2 }}
+            className="mt-3 max-w-[600px] text-[0.9rem] leading-[1.6] text-white/60"
+          >
+            {t(
+              "collections_desc",
+              "Explore carefully selected Moroccan products, crafted to bring premium quality and authentic character to your everyday moments.",
+            )}
+          </motion.p>
         </Reveal>
 
         <div className="mx-auto mt-12">
           <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-[2.2fr_1fr] lg:gap-6">
             {featured && (
               <Reveal>
-                <Link href={`/shop?category=${featured.slug}`} className="group block h-full">
-                  <div className="relative h-[460px] w-full overflow-hidden rounded-2xl sm:h-[500px] md:h-[540px] lg:h-[620px]">
+                <Link
+                  href={`/shop?category=${featured.slug}`}
+                  className="group block h-full"
+                >
+                  <motion.div
+                    initial={false}
+                    whileHover={{ scale: 1.01, transition: { duration: 0.5, ease: EASE } }}
+                    transition={{ duration: 0.5, ease: EASE }}
+                    className="relative h-[460px] w-full overflow-hidden rounded-2xl sm:h-[500px] md:h-[540px] lg:h-[620px]"
+                  >
                     <ProductImageOrFallback
                       src={featured.image}
                       alt={featured.title}
                       sizes="(min-width: 1024px) 52vw, 100vw"
                       className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
-                      fallback={
-                        <div className="flex h-full w-full items-center justify-center bg-black-soft">
-                          <span className="font-display text-[5rem] font-light text-white/[0.05]">{featured.title.charAt(0)}</span>
-                        </div>
-                      }
+                      fallback={null}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
                     <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-8 lg:p-10">
-                      <p className="text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-gold/80">
-                        {featured.previewLabel || t("collection_label", "COLLECTION")}
-                      </p>
-                      <h3 className="mt-2 font-display text-[1.25rem] leading-[1.0] tracking-[-0.015em] text-white sm:text-[1.5rem] lg:text-[1.75rem]">
+                      <motion.p
+                        initial={false}
+                        className="text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-gold/80"
+                      >
+                        {featured.previewLabel ||
+                          t("collection_label", "COLLECTION")}
+                      </motion.p>
+                      <motion.h3
+                        initial={false}
+                        whileHover={{ x: 3 }}
+                        transition={{ duration: 0.22, ease: EASE }}
+                        className="mt-2 font-display text-[1.25rem] leading-[1.0] tracking-[-0.015em] text-white sm:text-[1.5rem] lg:text-[1.75rem]"
+                      >
                         {featured.title}
-                      </h3>
+                      </motion.h3>
                       {featured.description && (
                         <p className="mt-2 max-w-md text-[0.78rem] leading-relaxed text-white/70">
                           {featured.description}
                         </p>
                       )}
-                      <span className="mt-4 inline-flex items-center gap-2 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white/60 transition-colors duration-300 group-hover:text-gold">
-                        {t("view_collection", "VIEW COLLECTION")} <ArrowRight />
-                      </span>
+                      <motion.span
+                        initial={false}
+                        whileHover={{ x: 2 }}
+                        transition={{ duration: 0.18, ease: EASE }}
+                        className="mt-4 inline-flex items-center gap-2 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white/60 transition-colors duration-200 group-hover:text-gold"
+                      >
+                        {t("view_collection", "VIEW COLLECTION")}
+                        <ArrowRight />
+                      </motion.span>
                     </div>
-                  </div>
+                  </motion.div>
                 </Link>
               </Reveal>
             )}
@@ -358,37 +472,56 @@ export function CollectionsShowcase({ collections }: { collections: CollectionDa
               <div className="flex flex-col gap-4 md:grid md:grid-cols-2 md:gap-5 lg:flex lg:flex-col lg:gap-6">
                 {secondary.slice(0, 2).map((col, i) => (
                   <Reveal key={col.slug} delay={0.08 * (i + 1)}>
-                    <Link href={`/shop?category=${col.slug}`} className="group block h-full">
-                      <div className="relative h-[280px] w-full overflow-hidden rounded-2xl sm:h-[300px] md:h-[320px] lg:h-[298px]">
+                    <Link
+                      href={`/shop?category=${col.slug}`}
+                      className="group block h-full"
+                    >
+                      <motion.div
+                        initial={false}
+                        whileHover={{ scale: 1.01, transition: { duration: 0.5, ease: EASE } }}
+                        transition={{ duration: 0.5, ease: EASE }}
+                        className="relative h-[280px] w-full overflow-hidden rounded-2xl sm:h-[300px] md:h-[320px] lg:h-[298px]"
+                      >
                         <ProductImageOrFallback
                           src={col.image}
                           alt={col.title}
                           sizes="(min-width: 1024px) 30vw, 100vw"
                           className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
-                          fallback={
-                            <div className="flex h-full w-full items-center justify-center bg-black-soft">
-                              <span className="font-display text-[3rem] font-light text-white/[0.05]">{col.title.charAt(0)}</span>
-                            </div>
-                          }
+                          fallback={null}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                         <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6 lg:p-7">
-                          <p className="text-[0.55rem] font-semibold uppercase tracking-[0.2em] text-gold/80">
-                            {col.previewLabel || t("collection_label", "COLLECTION")}
-                          </p>
-                          <h3 className="mt-1 font-display text-[1rem] leading-[1.0] tracking-[-0.01em] text-white sm:text-[1.125rem] lg:text-[1.25rem]">
+                          <motion.p
+                            initial={false}
+                            className="text-[0.55rem] font-semibold uppercase tracking-[0.2em] text-gold/80"
+                          >
+                            {col.previewLabel ||
+                              t("collection_label", "COLLECTION")}
+                          </motion.p>
+                          <motion.h3
+                            initial={false}
+                            whileHover={{ x: 2 }}
+                            transition={{ duration: 0.22, ease: EASE }}
+                            className="mt-1 font-display text-[1rem] leading-[1.0] tracking-[-0.01em] text-white sm:text-[1.125rem] lg:text-[1.25rem]"
+                          >
                             {col.title}
-                          </h3>
+                          </motion.h3>
                           {col.description && (
                             <p className="mt-1 max-w-[22ch] text-[0.68rem] leading-relaxed text-white/65 line-clamp-2">
                               {col.description}
                             </p>
                           )}
-                          <span className="mt-2 inline-flex items-center gap-1.5 text-[0.5rem] font-semibold uppercase tracking-[0.16em] text-white/50 transition-colors duration-300 group-hover:text-gold">
-                            {t("view_collection", "VIEW")} <ArrowRight />
-                          </span>
+                          <motion.span
+                            initial={false}
+                            whileHover={{ x: 1 }}
+                            transition={{ duration: 0.18, ease: EASE }}
+                            className="mt-2 inline-flex items-center gap-1.5 text-[0.5rem] font-semibold uppercase tracking-[0.16em] text-white/50 transition-colors duration-200 group-hover:text-gold"
+                          >
+                            {t("view_collection", "VIEW")}
+                            <ArrowRight />
+                          </motion.span>
                         </div>
-                      </div>
+                      </motion.div>
                     </Link>
                   </Reveal>
                 ))}
@@ -402,8 +535,8 @@ export function CollectionsShowcase({ collections }: { collections: CollectionDa
 }
 
 /* ============================================================
-06 — BRAND STORY / ABOUT
-============================================================ */
+   BRAND STORY / ABOUT
+   ============================================================ */
 export function BrandStory({
   title,
   description,
@@ -429,24 +562,43 @@ export function BrandStory({
               <h2 className="mt-5 font-display text-[clamp(1.875rem,3.5vw,2.75rem)] leading-[0.95] tracking-[-0.03em] text-white">
                 {title || t("our_story", "OUR STORY")}
               </h2>
-        {description && (
-          <div className="mt-6 max-w-md text-[0.82rem] leading-[1.85] text-white/55">
-            {(description || "").split("\n").map((line, i, arr) => (
-              <p key={line.trim() + String(i)} className={i < arr.length - 1 ? "mb-3" : ""}>
-                {line}
-              </p>
-            ))}
-          </div>
-        )}
+              {description && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.8, ease: EASE, delay: 0.2 }}
+                  className="mt-6 max-w-md text-[0.82rem] leading-[1.85] text-white/55"
+                >
+                  {(description || "")
+                    .split("\n")
+                    .map((line, i, arr) => (
+                      <p
+                        key={line.trim() + String(i)}
+                        className={i < arr.length - 1 ? "mb-3" : ""}
+                      >
+                        {line}
+                      </p>
+                    ))}
+                </motion.div>
+              )}
               <div className="mt-7">
-                <Link href="/about" className="btn-link text-white/50 hover:text-gold">
-                  {t("our_story_link", "DISCOVER OUR STORY")} <ArrowRight />
+                <Link
+                  href="/about"
+                  className="btn-link text-white/50 hover:text-gold"
+                >
+                  {t("our_story_link", "DISCOVER OUR STORY")}{" "}
+                  <ArrowRight />
                 </Link>
               </div>
             </div>
           </Reveal>
           <Reveal delay={0.15} className="lg:col-span-6 lg:col-start-7">
-            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl md:aspect-[16/11]">
+            <motion.div
+              initial={false}
+              whileHover={{ scale: 1.01, transition: { duration: 0.5, ease: EASE } }}
+              transition={{ duration: 0.5, ease: EASE }}
+              className="relative aspect-[4/5] w-full overflow-hidden rounded-xl md:aspect-[16/11]"
+            >
               {image && image !== "/images/placeholder.svg" ? (
                 <ProductImageOrFallback
                   src={image}
@@ -466,7 +618,7 @@ export function BrandStory({
                   {t("crafted_in_morocco", "CRAFTED IN MOROCCO · 2024")}
                 </span>
               </div>
-            </div>
+            </motion.div>
           </Reveal>
         </div>
       </div>
@@ -475,8 +627,8 @@ export function BrandStory({
 }
 
 /* ============================================================
-07 — BEST SELLERS
-============================================================ */
+   BEST SELLERS
+   ============================================================ */
 export function BestSellers({ products }: { products: ProductData[] }) {
   const { t } = useTranslation("home");
   const displayProducts = products.slice(0, 4);
@@ -498,12 +650,15 @@ export function BestSellers({ products }: { products: ProductData[] }) {
                 {t("bestsellers_title", "BEST SELLERS")}
               </h2>
               <p className="mt-3 max-w-md text-[0.78rem] leading-[1.7] text-white/50">
-                {t("bestsellers_desc", "The products our customers keep coming back for.")}
+                {t(
+                  "bestsellers_desc",
+                  "The products our customers keep coming back for.",
+                )}
               </p>
             </div>
             <Link
               href="/shop"
-              className="hidden items-center gap-2 label-utility text-[0.42rem] tracking-[0.2em] text-white/30 transition-colors duration-300 hover:text-gold md:flex"
+              className="hidden items-center gap-2 label-utility text-[0.42rem] tracking-[0.2em] text-white/30 transition-colors duration-200 hover:text-gold md:flex"
             >
               {t("shop_the_range", "SHOP THE RANGE")}
               <ArrowRight />
@@ -524,8 +679,8 @@ export function BestSellers({ products }: { products: ProductData[] }) {
 }
 
 /* ============================================================
-08 — BUILD YOUR BOX
-============================================================ */
+   BUILD YOUR BOX
+   ============================================================ */
 export function BuildYourBox({ products }: { products: ProductData[] }) {
   const { t } = useTranslation("home");
   const { addItem } = useCart();
@@ -560,7 +715,10 @@ export function BuildYourBox({ products }: { products: ProductData[] }) {
             <span className="h-px w-8 bg-gold" />
           </div>
           <p className="mx-auto mt-3 max-w-lg text-[0.82rem] leading-[1.85] text-white/40">
-            {t("bundle_desc", "Choose your favorites, build your selection, and enjoy more of what you love.")}
+            {t(
+              "bundle_desc",
+              "Choose your favorites, build your selection, and enjoy more of what you love.",
+            )}
           </p>
         </div>
 
@@ -571,21 +729,29 @@ export function BuildYourBox({ products }: { products: ProductData[] }) {
             { size: 6, label: "6-PACK", discount: "-10%" },
             { size: 8, label: "8-PACK", discount: "-20%" },
           ].map((opt) => (
-            <button
+            <motion.button
               key={opt.size}
               type="button"
               onClick={() => setPackSize(opt.size)}
-              className={`relative flex flex-col items-center gap-1 rounded-lg border px-5 py-3 transition-all duration-300 ${
+              initial={false}
+              whileHover={{ y: -2, transition: { duration: 0.18, ease: EASE } }}
+              whileTap={{ scale: 0.97, transition: { duration: 0.13 } }}
+              transition={{ duration: 0.18, ease: EASE }}
+              className={`relative flex flex-col items-center gap-1 rounded-lg border px-5 py-3 transition-colors duration-200 ${
                 packSize === opt.size
                   ? "border-gold/60 bg-gold/[0.04]"
                   : "border-white/[0.08] bg-black-surface hover:border-white/15"
               }`}
             >
-              <span className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-white/40">{opt.label}</span>
+              <span className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-white/50">
+                {opt.label}
+              </span>
               {opt.discount && (
-                <span className="text-[0.5rem] font-bold uppercase tracking-[0.15em] text-rouge">{opt.discount}</span>
+                <span className="text-[0.5rem] font-bold uppercase tracking-[0.15em] text-rouge">
+                  {opt.discount}
+                </span>
               )}
-            </button>
+            </motion.button>
           ))}
         </div>
 
@@ -601,10 +767,13 @@ export function BuildYourBox({ products }: { products: ProductData[] }) {
                 const isSelected = selected.has(product.id);
                 return (
                   <Reveal key={product.id}>
-                    <button
+                    <motion.button
                       type="button"
                       onClick={() => toggleProduct(product.id)}
-                      className={`group relative flex flex-col items-center rounded-xl border p-5 text-center transition-all duration-300 ${
+                      initial={false}
+                      whileTap={{ scale: 0.96 }}
+                      transition={{ duration: 0.13 }}
+                      className={`group relative flex flex-col items-center rounded-xl border p-5 text-center transition-colors duration-200 ${
                         isSelected
                           ? "border-gold/50 bg-gold/[0.03]"
                           : "border-white/[0.08] bg-black-surface hover:border-white/15"
@@ -621,19 +790,48 @@ export function BuildYourBox({ products }: { products: ProductData[] }) {
                         </div>
                       ) : (
                         <div className="aspect-square w-full max-w-[120px] flex items-center justify-center">
-                          <span className="font-display text-xl text-white/[0.08]">{product.name.charAt(0)}</span>
+                          <span className="font-display text-xl text-white/[0.08]">
+                            {product.name.charAt(0)}
+                          </span>
                         </div>
                       )}
-                      <p className="mt-3 text-[0.6rem] font-medium text-white/35 line-clamp-2">{product.name}</p>
-                      <p className="mt-1 text-[0.65rem] font-light text-gold">{product.price}</p>
-                      {isSelected && (
-                        <span className="absolute -top-2 -end-2 flex h-5 w-5 items-center justify-center rounded-full bg-gold text-white">
-                          <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                            <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        </span>
-                      )}
-                    </button>
+                      <p className="mt-3 text-[0.6rem] font-medium text-white/40 line-clamp-2">
+                        {product.name}
+                      </p>
+                      <p className="mt-1 text-[0.65rem] font-light text-gold">
+                        {product.price}
+                      </p>
+                      <AnimatePresence>
+                        {isSelected && (
+                          <motion.span
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0, opacity: 0 }}
+                            transition={{
+                              type: "spring",
+                              stiffness: 450,
+                              damping: 22,
+                            }}
+                            className="absolute -top-2 -end-2 flex h-5 w-5 items-center justify-center rounded-full bg-gold text-white"
+                          >
+                            <svg
+                              width="8"
+                              height="8"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="3"
+                            >
+                              <path
+                                d="M20 6L9 17l-5-5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </motion.span>
+                        )}
+                      </AnimatePresence>
+                    </motion.button>
                   </Reveal>
                 );
               })}
@@ -641,33 +839,45 @@ export function BuildYourBox({ products }: { products: ProductData[] }) {
           </div>
 
           {/* Summary bar — sticky on desktop */}
-          {selected.size > 0 && (
-            <div className="lg:col-span-4">
-              <div className="lg:sticky lg:top-24">
-                <Reveal>
-                  <div className="rounded-xl border border-gold/20 bg-black-surface p-6 shadow-premium">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-[0.6rem] uppercase tracking-[0.2em] text-white/40">
-                          {t("bundle_selected", "SELECTED")} · {selected.size} / {packSize}
-                        </p>
-                        <p className="mt-1 font-display text-lg text-white">
-                          {t("bundle_savings", "SAVE UP TO 20%")}
-                        </p>
+          <AnimatePresence>
+            {selected.size > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 12 }}
+                transition={{ duration: 0.3, ease: EASE }}
+                className="lg:col-span-4"
+              >
+                <div className="lg:sticky lg:top-24">
+                  <Reveal>
+                    <div className="rounded-xl border border-gold/20 bg-black-surface p-6 shadow-premium">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-[0.6rem] uppercase tracking-[0.2em] text-white/40">
+                            {t("bundle_selected", "SELECTED")} ·{" "}
+                            {selected.size} / {packSize}
+                          </p>
+                          <p className="mt-1 font-display text-lg text-white">
+                            {t("bundle_savings", "SAVE UP TO 20%")}
+                          </p>
+                        </div>
+                        <motion.button
+                          type="button"
+                          onClick={handleAddBundle}
+                          whileHover={{ scale: 1.02, y: -1 }}
+                          whileTap={{ scale: 0.97 }}
+                          transition={{ duration: 0.18, ease: EASE }}
+                          className="btn-primary h-10 px-6"
+                        >
+                          {t("add_bundle", "ADD BUNDLE TO CART")}
+                        </motion.button>
                       </div>
-                      <button
-                        type="button"
-                        onClick={handleAddBundle}
-                        className="btn-primary h-10 px-6"
-                      >
-                        {t("add_bundle", "ADD BUNDLE TO CART")}
-                      </button>
                     </div>
-                  </div>
-                </Reveal>
-              </div>
-            </div>
-          )}
+                  </Reveal>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </section>
@@ -675,8 +885,8 @@ export function BuildYourBox({ products }: { products: ProductData[] }) {
 }
 
 /* ============================================================
-09 — HOW IT WORKS
-============================================================ */
+   HOW IT WORKS
+   ============================================================ */
 export function HowItWorks() {
   const { t } = useTranslation("home");
   const steps = [
@@ -692,9 +902,14 @@ export function HowItWorks() {
           {steps.map((step, i) => (
             <Reveal key={step.num} delay={0.1 * i}>
               <div className="relative text-center">
-                <span className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full border border-gold/25 bg-gold/[0.04] font-display text-lg text-gold">
+                <motion.span
+                  initial={false}
+                  whileHover={{ scale: 1.08, y: -2 }}
+                  transition={{ duration: 0.22, ease: EASE }}
+                  className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full border border-gold/25 bg-gold/[0.04] font-display text-lg text-gold"
+                >
                   {step.num}
-                </span>
+                </motion.span>
                 <h3 className="mt-5 font-display text-lg leading-[0.95] tracking-[-0.01em] text-white">
                   {t(step.key + "_title", step.title)}
                 </h3>
@@ -711,8 +926,8 @@ export function HowItWorks() {
 }
 
 /* ============================================================
-10 — CUSTOMER NOTES / TESTIMONIALS
-============================================================ */
+   TESTIMONIALS / SOCIAL PROOF
+   ============================================================ */
 export function SocialProof({
   testimonials,
   title,
@@ -733,24 +948,40 @@ export function SocialProof({
         <Reveal>
           <div className="flex items-center gap-3">
             <span className="h-px w-8 bg-gold" />
-            <span className="text-[0.75rem] font-semibold uppercase tracking-[0.2em] text-gold">
+            <span className="text-[0.75rem] font-semibold uppercase tracking-[0.2em] text-gold/80">
               {subtitle || t("what_customers_say", "WHAT THEY SAY")}
             </span>
           </div>
-          <h2 className="mt-5 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] leading-[0.95] tracking-[-0.03em] text-white">
+          <motion.h2
+            initial={{ opacity: 0.7 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.7, ease: EASE, delay: 0.1 }}
+            className="mt-5 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] leading-[0.95] tracking-[-0.03em] text-white"
+          >
             {title || t("customer_notes", "Loved by customers across Morocco.")}
-          </h2>
+          </motion.h2>
         </Reveal>
 
         <Reveal delay={0.1} className="mt-12">
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+          <motion.div
+            layout
+            className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6"
+          >
             {displayTestimonials.map((tItem) => (
-              <div
+              <motion.div
                 key={tItem.id}
+                layout
+                initial={false}
+                whileHover={{
+                  y: -4,
+                  borderColor: "rgba(200,169,106,0.12)",
+                  transition: { duration: 0.22, ease: EASE },
+                }}
+                transition={{ duration: 0.22, ease: EASE }}
                 className="flex flex-col rounded-xl border border-white/[0.06] bg-black-surface p-7 md:p-8"
               >
-                <span className="text-[1rem] tracking-[0.1em] text-gold leading-none">
-                  &#9733;&#9733;&#9733;&#9733;&#9733;
+                <span className="text-[1rem] tracking-[0.1em] text-gold/80 leading-none transition-opacity duration-300">
+                  ★★★★★
                 </span>
                 <p className="mt-4 flex-1 text-[1rem] leading-[1.6] text-white">
                   {tItem.content}
@@ -760,14 +991,14 @@ export function SocialProof({
                     {tItem.name}
                   </p>
                   {tItem.role && (
-                    <p className="text-[0.75rem] leading-none text-gold">
+                    <p className="text-[0.75rem] leading-none text-gold/80">
                       {tItem.role}
                     </p>
                   )}
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </Reveal>
       </div>
     </section>
@@ -775,8 +1006,8 @@ export function SocialProof({
 }
 
 /* ============================================================
-11 — MOROCCAN MOMENT
-============================================================ */
+   MOROCCAN MOMENT
+   ============================================================ */
 export function MoroccanMoment() {
   const { t } = useTranslation("home");
   return (
@@ -784,13 +1015,18 @@ export function MoroccanMoment() {
       <div className="mx-auto max-w-[1400px] px-6 py-16 md:px-10 md:py-20 lg:px-16 lg:py-24">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16 lg:items-center">
           <Reveal className="lg:col-span-7">
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-black-soft flex items-center justify-center">
+            <motion.div
+              initial={false}
+              whileHover={{ scale: 1.01, transition: { duration: 0.5, ease: EASE } }}
+              transition={{ duration: 0.5, ease: EASE }}
+              className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-black-soft flex items-center justify-center"
+            >
               <div className="text-center">
                 <span className="label-utility tracking-[0.5em] text-white/40">
                   {t("pour_serve_savor", "POUR · SERVE · SAVOR")}
                 </span>
               </div>
-            </div>
+            </motion.div>
           </Reveal>
           <Reveal delay={0.15} className="lg:col-span-4 lg:col-start-9">
             <div className="flex items-center gap-3">
@@ -809,7 +1045,10 @@ export function MoroccanMoment() {
               )}
             </p>
             <div className="mt-8">
-              <Link href="/shop" className="btn-link text-white/50 hover:text-gold">
+              <Link
+                href="/shop"
+                className="btn-link text-white/50 hover:text-gold"
+              >
                 {t("explore_drinks", "EXPLORE DRINKS")} <ArrowRight />
               </Link>
             </div>
@@ -821,8 +1060,8 @@ export function MoroccanMoment() {
 }
 
 /* ============================================================
-12 — NEWSLETTER
-============================================================ */
+   NEWSLETTER
+   ============================================================ */
 export function Newsletter({
   title,
   description,
@@ -860,19 +1099,29 @@ export function Newsletter({
               onSubmit={(e) => e.preventDefault()}
             >
               <label className="flex-1 max-w-xs">
-                <span className="sr-only">{placeholder || t("newsletter_label", "Your email")}</span>
-<input
-type="email"
-placeholder={placeholder || t("newsletter_label", "Your email")}
-className="h-11 w-full border-0 border-b border-white/[0.15] bg-transparent px-0 text-[0.82rem] text-white outline-none transition-all duration-200 placeholder:text-white/40 focus:border-gold caret-white"
-style={{ WebkitTextFillColor: "#FFFFFF" }} />
+                <span className="sr-only">
+                  {placeholder || t("newsletter_label", "Your email")}
+                </span>
+                <motion.input
+                  type="email"
+                  placeholder={
+                    placeholder || t("newsletter_label", "Your email")
+                  }
+                  whileFocus={{ scale: 1.01 }}
+                  transition={{ duration: 0.2, ease: EASE }}
+                  className="h-11 w-full border-0 border-b border-white/[0.15] bg-transparent px-0 text-[0.82rem] text-white outline-none transition-all duration-200 placeholder:text-white/40 focus:border-gold/50"
+                  style={{ WebkitTextFillColor: "#FFFFFF", caretColor: "#FFFFFF" }}
+                />
               </label>
-              <button
+              <motion.button
                 type="submit"
+                whileHover={{ scale: 1.02, y: -1 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.18, ease: EASE }}
                 className="btn-primary"
               >
                 {buttonText || t("join", "JOIN US")}
-              </button>
+              </motion.button>
             </form>
           </div>
         </Reveal>
@@ -882,9 +1131,13 @@ style={{ WebkitTextFillColor: "#FFFFFF" }} />
 }
 
 /* ============================================================
-13 — FAQ
-============================================================ */
-export function FAQSection({ faqs }: { faqs: { question: string; answer: string }[] }) {
+   FAQ
+   ============================================================ */
+export function FAQSection({
+  faqs,
+}: {
+  faqs: { question: string; answer: string }[];
+}) {
   const { t } = useTranslation("home");
 
   if (!faqs || faqs.length === 0) {
@@ -893,7 +1146,9 @@ export function FAQSection({ faqs }: { faqs: { question: string; answer: string 
         <div className="mx-auto max-w-[1400px] px-6 py-16 md:px-10 md:py-20 lg:px-16 lg:py-24">
           <div className="mx-auto max-w-3xl">
             <Reveal>
-              <span className="label-utility tracking-[0.55em] text-gold/60">{t("faq_title", "FAQ")}</span>
+              <span className="label-utility tracking-[0.55em] text-gold/60">
+                {t("faq_title", "FAQ")}
+              </span>
               <h2 className="mt-3 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] leading-[0.95] tracking-[-0.03em] text-white">
                 {t("faq_subtitle", "Frequently asked questions")}
               </h2>
@@ -907,22 +1162,29 @@ export function FAQSection({ faqs }: { faqs: { question: string; answer: string 
   return (
     <section className="relative w-full overflow-hidden bg-black border-t border-white/[0.06]">
       <div className="mx-auto max-w-[1400px] px-6 py-16 md:px-10 md:py-20 lg:px-16 lg:py-24">
-        {/* Wide title wrapper — separate from the accordion column */}
+        {/* Wide title wrapper */}
         <div className="mx-auto max-w-3xl text-center">
           <Reveal>
-            <span className="label-utility tracking-[0.55em] text-gold/60">{t("faq_title", "FAQ")}</span>
+            <span className="label-utility tracking-[0.55em] text-gold/60">
+              {t("faq_title", "FAQ")}
+            </span>
             <h2 className="mt-3 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] leading-[0.95] tracking-[-0.03em] text-white">
               {t("faq_subtitle", "Frequently asked questions")}
             </h2>
           </Reveal>
         </div>
 
-        {/* Accordion stays in its own narrower column */}
+        {/* Accordion */}
         <div className="mx-auto mt-10 max-w-2xl">
           <Reveal delay={0.1}>
             <div className="space-y-0">
               {faqs.map((faq, i) => (
-                <FAQItem key={faq.question + faq.answer} question={faq.question} answer={faq.answer} isFirst={i === 0} />
+                <FAQItem
+                  key={faq.question + faq.answer}
+                  question={faq.question}
+                  answer={faq.answer}
+                  isFirst={i === 0}
+                />
               ))}
             </div>
           </Reveal>
@@ -932,55 +1194,86 @@ export function FAQSection({ faqs }: { faqs: { question: string; answer: string 
   );
 }
 
-function FAQItem({ question, answer, isFirst }: { question: string; answer: string; isFirst: boolean }) {
+function FAQItem({
+  question,
+  answer,
+  isFirst,
+}: {
+  question: string;
+  answer: string;
+  isFirst: boolean;
+}) {
   const [open, setOpen] = useState(isFirst);
 
   return (
     <div className={isFirst ? "" : "border-t border-white/[0.06]"}>
-      <button
+      <motion.button
         type="button"
         onClick={() => setOpen(!open)}
+        whileTap={{ scale: 0.995 }}
+        transition={{ duration: 0.13 }}
         className="flex w-full items-center justify-between py-5 text-left transition-colors duration-200 hover:text-gold"
         aria-expanded={open}
       >
-        <span className="pr-6 text-[0.82rem] font-medium text-white">{question}</span>
-        <span className={`shrink-0 text-white/25 transition-transform duration-300 ${open ? "rotate-180" : ""}`}>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+        <span className="pr-6 text-[0.82rem] font-medium text-white">
+          {question}
+        </span>
+        <motion.span
+          animate={{ rotate: open ? 180 : 0 }}
+          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          className="shrink-0 text-white/25"
+        >
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+          >
             <path d="M6 9l6 6 6-6" />
           </svg>
-        </span>
-      </button>
-      <div
-        className={`text-[0.78rem] leading-[1.9] text-white/40 transition-all duration-300 ${
-          open ? "pb-5 opacity-100" : "max-h-0 pb-0 opacity-0 overflow-hidden"
-        }`}
-        style={{ maxHeight: open ? "200px" : "0" }}
+        </motion.span>
+      </motion.button>
+      <motion.div
+        initial={false}
+        animate={
+          open
+            ? { height: "auto", opacity: 1 }
+            : { height: 0, opacity: 0 }
+        }
+        transition={{ duration: 0.3, ease: EASE }}
+        className="overflow-hidden text-[0.78rem] leading-[1.9] text-white/40"
       >
-        {answer}
-      </div>
+        <div className="pb-5">{answer}</div>
+      </motion.div>
     </div>
   );
 }
 
 /* ============================================================
-14 — FINAL CTA
-============================================================ */
+   FINAL CTA
+   ============================================================ */
 export function FinalCTA() {
   return (
     <section className="relative w-full overflow-hidden bg-black border-t border-white/[0.06]">
       <div className="mx-auto max-w-[1400px] px-6 py-16 md:px-10 md:py-20 lg:px-16 lg:py-24">
-        <div className="animate-fade-up">
+        <Reveal>
           <div className="mx-auto max-w-2xl text-center">
             <div className="flex items-center justify-center gap-3">
               <span className="h-px w-8 bg-gold" />
-              <span className="label-utility tracking-[0.55em] text-gold/60">BEGIN THE POUR</span>
+              <span className="label-utility tracking-[0.55em] text-gold/60">
+                BEGIN THE POUR
+              </span>
               <span className="h-px w-8 bg-gold" />
             </div>
             <h2 className="mt-7 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] leading-[0.95] tracking-[-0.02em] text-white">
               YOUR NEXT FAVORITE TASTE IS WAITING.
             </h2>
             <p className="mx-auto mt-4 max-w-md text-[0.78rem] leading-[1.7] text-white/55">
-              Discover the MONADATY collection. Premium Moroccan refreshment, delivered to your door.
+              Discover the MONADATY collection. Premium Moroccan refreshment,
+              delivered to your door.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link href="/shop" className="btn-primary">
@@ -991,7 +1284,7 @@ export function FinalCTA() {
               </Link>
             </div>
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

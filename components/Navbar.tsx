@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback, Suspense } from "react";
 import type { FormEvent } from "react";
 import Link from "next/link";
+import { useState, useRef, useEffect, useCallback, Suspense } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/components/cart-context";
 import { useWishlist } from "@/components/wishlist-context";
 import { usePathname, useRouter } from "next/navigation";
@@ -23,14 +24,15 @@ export function Navbar({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCollectionsOpen, setIsCollectionsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [search, setSearch] = useState("");
+  const [cmdOpen, setCmdOpen] = useState(false);
+
   const { itemCount, toggleDrawer } = useCart();
   const { count: wishlistCount } = useWishlist();
   const pathname = usePathname();
   const router = useRouter();
-  const [search, setSearch] = useState("");
-  const [cmdOpen, setCmdOpen] = useState(false);
-const isShopPage = pathname === "/shop";
 
+  const isShopPage = pathname === "/shop";
   const { t } = useTranslation("navbar");
   const { t: tCommon } = useTranslation("common");
 
@@ -171,59 +173,66 @@ const isShopPage = pathname === "/shop";
   }
 
   return (
-    <header
-      className={`sticky top-0 z-50 bg-black transition-all duration-500 ${
+    <motion.header
+      initial={{ y: -20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className={`sticky top-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "border-b border-white/[0.06]"
-          : "border-b border-transparent"
+          ? "bg-black/80 border-b border-white/[0.06] backdrop-blur-xl"
+          : "bg-black border-b border-transparent"
       }`}
     >
-  <div className="mx-auto flex h-16 md:h-20 items-center justify-between gap-2 md:gap-4 max-w-[1400px] px-6 md:px-10 lg:px-16">
-
-  <Link
-    href="/"
-    className="group shrink-0 font-display text-[0.8rem] font-normal uppercase tracking-[0.55em] text-gold transition-colors duration-500 hover:text-gold/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-4 focus-visible:ring-offset-black hidden md:inline-block"
-    aria-label={`${websiteName} — Home`}
-  >
-    <span>{websiteName}</span>
-  </Link>
-
-  <Link
-    href="/"
-    className="group md:hidden shrink-0 font-display text-[0.65rem] font-normal uppercase tracking-[0.45em] text-gold transition-colors duration-500 hover:text-gold/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-4 focus-visible:ring-offset-black"
-    aria-label={`${websiteName} — Home`}
-  >
-    <span>{websiteName}</span>
-  </Link>
-
-  <nav
-          aria-label="Primary"
-          className="hidden lg:flex lg:flex-1 lg:justify-center"
+      <div className="mx-auto flex h-16 md:h-20 items-center justify-between gap-2 md:gap-4 max-w-[1400px] px-6 md:px-10 lg:px-16">
+        <Link
+          href="/"
+          className="group shrink-0 font-display text-[0.8rem] font-normal uppercase tracking-[0.55em] text-gold transition-colors duration-500 hover:text-gold/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-4 focus-visible:ring-offset-black hidden md:inline-block"
+          aria-label={`${websiteName} — Home`}
         >
+          <span>{websiteName}</span>
+        </Link>
+
+        <Link
+          href="/"
+          className="group md:hidden shrink-0 font-display text-[0.65rem] font-normal uppercase tracking-[0.45em] text-gold transition-colors duration-500 hover:text-gold/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-4 focus-visible:ring-offset-black"
+          aria-label={`${websiteName} — Home`}
+        >
+          <span>{websiteName}</span>
+        </Link>
+
+        <nav aria-label="Primary" className="hidden lg:flex lg:flex-1 lg:justify-center">
           <ul className="flex items-center gap-12 text-[0.52rem] font-medium uppercase tracking-[0.28em]">
             <li>
               <Link
                 href="/"
-              className={`relative py-2 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none ${
-                pathname === "/" ? "text-white" : "text-white/60"
-              }`}
+                className={`relative py-2 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none ${
+                  pathname === "/" ? "text-white" : "text-white/60"
+                }`}
               >
                 {t("home")}
                 {pathname === "/" && (
-                  <span className="absolute -bottom-1.5 left-1/2 h-px w-3.5 -translate-x-1/2 bg-gold" />
+                  <motion.span
+                    layoutId="nav-indicator"
+                    className="absolute -bottom-1.5 left-1/2 h-px w-3.5 -translate-x-1/2 bg-gold"
+                    transition={{ type: "spring", stiffness: 380, damping: 28 }}
+                  />
                 )}
               </Link>
             </li>
             <li>
               <Link
                 href="/shop"
-              className={`relative py-2 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none ${
-                isShopPage ? "text-white" : "text-white/60"
-              }`}
+                className={`relative py-2 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none ${
+                  isShopPage ? "text-white" : "text-white/60"
+                }`}
               >
                 {t("shop")}
                 {isShopPage && (
-                  <span className="absolute -bottom-1.5 left-1/2 h-px w-3.5 -translate-x-1/2 bg-gold" />
+                  <motion.span
+                    layoutId="nav-indicator"
+                    className="absolute -bottom-1.5 left-1/2 h-px w-3.5 -translate-x-1/2 bg-gold"
+                    transition={{ type: "spring", stiffness: 380, damping: 28 }}
+                  />
                 )}
               </Link>
             </li>
@@ -266,39 +275,52 @@ const isShopPage = pathname === "/shop";
                   />
                 </svg>
                 {isCollectionsOpen && (
-                  <span className="absolute -bottom-1.5 left-1/2 h-px w-3.5 -translate-x-1/2 bg-gold" />
+                  <motion.span
+                    layoutId="nav-indicator"
+                    className="absolute -bottom-1.5 left-1/2 h-px w-3.5 -translate-x-1/2 bg-gold"
+                    transition={{ type: "spring", stiffness: 380, damping: 28 }}
+                  />
                 )}
               </button>
-              {isCollectionsOpen && (
-                <div
-                  id="collections-dropdown"
-                  ref={collectionsRef}
-                  role="menu"
-                  aria-label={t("collections")}
-                  onMouseEnter={openWithDelay}
-                  onMouseLeave={closeWithDelay}
-                  className="absolute left-1/2 top-full z-40 -translate-x-1/2 pt-5 animate-fade-in"
-                >
-                  <div className="w-[680px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-input border border-white/[0.1] bg-black/95 backdrop-blur-xl shadow-premium">
-                    <div className="p-7">
-                      <p className="mb-5 label-utility tracking-[0.32em] text-white/40">
-                        {t("our_collections")}
-                      </p>
-                      <div className="grid grid-cols-3 gap-5">
-                        {collections.map((col) => (
-                          <div
-                            key={col.slug}
-                            className="max-w-[200px]"
-                            role="none"
-                          >
-                            <CollectionCard collection={col} />
-                          </div>
-                        ))}
+              <AnimatePresence>
+                {isCollectionsOpen && (
+                  <motion.div
+                    id="collections-dropdown"
+                    ref={collectionsRef}
+                    role="menu"
+                    aria-label={t("collections")}
+                    onMouseEnter={openWithDelay}
+                    onMouseLeave={closeWithDelay}
+                    initial={{ opacity: 0, y: -6, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -4, scale: 0.98 }}
+                    transition={{
+                      duration: 0.22,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className="absolute left-1/2 top-full z-40 -translate-x-1/2 pt-5"
+                  >
+                    <div className="w-[680px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-input border border-white/[0.1] bg-black/95 backdrop-blur-xl shadow-premium">
+                      <div className="p-7">
+                        <p className="mb-5 label-utility tracking-[0.32em] text-white/40">
+                          {t("our_collections")}
+                        </p>
+                        <div className="grid grid-cols-3 gap-5">
+                          {collections.map((col) => (
+                            <div
+                              key={col.slug}
+                              className="max-w-[200px]"
+                              role="none"
+                            >
+                              <CollectionCard collection={col} />
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </li>
             <li>
               <Link
@@ -309,11 +331,15 @@ const isShopPage = pathname === "/shop";
               >
                 {t("about")}
                 {pathname === "/about" && (
-                  <span className="absolute -bottom-1.5 left-1/2 h-px w-3.5 -translate-x-1/2 bg-gold" />
+                  <motion.span
+                    layoutId="nav-indicator"
+                    className="absolute -bottom-1.5 left-1/2 h-px w-3.5 -translate-x-1/2 bg-gold"
+                    transition={{ type: "spring", stiffness: 380, damping: 28 }}
+                  />
                 )}
               </Link>
             </li>
-  </ul>
+          </ul>
         </nav>
 
         <div className="flex shrink-0 items-center gap-0.5">
@@ -375,12 +401,19 @@ const isShopPage = pathname === "/shop";
               <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 10-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z" />
             </svg>
             {wishlistCount > 0 && (
-              <span
+              <motion.span
                 key={`wish-${wishlistCount}`}
+                initial={{ scale: 0.6 }}
+                animate={{ scale: 1 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 500,
+                  damping: 20,
+                }}
                 className="absolute -end-1 -top-1 inline-flex h-3.5 min-w-[0.8rem] items-center justify-center rounded-full bg-gold px-1 text-[0.42rem] font-bold text-white"
               >
                 {wishlistCount}
-              </span>
+              </motion.span>
             )}
           </Link>
 
@@ -413,16 +446,21 @@ const isShopPage = pathname === "/shop";
               <path d="M16 10a4 4 0 01-8 0" />
             </svg>
             {itemCount > 0 && (
-              <span
+              <motion.span
                 key={`cart-${itemCount}`}
+                initial={{ scale: 0.6 }}
+                animate={{ scale: 1 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 500,
+                  damping: 20,
+                }}
                 className="absolute -end-1 -top-1 inline-flex h-3.5 min-w-[0.8rem] items-center justify-center rounded-full bg-gold px-1 text-[0.42rem] font-bold text-white"
               >
                 {itemCount}
-              </span>
+              </motion.span>
             )}
           </button>
-
-
 
           {!isShopPage && (
             <form
@@ -439,7 +477,7 @@ const isShopPage = pathname === "/shop";
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="h-8 w-28 rounded-input border border-white/[0.15] bg-white/[0.06] px-3 pe-7 text-[0.6rem] text-white outline-none transition-all duration-300 placeholder:text-white/40 focus:w-36 focus:border-white/30 focus:bg-white/[0.1]"
-style={{ WebkitTextFillColor: "#FFFFFF", caretColor: "#FFFFFF" }}
+                style={{ WebkitTextFillColor: "#FFFFFF", caretColor: "#FFFFFF" }}
               />
             </form>
           )}
@@ -453,159 +491,189 @@ style={{ WebkitTextFillColor: "#FFFFFF", caretColor: "#FFFFFF" }}
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
           >
-            {isMenuOpen ? (
-              <svg
-                aria-hidden="true"
-                width={16}
-                height={16}
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              >
-                <path d="M18 6L6 18" />
-                <path d="M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg
-                aria-hidden="true"
-                width={16}
-                height={16}
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              >
-                <path d="M4 7h16" />
-                <path d="M4 12h16" />
-                <path d="M4 17h16" />
-              </svg>
-            )}
+            <AnimatePresence mode="wait">
+              {isMenuOpen ? (
+                <motion.span
+                  key="close"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="inline-flex"
+                >
+                  <svg
+                    aria-hidden="true"
+                    width={16}
+                    height={16}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  >
+                    <path d="M18 6L6 18" />
+                    <path d="M6 6l12 12" />
+                  </svg>
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="open"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="inline-flex"
+                >
+                  <svg
+                    aria-hidden="true"
+                    width={16}
+                    height={16}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  >
+                    <path d="M4 7h16" />
+                    <path d="M4 12h16" />
+                    <path d="M4 17h16" />
+                  </svg>
+                </motion.span>
+              )}
+            </AnimatePresence>
           </button>
         </div>
       </div>
 
-      {isMenuOpen && (
-  <div
-    ref={mobileMenuRef}
-    id="mobile-menu"
-    role="dialog"
-    aria-modal="true"
-    aria-label="Navigation menu"
-    className="lg:hidden border-t border-white/[0.06] bg-black animate-fade-in"
-    style={{ background: "rgba(23,23,23,0.97)", backdropFilter: "blur(28px) saturate(1.3)", borderTop: "1px solid rgba(255,255,255,0.06)" }}
-  >
-          <div className="max-h-[85vh] overflow-y-auto">
-            <div className="flex items-center justify-between px-6 pt-4 pb-2">
-              <Link
-                href="/"
-                onClick={() => setIsMenuOpen(false)}
-                className="font-display text-[0.7rem] font-normal uppercase tracking-[0.5em] text-[#C8A96A] transition-colors duration-300"
-              >
-                {websiteName}
-              </Link>
-              <button
-                type="button"
-                onClick={() => setIsMenuOpen(false)}
-                className="flex h-9 w-9 items-center justify-center rounded-input text-white/50 transition-colors duration-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/15"
-                aria-label={t("toggle_menu")}
-              >
-                <svg
-                  aria-hidden="true"
-                  width={16}
-                  height={16}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                >
-                  <path d="M18 6L6 18" />
-                  <path d="M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-
-            <nav aria-label="Mobile primary" className="px-4 pt-2 pb-6">
-              <div className="flex flex-col gap-0">
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            ref={mobileMenuRef}
+            id="mobile-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation menu"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:hidden border-t border-white/[0.06] bg-black overflow-hidden"
+            style={{
+              background: "rgba(23,23,23,0.97)",
+              backdropFilter: "blur(28px) saturate(1.3)",
+              borderTop: "1px solid rgba(255,255,255,0.06)",
+            }}
+          >
+            <div className="max-h-[85vh] overflow-y-auto">
+              <div className="flex items-center justify-between px-6 pt-4 pb-2">
                 <Link
                   href="/"
                   onClick={() => setIsMenuOpen(false)}
-                  className={`rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] transition-colors duration-200 hover:bg-white/[0.06] hover:text-white ${
-                    pathname === "/"
-                      ? "text-white bg-white/[0.06]"
-                      : "text-white/50"
-                  }`}
+                  className="font-display text-[0.7rem] font-normal uppercase tracking-[0.5em] text-[#C8A96A] transition-colors duration-300"
                 >
-                  {t("home")}
+                  {websiteName}
                 </Link>
-                <Link
-                  href="/shop"
+                <button
+                  type="button"
                   onClick={() => setIsMenuOpen(false)}
-                  className={`rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] transition-colors duration-200 hover:bg-white/[0.06] hover:text-white ${
-                    isShopPage
-                      ? "text-white bg-white/[0.06]"
-                      : "text-white/50"
-                  }`}
+                  className="flex h-9 w-9 items-center justify-center rounded-input text-white/50 transition-colors duration-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/15"
+                  aria-label={t("toggle_menu")}
                 >
-                  {t("shop")}
-                </Link>
+                  <svg
+                    aria-hidden="true"
+                    width={16}
+                    height={16}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  >
+                    <path d="M18 6L6 18" />
+                    <path d="M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
 
-                <details className="group rounded-input">
-                  <summary className="flex cursor-pointer items-center justify-between rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] text-white/50 transition-colors duration-200 hover:bg-white/[0.06] hover:text-white [&::-webkit-details-marker]:hidden [&::marker]:hidden">
-                    {t("collections")}
-                    <svg
-                      aria-hidden="true"
-                      width={12}
-                      height={12}
-                      className="h-3 w-3 shrink-0 opacity-40 transition-transform duration-250 group-open:rotate-180"
-                      viewBox="0 0 12 12"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                    >
-                      <path
-                        d="M3 4.5L6 7.5L9 4.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </summary>
-                  <div className="space-y-0.5 px-3 pb-2 pt-1">
-                    {collections.map((col) => (
-                      <Link
-                        key={col.slug}
-                        href={`/shop?category=${col.slug}`}
-                        onClick={() => setIsMenuOpen(false)}
-                        className="block rounded-input px-5 py-3 text-[0.68rem] text-white/50 transition-colors duration-200 hover:bg-white/[0.06] hover:text-white"
+              <nav aria-label="Mobile primary" className="px-4 pt-2 pb-6">
+                <div className="flex flex-col gap-0">
+                  <Link
+                    href="/"
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] transition-colors duration-200 hover:bg-white/[0.06] hover:text-white ${
+                      pathname === "/"
+                        ? "text-white bg-white/[0.06]"
+                        : "text-white/50"
+                    }`}
+                  >
+                    {t("home")}
+                  </Link>
+                  <Link
+                    href="/shop"
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] transition-colors duration-200 hover:bg-white/[0.06] hover:text-white ${
+                      isShopPage
+                        ? "text-white bg-white/[0.06]"
+                        : "text-white/50"
+                    }`}
+                  >
+                    {t("shop")}
+                  </Link>
+
+                  <details className="group rounded-input">
+                    <summary className="flex cursor-pointer items-center justify-between rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] text-white/50 transition-colors duration-200 hover:bg-white/[0.06] hover:text-white [&::-webkit-details-marker]:hidden [&::marker]:hidden">
+                      {t("collections")}
+                      <svg
+                        aria-hidden="true"
+                        width={12}
+                        height={12}
+                        className="h-3 w-3 shrink-0 opacity-40 transition-transform duration-250 group-open:rotate-180"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
                       >
-                        {col.title}
-                      </Link>
-                    ))}
-                  </div>
-                </details>
+                        <path
+                          d="M3 4.5L6 7.5L9 4.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </summary>
+                    <div className="space-y-0.5 px-3 pb-2 pt-1">
+                      {collections.map((col) => (
+                        <Link
+                          key={col.slug}
+                          href={`/shop?category=${col.slug}`}
+                          onClick={() => setIsMenuOpen(false)}
+                          className="block rounded-input px-5 py-3 text-[0.68rem] text-white/50 transition-colors duration-200 hover:bg-white/[0.06] hover:text-white"
+                        >
+                          {col.title}
+                        </Link>
+                      ))}
+                    </div>
+                  </details>
 
-                <Link
-                  href="/about"
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] transition-colors duration-200 hover:bg-white/[0.06] hover:text-white ${
-                    pathname === "/about"
-                      ? "text-white bg-white/[0.06]"
-                      : "text-white/50"
-                  }`}
-                >
-                  {t("about")}
-                </Link>
-  <Link
-    href="/admin/login"
-    onClick={() => setIsMenuOpen(false)}
-    className="inline-flex h-10 w-full items-center justify-center rounded-btn bg-burgundy text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-white shadow-rouge transition-all duration-300 hover:bg-burgundy-dark active:translate-y-0"
-  >
-    {t("admin_login", "Connexion Admin")}
-  </Link>
-               </div>
+                  <Link
+                    href="/about"
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] transition-colors duration-200 hover:bg-white/[0.06] hover:text-white ${
+                      pathname === "/about"
+                        ? "text-white bg-white/[0.06]"
+                        : "text-white/50"
+                    }`}
+                  >
+                    {t("about")}
+                  </Link>
+                  <Link
+                    href="/admin/login"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="inline-flex h-10 w-full items-center justify-center rounded-btn bg-burgundy text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-white shadow-rouge transition-all duration-300 hover:bg-burgundy-dark active:translate-y-0"
+                  >
+                    {t("admin_login", "Connexion Admin")}
+                  </Link>
+                </div>
+              </nav>
 
               <div className="mx-5 my-5 h-px bg-white/[0.08]" />
 
@@ -629,7 +697,10 @@ style={{ WebkitTextFillColor: "#FFFFFF", caretColor: "#FFFFFF" }}
                     className="shrink-0 text-white/20"
                   >
                     <circle cx="11" cy="11" r="4" />
-                    <path d="M21 21l-4.35-4.35" strokeLinecap="round" />
+                    <path
+                      d="M21 21l-4.35-4.35"
+                      strokeLinecap="round"
+                    />
                   </svg>
                   <span>{t("open_search", "Search")}</span>
                 </button>
@@ -690,21 +761,18 @@ style={{ WebkitTextFillColor: "#FFFFFF", caretColor: "#FFFFFF" }}
                 </div>
               </div>
 
-<div className="mx-5 mt-5 h-px bg-white/[0.06]" />
-  <div className="mt-4 px-2">
-    <MobileLanguageSwitcher onSelect={() => setIsMenuOpen(false)} />
-  </div>
-            </nav>
-          </div>
-        </div>
-      )}
+              <div className="mx-5 mt-5 h-px bg-white/[0.06]" />
+              <div className="mt-4 px-2">
+                <MobileLanguageSwitcher onSelect={() => setIsMenuOpen(false)} />
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <Suspense fallback={null}>
-        <CommandPalette
-          open={cmdOpen}
-          onClose={() => setCmdOpen(false)}
-        />
+        <CommandPalette open={cmdOpen} onClose={() => setCmdOpen(false)} />
       </Suspense>
-    </header>
+    </motion.header>
   );
 }

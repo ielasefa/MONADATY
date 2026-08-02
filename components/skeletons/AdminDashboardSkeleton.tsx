@@ -9,7 +9,7 @@ export function AdminDashboardSkeleton() {
       </div>
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
         {Array.from({ length: 10 }).map((_, i) => (
-          <div key={i} className="rounded-xl border border-white/[0.06] bg-[#11100F] p-5">
+          <div key={i} className="skeleton-shimmer-wave animate-pulse rounded-xl border border-white/[0.06] bg-[#11100F] p-5">
             <Skeleton className="h-3 w-8" rounded="full" />
             <Skeleton className="mt-3 h-2 w-16" rounded="full" />
             <Skeleton className="mt-2 h-5 w-20" rounded="md" />

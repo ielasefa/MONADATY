@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
 
 type NavItem = { label: string; href: string; icon: string };
@@ -57,27 +58,57 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
         </div>
       </div>
 
-      <nav aria-label={t("admin_navigation")} className="flex-1 space-y-1 p-3">
-        {items.map((item) => (
+  <nav aria-label={t("admin_navigation")} className="flex-1 space-y-1 p-3">
+    {items.map((item) => {
+      const active = isActive(item.href);
+      return (
+        <motion.div
+          key={item.href}
+          initial={false}
+          animate={{
+            x: active ? 4 : 0,
+            scale: active ? 1.01 : 1,
+          }}
+          transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+        >
           <Link
-            key={item.href}
             href={item.href}
             className={`group relative flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
-              isActive(item.href)
+              active
                 ? "border-l-[3px] border-burgundy bg-burgundy/10 pl-[9px] text-white"
                 : "border-l-[3px] border-transparent text-white/50 hover:border-burgundy/40 hover:bg-burgundy/5 hover:text-white"
             }`}
           >
-            <span aria-hidden="true" className={`w-5 text-center text-base transition-colors ${isActive(item.href) ? "text-burgundy" : "text-white/50 group-hover:text-burgundy"}`}>
+            <motion.span
+              aria-hidden="true"
+              className={`w-5 text-center text-base ${
+                active
+                  ? "text-burgundy"
+                  : "text-white/50 group-hover:text-burgundy"
+              }`}
+              animate={{ color: active ? "#9B2638" : "inherit" }}
+              transition={{ duration: 0.2 }}
+            >
               {item.icon}
-            </span>
+            </motion.span>
             {item.label}
-            {isActive(item.href) && (
-              <div className="absolute right-3 h-1.5 w-1.5 rounded-full bg-burgundy shadow-[0_0_6px_rgba(155,38,56,0.5)]" />
+            {active && (
+              <motion.div
+                layoutId="sidebar-active-dot"
+                className="absolute right-3 h-1.5 w-1.5 rounded-full bg-burgundy"
+                transition={{
+                  type: "spring",
+                  stiffness: 500,
+                  damping: 25,
+                }}
+                style={{ boxShadow: "0 0 6px rgba(155,38,56,0.5)" }}
+              />
             )}
           </Link>
-        ))}
-      </nav>
+        </motion.div>
+      );
+    })}
+  </nav>
 
       <div className="divider mx-4" />
 

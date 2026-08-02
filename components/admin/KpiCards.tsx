@@ -103,7 +103,7 @@ export function KpiCards({ cards }: Props) {
               </p>
             </div>
 
-            <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-yellow/5 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
+                      <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-gold/[0.04] opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
           </div>
         );
       })}
