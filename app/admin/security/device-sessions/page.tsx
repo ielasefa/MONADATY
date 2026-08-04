@@ -44,8 +44,8 @@ export default function DeviceSessionsPage() {
     <div className="container-shell mx-auto px-6 py-10">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <p className="luxury-label mb-2">Security</p>
-          <h1 className="text-3xl font-semibold tracking-tight text-white">Device Sessions</h1>
+          <p className="luxury-label mb-2">{t("security", "Security")}</p>
+          <h1 className="text-3xl font-semibold tracking-tight text-white">{t("device_sessions", "Device Sessions")}</h1>
           <p className="mt-1 text-sm text-muted">{t("manage_sessions")}</p>
         </div>
           <button onClick={handleTerminateAll} className="btn-secondary text-xs">{t("terminate_all")}</button>

@@ -155,9 +155,9 @@ export function AdminManagement({ admins: initialAdmins }: { admins: AdminRecord
               <th className="luxury-label px-6 py-4">{t("name_label")}</th>
               <th className="luxury-label px-6 py-4">{t("email_label")}</th>
               <th className="luxury-label px-6 py-4">{t("role_label")}</th>
-              <th className="luxury-label px-6 py-4">Status</th>
-              <th className="luxury-label px-6 py-4">Last Login</th>
-              <th className="luxury-label px-6 py-4">Actions</th>
+              <th className="luxury-label px-6 py-4">{t("status", "Status")}</th>
+              <th className="luxury-label px-6 py-4">{t("last_login", "Last Login")}</th>
+              <th className="luxury-label px-6 py-4">{t("actions", "Actions")}</th>
             </tr>
           </thead>
           <tbody>

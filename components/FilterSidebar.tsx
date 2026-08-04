@@ -78,7 +78,7 @@ export const FilterSidebar = memo(function FilterSidebar({
               type="number"
               inputMode="numeric"
               min={0}
-              aria-label="Minimum price"
+              aria-label={t("min_price", "Minimum price")}
               value={localMin || ""}
               onChange={(e) => setLocalMin(Number(e.target.value))}
               className="h-10 w-full rounded-input border border-white/[0.08] bg-[#1E1E1E] px-3 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/35 focus:border-gold/50 focus:ring-1 focus:ring-gold/20 caret-white"
@@ -91,7 +91,7 @@ export const FilterSidebar = memo(function FilterSidebar({
               type="number"
               inputMode="numeric"
               min={0}
-              aria-label="Maximum price"
+              aria-label={t("max_price", "Maximum price")}
               value={localMax || ""}
               onChange={(e) => setLocalMax(Number(e.target.value))}
               className="h-10 w-full rounded-input border border-white/[0.08] bg-[#1E1E1E] px-3 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/35 focus:border-gold/50 focus:ring-1 focus:ring-gold/20 caret-white"
@@ -103,7 +103,7 @@ export const FilterSidebar = memo(function FilterSidebar({
           type="button"
           onClick={() => onPriceChange(localMin, localMax)}
           className="btn-secondary h-9 w-full text-[0.55rem] font-semibold uppercase tracking-[0.14em]"
-          aria-label="Apply price filter"
+          aria-label={t("apply_price_filter", "Apply price filter")}
         >
           {t("apply")}
         </button>

@@ -59,55 +59,61 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
       </div>
 
   <nav aria-label={t("admin_navigation")} className="flex-1 space-y-1 p-3">
-    {items.map((item) => {
-      const active = isActive(item.href);
-      return (
-        <motion.div
-          key={item.href}
-          initial={false}
-          animate={{
-            x: active ? 4 : 0,
-            scale: active ? 1.01 : 1,
-          }}
-          transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <Link
-            href={item.href}
-            className={`group relative flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
-              active
-                ? "border-l-[3px] border-burgundy bg-burgundy/10 pl-[9px] text-white"
-                : "border-l-[3px] border-transparent text-white/50 hover:border-burgundy/40 hover:bg-burgundy/5 hover:text-white"
-            }`}
-          >
-            <motion.span
-              aria-hidden="true"
-              className={`w-5 text-center text-base ${
-                active
-                  ? "text-burgundy"
-                  : "text-white/50 group-hover:text-burgundy"
-              }`}
-              animate={{ color: active ? "#9B2638" : "inherit" }}
-              transition={{ duration: 0.2 }}
-            >
-              {item.icon}
-            </motion.span>
-            {item.label}
-            {active && (
-              <motion.div
-                layoutId="sidebar-active-dot"
-                className="absolute right-3 h-1.5 w-1.5 rounded-full bg-burgundy"
-                transition={{
-                  type: "spring",
-                  stiffness: 500,
-                  damping: 25,
-                }}
-                style={{ boxShadow: "0 0 6px rgba(155,38,56,0.5)" }}
-              />
-            )}
-          </Link>
-        </motion.div>
-      );
-    })}
+ {items.map((item) => {
+   const active = isActive(item.href);
+   return (
+     <motion.div
+       key={item.href}
+       initial={false}
+       animate={{
+         x: active ? 4 : 0,
+         scale: active ? 1.01 : 1,
+       }}
+       transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+     >
+       <Link
+         href={item.href}
+         className={`group relative flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
+           active
+             ? "border-l-[3px] border-burgundy bg-burgundy/10 pl-[9px] text-white"
+             : "border-l-[3px] border-transparent text-white/50 hover:border-burgundy/40 hover:bg-burgundy/5 hover:text-white"
+         }`}
+       >
+         <motion.span
+           aria-hidden="true"
+           className={`w-5 text-center text-base ${
+             active
+               ? "text-burgundy"
+               : "text-white/50 group-hover:text-burgundy"
+           }`}
+           animate={{
+             color: active ? "#9B2638" : undefined,
+             scale: active ? [1, 1.2, 1] : 1,
+           }}
+           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+         >
+           {item.icon}
+         </motion.span>
+         {item.label}
+         {active && (
+           <motion.div
+             layoutId="sidebar-active-dot"
+             className="absolute right-3 h-1.5 w-1.5 rounded-full bg-burgundy"
+             transition={{
+               type: "spring",
+               stiffness: 500,
+               damping: 25,
+             }}
+             style={{
+               boxShadow: "0 0 6px rgba(155,38,56,0.5)",
+               animation: "pulseSubtle 2s ease-in-out infinite",
+             }}
+           />
+         )}
+       </Link>
+     </motion.div>
+   );
+ })}
   </nav>
 
       <div className="divider mx-4" />

@@ -38,33 +38,33 @@ export function BlogClient({
       {(editingId === "__new__" || editing) && (
         <div className="mb-8 luxury-card p-8">
           <h2 className="luxury-label mb-4">
-            {editingId === "__new__" ? "New Article" : `Edit: ${editing?.title}`}
+            {editingId === "__new__" ? t("new_article", "New Article") : `${t("edit_label", "Edit")}: ${editing?.title}`}
           </h2>
           <form action={saveArticle} className="space-y-5">
             {editing && <input type="hidden" name="id" value={editing.id} />}
             <div className="grid grid-cols-2 gap-4">
               <Field label={t("title_label")} name="title" defaultValue={editing?.title} />
-              <Field label="Slug" name="slug" defaultValue={editing?.slug} />
+              <Field label={t("slug", "Slug")} name="slug" defaultValue={editing?.slug} />
             </div>
-            <Field label="Content" name="content" defaultValue={editing?.content} rows={6} />
+            <Field label={t("content", "Content")} name="content" defaultValue={editing?.content} rows={6} />
             <div className="grid grid-cols-3 gap-4">
-              <Field label="Author" name="author" defaultValue={editing?.author} />
-              <SingleImageUploader label="Cover Image" value={editing?.coverImage || ""} // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              <Field label={t("author", "Author")} name="author" defaultValue={editing?.author} />
+              <SingleImageUploader label={t("cover_image", "Cover Image")} value={editing?.coverImage || ""} // eslint-disable-next-line @typescript-eslint/no-unused-vars
 onChange={(_url) => {}} folder="monadaty/blog" />
               <input type="hidden" name="coverImage" defaultValue={editing?.coverImage || ""} />
-              <Field label="Publish Date" name="publishDate" type="date" defaultValue={editing?.publishDate?.slice(0, 10)} />
+              <Field label={t("publish_date", "Publish Date")} name="publishDate" type="date" defaultValue={editing?.publishDate?.slice(0, 10)} />
             </div>
-            <Field label="Tags (comma separated)" name="tags" defaultValue={editing?.tags?.join(", ")} />
+            <Field label={t("tags_comma", "Tags (comma separated)")} name="tags" defaultValue={editing?.tags?.join(", ")} />
             <div className="grid grid-cols-2 gap-4">
               <label className="flex items-center gap-3 cursor-pointer pt-6">
                 <input type="hidden" name="published" value="false" />
-                <input type="checkbox" name="published" value="true" defaultChecked={editing?.published} className="h-4 w-4 rounded border-white/20 accent-gold" /> <span className="text-sm text-muted">Published</span>
+                <input type="checkbox" name="published" value="true" defaultChecked={editing?.published} className="h-4 w-4 rounded border-white/20 accent-gold" /> <span className="text-sm text-muted">{t("published", "Published")}</span>
               </label>
               <Field label={t("order_label")} name="order" type="number" defaultValue={editing?.order?.toString()} />
             </div>
             <div className="flex gap-3 pt-2">
               <button type="submit" className="btn-primary">
-                {editingId === "__new__" ? "Create Article" : "Update Article"}
+                {editingId === "__new__" ? t("create_article", "Create Article") : t("update_article", "Update Article")}
               </button>
               <button type="button" onClick={() => setEditingId(null)} className="btn-secondary">{t("cancel")}</button>
             </div>
@@ -78,8 +78,8 @@ onChange={(_url) => {}} folder="monadaty/blog" />
             <div className="flex-1">
               <p className="font-medium text-white">{a.title}</p>
               <p className="text-sm text-muted">
-                {a.published ? <span className="badge-emerald mr-2">Published</span> : <span className="badge-red mr-2">Draft</span>}
-                {a.author || "No author"} &middot; {a.publishDate?.slice(0, 10)}
+                {a.published ? <span className="badge-emerald mr-2">{t("published", "Published")}</span> : <span className="badge-red mr-2">{t("draft", "Draft")}</span>}
+                {a.author || t("no_author", "No author")} &middot; {a.publishDate?.slice(0, 10)}
               </p>
             </div>
             <button

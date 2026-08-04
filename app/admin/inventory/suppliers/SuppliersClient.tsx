@@ -60,7 +60,7 @@ export function SuppliersClient({ suppliers: initial }: { suppliers: Supplier[] 
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search suppliers..."
+          placeholder={t("search_suppliers", "Search suppliers...")}
           className="input-premium w-full max-w-md"
         />
       </div>
@@ -70,12 +70,12 @@ export function SuppliersClient({ suppliers: initial }: { suppliers: Supplier[] 
           <table className="w-full text-left text-sm">
             <thead>
               <tr className="border-b border-white/[0.06] text-xs uppercase tracking-[0.1em] text-muted">
-                <th className="px-5 py-4 font-medium">Name</th>
-                <th className="px-5 py-4 font-medium">Company</th>
-                <th className="px-5 py-4 font-medium">Email</th>
-                <th className="px-5 py-4 font-medium">Phone</th>
-                <th className="px-5 py-4 font-medium">Status</th>
-                <th className="px-5 py-4 font-medium text-right">Actions</th>
+                <th className="px-5 py-4 font-medium">{t("name", "Name")}</th>
+                <th className="px-5 py-4 font-medium">{t("company", "Company")}</th>
+                <th className="px-5 py-4 font-medium">{t("email", "Email")}</th>
+                <th className="px-5 py-4 font-medium">{t("phone", "Phone")}</th>
+                <th className="px-5 py-4 font-medium">{t("status", "Status")}</th>
+                <th className="px-5 py-4 font-medium text-right">{t("actions", "Actions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/[0.06]">
@@ -94,7 +94,7 @@ export function SuppliersClient({ suppliers: initial }: { suppliers: Supplier[] 
                   <td className="px-5 py-4 text-muted">{s.phone || "\u2014"}</td>
                   <td className="px-5 py-4">
                     <button
-                      aria-label={`${s.active ? "Deactivate" : "Activate"} ${s.name}`}
+                      aria-label={`${s.active ? t("deactivate", "Deactivate") : t("activate", "Activate")} ${s.name}`}
                       onClick={() => toggleStatus(s.id, s.active)}
                       className={`inline-flex rounded-full px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.15em] transition-all ${
                         s.active
@@ -102,7 +102,7 @@ export function SuppliersClient({ suppliers: initial }: { suppliers: Supplier[] 
                           : "badge-red bg-burgundy/10 text-burgundy border border-burgundy/20"
                       }`}
                     >
-                      {s.active ? "Active" : "Inactive"}
+                      {s.active ? t("active", "Active") : t("inactive", "Inactive")}
                     </button>
                   </td>
                   <td className="px-5 py-4 text-right">

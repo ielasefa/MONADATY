@@ -3,7 +3,7 @@ import { getAuthenticatedAdmin } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { saveSeo } from "@/lib/landing-cms";
 import { requireOrigin } from "@/lib/csrf";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { logError } from "@/lib/logger";
 
 const SEO_FIELDS = [
@@ -96,10 +96,9 @@ export async function PUT(request: Request) {
       }
     }
 
-    await saveSeo(configId, sanitized, admin.name);
+  await saveSeo(configId, sanitized, admin.name);
 
-    revalidatePath("/");
-    revalidatePath("/admin/landing");
+  revalidateTag("landing");
 
     return NextResponse.json({ success: true });
   } catch (error) {

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "@/hooks/useTranslation";
 import {
   ResponsiveContainer,
   BarChart,
@@ -15,6 +16,7 @@ type Props = {
 };
 
 export default function OrdersChart({ data }: Props) {
+  const { t } = useTranslation("admin");
   if (data.length === 0) {
     return (
       <div className="rounded-xl border border-white/[0.06] bg-surface p-6">
@@ -22,7 +24,7 @@ export default function OrdersChart({ data }: Props) {
           Orders (30 days)
         </p>
         <div className="flex h-48 items-center justify-center">
-          <p className="text-sm text-muted">No data yet</p>
+          <p className="text-sm text-muted">{t("no_data_yet", "No data yet")}</p>
         </div>
       </div>
     );

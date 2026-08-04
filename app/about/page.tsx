@@ -43,11 +43,11 @@ return (
           {/* Bottom markers — chapter + city */}
           <div className="mt-20 flex items-center justify-between md:mt-28 lg:mt-36">
             <span className="label-utility tracking-[0.5em] text-ivory/12">
-              CASABLANCA · BERRECHID
+              {t(translations, "locations_marker", lang)}
             </span>
             <span className="hidden h-px flex-1 mx-6 bg-ivory/[0.04] md:block" />
             <span className="label-utility tracking-[0.5em] text-ivory/12">
-              2024 — PRESENT
+              {t(translations, "year_range", lang)}
             </span>
           </div>
         </div>
@@ -68,10 +68,10 @@ return (
                 <div className="absolute inset-0 flex items-end justify-start p-8">
                   <div className="space-y-3">
                     <span className="block label-utility tracking-[0.55em] text-ivory/12">
-                      CASABLANCA
+                      {t(translations, "casablanca_city", lang)}
                </span>
                     <span className="block label-utility text-[0.4rem] tracking-[0.4em] text-ivory/10">
-                      ATLANTIC COAST · MOROCCO
+                      {t(translations, "atlantic_coast", lang)}
                </span>
              </div>
                </div>
@@ -141,7 +141,7 @@ return (
               <div className="pt-4 flex items-center gap-3">
                 <span className="h-px w-10 bg-gold/30" />
                  <span className="label-utility tracking-[0.4em] text-ivory/18">
-                  ATLAS · SAHARA · MEDINA
+                  {t(translations, "atlas_sahara_medina", lang)}
               </span>
             </div>
           </div>
@@ -152,10 +152,10 @@ return (
                 <div className="absolute inset-0 flex items-end justify-start p-8">
                   <div className="space-y-3">
                     <span className="block label-utility tracking-[0.55em] text-ivory/12">
-                      BERRECHID
+                      {t(translations, "berrechid_city", lang)}
                </span>
                     <span className="block label-utility text-[0.4rem] tracking-[0.4em] text-ivory/10">
-                      THE PLAIN · MOROCCO
+                      {t(translations, "the_plain", lang)}
                </span>
              </div>
                </div>
@@ -251,7 +251,7 @@ return (
                   href="/shop"
                   className="btn-link group"
                 >
-                  EXPLORE THE COLLECTION
+                  {t(translations, "explore_collection_cta", lang)}
                   <span className="transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180">
                     →
              </span>

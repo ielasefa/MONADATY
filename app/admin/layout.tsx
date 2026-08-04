@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { isAuthenticated } from "@/lib/auth";
+import { getLanguage, getTranslation, loadTranslations } from "@/lib/translations";
 import SidebarWrapper from "@/components/admin/SidebarWrapper";
 import { NotificationBell } from "@/components/admin/NotificationBell";
 import { getNotifications, getUnreadCount } from "@/lib/admin-notifications";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Admin",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await getLanguage();
+  const translations = await loadTranslations("admin");
+  return { title: getTranslation(translations, "admin_panel", lang, "Admin") };
+}
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const headersList = await headers();
@@ -40,7 +43,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <div className="flex min-h-screen bg-bg">
       <SidebarWrapper />
       <main className="flex-1 overflow-auto bg-bg p-0">
-        <div className="sticky top-0 z-40 flex h-16 items-center justify-end gap-3 border-b border-white/[0.06] bg-bg/80 px-6 backdrop-blur-2xl">
+        <div className="sticky top-0 z-40 flex h-16 items-center justify-end gap-3 border-b border-white/[0.06] bg-bg/80 px-6 backdrop-blur-2xl will-change-transform">
           <div className="flex items-center gap-3">
             <NotificationBell initialNotifications={notifications} initialUnread={unreadCount} />
           </div>

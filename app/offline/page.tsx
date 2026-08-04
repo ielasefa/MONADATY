@@ -15,7 +15,7 @@ export default function OfflinePage() {
   </div>
 
       <span className="label-utility tracking-[0.55em] text-ivory/18">
-        OFFLINE
+        {t("offline_label")}
     </span>
 
       <h1 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[0.92] tracking-[-0.04em] text-ivory">

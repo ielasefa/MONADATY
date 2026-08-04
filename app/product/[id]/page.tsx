@@ -36,7 +36,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     <div className="min-h-screen bg-black">
       {/* Breadcrumb — minimal editorial */}
       <div className="container-premium pt-8 md:pt-10">
-        <nav aria-label="Breadcrumb" className="flex items-center gap-2 label-utility tracking-[0.32em] text-ivory/12">
+        <nav aria-label={t(translations, "breadcrumb_aria_label", lang)} className="flex items-center gap-2 label-utility tracking-[0.32em] text-ivory/12">
           <Link href="/shop" className="transition-colors hover:text-ivory/35">
             {t(translations, "back_to_drinks", lang)}
          </Link>
@@ -109,7 +109,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div className="pt-6 flex items-center gap-3">
               <span className="h-px w-10 bg-ivory/[0.04]" />
               <span className="label-utility tracking-[0.4em] text-ivory/12">
-                CRAFTED IN MOROCCO · 2024
+                {t(translations, "crafted_in_morocco_label", lang)}
              </span>
            </div>
          </div>

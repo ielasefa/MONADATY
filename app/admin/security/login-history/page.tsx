@@ -37,8 +37,8 @@ export default function LoginHistoryPage() {
   return (
     <div className="container-shell mx-auto px-6 py-10">
       <div className="mb-6">
-        <p className="luxury-label mb-2">Security</p>
-        <h1 className="text-3xl font-semibold tracking-tight text-white">Login History</h1>
+        <p className="luxury-label mb-2">{t("security", "Security")}</p>
+        <h1 className="text-3xl font-semibold tracking-tight text-white">{t("login_history", "Login History")}</h1>
         <input
           type="text"
           placeholder={t("search_placeholder")}

@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { logError } from "@/lib/logger";
 
 export type LandingPageData = {
@@ -53,7 +53,7 @@ async function ensureFeatured(configId: string) {
 }
 async function ensureCollectionHeader(configId: string) {
   if (!(await prisma.landingCollectionHeader.findUnique({ where: { configId } }))) {
-    await prisma.landingCollectionHeader.create({ data: { configId, enabled: true, title: "Shop by Collection", subtitle: "THE COLLECTIONS" } });
+    await prisma.landingCollectionHeader.create({ data: { configId, enabled: true, title: "Shop by Collection", subtitle: "THE COLLECTIONS", selectedCollectionIds: "" } });
   }
 }
 async function ensureTestimonialHeader(configId: string) {
@@ -77,13 +77,35 @@ async function ensureNewsletter(configId: string) {
   }
 }
 
-export const getAdminLanding = cache(async (): Promise<LandingPageData> => {
+export const getLatestLandingConfigId = unstable_cache(async (): Promise<string> => {
+  let config = await prisma.landingConfig.findFirst({ orderBy: { createdAt: "desc" } });
+  if (!config) {
+    await migrateFromSettings();
+    config = await prisma.landingConfig.findFirst({ orderBy: { createdAt: "desc" } });
+  }
+  if (!config) {
+    return ensureConfig();
+  }
+  return config.id;
+},
+  [],
+  { tags: ["landing"] },
+);
+
+export const getLandingConfigWithRelations = unstable_cache(async (configId: string) => {
+  return prisma.landingConfig.findUnique({
+    where: { id: configId },
+    include: { hero: true, brandStory: true, featured: true, collectionHeader: true, testimonialHeader: true, moroccanMoment: true, finalCta: true, newsletter: true, seo: true },
+  });
+},
+  [],
+  { tags: ["landing"] },
+);
+
+export const getAdminLanding = unstable_cache(async (): Promise<LandingPageData> => {
   try {
-    const configId = await ensureConfig();
-    const config = await prisma.landingConfig.findUnique({
-      where: { id: configId },
-      include: { hero: true, brandStory: true, featured: true, collectionHeader: true, testimonialHeader: true, moroccanMoment: true, finalCta: true, newsletter: true, seo: true },
-    });
+    const configId = await getLatestLandingConfigId();
+    const config = await getLandingConfigWithRelations(configId);
 
     if (!config) throw new Error("Config not found");
 
@@ -97,9 +119,9 @@ export const getAdminLanding = cache(async (): Promise<LandingPageData> => {
       id: config.id,
       status: config.status,
       sectionOrder: JSON.parse(config.sectionOrder || "[]"),
-      publishedAt: config.publishedAt?.toISOString() ?? null,
+      publishedAt: config.publishedAt != null ? (config.publishedAt instanceof Date ? config.publishedAt.toISOString() : String(config.publishedAt)) : null,
       publishedBy: config.publishedBy,
-      updatedAt: config.updatedAt.toISOString(),
+      updatedAt: config.updatedAt instanceof Date ? config.updatedAt.toISOString() : String(config.updatedAt),
       seo: config.seo ? (() => { const { configId: _c, id: _id, createdAt: _cr, updatedAt: _ur, ...rest } = config.seo as Record<string, unknown>; return rest as Record<string, string>; })() : null,
       hero: mapSection(config.hero as unknown as Record<string, unknown>),
       brandStory: mapSection(config.brandStory as unknown as Record<string, unknown>),
@@ -114,7 +136,10 @@ export const getAdminLanding = cache(async (): Promise<LandingPageData> => {
     logError(error, "getAdminLanding");
     return { id: "", status: "draft", sectionOrder: [], publishedAt: null, publishedBy: "", updatedAt: new Date().toISOString(), seo: null, hero: null, brandStory: null, featured: null, collectionHeader: null, testimonialHeader: null, moroccanMoment: null, finalCta: null, newsletter: null };
   }
-});
+},
+  [],
+  { tags: ["landing"] },
+);
 
 export async function saveSection(configId: string, sectionType: string, data: Record<string, unknown>, adminName: string) {
   switch (sectionType) {
@@ -210,14 +235,63 @@ async function createVersion(configId: string, adminName: string) {
   });
 }
 
-export async function getVersions(configId: string) {
+export const getVersions = unstable_cache(async (configId: string) => {
   return prisma.landingVersion.findMany({
     where: { configId },
     orderBy: { version: "desc" },
     take: 50,
     select: { id: true, version: true, status: true, label: true, createdBy: true, createdAt: true },
   });
-}
+},
+  [],
+  { tags: ["landing"] },
+);
+
+export type FeaturedSectionEntry = {
+  id: string;
+  position: number;
+  enabled: boolean;
+  productId: string;
+  product: { id: string; name: string; slug: string; price: string; image: string } | null;
+};
+
+export const getFeaturedSectionEntries = unstable_cache(async (configId: string): Promise<FeaturedSectionEntry[]> => {
+  const config = await getLandingConfigWithRelations(configId);
+  const productIds = config?.featured?.productIds ? config.featured.productIds.split(",").filter(Boolean) : [];
+  if (productIds.length === 0) return [];
+  const products = await prisma.product.findMany({
+    where: { id: { in: productIds } },
+    select: { id: true, name: true, slug: true, price: true, image: true },
+  });
+  const productMap = new Map(products.map((p) => [p.id, p]));
+  return productIds.map((productId, idx) => {
+    const product = productMap.get(productId);
+    return {
+      id: productId,
+      position: idx,
+      enabled: true,
+      productId,
+      product: product ? { id: product.id, name: product.name, slug: product.slug, price: product.price, image: product.image } : null,
+    };
+  });
+},
+  [],
+  { tags: ["landing"] },
+);
+
+export const getLandingCollections = unstable_cache(async () => {
+  return (await prisma.collection.findMany({ orderBy: { order: "asc" } })).map((c) => ({
+    id: c.id,
+    name: c.name,
+    slug: c.slug,
+    image: c.image,
+    landingEnabled: c.landingEnabled,
+    landingOrder: c.landingOrder,
+  }));
+},
+  [],
+  { tags: ["landing"] },
+);
 
 export async function getVersion(configId: string, versionId: string) {
   const version = await prisma.landingVersion.findUnique({ where: { id: versionId } });

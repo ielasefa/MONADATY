@@ -36,7 +36,7 @@ export default function ProfitReportPage() {
           <p className="mt-1 text-xl font-semibold text-burgundy">{data.totalCost.toFixed(2)} DH</p>
         </div>
         <div className="rounded-card border border-white/[0.06] bg-card p-4">
-          <p className="text-[10px] text-muted">Net Profit</p>
+          <p className="text-[10px] text-muted">{t("net_profit", "Net Profit")}</p>
           <p className={`mt-1 text-xl font-semibold ${data.profit >= 0 ? "text-gold" : "text-burgundy"}`}>{data.profit.toFixed(2)} DH</p>
         </div>
         <div className="rounded-card border border-white/[0.06] bg-card p-4">

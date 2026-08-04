@@ -117,9 +117,9 @@ export function AdjustmentsClient({
   return (
     <div>
       <div className="mb-8">
-        <p className="luxury-label mb-2">Inventory</p>
-        <h1 className="text-3xl font-semibold tracking-tight text-white">Stock Adjustments</h1>
-        <p className="mt-1 text-sm text-muted">Adjust stock levels manually</p>
+        <p className="luxury-label mb-2">{t("inventory", "Inventory")}</p>
+        <h1 className="text-3xl font-semibold tracking-tight text-white">{t("adjustments_title", "Stock Adjustments")}</h1>
+        <p className="mt-1 text-sm text-muted">{t("adjust_stock_manually", "Adjust stock levels manually")}</p>
       </div>
 
       {error && (
@@ -130,25 +130,25 @@ export function AdjustmentsClient({
       )}
 
       <div className="mb-10 luxury-card rounded-card border border-white/[0.06] bg-card p-6">
-        <p className="luxury-label mb-6 text-[10px] text-muted">New Adjustment</p>
+        <p className="luxury-label mb-6 text-[10px] text-muted">{t("new_adjustment", "New Adjustment")}</p>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <div className="space-y-2">
-              <label className="luxury-label text-[10px] text-muted">Warehouse</label>
+              <label className="luxury-label text-[10px] text-muted">{t("warehouse", "Warehouse")}</label>
               <select
                 value={selectedWarehouse}
                 onChange={(e) => setSelectedWarehouse(e.target.value)}
                 className="input-premium w-full"
                 required
               >
-                <option value="">Select warehouse...</option>
+                <option value="">{t("po_select_warehouse", "Select warehouse...")}</option>
                 {warehouses.map((w) => (
                   <option key={w.id} value={w.id}>{w.name}</option>
                 ))}
               </select>
             </div>
             <div className="space-y-2">
-              <label className="luxury-label text-[10px] text-muted">Product</label>
+              <label className="luxury-label text-[10px] text-muted">{t("product", "Product")}</label>
               <input
                 type="text"
                 value={productQuery}
@@ -160,7 +160,7 @@ export function AdjustmentsClient({
                 placeholder={t("search_products")}
                 className="input-premium w-full"
               />
-              {searching && <p className="text-xs text-muted">Searching...</p>}
+              {searching && <p className="text-xs text-muted">{t("searching", "Searching...")}</p>}
               {searchResults.length > 0 && !selectedProduct && (
                 <div className="mt-1 max-h-40 overflow-y-auto rounded-card border border-white/[0.06] bg-surface">
                   {searchResults.map((p) => (
@@ -198,13 +198,13 @@ export function AdjustmentsClient({
               )}
             </div>
             <div className="space-y-2">
-              <label className="luxury-label text-[10px] text-muted">Current Stock</label>
+              <label className="luxury-label text-[10px] text-muted">{t("current_stock", "Current Stock")}</label>
               <div className="flex h-12 items-center rounded-button border border-white/[0.06] bg-surface px-4 text-sm text-white">
                 {currentStock !== null ? currentStock : "\u2014"}
               </div>
             </div>
             <div className="space-y-2">
-              <label className="luxury-label text-[10px] text-muted">New Stock</label>
+              <label className="luxury-label text-[10px] text-muted">{t("new_stock", "New Stock")}</label>
               <input
                 type="number"
                 min={0}
@@ -245,19 +245,19 @@ export function AdjustmentsClient({
       </div>
 
       <div>
-        <p className="luxury-label mb-4 text-[10px] text-muted">Recent Adjustments</p>
+        <p className="luxury-label mb-4 text-[10px] text-muted">{t("recent_adjustments", "Recent Adjustments")}</p>
         <div className="glass overflow-hidden rounded-card border border-white/[0.06]">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
                 <tr className="border-b border-white/[0.06] text-xs uppercase tracking-[0.1em] text-muted">
-                  <th className="px-5 py-4 font-medium">Date</th>
-                  <th className="px-5 py-4 font-medium">Product</th>
-                  <th className="px-5 py-4 font-medium">Warehouse</th>
-                  <th className="px-5 py-4 font-medium text-right">Prev</th>
-                  <th className="px-5 py-4 font-medium text-right">New</th>
-                  <th className="px-5 py-4 font-medium text-right">Change</th>
-                  <th className="px-5 py-4 font-medium">Reason</th>
+                  <th className="px-5 py-4 font-medium">{t("date", "Date")}</th>
+                  <th className="px-5 py-4 font-medium">{t("product", "Product")}</th>
+                  <th className="px-5 py-4 font-medium">{t("warehouse", "Warehouse")}</th>
+                  <th className="px-5 py-4 font-medium text-right">{t("prev", "Prev")}</th>
+                  <th className="px-5 py-4 font-medium text-right">{t("new", "New")}</th>
+                  <th className="px-5 py-4 font-medium text-right">{t("change_col", "Change")}</th>
+                  <th className="px-5 py-4 font-medium">{t("reason", "Reason")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/[0.06]">

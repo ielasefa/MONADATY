@@ -67,8 +67,8 @@ export default function ApiKeysPage() {
   return (
     <div className="container-shell mx-auto px-6 py-10">
       <div className="mb-8">
-        <p className="luxury-label mb-2">Security</p>
-        <h1 className="text-3xl font-semibold tracking-tight text-white">API Keys</h1>
+        <p className="luxury-label mb-2">{t("security", "Security")}</p>
+        <h1 className="text-3xl font-semibold tracking-tight text-white">{t("api_keys", "API Keys")}</h1>
         <p className="mt-1 text-sm text-muted">{t("api_keys_desc")}</p>
       </div>
 

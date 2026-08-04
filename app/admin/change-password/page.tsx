@@ -90,7 +90,7 @@ export default function ChangePasswordPage() {
                 disabled={loading}
                 className={inputClass}
               />
-              <ToggleButton on={showCurrent} onClick={() => setShowCurrent((s) => !s)} label="current password" />
+              <ToggleButton on={showCurrent} onClick={() => setShowCurrent((s) => !s)} label={t("current_password_label", "current password")} />
             </div>
           </div>
 
@@ -108,7 +108,7 @@ export default function ChangePasswordPage() {
                 disabled={loading}
                 className={inputClass}
               />
-              <ToggleButton on={showNew} onClick={() => setShowNew((s) => !s)} label="new password" />
+              <ToggleButton on={showNew} onClick={() => setShowNew((s) => !s)} label={t("new_password_label", "new password")} />
             </div>
             <p className="mt-1 text-xs text-muted">{t("min_chars")}</p>
           </div>
@@ -127,7 +127,7 @@ export default function ChangePasswordPage() {
                 disabled={loading}
                 className={inputClass}
               />
-              <ToggleButton on={showConfirm} onClick={() => setShowConfirm((s) => !s)} label="confirm password" />
+              <ToggleButton on={showConfirm} onClick={() => setShowConfirm((s) => !s)} label={t("confirm_password_label", "confirm password")} />
             </div>
           </div>
 

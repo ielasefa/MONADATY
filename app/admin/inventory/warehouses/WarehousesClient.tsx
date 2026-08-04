@@ -60,7 +60,7 @@ export function WarehousesClient({ warehouses: initial }: { warehouses: Warehous
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search warehouses..."
+          placeholder={t("search_warehouses", "Search warehouses...")}
           className="input-premium w-full max-w-md"
         />
       </div>
@@ -70,12 +70,12 @@ export function WarehousesClient({ warehouses: initial }: { warehouses: Warehous
           <table className="w-full text-left text-sm">
             <thead>
               <tr className="border-b border-white/[0.06] text-xs uppercase tracking-[0.1em] text-muted">
-                <th className="px-5 py-4 font-medium">Code</th>
-                <th className="px-5 py-4 font-medium">Name</th>
-                <th className="px-5 py-4 font-medium">City</th>
-                <th className="px-5 py-4 font-medium">Manager</th>
-                <th className="px-5 py-4 font-medium">Status</th>
-                <th className="px-5 py-4 font-medium text-right">Actions</th>
+                <th className="px-5 py-4 font-medium">{t("code_label", "Code")}</th>
+                <th className="px-5 py-4 font-medium">{t("name", "Name")}</th>
+                <th className="px-5 py-4 font-medium">{t("city", "City")}</th>
+                <th className="px-5 py-4 font-medium">{t("manager_field", "Manager")}</th>
+                <th className="px-5 py-4 font-medium">{t("warehouse_status", "Status")}</th>
+                <th className="px-5 py-4 font-medium text-right">{t("actions", "Actions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/[0.06]">
@@ -94,7 +94,7 @@ export function WarehousesClient({ warehouses: initial }: { warehouses: Warehous
                   <td className="px-5 py-4 text-muted">{w.manager || "\u2014"}</td>
                   <td className="px-5 py-4">
                     <button
-                      aria-label={`${w.isActive ? "Deactivate" : "Activate"} ${w.name}`}
+                      aria-label={`${w.isActive ? t("deactivate", "Deactivate") : t("activate", "Activate")} ${w.name}`}
                       onClick={() => toggleStatus(w.id, w.isActive)}
                       className={`inline-flex rounded-full px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.15em] transition-all ${
                         w.isActive

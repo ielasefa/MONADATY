@@ -41,7 +41,7 @@ export default function InventoryReportPage() {
           <p className="mt-1 text-xl font-semibold text-gold">{data.lowStockCount}</p>
         </div>
         <div className="rounded-card border border-white/[0.06] bg-card p-4">
-          <p className="text-[10px] text-muted">Out of Stock</p>
+          <p className="text-[10px] text-muted">{t("out_of_stock", "Out of Stock")}</p>
           <p className="mt-1 text-xl font-semibold text-burgundy">{data.outOfStockCount}</p>
         </div>
       </div>

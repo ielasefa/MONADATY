@@ -61,7 +61,7 @@ export function Footer({
   const { t } = useTranslation("footer");
 
   const copyright =
-    settings?.copyright ?? "© 2025 MONADATY. All rights reserved.";
+    settings?.copyright ?? t("copyright", "© 2025 MONADATY. All rights reserved.");
   const contactEmail = settings?.email;
   const socialLinks = settings?.socialLinks ?? {
     twitter: "",
@@ -99,15 +99,31 @@ export function Footer({
   return (
     <footer className="relative w-full overflow-hidden bg-black">
       {/* Top gold divider */}
-      <motion.div
-        initial={{ opacity: 0, scaleX: 0.4 }}
-        whileInView={{ opacity: 1, scaleX: 1 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        className="mx-auto max-w-[1400px] px-6 md:px-10 lg:px-16"
-      >
-        <div className="h-px w-full bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
-      </motion.div>
+ {/* Top gold divider — luxury shimmer reveal */}
+ <motion.div
+   initial={{ opacity: 0, scaleX: 0.2 }}
+   whileInView={{ opacity: 1, scaleX: 1 }}
+   viewport={{ once: true, margin: "-100px" }}
+   transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+   className="mx-auto max-w-[1400px] px-6 md:px-10 lg:px-16"
+ >
+ <div className="relative h-px w-full overflow-hidden">
+   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
+   <motion.div
+     aria-hidden
+     className="absolute inset-0 will-change-transform"
+     initial={{ x: "-100%", opacity: 0 }}
+     whileInView={{ x: "100%", opacity: [0, 0.8, 0] }}
+     viewport={{ once: true }}
+     transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+     style={{
+       background:
+         "linear-gradient(90deg, transparent 0%, rgba(212,188,126,0.45) 50%, transparent 100%)",
+       filter: "blur(1px)",
+     }}
+   />
+ </div>
+ </motion.div>
 
       {/* Main content */}
       <motion.div
@@ -129,7 +145,7 @@ export function Footer({
             >
               <Link
                 href="/"
-                aria-label={`${websiteName || "MONADATY"} — Home`}
+                aria-label={`${websiteName || "MONADATY"} — ${t("home_label", "Home")}`}
                 className="group inline-block focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-4 focus-visible:ring-offset-black"
               >
                 <motion.span
@@ -208,71 +224,71 @@ export function Footer({
               </div>
             </motion.div>
 
-            {/* Navigation columns */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{
-                duration: 0.7,
-                ease: [0.16, 1, 0.3, 1],
-                delay: 0.1,
-              }}
-              className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:col-span-7 lg:col-start-6"
-            >
-              <nav aria-label="Shop">
-                <p className="label-utility text-[0.42rem] font-semibold uppercase tracking-[0.25em] text-white/40">
-                  {t("shop", "SHOP")}
-                </p>
-                <ul className="mt-5 space-y-3">
-                  {shopLinks.map((link) => (
-                    <li key={link.label}>
-                      <Link
-                        href={link.href}
-                        className="text-[0.7rem] tracking-[0.04em] text-white/50 transition-all duration-300 hover:text-gold hover:translate-x-0.5"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
+ {/* Navigation columns */}
+ <motion.div
+   initial={{ opacity: 0, y: 16 }}
+   whileInView={{ opacity: 1, y: 0 }}
+   viewport={{ once: true, margin: "-40px" }}
+   transition={{
+     duration: 0.7,
+     ease: [0.16, 1, 0.3, 1],
+     delay: 0.2,
+   }}
+   className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:col-span-7 lg:col-start-6"
+ >
+ <nav aria-label={t("shop", "Shop")}>
+ <p className="label-utility text-[0.42rem] font-semibold uppercase tracking-[0.25em] text-white/40">
+   {t("shop", "SHOP")}
+ </p>
+ <ul className="mt-5 space-y-3">
+   {shopLinks.map((link) => (
+     <li key={link.label} className="relative">
+       <Link
+         href={link.href}
+         className="text-[0.7rem] tracking-[0.04em] text-white/50 transition-all duration-300 hover:text-gold hover:translate-x-0.5 relative after:absolute after:bottom-0 after:start-0 after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
+       >
+         {link.label}
+       </Link>
+     </li>
+   ))}
+ </ul>
+ </nav>
 
-              <nav aria-label="Discover">
-                <p className="label-utility text-[0.42rem] font-semibold uppercase tracking-[0.25em] text-white/40">
-                  {t("discover", "DISCOVER")}
-                </p>
-                <ul className="mt-5 space-y-3">
-                  {discoverLinks.map((link) => (
-                    <li key={link.label}>
-                      <Link
-                        href={link.href}
-                        className="text-[0.7rem] tracking-[0.04em] text-white/50 transition-all duration-300 hover:text-gold hover:translate-x-0.5"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
+ <nav aria-label={t("discover", "Discover")}>
+ <p className="label-utility text-[0.42rem] font-semibold uppercase tracking-[0.25em] text-white/40">
+   {t("discover", "DISCOVER")}
+ </p>
+ <ul className="mt-5 space-y-3">
+   {discoverLinks.map((link) => (
+     <li key={link.label} className="relative">
+       <Link
+         href={link.href}
+         className="text-[0.7rem] tracking-[0.04em] text-white/50 transition-all duration-300 hover:text-gold hover:translate-x-0.5 relative after:absolute after:bottom-0 after:start-0 after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
+       >
+         {link.label}
+       </Link>
+     </li>
+   ))}
+ </ul>
+ </nav>
 
-              <nav aria-label="Help">
-                <p className="label-utility text-[0.42rem] font-semibold uppercase tracking-[0.25em] text-white/40">
-                  {t("help", "HELP")}
-                </p>
-                <ul className="mt-5 space-y-3">
-                  {helpLinks.map((link) => (
-                    <li key={link.label}>
-                      <Link
-                        href={link.href}
-                        className="text-[0.7rem] tracking-[0.04em] text-white/50 transition-all duration-300 hover:text-gold hover:translate-x-0.5"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
+ <nav aria-label={t("help", "Help")}>
+ <p className="label-utility text-[0.42rem] font-semibold uppercase tracking-[0.25em] text-white/40">
+   {t("help", "HELP")}
+ </p>
+ <ul className="mt-5 space-y-3">
+   {helpLinks.map((link) => (
+     <li key={link.label} className="relative">
+       <Link
+         href={link.href}
+         className="text-[0.7rem] tracking-[0.04em] text-white/50 transition-all duration-300 hover:text-gold hover:translate-x-0.5 relative after:absolute after:bottom-0 after:start-0 after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
+       >
+         {link.label}
+       </Link>
+     </li>
+   ))}
+ </ul>
+ </nav>
             </motion.div>
           </div>
         </div>
@@ -310,7 +326,7 @@ export function Footer({
             </nav>
             <span className="h-px w-px bg-ivory/[0.06]" />
             <span className="text-[0.42rem] tracking-[0.18em] text-white/40">
-              Casablanca · Morocco
+              {t("location", "Casablanca · Morocco")}
             </span>
             <LanguageSwitcher />
           </div>

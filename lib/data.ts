@@ -100,6 +100,9 @@ export async function saveProducts(products: StoredProduct[]): Promise<void> {
 }
 
 export async function saveCollections(collections: StoredCollection[]): Promise<void> {
+  await prisma.collection.deleteMany({
+    where: { slug: { notIn: collections.map((c) => c.slug) } },
+  });
   for (const c of collections) {
     await prisma.collection.upsert({
       where: { slug: c.slug },
@@ -110,6 +113,9 @@ export async function saveCollections(collections: StoredCollection[]): Promise<
 }
 
 export async function saveCategories(categories: StoredCategory[]): Promise<void> {
+  await prisma.category.deleteMany({
+    where: { slug: { notIn: categories.map((c) => c.slug) } },
+  });
   for (const c of categories) {
     await prisma.category.upsert({
       where: { slug: c.slug },
@@ -120,6 +126,9 @@ export async function saveCategories(categories: StoredCategory[]): Promise<void
 }
 
 export async function saveArticles(articles: StoredArticle[]): Promise<void> {
+  await prisma.blogPost.deleteMany({
+    where: { id: { notIn: articles.map((a) => a.id) } },
+  });
   for (const a of articles) {
     await prisma.blogPost.upsert({
       where: { slug: a.slug },

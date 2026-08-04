@@ -29,7 +29,7 @@ export default async function CheckoutPage() {
             </h1>
 
             <p className="mt-6 max-w-lg text-[0.82rem] leading-[1.85] text-white/65">
-              You&rsquo;re one step away from enjoying premium Moroccan beverages.
+              {t(translations, "checkout_description", lang)}
             </p>
           </div>
         </div>

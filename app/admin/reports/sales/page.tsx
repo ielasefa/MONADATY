@@ -53,17 +53,17 @@ export default function SalesReportPage() {
           <p className="mt-1 text-xl font-semibold text-gold">{summary.totalRevenue.toFixed(2)} DH</p>
         </div>
         <div className="rounded-card border border-white/[0.06] bg-card p-4">
-          <p className="text-[10px] text-muted">Items Sold</p>
+          <p className="text-[10px] text-muted">{t("items_sold", "Items Sold")}</p>
           <p className="mt-1 text-xl font-semibold text-white">{summary.totalItems}</p>
         </div>
         <div className="rounded-card border border-white/[0.06] bg-card p-4">
-          <p className="text-[10px] text-muted">Avg Order Value</p>
+          <p className="text-[10px] text-muted">{t("avg_order_value", "Avg Order Value")}</p>
           <p className="mt-1 text-xl font-semibold text-gold">{summary.avgOrderValue.toFixed(2)} DH</p>
         </div>
       </div>
 
       <div className="mb-6 rounded-card border border-white/[0.06] bg-card p-6">
-        <h3 className="mb-4 text-sm font-semibold text-white">Daily Revenue</h3>
+        <h3 className="mb-4 text-sm font-semibold text-white">{t("daily_revenue", "Daily Revenue")}</h3>
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={data}>
@@ -78,7 +78,7 @@ export default function SalesReportPage() {
       </div>
 
       <div className="rounded-card border border-white/[0.06] bg-card p-6">
-        <h3 className="mb-4 text-sm font-semibold text-white">Daily Orders</h3>
+        <h3 className="mb-4 text-sm font-semibold text-white">{t("daily_orders", "Daily Orders")}</h3>
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data}>

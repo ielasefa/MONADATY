@@ -89,15 +89,15 @@ export default function AutomationPage() {
     <div className="container-shell mx-auto px-6 py-10">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <p className="luxury-label mb-2">System</p>
-          <h1 className="text-3xl font-semibold tracking-tight text-white">Automation Center</h1>
-          <p className="mt-1 text-sm text-muted">Scheduled jobs and task automation</p>
+          <p className="luxury-label mb-2">{t("system_label")}</p>
+          <h1 className="text-3xl font-semibold tracking-tight text-white">{t("automation_center")}</h1>
+          <p className="mt-1 text-sm text-muted">{t("automation_desc")}</p>
         </div>
         <div className="flex gap-3">
           <button onClick={() => { setShowLogs(!showLogs); if (!showLogs) fetchLogs(); }} className="btn-secondary text-xs">
             {showLogs ? t("hide_logs") : `${t("job_logs", "Job Logs")}`}
           </button>
-          <button onClick={handleInit} className="btn-primary text-xs">Initialize Default Jobs</button>
+          <button onClick={handleInit} className="btn-primary text-xs">{t("initialize_default_jobs")}</button>
         </div>
       </div>
 
@@ -107,7 +107,7 @@ export default function AutomationPage() {
 
       {showLogs && (
         <div className="mb-6 rounded-card border border-white/[0.06] bg-card p-6">
-          <h3 className="mb-4 text-sm font-semibold text-white">Recent Job Logs</h3>
+          <h3 className="mb-4 text-sm font-semibold text-white">{t("recent_job_logs")}</h3>
           <div className="max-h-72 space-y-2 overflow-y-auto">
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {logs.map((log: any, i: number) => (
@@ -142,7 +142,7 @@ export default function AutomationPage() {
                 disabled={running === job.id}
                 className="inline-flex h-8 items-center rounded-button bg-gold/20 px-3 text-[11px] font-semibold text-gold transition hover:bg-gold/30 disabled:opacity-50"
               >
-                {running === job.id ? "..." : "Run"}
+                {running === job.id ? "..." : t("run")}
               </button>
               <button
                 onClick={() => handleToggle(job.id, !job.enabled)}
@@ -150,7 +150,7 @@ export default function AutomationPage() {
                   job.enabled ? "bg-gold/10 text-gold hover:bg-emerald/20" : "bg-white/5 text-muted hover:bg-white/10"
                 }`}
               >
-                {job.enabled ? "Enabled" : "Disabled"}
+                {job.enabled ? t("enabled") : t("disabled")}
               </button>
             </div>
           </div>

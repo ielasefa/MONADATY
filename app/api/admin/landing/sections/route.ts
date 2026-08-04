@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getAuthenticatedAdmin } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { saveSection, saveSectionOrder } from "@/lib/landing-cms";
-import { revalidatePath } from "next/cache";
+import { revalidateTag, revalidatePath } from "next/cache";
 import { requireOrigin } from "@/lib/csrf";
 
 export async function PUT(request: Request) {
@@ -20,14 +20,41 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: "Missing configId or sectionType" }, { status: 400 });
     }
 
-    await saveSection(configId, sectionType, data, admin.name);
-
-    if (order) {
-      await saveSectionOrder(configId, order, admin.name);
+    if (sectionType === "featured" && data.productIds !== undefined) {
+      const ids = typeof data.productIds === "string" ? data.productIds.split(",").filter(Boolean) : [];
+      if (ids.length > 4) {
+        return NextResponse.json({ error: "Maximum 4 products allowed" }, { status: 400 });
+      }
+      if (ids.length > 0) {
+        const count = await prisma.product.count({ where: { id: { in: ids } } });
+        if (count !== ids.length) {
+          return NextResponse.json({ error: "One or more selected products do not exist" }, { status: 400 });
+        }
+      }
     }
 
-    revalidatePath("/");
-    revalidatePath("/admin/landing");
+    if (sectionType === "collections" && data.selectedCollectionIds !== undefined) {
+      const ids = typeof data.selectedCollectionIds === "string" ? data.selectedCollectionIds.split(",").filter(Boolean) : [];
+      if (ids.length > 4) {
+        return NextResponse.json({ error: "Maximum 4 collections allowed" }, { status: 400 });
+      }
+      if (ids.length > 0) {
+        const count = await prisma.collection.count({ where: { id: { in: ids } } });
+        if (count !== ids.length) {
+          return NextResponse.json({ error: "One or more selected collections do not exist" }, { status: 400 });
+        }
+      }
+    }
+
+    await saveSection(configId, sectionType, data, admin.name);
+
+  if (order) {
+    await saveSectionOrder(configId, order, admin.name);
+  }
+
+  revalidateTag("landing");
+  revalidatePath("/");
+  revalidatePath("/admin/landing");
 
     return NextResponse.json({ success: true });
   } catch (error) {

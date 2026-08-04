@@ -46,12 +46,12 @@ export function SupplierForm({ supplier }: { supplier: Supplier | null }) {
         router.push("/admin/inventory/suppliers");
         router.refresh();
       } catch (e: unknown) {
-        setError(e instanceof Error ? e.message : "An error occurred");
+        setError(e instanceof Error ? e.message : t("an_error_occurred", "An error occurred"));
       } finally {
         setSaving(false);
       }
     },
-    [isNew, supplier, router]
+    [isNew, supplier, router, t]
   );
 
   return (
@@ -78,21 +78,21 @@ export function SupplierForm({ supplier }: { supplier: Supplier | null }) {
 
       <form action={handleSubmit} className="space-y-8">
         <div className="luxury-card rounded-card border border-white/[0.06] bg-card p-6">
-          <p className="luxury-label mb-6 text-[10px] text-muted">Supplier Information</p>
+          <p className="luxury-label mb-6 text-[10px] text-muted">{t("supplier_information", "Supplier Information")}</p>
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-            <Field label="Supplier Name" name="name" defaultValue={supplier?.name} required />
-            <Field label="Company" name="company" defaultValue={supplier?.company} />
+            <Field label={t("supplier_name", "Supplier Name")} name="name" defaultValue={supplier?.name} required />
+            <Field label={t("company", "Company")} name="company" defaultValue={supplier?.company} />
             <Field label={t("email_field")} name="email" defaultValue={supplier?.email} type="email" />
             <Field label={t("phone_field")} name="phone" defaultValue={supplier?.phone} />
             <div className="md:col-span-2">
               <Field label={t("address_field")} name="address" defaultValue={supplier?.address} />
             </div>
-            <Field label="Website" name="website" defaultValue={supplier?.website} />
-            <Field label="Tax Number" name="taxNumber" defaultValue={supplier?.taxNumber} />
-            <Field label="Contact Person" name="contactPerson" defaultValue={supplier?.contactPerson} />
+            <Field label={t("website", "Website")} name="website" defaultValue={supplier?.website} />
+            <Field label={t("tax_number", "Tax Number")} name="taxNumber" defaultValue={supplier?.taxNumber} />
+            <Field label={t("contact_person", "Contact Person")} name="contactPerson" defaultValue={supplier?.contactPerson} />
             <div className="md:col-span-2">
               <div className="space-y-2">
-                <label className="luxury-label text-[10px] text-muted">Notes</label>
+                <label className="luxury-label text-[10px] text-muted">{t("supplier_notes", "Notes")}</label>
                 <textarea
                   name="notes"
                   defaultValue={supplier?.notes}
@@ -111,7 +111,7 @@ export function SupplierForm({ supplier }: { supplier: Supplier | null }) {
                 defaultChecked={supplier?.active ?? true}
                 className="h-4 w-4 rounded border-white/20 bg-white/5 accent-gold"
               />
-              <span className="text-sm text-white">Active</span>
+              <span className="text-sm text-white">{t("active", "Active")}</span>
             </label>
           </div>
         </div>

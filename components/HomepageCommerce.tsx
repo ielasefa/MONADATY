@@ -130,7 +130,7 @@ export function BrandStatement() {
    ============================================================ */
 export function FeaturedProducts({ products }: { products: ProductData[] }) {
   const { t } = useTranslation("home");
-  const displayProducts = products.slice(0, 4);
+  const displayProducts = products;
   if (displayProducts.length === 0) return null;
 
   return (
@@ -307,7 +307,7 @@ function ProductCardLite({ product }: { product: ProductData }) {
 
             {/* Premium badge */}
             <span className="absolute start-2.5 top-2.5 z-10 inline-flex items-center px-2 py-0.5 text-[0.32rem] font-semibold uppercase tracking-[0.2em] text-gold/80 transition-opacity duration-300 group-hover:opacity-100">
-              Premium
+              {t("premium_badge", "Premium")}
             </span>
           </motion.div>
         </Link>
@@ -725,9 +725,9 @@ export function BuildYourBox({ products }: { products: ProductData[] }) {
         {/* Pack size selector */}
         <div className="mt-8 flex items-center justify-center gap-3">
           {[
-            { size: 4, label: "4-PACK", discount: "" },
-            { size: 6, label: "6-PACK", discount: "-10%" },
-            { size: 8, label: "8-PACK", discount: "-20%" },
+            { size: 4, label: t("pack_4", "4-PACK"), discount: "" },
+            { size: 6, label: t("pack_6", "6-PACK"), discount: "-10%" },
+            { size: 8, label: t("pack_8", "8-PACK"), discount: "-20%" },
           ].map((opt) => (
             <motion.button
               key={opt.size}
@@ -1256,6 +1256,7 @@ function FAQItem({
    FINAL CTA
    ============================================================ */
 export function FinalCTA() {
+  const { t } = useTranslation("home");
   return (
     <section className="relative w-full overflow-hidden bg-black border-t border-white/[0.06]">
       <div className="mx-auto max-w-[1400px] px-6 py-16 md:px-10 md:py-20 lg:px-16 lg:py-24">
@@ -1264,23 +1265,25 @@ export function FinalCTA() {
             <div className="flex items-center justify-center gap-3">
               <span className="h-px w-8 bg-gold" />
               <span className="label-utility tracking-[0.55em] text-gold/60">
-                BEGIN THE POUR
+                {t("final_cta_subtitle", "BEGIN THE POUR")}
               </span>
               <span className="h-px w-8 bg-gold" />
             </div>
             <h2 className="mt-7 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] leading-[0.95] tracking-[-0.02em] text-white">
-              YOUR NEXT FAVORITE TASTE IS WAITING.
+              {t("final_cta_title", "YOUR NEXT FAVORITE TASTE IS WAITING.")}
             </h2>
             <p className="mx-auto mt-4 max-w-md text-[0.78rem] leading-[1.7] text-white/55">
-              Discover the MONADATY collection. Premium Moroccan refreshment,
-              delivered to your door.
+              {t(
+                "final_cta_description",
+                "Discover the MONADATY collection. Premium Moroccan refreshment, delivered to your door.",
+              )}
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link href="/shop" className="btn-primary">
-                SHOP NOW <ArrowRight />
+                {t("shop_now", "SHOP NOW")} <ArrowRight />
               </Link>
               <Link href="/about" className="btn-link text-white/50 hover:text-gold">
-                OUR STORY
+                {t("our_story", "OUR STORY")}
               </Link>
             </div>
           </div>

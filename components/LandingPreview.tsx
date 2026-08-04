@@ -150,12 +150,14 @@ type FeaturedPreviewProps = {
   title?: string;
   subtitle?: string;
   products?: FeaturedProduct[];
+  t?: (key: string, fallback?: string) => string;
 };
 
 export function FeaturedPreview({
   title = DEFAULT_FEATURED.title,
   subtitle = DEFAULT_FEATURED.subtitle,
   products = [],
+  t = (key, fb) => fb || key,
 }: FeaturedPreviewProps) {
   const safeProducts = Array.isArray(products) ? products.filter(Boolean) : [];
   return (
@@ -177,11 +179,11 @@ export function FeaturedPreview({
 
         {safeProducts.length === 0 ? (
           <div className="mt-12 grid place-items-center border border-dashed border-white/[0.06] py-20">
-            <p className="text-[0.78rem] text-white/30">No featured products selected</p>
+            <p className="text-[0.78rem] text-white/30">{t("no_products_selected", "No featured products selected")}</p>
          </div>
         ) : (
           <div className="mt-12 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-x-6 md:gap-y-12">
-            {safeProducts.slice(0, 8).map((product) => (
+            {safeProducts.map((product) => (
               <FeaturedCardPreview key={product.id} product={product} />
             ))}
          </div>
@@ -235,12 +237,14 @@ type CollectionsPreviewProps = {
   title?: string;
   subtitle?: string;
   collections?: CollectionPreviewItem[];
+  t?: (key: string, fallback?: string) => string;
 };
 
 export function CollectionsPreview({
   title = DEFAULT_COLLECTIONS.title,
   subtitle = DEFAULT_COLLECTIONS.subtitle,
   collections = [],
+  t = (key, fb) => fb || key,
 }: CollectionsPreviewProps) {
   const safeCollections = Array.isArray(collections) ? collections.filter(Boolean) : [];
   return (
@@ -261,7 +265,7 @@ export function CollectionsPreview({
 
         {safeCollections.length === 0 ? (
           <div className="mt-12 grid place-items-center border border-dashed border-white/[0.06] py-20">
-            <p className="text-[0.78rem] text-white/30">No collections enabled</p>
+            <p className="text-[0.78rem] text-white/30">{t("no_collections_selected", "No collections enabled")}</p>
          </div>
         ) : (
           <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-3">
@@ -369,12 +373,14 @@ type SocialProofPreviewProps = {
   title?: string;
   subtitle?: string;
   testimonials?: TestimonialItem[];
+  t?: (key: string, fallback?: string) => string;
 };
 
 export function SocialProofPreview({
   title = DEFAULT_TESTIMONIALS.title,
   subtitle = DEFAULT_TESTIMONIALS.subtitle,
   testimonials = [],
+  t = (key, fb) => fb || key,
 }: SocialProofPreviewProps) {
   const safeTestimonials = Array.isArray(testimonials) ? testimonials.filter(Boolean) : [];
   return (
@@ -395,7 +401,7 @@ export function SocialProofPreview({
 
         {safeTestimonials.length === 0 ? (
           <div className="mt-12 grid place-items-center border border-dashed border-white/[0.06] py-20">
-            <p className="text-[0.78rem] text-white/30">No testimonials available</p>
+            <p className="text-[0.78rem] text-white/30">{t("no_results", "No testimonials available")}</p>
          </div>
         ) : (
           <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -495,6 +501,7 @@ type NewsletterPreviewProps = {
   description?: string;
   placeholder?: string;
   buttonText?: string;
+  t?: (key: string, fallback?: string) => string;
 };
 
 export function NewsletterPreview({
@@ -503,6 +510,7 @@ export function NewsletterPreview({
   description = DEFAULT_NEWSLETTER.description,
   placeholder = DEFAULT_NEWSLETTER.placeholder,
   buttonText = DEFAULT_NEWSLETTER.buttonText,
+  t = (key, fb) => fb || key,
 }: NewsletterPreviewProps) {
   return (
     <section className="relative w-full overflow-hidden bg-rouge-dark">
@@ -526,7 +534,7 @@ export function NewsletterPreview({
           <form
             className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center"
             onSubmit={(e) => e.preventDefault()}
-            aria-label="Newsletter preview (disabled)"
+            aria-label={t("newsletter_preview_disabled", "Newsletter preview (disabled)")}
           >
             <label className="flex-1 max-w-xs">
               <span className="sr-only">{placeholder}</span>

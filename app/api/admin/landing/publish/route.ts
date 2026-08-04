@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAuthenticatedAdmin } from "@/lib/auth";
 import { publishLanding } from "@/lib/landing-cms";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { requireOrigin } from "@/lib/csrf";
 
 export async function POST(request: Request) {
@@ -19,10 +19,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing configId" }, { status: 400 });
     }
 
-    await publishLanding(configId, admin.name);
+  await publishLanding(configId, admin.name);
 
-    revalidatePath("/");
-    revalidatePath("/admin/landing");
+  revalidateTag("landing");
 
     return NextResponse.json({ success: true });
   } catch (error) {

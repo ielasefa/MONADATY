@@ -18,7 +18,7 @@ type Props = {
 };
 
 export function InvoicePanel({ orderId, initialInvoice }: Props) {
-  const { t } = useTranslation("invoice");
+  const { t, lang } = useTranslation("invoice");
   const [invoice, setInvoice] = useState<InvoiceData | null>(initialInvoice);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -116,9 +116,14 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
       Issued: "bg-gold/10 text-gold border-gold/20",
       Cancelled: "bg-burgundy/10 text-burgundy border-burgundy/20",
     };
+    const labels: Record<string, string> = {
+      Draft: t("status_draft", "Draft"),
+      Issued: t("status_issued", "Issued"),
+      Cancelled: t("status_cancelled", "Cancelled"),
+    };
     return (
       <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[0.6rem] font-semibold uppercase tracking-[0.1em] ${colors[status] || colors.Draft}`}>
-        {status}
+        {labels[status] || status}
       </span>
     );
   };
@@ -163,7 +168,7 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
           <div>
             <p className="text-xs text-white/50">{t("created")}</p>
             <p className="text-sm text-white">
-              {new Date(invoice.createdAt).toLocaleDateString("en-US", {
+              {new Date(invoice.createdAt).toLocaleDateString(lang === "ar" ? "ar-MA" : lang === "fr" ? "fr-FR" : "en-US", {
                 year: "numeric",
                 month: "long",
                 day: "numeric",

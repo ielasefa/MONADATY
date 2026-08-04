@@ -291,7 +291,7 @@ export default function AdminOrderDetailPage() {
                 />
                 <fieldset>
                   <legend className="text-xs text-muted">{t("payment_status_section")}</legend>
-                  <div className="mt-2 flex flex-wrap gap-2" role="group" aria-label="Payment status">
+                  <div className="mt-2 flex flex-wrap gap-2" role="group" aria-label={t("payment_status", "Payment status")}>
                     {PAYMENT_STATUSES.map((s) => (
                       <button
                         key={s}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useTranslation } from "@/hooks/useTranslation";
 import type { ProductHistoryEntry } from "@/types";
 
 const ACTION_ICONS: Record<string, string> = {
@@ -32,6 +33,7 @@ const ACTION_COLORS: Record<string, string> = {
 };
 
 export function ProductHistory({ productId }: { productId: string }) {
+  const { t } = useTranslation("common");
   const [history, setHistory] = useState<ProductHistoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -71,7 +73,7 @@ export function ProductHistory({ productId }: { productId: string }) {
     return (
       <div className="flex flex-col items-center gap-3 py-8 text-white/50">
         <span className="text-2xl">⏱</span>
-        <p className="text-sm">No history recorded yet</p>
+        <p className="text-sm">{t("no_history_recorded", "No history recorded yet")}</p>
       </div>
     );
   }

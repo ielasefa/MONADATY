@@ -36,20 +36,20 @@ export default function CustomersReportPage() {
           <p className="mt-1 text-xl font-semibold text-gold">{data.avgOrdersPerCustomer.toFixed(2)}</p>
         </div>
         <div className="rounded-card border border-white/[0.06] bg-card p-4">
-          <p className="text-[10px] text-muted">Avg Spent / Customer</p>
+          <p className="text-[10px] text-muted">{t("avg_spent_customer", "Avg Spent / Customer")}</p>
           <p className="mt-1 text-xl font-semibold text-gold">{data.avgSpentPerCustomer.toFixed(2)} DH</p>
         </div>
       </div>
 
       <div className="rounded-card border border-white/[0.06] bg-card p-6">
-        <h3 className="mb-4 text-sm font-semibold text-white">All Customers</h3>
+        <h3 className="mb-4 text-sm font-semibold text-white">{t("all_customers", "All Customers")}</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
               <tr className="border-b border-white/[0.06] text-xs text-muted">
-                <th className="pb-3 font-medium">Email</th>
-                <th className="pb-3 font-medium">Name</th>
-                <th className="pb-3 font-medium">Orders</th>
+                <th className="pb-3 font-medium">{t("email", "Email")}</th>
+                <th className="pb-3 font-medium">{t("name", "Name")}</th>
+                <th className="pb-3 font-medium">{t("orders", "Orders")}</th>
                 <th className="pb-3 font-medium">{t("total_spent")}</th>
               </tr>
             </thead>

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth-guard";
 import { requireOrigin } from "@/lib/csrf";
+import { deleteImage } from "@/lib/cloudinary";
 import { logError } from "@/lib/logger";
 
 const MIN_PRODUCT_NAME = 1;
@@ -151,5 +152,58 @@ export async function POST(request: NextRequest) {
   } catch (err) {
     logError(err, "PRODUCT_CREATE");
     return NextResponse.json({ error: "Failed to create product" }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  const originCheck = requireOrigin(request);
+  if (originCheck) return originCheck;
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
+  let id: string | null = null;
+
+  const { searchParams } = request.nextUrl;
+  id = searchParams.get("id");
+
+  if (!id) {
+    try {
+      const body = await request.json();
+      id = body.id;
+    } catch {}
+  }
+
+  if (!id) {
+    return NextResponse.json({ error: "Product ID is required" }, { status: 400 });
+  }
+
+  try {
+    const imagesToDelete = await prisma.$transaction(async (tx) => {
+      const existing = await tx.product.findUnique({ where: { id }, select: { id: true } });
+      if (!existing) return [];
+
+      const imgs = await tx.productImage.findMany({ where: { productId: id }, select: { publicId: true } });
+
+      await tx.orderItem.updateMany({
+        where: { productId: id },
+        data: { productId: null },
+      });
+
+      await tx.product.delete({ where: { id } });
+      return imgs;
+    });
+
+    if (imagesToDelete.length > 0) {
+      for (const img of imagesToDelete) {
+        if (img.publicId) {
+          try { await deleteImage(img.publicId); } catch {}
+        }
+      }
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    logError(err, "PRODUCT_DELETE");
+    return NextResponse.json({ error: "Failed to delete product" }, { status: 500 });
   }
 }

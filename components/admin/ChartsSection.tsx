@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, lazy, Suspense } from "react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const RevenueChart = lazy(() => import("./charts/RevenueChart"));
 const OrdersChart = lazy(() => import("./charts/OrdersChart"));
@@ -26,6 +27,7 @@ type Props = {
 };
 
 export function ChartsSection({ revenueData, ordersData, topProducts, collectionSales, monthlyRevenue }: Props) {
+  const { t } = useTranslation("admin");
   const [visible, setVisible] = useState(false);
 
   return (
@@ -47,7 +49,7 @@ export function ChartsSection({ revenueData, ordersData, topProducts, collection
       }}
     >
       <div className="mb-4 flex items-center justify-between">
-        <p className="luxury-label text-[10px] text-white/50">Analytics</p>
+        <p className="luxury-label text-[10px] text-white/50">{t("analytics", "Analytics")}</p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">

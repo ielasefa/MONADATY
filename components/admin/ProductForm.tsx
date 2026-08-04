@@ -227,7 +227,7 @@ export function ProductForm() {
 
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || "Failed to create product");
+        setError(data.error || t("failed_to_create_product", "Failed to create product"));
         setSaving(false);
         return;
       }
@@ -237,7 +237,7 @@ export function ProductForm() {
       setCreated(true);
       setTimeout(() => router.push("/admin/products"), 2000);
     } catch {
-      setError("Network error");
+      setError(t("network_error", "Network error"));
       setSaving(false);
     }
   };
@@ -275,7 +275,7 @@ export function ProductForm() {
 
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-2xl text-white md:text-3xl">Add Product</h1>
+          <h1 className="font-display text-2xl text-white md:text-3xl">{t("add_product", "Add Product")}</h1>
           <p className="mt-1 text-sm text-muted">{t("product_create_desc")}</p>
         </div>
         <div className="flex gap-3">
@@ -302,7 +302,7 @@ export function ProductForm() {
         <div className="space-y-4">
           <div>
             <label htmlFor="p-name" className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-muted">
-              Product Name <span className="text-burgundy">*</span>
+              {t("product_name", "Product Name")} <span className="text-burgundy">*</span>
             </label>
             <input
               id="p-name"
@@ -316,7 +316,7 @@ export function ProductForm() {
           </div>
           <div>
             <label htmlFor="p-slug" className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-muted">
-              Slug
+              {t("slug", "Slug")}
             </label>
             <div className="relative">
               <input
@@ -345,7 +345,7 @@ export function ProductForm() {
           </div>
           <div>
             <label htmlFor="p-short" className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-muted">
-              Short Description
+              {t("short_description", "Short Description")}
             </label>
             <input
               id="p-short"
@@ -358,7 +358,7 @@ export function ProductForm() {
           </div>
           <div>
             <label htmlFor="p-desc" className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-muted">
-              Full Description
+              {t("full_description", "Full Description")}
             </label>
             <textarea
               id="p-desc"
@@ -372,7 +372,7 @@ export function ProductForm() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label htmlFor="p-sku" className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-muted">
-                SKU
+                {t("sku", "SKU")}
               </label>
               <input
                 id="p-sku"
@@ -385,7 +385,7 @@ export function ProductForm() {
             </div>
             <div>
               <label htmlFor="p-barcode" className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-muted">
-                Barcode
+                {t("barcode", "Barcode")}
               </label>
               <input
                 id="p-barcode"
@@ -406,7 +406,7 @@ export function ProductForm() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <label htmlFor="p-regular" className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-muted">
-              Regular Price <span className="text-burgundy">*</span>
+              {t("regular_price", "Regular Price")} <span className="text-burgundy">*</span>
             </label>
             <div className="relative">
               <input
@@ -416,7 +416,7 @@ export function ProductForm() {
                 value={form.regularPrice}
                 onChange={(e) => handlePriceChange("regularPrice", e.target.value)}
                 className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 pr-14 text-sm text-white outline-none transition focus:border-gold/30"
-                placeholder="0.00"
+                placeholder={t("price_zero_placeholder", "0.00")}
                 required
               />
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted">{form.currency}</span>
@@ -434,7 +434,7 @@ export function ProductForm() {
                 value={form.salePrice}
                 onChange={(e) => handlePriceChange("salePrice", e.target.value)}
                 className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 pr-14 text-sm text-white outline-none transition focus:border-gold/30"
-                placeholder="0.00"
+                placeholder={t("price_zero_placeholder", "0.00")}
               />
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted">{form.currency}</span>
             </div>
@@ -451,7 +451,7 @@ export function ProductForm() {
                 value={form.costPrice}
                 onChange={(e) => handlePriceChange("costPrice", e.target.value)}
                 className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 pr-14 text-sm text-white outline-none transition focus:border-gold/30"
-                placeholder="0.00"
+                placeholder={t("price_zero_placeholder", "0.00")}
               />
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted">{form.currency}</span>
             </div>

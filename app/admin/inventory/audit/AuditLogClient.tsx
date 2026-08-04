@@ -76,7 +76,7 @@ export function AuditLogClient({
       if (dateFrom) params.set("from", dateFrom);
       if (dateTo) params.set("to", dateTo);
       const res = await fetch(`/api/admin/inventory/export?format=csv&${params.toString()}`);
-      if (!res.ok) throw new Error("Export failed");
+      if (!res.ok) throw new Error(t("export_failed", "Export failed"));
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -87,14 +87,14 @@ export function AuditLogClient({
     } catch {
       // silent
     }
-  }, [warehouseFilter, typeFilter, dateFrom, dateTo]);
+  }, [warehouseFilter, typeFilter, dateFrom, dateTo, t]);
 
   return (
     <div>
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="luxury-label mb-2">Inventory</p>
-          <h1 className="text-3xl font-semibold tracking-tight text-white">Audit Log</h1>
+          <p className="luxury-label mb-2">{t("inventory", "Inventory")}</p>
+          <h1 className="text-3xl font-semibold tracking-tight text-white">{t("audit_log", "Audit Log")}</h1>
           <p className="mt-1 text-sm text-muted">{filtered.length} movements</p>
         </div>
         <button
@@ -130,7 +130,7 @@ export function AuditLogClient({
           ))}
         </select>
         <div className="flex items-center gap-2">
-          <label className="text-xs text-muted">From:</label>
+          <label className="text-xs text-muted">{t("from", "From:")}</label>
           <input
             type="date"
             value={dateFrom}
@@ -139,7 +139,7 @@ export function AuditLogClient({
           />
         </div>
         <div className="flex items-center gap-2">
-          <label className="text-xs text-muted">To:</label>
+          <label className="text-xs text-muted">{t("to", "To:")}</label>
           <input
             type="date"
             value={dateTo}
@@ -154,13 +154,13 @@ export function AuditLogClient({
           <table className="w-full text-left text-sm">
             <thead>
               <tr className="border-b border-white/[0.06] text-xs uppercase tracking-[0.1em] text-muted">
-                <th className="px-5 py-4 font-medium">Date</th>
-                <th className="px-5 py-4 font-medium">Product</th>
-                <th className="px-5 py-4 font-medium">Warehouse</th>
-                <th className="px-5 py-4 font-medium">Type</th>
-                <th className="px-5 py-4 font-medium text-right">Qty</th>
-                <th className="px-5 py-4 font-medium">Reason</th>
-                <th className="px-5 py-4 font-medium">Reference</th>
+                <th className="px-5 py-4 font-medium">{t("date", "Date")}</th>
+                <th className="px-5 py-4 font-medium">{t("product", "Product")}</th>
+                <th className="px-5 py-4 font-medium">{t("warehouse", "Warehouse")}</th>
+                <th className="px-5 py-4 font-medium">{t("type", "Type")}</th>
+                <th className="px-5 py-4 font-medium text-right">{t("qty_label", "Qty")}</th>
+                <th className="px-5 py-4 font-medium">{t("reason", "Reason")}</th>
+                <th className="px-5 py-4 font-medium">{t("audit_log_reference", "Reference")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/[0.06]">

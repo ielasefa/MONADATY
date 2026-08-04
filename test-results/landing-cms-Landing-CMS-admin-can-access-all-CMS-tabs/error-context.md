@@ -33,380 +33,376 @@ Received:    7
             - generic [ref=e10]: MONADATY
             - generic [ref=e11]: Admin
         - navigation "Navigation admin" [ref=e12]:
-          - link "Dashboard" [ref=e13] [cursor=pointer]:
+          - link "Dashboard" [ref=e14] [cursor=pointer]:
             - /url: /admin/dashboard
-            - generic [ref=e14]: ◇
+            - generic [ref=e15]: ◇
             - text: Dashboard
-          - link "Orders" [ref=e15] [cursor=pointer]:
+          - link "Orders" [ref=e17] [cursor=pointer]:
             - /url: /admin/orders
-            - generic [ref=e16]: ☰
+            - generic [ref=e18]: ☰
             - text: Orders
-          - link "Customers" [ref=e17] [cursor=pointer]:
+          - link "Customers" [ref=e20] [cursor=pointer]:
             - /url: /admin/customers
-            - generic [ref=e18]: ♢
+            - generic [ref=e21]: ♢
             - text: Customers
-          - link "Reports" [ref=e19] [cursor=pointer]:
+          - link "Reports" [ref=e23] [cursor=pointer]:
             - /url: /admin/reports
-            - generic [ref=e20]: ◎
+            - generic [ref=e24]: ◎
             - text: Reports
-          - link "Automation" [ref=e21] [cursor=pointer]:
+          - link "Automation" [ref=e26] [cursor=pointer]:
             - /url: /admin/automation
-            - generic [ref=e22]: ⚡
+            - generic [ref=e27]: ⚡
             - text: Automation
-          - link "Security" [ref=e23] [cursor=pointer]:
+          - link "Security" [ref=e29] [cursor=pointer]:
             - /url: /admin/security
-            - generic [ref=e24]: 🔒
+            - generic [ref=e30]: 🔒
             - text: Security
-          - link "Landing Page" [ref=e25] [cursor=pointer]:
+          - link "Landing Page" [ref=e32] [cursor=pointer]:
             - /url: /admin/landing
-            - generic [ref=e26]: ◎
+            - generic [ref=e33]: ◎
             - text: Landing Page
-          - link "Shop" [ref=e28] [cursor=pointer]:
+          - link "Shop" [ref=e36] [cursor=pointer]:
             - /url: /admin/shop
-            - generic [ref=e29]: □
+            - generic [ref=e37]: □
             - text: Shop
-          - link "Categories" [ref=e30] [cursor=pointer]:
+          - link "Categories" [ref=e39] [cursor=pointer]:
             - /url: /admin/categories
-            - generic [ref=e31]: ⊞
+            - generic [ref=e40]: ⊞
             - text: Categories
-          - link "Collections" [ref=e32] [cursor=pointer]:
+          - link "Collections" [ref=e42] [cursor=pointer]:
             - /url: /admin/collections
-            - generic [ref=e33]: ⊟
+            - generic [ref=e43]: ⊟
             - text: Collections
-          - link "Blog" [ref=e34] [cursor=pointer]:
+          - link "Blog" [ref=e45] [cursor=pointer]:
             - /url: /admin/blog
-            - generic [ref=e35]: △
+            - generic [ref=e46]: △
             - text: Blog
-          - link "Inventory" [ref=e36] [cursor=pointer]:
+          - link "Inventory" [ref=e48] [cursor=pointer]:
             - /url: /admin/inventory
-            - generic [ref=e37]: ▤
+            - generic [ref=e49]: ▤
             - text: Inventory
-          - link "Admins" [ref=e38] [cursor=pointer]:
+          - link "Admins" [ref=e51] [cursor=pointer]:
             - /url: /admin/admins
-            - generic [ref=e39]: ✦
+            - generic [ref=e52]: ✦
             - text: Admins
-          - link "Settings" [ref=e40] [cursor=pointer]:
+          - link "Settings" [ref=e54] [cursor=pointer]:
             - /url: /admin/settings
-            - generic [ref=e41]: ⚙
+            - generic [ref=e55]: ⚙
             - text: Settings
-        - button "Déconnexion" [ref=e43] [cursor=pointer]:
-          - generic [ref=e44]: ⏻
+        - button "Déconnexion" [ref=e57] [cursor=pointer]:
+          - generic [ref=e58]: ⏻
           - text: Déconnexion
-      - main [ref=e45]:
-        - button "Notifications" [ref=e49] [cursor=pointer]:
-          - img [ref=e50]
-        - generic [ref=e53]:
-          - complementary [ref=e54]:
-            - generic [ref=e56]:
-              - generic [ref=e57]:
-                - paragraph [ref=e58]: Landing Page
-                - generic [ref=e61]: draft
-              - generic [ref=e62]: 8/1/2026
-            - generic [ref=e63]:
-              - paragraph [ref=e64]: Sections
-              - list [ref=e65]:
-                - listitem [ref=e66]:
-                  - button "◇ Hero ⋮⋮" [ref=e67] [cursor=pointer]:
-                    - generic [ref=e68]: ◇
-                    - generic [ref=e69]: Hero
-                    - generic [ref=e70]: ⋮⋮
-                - listitem [ref=e71]:
-                  - button "□ Featured Products ⋮⋮" [ref=e72] [cursor=pointer]:
-                    - generic [ref=e73]: □
-                    - generic [ref=e74]: Featured Products
-                    - generic [ref=e75]: ⋮⋮
-                - listitem [ref=e76]:
-                  - button "⊞ Collections ⋮⋮" [ref=e77] [cursor=pointer]:
-                    - generic [ref=e78]: ⊞
-                    - generic [ref=e79]: Collections
-                    - generic [ref=e80]: ⋮⋮
-                - listitem [ref=e81]:
-                  - button "△ Brand Story ⋮⋮" [ref=e82] [cursor=pointer]:
-                    - generic [ref=e83]: △
-                    - generic [ref=e84]: Brand Story
-                    - generic [ref=e85]: ⋮⋮
-                - listitem [ref=e86]:
-                  - button "♢ Testimonials ⋮⋮" [ref=e87] [cursor=pointer]:
-                    - generic [ref=e88]: ♢
-                    - generic [ref=e89]: Testimonials
-                    - generic [ref=e90]: ⋮⋮
-                - listitem [ref=e91]:
-                  - button "◎ Moroccan Moment ⋮⋮" [ref=e92] [cursor=pointer]:
-                    - generic [ref=e93]: ◎
-                    - generic [ref=e94]: Moroccan Moment
-                    - generic [ref=e95]: ⋮⋮
-                - listitem [ref=e96]:
-                  - button "✉ Newsletter ⋮⋮" [ref=e97] [cursor=pointer]:
-                    - generic [ref=e98]: ✉
-                    - generic [ref=e99]: Newsletter
-                    - generic [ref=e100]: ⋮⋮
-                - listitem [ref=e101]:
-                  - button "▶ Final CTA ⋮⋮" [ref=e102] [cursor=pointer]:
-                    - generic [ref=e103]: ▶
-                    - generic [ref=e104]: Final CTA
-                    - generic [ref=e105]: ⋮⋮
-            - generic [ref=e106]:
-              - generic [ref=e107]:
-                - generic [ref=e108]: 50 versions
-                - button "History" [ref=e109] [cursor=pointer]
-              - generic [ref=e110]: Ctrl+S to save
-          - generic [ref=e111]:
-            - generic [ref=e112]:
-              - heading "Hero" [level=2] [ref=e114]
-              - generic [ref=e115]:
-                - generic [ref=e116]: ○ Draft
-                - button "Save Draft" [ref=e117] [cursor=pointer]
-                - button "Publish" [ref=e118] [cursor=pointer]
-                - link "View Site" [ref=e119] [cursor=pointer]:
+      - main [ref=e59]:
+        - button "Notifications" [ref=e63] [cursor=pointer]:
+          - img [ref=e64]
+        - generic [ref=e67]:
+          - complementary [ref=e68]:
+            - generic [ref=e70]:
+              - generic [ref=e71]:
+                - paragraph [ref=e72]: Landing Page
+                - generic [ref=e75]: draft
+              - generic [ref=e76]: 8/1/2026
+            - generic [ref=e77]:
+              - paragraph [ref=e78]: Sections
+              - list [ref=e79]:
+                - listitem [ref=e80]:
+                  - button "◇ Hero ⋮⋮" [ref=e81] [cursor=pointer]:
+                    - generic [ref=e82]: ◇
+                    - generic [ref=e83]: Hero
+                    - generic [ref=e84]: ⋮⋮
+                - listitem [ref=e85]:
+                  - button "□ Featured Products ⋮⋮" [ref=e86] [cursor=pointer]:
+                    - generic [ref=e87]: □
+                    - generic [ref=e88]: Featured Products
+                    - generic [ref=e89]: ⋮⋮
+                - listitem [ref=e90]:
+                  - button "⊞ Collections ⋮⋮" [ref=e91] [cursor=pointer]:
+                    - generic [ref=e92]: ⊞
+                    - generic [ref=e93]: Collections
+                    - generic [ref=e94]: ⋮⋮
+                - listitem [ref=e95]:
+                  - button "△ Brand Story ⋮⋮" [ref=e96] [cursor=pointer]:
+                    - generic [ref=e97]: △
+                    - generic [ref=e98]: Brand Story
+                    - generic [ref=e99]: ⋮⋮
+                - listitem [ref=e100]:
+                  - button "♢ Testimonials ⋮⋮" [ref=e101] [cursor=pointer]:
+                    - generic [ref=e102]: ♢
+                    - generic [ref=e103]: Testimonials
+                    - generic [ref=e104]: ⋮⋮
+                - listitem [ref=e105]:
+                  - button "◎ Moroccan Moment ⋮⋮" [ref=e106] [cursor=pointer]:
+                    - generic [ref=e107]: ◎
+                    - generic [ref=e108]: Moroccan Moment
+                    - generic [ref=e109]: ⋮⋮
+                - listitem [ref=e110]:
+                  - button "✉ Newsletter ⋮⋮" [ref=e111] [cursor=pointer]:
+                    - generic [ref=e112]: ✉
+                    - generic [ref=e113]: Newsletter
+                    - generic [ref=e114]: ⋮⋮
+                - listitem [ref=e115]:
+                  - button "▶ Final CTA ⋮⋮" [ref=e116] [cursor=pointer]:
+                    - generic [ref=e117]: ▶
+                    - generic [ref=e118]: Final CTA
+                    - generic [ref=e119]: ⋮⋮
+            - generic [ref=e120]:
+              - generic [ref=e121]:
+                - generic [ref=e122]: 50 versions
+                - button "History" [ref=e123] [cursor=pointer]
+              - generic [ref=e124]: Ctrl+S to save
+          - generic [ref=e125]:
+            - generic [ref=e126]:
+              - heading "Hero" [level=2] [ref=e128]
+              - generic [ref=e129]:
+                - generic [ref=e130]: ○ Draft
+                - button "Save Draft" [ref=e131] [cursor=pointer]
+                - button "Publish" [ref=e132] [cursor=pointer]
+                - link "View Site" [ref=e133] [cursor=pointer]:
                   - /url: /
-            - generic [ref=e121]:
-              - generic [ref=e122]:
-                - generic [ref=e124]:
-                  - generic [ref=e125]: ⚙
-                  - heading "Section Settings" [level=3] [ref=e126]
-                - generic [ref=e127]:
-                  - generic [ref=e128]:
-                    - generic [ref=e129]: Background
-                    - combobox [ref=e130]:
+            - generic [ref=e135]:
+              - generic [ref=e136]:
+                - generic [ref=e138]:
+                  - generic [ref=e139]: ⚙
+                  - heading "Section Settings" [level=3] [ref=e140]
+                - generic [ref=e141]:
+                  - generic [ref=e142]:
+                    - generic [ref=e143]: Background
+                    - combobox [ref=e144]:
                       - option "Default" [selected]
                       - option "Surface"
                       - option "Burgundy"
                       - option "Dark Burgundy"
                       - option "Custom"
-                  - generic [ref=e131]:
-                    - generic [ref=e132]: Max Width
-                    - combobox [ref=e133]:
+                  - generic [ref=e145]:
+                    - generic [ref=e146]: Max Width
+                    - combobox [ref=e147]:
                       - option "Standard (1400px)" [selected]
                       - option "Wide (1600px)"
                       - option "Full Width"
-                  - generic [ref=e134]:
-                    - generic [ref=e135]: Padding Top
-                    - combobox [ref=e136]:
+                  - generic [ref=e148]:
+                    - generic [ref=e149]: Padding Top
+                    - combobox [ref=e150]:
                       - option "Small (py-12)"
                       - option "Medium (py-16)" [selected]
                       - option "Large (py-20)"
                       - option "XL (py-24)"
                       - option "None"
-                  - generic [ref=e137]:
-                    - generic [ref=e138]: Padding Bottom
-                    - combobox [ref=e139]:
+                  - generic [ref=e151]:
+                    - generic [ref=e152]: Padding Bottom
+                    - combobox [ref=e153]:
                       - option "Small (py-12)"
                       - option "Medium (py-16)" [selected]
                       - option "Large (py-20)"
                       - option "XL (py-24)"
                       - option "None"
-                  - generic [ref=e140]:
-                    - generic [ref=e141]: Border Radius
-                    - combobox [ref=e142]:
+                  - generic [ref=e154]:
+                    - generic [ref=e155]: Border Radius
+                    - combobox [ref=e156]:
                       - option "None" [selected]
                       - option "Small"
                       - option "Medium"
                       - option "Large"
                       - option "XL"
                       - option "2XL"
-                  - generic [ref=e143]:
-                    - generic [ref=e144]: Animation
-                    - combobox [ref=e145]:
+                  - generic [ref=e157]:
+                    - generic [ref=e158]: Animation
+                    - combobox [ref=e159]:
                       - option "None"
                       - option "Fade Up" [selected]
                       - option "Fade In"
                       - option "Scale In"
-              - generic [ref=e146]:
-                - generic [ref=e148]:
-                  - generic [ref=e149]: 👁
-                  - heading "Visibility" [level=3] [ref=e150]
-                - generic [ref=e151] [cursor=pointer]:
-                  - switch "Show on homepage" [checked] [ref=e152]
-                  - generic [ref=e154]: Show on homepage
-              - generic [ref=e155]:
-                - generic [ref=e157]:
-                  - generic [ref=e158]: ◇
-                  - heading "Content" [level=3] [ref=e159]
-                - generic [ref=e160]:
-                  - generic [ref=e161]:
+              - generic [ref=e160]:
+                - generic [ref=e162]:
+                  - generic [ref=e163]: 👁
+                  - heading "Visibility" [level=3] [ref=e164]
+                - generic [ref=e165] [cursor=pointer]:
+                  - switch "Show on homepage" [checked] [ref=e166]
+                  - generic [ref=e168]: Show on homepage
+              - generic [ref=e169]:
+                - generic [ref=e171]:
+                  - generic [ref=e172]: ◇
+                  - heading "Content" [level=3] [ref=e173]
+                - generic [ref=e174]:
+                  - generic [ref=e175]:
                     - text: Headline
-                    - textbox "Headline" [ref=e162]:
+                    - textbox "Headline" [ref=e176]:
                       - /placeholder: TASTE\nREDEFINED.
                       - text: LE GOÛT,AUTREMENT.
-                  - generic [ref=e163]:
+                  - generic [ref=e177]:
                     - text: Subheadline
-                    - textbox "Subheadline" [ref=e164]:
+                    - textbox "Subheadline" [ref=e178]:
                       - /placeholder: Premium Soda — Moroccan Craft
                       - text: Soda crafted in Morocco
-                - generic [ref=e165]:
+                - generic [ref=e179]:
                   - text: Description
-                  - textbox "Description" [ref=e166]:
+                  - textbox "Description" [ref=e180]:
                     - /placeholder: A refined soda experience...
                     - text: Née au Maroc. Pensée autour du goût. MONADATY redéfinit ce que signifie une boisson premium.
-                - generic [ref=e167]:
+                - generic [ref=e181]:
                   - text: Background Image
-                  - generic [ref=e169] [cursor=pointer]:
-                    - img [ref=e171]
-                    - paragraph [ref=e174]: Déposer l'image ou cliquer pour téléverser
-                    - paragraph [ref=e175]: JPG, PNG, WebP, AVIF — Up to 10 MB
-                    - button "Camera" [ref=e176]:
-                      - img [ref=e177]
+                  - generic [ref=e183] [cursor=pointer]:
+                    - img [ref=e185]
+                    - paragraph [ref=e188]: Déposer l'image ou cliquer pour téléverser
+                    - paragraph [ref=e189]: JPG, PNG, WebP, AVIF — Up to 10 MB
+                    - button "Camera" [ref=e190]:
+                      - img [ref=e191]
                       - text: Camera
-              - generic [ref=e180]:
-                - generic [ref=e182]:
-                  - generic [ref=e183]: ▶
-                  - heading "Primary CTA" [level=3] [ref=e184]
-                - generic [ref=e185]:
-                  - generic [ref=e186]:
+              - generic [ref=e194]:
+                - generic [ref=e196]:
+                  - generic [ref=e197]: ▶
+                  - heading "Primary CTA" [level=3] [ref=e198]
+                - generic [ref=e199]:
+                  - generic [ref=e200]:
                     - text: Button Text
-                    - textbox "Button Text" [ref=e187]:
+                    - textbox "Button Text" [ref=e201]:
                       - /placeholder: Shop MONADATY
                       - text: SHOP MONADATY
-                  - generic [ref=e188]:
+                  - generic [ref=e202]:
                     - text: Button Link
-                    - textbox "Button Link" [ref=e189]:
+                    - textbox "Button Link" [ref=e203]:
                       - /placeholder: /shop
                       - text: /shop
-                - generic [ref=e190]:
-                  - generic [ref=e191]:
-                    - generic [ref=e192]: Target
-                    - combobox [ref=e193]:
+                - generic [ref=e204]:
+                  - generic [ref=e205]:
+                    - generic [ref=e206]: Target
+                    - combobox [ref=e207]:
                       - option "Same tab" [selected]
                       - option "New tab"
-                  - generic [ref=e194]:
-                    - generic [ref=e195]: Variant
-                    - combobox [ref=e196]:
+                  - generic [ref=e208]:
+                    - generic [ref=e209]: Variant
+                    - combobox [ref=e210]:
                       - option "Primary (Gold)" [selected]
                       - option "Outline"
                       - option "Burgundy"
-                  - generic [ref=e197]:
-                    - generic [ref=e198]: Alignment
-                    - combobox [ref=e199]:
+                  - generic [ref=e211]:
+                    - generic [ref=e212]: Alignment
+                    - combobox [ref=e213]:
                       - option "Left" [selected]
                       - option "Center"
                       - option "Right"
-              - generic [ref=e200]:
-                - generic [ref=e202]:
-                  - generic [ref=e203]: ◇
-                  - heading "Secondary CTA" [level=3] [ref=e204]
-                - generic [ref=e205]:
-                  - generic [ref=e206]:
+              - generic [ref=e214]:
+                - generic [ref=e216]:
+                  - generic [ref=e217]: ◇
+                  - heading "Secondary CTA" [level=3] [ref=e218]
+                - generic [ref=e219]:
+                  - generic [ref=e220]:
                     - text: Button Text
-                    - textbox "Button Text" [ref=e207]:
+                    - textbox "Button Text" [ref=e221]:
                       - /placeholder: EXPLORE COLLECTIONS
-                  - generic [ref=e208]:
+                  - generic [ref=e222]:
                     - text: Button Link
-                    - textbox "Button Link" [ref=e209]:
+                    - textbox "Button Link" [ref=e223]:
                       - /placeholder: /collections
-              - generic [ref=e210]:
-                - generic [ref=e212]:
-                  - generic [ref=e213]: ⚙
-                  - heading "Design" [level=3] [ref=e214]
-                - generic [ref=e215]:
-                  - generic [ref=e216]:
+              - generic [ref=e224]:
+                - generic [ref=e226]:
+                  - generic [ref=e227]: ⚙
+                  - heading "Design" [level=3] [ref=e228]
+                - generic [ref=e229]:
+                  - generic [ref=e230]:
                     - text: Background Style
-                    - textbox "Background Style" [ref=e217]:
+                    - textbox "Background Style" [ref=e231]:
                       - /placeholder: "#171717 or gradient..."
-                  - generic [ref=e218]:
+                  - generic [ref=e232]:
                     - text: Overlay Opacity (0–1)
-                    - textbox "Overlay Opacity (0–1)" [ref=e219]:
+                    - textbox "Overlay Opacity (0–1)" [ref=e233]:
                       - /placeholder: "0.0"
                       - text: "0"
-          - complementary [ref=e220]:
-            - generic [ref=e221]:
-              - generic [ref=e222]: Preview
-              - generic [ref=e223]:
-                - button "1920px" [ref=e224] [cursor=pointer]
-                - button "1440px" [ref=e225] [cursor=pointer]
-                - button "768px" [ref=e226] [cursor=pointer]
-                - button "375px" [ref=e227] [cursor=pointer]
-            - generic [ref=e230]:
-              - generic [ref=e233]:
-                - generic [ref=e234]:
-                  - generic [ref=e237]: Soda crafted in Morocco
-                  - heading "LE GOÛT, AUTREMENT." [level=1] [ref=e238]
-                  - paragraph [ref=e239]: Née au Maroc. Pensée autour du goût. MONADATY redéfinit ce que signifie une boisson premium.
-                  - generic [ref=e240]:
+          - complementary [ref=e234]:
+            - generic [ref=e235]:
+              - generic [ref=e236]: Preview
+              - generic [ref=e237]:
+                - button "1920px" [ref=e238] [cursor=pointer]
+                - button "1440px" [ref=e239] [cursor=pointer]
+                - button "768px" [ref=e240] [cursor=pointer]
+                - button "375px" [ref=e241] [cursor=pointer]
+            - generic [ref=e244]:
+              - generic [ref=e248]:
+                - generic [ref=e249]:
+                  - generic [ref=e252]: Soda crafted in Morocco
+                  - heading "LE GOÛT, AUTREMENT." [level=1] [ref=e253]
+                  - paragraph [ref=e254]: Née au Maroc. Pensée autour du goût. MONADATY redéfinit ce que signifie une boisson premium.
+                  - generic [ref=e255]:
                     - generic: SHOP MONADATY
-                - generic [ref=e244]: M
-              - generic [ref=e246]:
-                - generic [ref=e247]:
-                  - generic [ref=e248]:
+                - generic [ref=e259]: M
+              - generic [ref=e262]:
+                - generic [ref=e263]:
+                  - generic [ref=e264]:
                     - text: THE MONADATY EDIT
-                    - heading "THREE WAYS TO TASTE IT." [level=2] [ref=e249]
-                  - generic [ref=e250]: SHOP THE RANGE
-                - generic [ref=e251]:
-                  - generic [ref=e252]:
-                    - img "COCA BOITE 25 CL" [ref=e254]
-                    - heading "COCA BOITE 25 CL" [level=3] [ref=e255]
-                    - paragraph [ref=e256]: 80.63 DH
+                    - heading "THREE WAYS TO TASTE IT." [level=2] [ref=e265]
+                  - generic [ref=e266]: SHOP THE RANGE
+                - generic [ref=e267]:
+                  - generic [ref=e268]:
+                    - img "COCA BOITE 25 CL" [ref=e270]
+                    - heading "COCA BOITE 25 CL" [level=3] [ref=e271]
+                    - paragraph [ref=e272]: 80.63 DH
                     - generic: Add to Cart
-                  - generic [ref=e257]:
-                    - img "HAWAI BOITE 25 CL" [ref=e259]
-                    - heading "HAWAI BOITE 25 CL" [level=3] [ref=e260]
-                    - paragraph [ref=e261]: 80.63 DH
+                  - generic [ref=e273]:
+                    - img "HAWAI BOITE 25 CL" [ref=e275]
+                    - heading "HAWAI BOITE 25 CL" [level=3] [ref=e276]
+                    - paragraph [ref=e277]: 80.63 DH
                     - generic: Add to Cart
-                  - generic [ref=e262]:
-                    - img "SPRITE BOITE 25 CL" [ref=e264]
-                    - heading "SPRITE BOITE 25 CL" [level=3] [ref=e265]
-                    - paragraph [ref=e266]: 80.63 DH
+                  - generic [ref=e278]:
+                    - img "SPRITE BOITE 25 CL" [ref=e280]
+                    - heading "SPRITE BOITE 25 CL" [level=3] [ref=e281]
+                    - paragraph [ref=e282]: 80.63 DH
                     - generic: Add to Cart
-              - generic [ref=e269]:
-                - generic [ref=e272]: M
-                - generic [ref=e273]:
+              - generic [ref=e285]:
+                - generic [ref=e286]:
+                  - generic [ref=e289]: CURATED FOR THE CURIOUS
+                  - heading "COLLECTED BY TASTE." [level=2] [ref=e291]
+                - paragraph [ref=e293]: No collections enabled
+              - generic [ref=e297]:
+                - generic [ref=e300]: M
+                - generic [ref=e301]:
                   - text: BORN IN MOROCCO
-                  - heading "BORN IN MOROCCO. BUILT AROUND TASTE." [level=2] [ref=e274]
-                  - paragraph [ref=e275]: Carefully sourced ingredients, intentionally crafted blends, and service designed for Morocco.
-                  - generic [ref=e276]:
+                  - heading "BORN IN MOROCCO. BUILT AROUND TASTE." [level=2] [ref=e302]
+                  - paragraph [ref=e303]: Carefully sourced ingredients, intentionally crafted blends, and service designed for Morocco.
+                  - generic [ref=e304]:
                     - generic: Read Our Story
-              - generic [ref=e278]:
-                - generic [ref=e279]:
-                  - generic [ref=e282]: WHAT THEY SAY
-                  - heading "Testimonials" [level=2] [ref=e284]
-                - generic [ref=e285]:
-                  - article [ref=e286]:
-                    - paragraph [ref=e287]: “MONADATY's Golden Citrus is absolutely refreshing. The quality is unmatched!”
-                    - generic [ref=e288]:
-                      - generic [ref=e289]: S
-                      - generic [ref=e290]:
-                        - paragraph [ref=e291]: Sofia A.
-                        - paragraph [ref=e292]: Casablanca
-                  - article [ref=e293]:
-                    - paragraph [ref=e294]: “Finally, a Moroccan soda brand that competes with international premium labels. Bravo!”
-                    - generic [ref=e295]:
-                      - generic [ref=e296]: "Y"
-                      - generic [ref=e297]:
-                        - paragraph [ref=e298]: Youssef M.
-                        - paragraph [ref=e299]: Rabat
-                  - article [ref=e300]:
-                    - paragraph [ref=e301]: “The Rose Lychee is my go-to gift for friends. Everyone loves it!”
-                    - generic [ref=e302]:
-                      - generic [ref=e303]: L
-                      - generic [ref=e304]:
-                        - paragraph [ref=e305]: Laila K.
-                        - paragraph [ref=e306]: Marrakech
-              - generic [ref=e309]:
-                - generic [ref=e313]: POUR · SERVE · SAVOR
+              - generic [ref=e307]:
+                - generic [ref=e308]:
+                  - generic [ref=e311]: WHAT THEY SAY
+                  - heading "Testimonials" [level=2] [ref=e313]
                 - generic [ref=e314]:
-                  - generic [ref=e317]: THE MONADATY MOMENT
-                  - heading "Pour. Serve. Savor." [level=2] [ref=e318]
-                  - paragraph [ref=e319]: MONADATY is designed for the good moments.
-              - generic [ref=e322]:
-                - generic [ref=e325]: BEGIN THE POUR
-                - heading "YOUR NEXT FAVORITE TASTE IS WAITING." [level=2] [ref=e327]
-                - paragraph [ref=e328]: Discover the MONADATY collection.
-                - generic [ref=e329]:
-                  - link "SHOP NOW" [ref=e330] [cursor=pointer]:
+                  - article [ref=e315]:
+                    - paragraph [ref=e316]: “MONADATY's Golden Citrus is absolutely refreshing. The quality is unmatched!”
+                    - generic [ref=e317]:
+                      - generic [ref=e318]: S
+                      - generic [ref=e319]:
+                        - paragraph [ref=e320]: Sofia A.
+                        - paragraph [ref=e321]: Casablanca
+                  - article [ref=e322]:
+                    - paragraph [ref=e323]: “Finally, a Moroccan soda brand that competes with international premium labels. Bravo!”
+                    - generic [ref=e324]:
+                      - generic [ref=e325]: "Y"
+                      - generic [ref=e326]:
+                        - paragraph [ref=e327]: Youssef M.
+                        - paragraph [ref=e328]: Rabat
+                  - article [ref=e329]:
+                    - paragraph [ref=e330]: “The Rose Lychee is my go-to gift for friends. Everyone loves it!”
+                    - generic [ref=e331]:
+                      - generic [ref=e332]: L
+                      - generic [ref=e333]:
+                        - paragraph [ref=e334]: Laila K.
+                        - paragraph [ref=e335]: Marrakech
+              - generic [ref=e339]:
+                - generic [ref=e343]: POUR · SERVE · SAVOR
+                - generic [ref=e344]:
+                  - generic [ref=e347]: THE MONADATY MOMENT
+                  - heading "Pour. Serve. Savor." [level=2] [ref=e348]
+                  - paragraph [ref=e349]: MONADATY is designed for the good moments.
+              - generic [ref=e353]:
+                - generic [ref=e356]: BEGIN THE POUR
+                - heading "YOUR NEXT FAVORITE TASTE IS WAITING." [level=2] [ref=e358]
+                - paragraph [ref=e359]: Discover the MONADATY collection.
+                - generic [ref=e360]:
+                  - link "SHOP NOW" [ref=e361] [cursor=pointer]:
                     - /url: /shop
-                  - link "OUR STORY" [ref=e331] [cursor=pointer]:
+                  - link "OUR STORY" [ref=e362] [cursor=pointer]:
                     - /url: /about
-                - paragraph [ref=e332]: Preview — links open in new tab
+                - paragraph [ref=e363]: Preview — links open in new tab
   - region "Notifications alt+T"
-  - generic [ref=e338] [cursor=pointer]:
-    - button "Open issues overlay" [ref=e339]:
-      - img [ref=e341]
-      - generic [ref=e343]:
-        - generic [ref=e344]: "0"
-        - generic [ref=e345]: "1"
-      - generic [ref=e346]: Issue
-    - button "Collapse issues badge" [ref=e347]:
-      - img [ref=e348]
-  - alert [ref=e350]
+  - alert [ref=e364]
 ```
 
 # Test source

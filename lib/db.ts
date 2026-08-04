@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import type { ProductData, CollectionData, SiteSettings } from "@/types";
 import { logError, logWarning } from "@/lib/logger";
 
@@ -150,13 +151,25 @@ export const getCollections = cache(async (): Promise<CollectionData[]> => {
   }
 });
 
-export const getLandingCollections = cache(async (): Promise<CollectionData[]> => {
+export const getLandingCollections = unstable_cache(
+  async (): Promise<CollectionData[]> => {
   try {
-    const rows = await prisma.collection.findMany({
-      where: { landingEnabled: true },
-      orderBy: { landingOrder: "asc" },
-    });
-    if (rows.length > 0) return rows.map(mapCollectionData);
+    const header = await prisma.landingCollectionHeader.findFirst({ orderBy: { configId: "asc" } });
+    const selectedIds = header?.selectedCollectionIds
+      ? header.selectedCollectionIds.split(",").filter(Boolean)
+      : [];
+
+    if (selectedIds.length > 0) {
+      const rows = await prisma.collection.findMany({
+        where: { id: { in: selectedIds } },
+      });
+      const byId = new Map(rows.map((r) => [r.id, r]));
+      const ordered = selectedIds
+        .map((id) => byId.get(id))
+        .filter(Boolean) as typeof rows;
+      return ordered.map(mapCollectionData);
+    }
+
     const fallback = await prisma.collection.findMany({
       orderBy: { order: "asc" },
       take: 3,
@@ -166,7 +179,10 @@ export const getLandingCollections = cache(async (): Promise<CollectionData[]> =
     logError(error, "Database error in getLandingCollections");
     return [];
   }
-});
+},
+  [],
+  { tags: ["landing"] },
+);
 
 export const getCategories = cache(async () => {
   try {
@@ -177,7 +193,8 @@ export const getCategories = cache(async () => {
   }
 });
 
-export const getTestimonials = cache(async () => {
+export const getTestimonials = unstable_cache(
+  async () => {
   try {
     return await prisma.testimonial.findMany({
       where: { visible: true },
@@ -188,7 +205,10 @@ export const getTestimonials = cache(async () => {
     logError(error, "Database error in getTestimonials");
     return [];
   }
-});
+},
+  [],
+  { tags: ["landing"] },
+);
 
 export const getAllTestimonials = cache(async () => {
   try {
@@ -211,21 +231,40 @@ export const getFAQ = cache(async () => {
   }
 });
 
-export const getFeaturedProducts = cache(async (): Promise<ProductData[]> => {
+export const getLandingFeaturedProducts = unstable_cache(
+  async (): Promise<ProductData[]> => {
   try {
-    const rows = await prisma.landingSection.findMany({
-      where: { section: "featured_products", enabled: true, product: { available: true } },
-      orderBy: { position: "asc" },
-      include: { product: { include: productInclude } },
+    const config = await prisma.landingConfig.findFirst({
+      where: { status: "published" },
+      orderBy: { publishedAt: "desc" },
+      include: { featured: { select: { productIds: true } } },
+    }) ?? await prisma.landingConfig.findFirst({
+      orderBy: { createdAt: "desc" },
+      include: { featured: { select: { productIds: true } } },
     });
-    return rows
-      .filter((r) => r.product)
-      .map((r) => mapProductToData(r.product!));
+
+    const raw = config?.featured?.productIds || "";
+    const ids = raw.split(",").filter(Boolean);
+
+    if (ids.length === 0) return [];
+
+    const products = await prisma.product.findMany({
+      where: { id: { in: ids } },
+      include: productInclude,
+    });
+
+    const orderMap = new Map(ids.map((id, idx) => [id, idx]));
+    return products
+      .sort((a, b) => (orderMap.get(a.id) ?? 0) - (orderMap.get(b.id) ?? 0))
+      .map(mapProductToData);
   } catch (error) {
-    logError(error, "Database error in getFeaturedProducts");
+    logError(error, "Database error in getLandingFeaturedProducts");
     return [];
   }
-});
+},
+  [],
+  { tags: ["landing"] },
+);
 
 export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
   try {
@@ -362,12 +401,12 @@ function parseLandingBrandStory(bs: { enabled: boolean; title: string; subtitle:
   };
 }
 
-function parseLandingFeatured(f: { enabled: boolean; title: string; subtitle: string }) {
-  return { enabled: f.enabled, title: f.title, subtitle: f.subtitle };
+function parseLandingFeatured(f: { enabled: boolean; title: string; subtitle: string; productIds: string }) {
+  return { enabled: f.enabled, title: f.title, subtitle: f.subtitle, productIds: f.productIds || "" };
 }
 
-function parseLandingCollectionHeader(ch: { enabled: boolean; title: string; subtitle: string }) {
-  return { enabled: ch.enabled, title: ch.title, subtitle: ch.subtitle };
+function parseLandingCollectionHeader(ch: { enabled: boolean; title: string; subtitle: string; selectedCollectionIds?: string }) {
+  return { enabled: ch.enabled, title: ch.title, subtitle: ch.subtitle, selectedCollectionIds: ch.selectedCollectionIds || "" };
 }
 
 function parseLandingTestimonialHeader(th: { enabled: boolean; title: string; subtitle: string }) {
@@ -397,7 +436,8 @@ export type LandingContent = {
   seo: { title: string; metaDescription: string; ogTitle: string; ogDescription: string; ogImage: string; canonicalUrl: string } | null;
   sectionOrder: string[];
 };
-export const getLandingContent = cache(async (): Promise<LandingContent> => {
+export const getLandingContent = unstable_cache(
+  async (): Promise<LandingContent> => {
   try {
     let config = await prisma.landingConfig.findFirst({
       where: { status: "published" },
@@ -433,8 +473,8 @@ export const getLandingContent = cache(async (): Promise<LandingContent> => {
     if (!config) {
       return {
         hero: { enabled: true, title: "TASTE\nREDEFINED.", subtitle: "Premium Soda — Moroccan Craft", description: "A refined soda experience shaped in Morocco.", ctaText: "Shop MONADATY", ctaLink: "/shop", media: [] },
-        featuredProducts: { enabled: true, title: "Featured", subtitle: "SELECTED FLAVORS" },
-        collectionsSection: { enabled: true, title: "Shop by Collection", subtitle: "THE COLLECTIONS" },
+        featuredProducts: { enabled: true, title: "Featured", subtitle: "SELECTED FLAVORS", productIds: "" },
+        collectionsSection: { enabled: true, title: "Shop by Collection", subtitle: "THE COLLECTIONS", selectedCollectionIds: "" },
         aboutSection: { enabled: true, title: "Our Story", subtitle: "BORN IN MOROCCO", description: "", image: "" },
         testimonialsSection: { enabled: true, title: "Testimonials", subtitle: "WHAT THEY SAY" },
         newsletter: { enabled: false, title: "Stay Close.", subtitle: "THE INNER CIRCLE", description: "", placeholder: "Your email", buttonText: "Join" },
@@ -461,8 +501,8 @@ export const getLandingContent = cache(async (): Promise<LandingContent> => {
 
     return {
       hero: config.hero ? parseLandingHero(config.hero) : { enabled: false, title: "", subtitle: "", description: "", ctaText: "", ctaLink: "", media: [] },
-      featuredProducts: config.featured ? parseLandingFeatured(config.featured) : { enabled: false, title: "", subtitle: "" },
-      collectionsSection: config.collectionHeader ? parseLandingCollectionHeader(config.collectionHeader) : { enabled: false, title: "", subtitle: "" },
+      featuredProducts: config.featured ? parseLandingFeatured(config.featured) : { enabled: false, title: "", subtitle: "", productIds: "" },
+      collectionsSection: config.collectionHeader ? parseLandingCollectionHeader(config.collectionHeader) : { enabled: false, title: "", subtitle: "", selectedCollectionIds: "" },
       aboutSection: config.brandStory ? parseLandingBrandStory(config.brandStory) : { enabled: false, title: "", subtitle: "", description: "", image: "" },
       testimonialsSection: config.testimonialHeader ? parseLandingTestimonialHeader(config.testimonialHeader) : { enabled: false, title: "", subtitle: "" },
       newsletter: config.newsletter ? parseLandingNewsletter(config.newsletter) : { enabled: false, title: "", subtitle: "", description: "", placeholder: "", buttonText: "" },
@@ -479,8 +519,8 @@ export const getLandingContent = cache(async (): Promise<LandingContent> => {
     logError(error, "Database error in getLandingContent");
     return {
       hero: { enabled: true, title: "TASTE\nREDEFINED.", subtitle: "Premium Soda — Moroccan Craft", description: "A refined soda experience shaped in Morocco.", ctaText: "Shop MONADATY", ctaLink: "/shop", media: [] },
-      featuredProducts: { enabled: true, title: "Featured", subtitle: "SELECTED FLAVORS" },
-      collectionsSection: { enabled: true, title: "Shop by Collection", subtitle: "THE COLLECTIONS" },
+      featuredProducts: { enabled: true, title: "Featured", subtitle: "SELECTED FLAVORS", productIds: "" },
+      collectionsSection: { enabled: true, title: "Shop by Collection", subtitle: "THE COLLECTIONS", selectedCollectionIds: "" },
       aboutSection: { enabled: true, title: "Our Story", subtitle: "BORN IN MOROCCO", description: "", image: "" },
       testimonialsSection: { enabled: true, title: "Testimonials", subtitle: "WHAT THEY SAY" },
       newsletter: { enabled: false, title: "Stay Close.", subtitle: "THE INNER CIRCLE", description: "", placeholder: "Your email", buttonText: "Join" },
@@ -490,5 +530,8 @@ export const getLandingContent = cache(async (): Promise<LandingContent> => {
       sectionOrder: ["hero", "featured", "collections", "about", "testimonials", "moroccan_moment", "newsletter", "final_cta"],
     };
   }
-});
+},
+  [],
+  { tags: ["landing"] },
+);
 

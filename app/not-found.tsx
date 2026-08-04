@@ -6,7 +6,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 export default function NotFound() {
   const { t } = useTranslation("errors");
   return (
-    <div className="flex min-h-[80vh] flex-col items-center justify-center bg-black px-6 text-center" role="alert" aria-label="404 — Page not found">
+    <div className="flex min-h-[80vh] flex-col items-center justify-center bg-black px-6 text-center" role="alert" aria-label={t("page_not_found_label", "404 — Page not found")}>
       {/* Editorial chapter number */}
       <span className="font-display text-[10rem] font-light leading-[0.85] tracking-[-0.05em] text-ivory/[0.03] md:text-[16rem]">
         404

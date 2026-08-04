@@ -117,26 +117,30 @@ export async function isAuthenticated(): Promise<IsAuthenticatedResult | false> 
 }
 
 export async function getAuthenticatedAdmin(): Promise<AuthenticatedAdmin | null> {
-  const cookieStore = await cookies();
-  const signed = cookieStore.get(SESSION_COOKIE)?.value;
-  if (!signed) return null;
-  const token = unsignToken(signed);
-  if (!token) return null;
-  const hashedToken = hashToken(token);
-  const admin = await prisma.admin.findFirst({
-    where: { sessionToken: hashedToken },
-    select: { id: true, email: true, name: true, mustChangePassword: true, lastLoginAt: true, role: true },
-  });
-  if (!admin) return null;
-  if (admin.lastLoginAt && Date.now() - admin.lastLoginAt.getTime() > SESSION_MAX_AGE * 1000) {
+  try {
+    const cookieStore = await cookies();
+    const signed = cookieStore.get(SESSION_COOKIE)?.value;
+    if (!signed) return null;
+    const token = unsignToken(signed);
+    if (!token) return null;
+    const hashedToken = hashToken(token);
+    const admin = await prisma.admin.findFirst({
+      where: { sessionToken: hashedToken },
+      select: { id: true, email: true, name: true, mustChangePassword: true, lastLoginAt: true, role: true },
+    });
+    if (!admin) return null;
+    if (admin.lastLoginAt && Date.now() - admin.lastLoginAt.getTime() > SESSION_MAX_AGE * 1000) {
+      return null;
+    }
+    return {
+      id: admin.id,
+      email: admin.email,
+      name: admin.name,
+      mustChangePassword: admin.mustChangePassword,
+      lastLoginAt: admin.lastLoginAt,
+      role: admin.role as "SUPER_ADMIN" | "ADMIN",
+    };
+  } catch {
     return null;
   }
-  return {
-    id: admin.id,
-    email: admin.email,
-    name: admin.name,
-    mustChangePassword: admin.mustChangePassword,
-    lastLoginAt: admin.lastLoginAt,
-    role: admin.role as "SUPER_ADMIN" | "ADMIN",
-  };
 }

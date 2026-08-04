@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
+import { getLanguage, getTranslation, loadTranslations } from "@/lib/translations";
 import { prisma } from "@/lib/prisma";
 import { AuditLogClient } from "./AuditLogClient";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Audit Log",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await getLanguage();
+  const translations = await loadTranslations("admin");
+  return { title: getTranslation(translations, "audit_log", lang, "Audit Log") };
+}
 
 export default async function AuditLogPage() {
   const [warehouses, movements] = await Promise.all([

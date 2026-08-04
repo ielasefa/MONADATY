@@ -36,10 +36,10 @@ export function CategoriesClient({
             {editing && <input type="hidden" name="original" value={editing.slug} />}
             <div className="grid grid-cols-2 gap-4">
               <Field label={t("name_label")} name="name" defaultValue={editing?.name} />
-              <Field label="Slug" name="slug" defaultValue={editing?.slug} />
+              <Field label={t("slug_label")} name="slug" defaultValue={editing?.slug} />
             </div>
             <Field label={t("description_label")} name="description" defaultValue={editing?.description} rows={2} />
-            <SingleImageUploader label="Category Image" value={editing?.image || ""} onChange={(_url) => {}} folder="monadaty/categories" />
+            <SingleImageUploader label={t("category_image")} value={editing?.image || ""} onChange={(_url) => {}} folder="monadaty/categories" />
             <input type="hidden" name="image" defaultValue={editing?.image || ""} />
             <div className="flex gap-3 pt-2">
               <button type="submit" className="btn-primary">
@@ -63,13 +63,13 @@ export function CategoriesClient({
             <button
               onClick={() => setEditingSlug(c.slug)}
               className="text-sm font-medium text-gold hover:text-gold/80 transition-colors"
-              aria-label={`Edit ${c.name}`}
+              aria-label={`${t("edit")} ${c.name}`}
             >
-              Edit
+              {t("edit")}
             </button>
             <form action={deleteCategory} className="flex items-center gap-2">
               <input type="hidden" name="slug" value={c.slug} />
-              <label className="text-xs text-muted">Reassign to:</label>
+              <label className="text-xs text-muted">{t("reassign_to")}:</label>
               <select name="replacement" className="input-premium h-12 px-3 text-xs" aria-label={t("replacement_category")}>
                 <option value="">{t("delete_products_warning")}</option>
                 {categories.filter((cat) => cat.slug !== c.slug).map((cat) => (

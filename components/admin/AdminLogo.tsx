@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTranslation } from "@/hooks/useTranslation";
 
 /**
  * MONADATY monogram + wordmark for the admin auth screens.
@@ -8,6 +9,7 @@ import { useRouter } from "next/navigation";
  */
 export function AdminLogo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   const router = useRouter();
+  const { t } = useTranslation("common");
   const dims =
     size === "lg" ? "h-16 w-16" : size === "sm" ? "h-10 w-10" : "h-14 w-14";
   const text =
@@ -17,7 +19,7 @@ export function AdminLogo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
     <button
       type="button"
       onClick={() => router.push("/")}
-      aria-label="MONADATY — back to store"
+      aria-label={t("monadaty_logo_aria", "MONADATY — back to store")}
       className="group mx-auto flex flex-col items-center gap-3 outline-none"
     >
       <div

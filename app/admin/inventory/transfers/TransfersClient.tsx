@@ -64,11 +64,11 @@ export function TransfersClient({
     async (e: React.FormEvent) => {
       e.preventDefault();
       if (!fromWarehouse || !toWarehouse || !selectedProduct || quantity < 1) {
-        setError("Please fill all required fields");
+        setError(t("fill_required_fields", "Please fill all required fields"));
         return;
       }
       if (fromWarehouse === toWarehouse) {
-        setError("Source and destination warehouses must be different");
+        setError(t("different_warehouses_required", "Source and destination warehouses must be different"));
         return;
       }
       setSaving(true);
@@ -91,7 +91,7 @@ export function TransfersClient({
           const err = await res.json();
           throw new Error(err.error || "Transfer failed");
         }
-        setSuccess("Transfer completed successfully");
+        setSuccess(t("transfer_completed", "Transfer completed successfully"));
         setFromWarehouse("");
         setToWarehouse("");
         setSelectedProduct(null);
@@ -100,20 +100,20 @@ export function TransfersClient({
         setReason("");
         router.refresh();
       } catch (e: unknown) {
-        setError(e instanceof Error ? e.message : "An error occurred");
+        setError(e instanceof Error ? e.message : t("an_error_occurred", "An error occurred"));
       } finally {
         setSaving(false);
       }
     },
-    [fromWarehouse, toWarehouse, selectedProduct, quantity, reason, router]
+    [fromWarehouse, toWarehouse, selectedProduct, quantity, reason, router, t]
   );
 
   return (
     <div>
       <div className="mb-8">
-        <p className="luxury-label mb-2">Inventory</p>
-        <h1 className="text-3xl font-semibold tracking-tight text-white">Stock Transfers</h1>
-        <p className="mt-1 text-sm text-muted">Transfer stock between warehouses</p>
+        <p className="luxury-label mb-2">{t("inventory", "Inventory")}</p>
+        <h1 className="text-3xl font-semibold tracking-tight text-white">{t("stock_transfers", "Stock Transfers")}</h1>
+        <p className="mt-1 text-sm text-muted">{t("stock_transfers_desc", "Transfer stock between warehouses")}</p>
       </div>
 
       {error && (
@@ -124,39 +124,39 @@ export function TransfersClient({
       )}
 
       <div className="mb-10 luxury-card rounded-card border border-white/[0.06] bg-card p-6">
-        <p className="luxury-label mb-6 text-[10px] text-muted">New Transfer</p>
+        <p className="luxury-label mb-6 text-[10px] text-muted">{t("new_transfer", "New Transfer")}</p>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <div className="space-y-2">
-              <label className="luxury-label text-[10px] text-muted">From Warehouse</label>
+              <label className="luxury-label text-[10px] text-muted">{t("from_warehouse", "From Warehouse")}</label>
               <select
                 value={fromWarehouse}
                 onChange={(e) => setFromWarehouse(e.target.value)}
                 className="input-premium w-full"
                 required
               >
-                <option value="">Select source...</option>
+                <option value="">{t("select_source", "Select source...")}</option>
                 {warehouses.map((w) => (
                   <option key={w.id} value={w.id}>{w.name}</option>
                 ))}
               </select>
             </div>
             <div className="space-y-2">
-              <label className="luxury-label text-[10px] text-muted">To Warehouse</label>
+              <label className="luxury-label text-[10px] text-muted">{t("to_warehouse", "To Warehouse")}</label>
               <select
                 value={toWarehouse}
                 onChange={(e) => setToWarehouse(e.target.value)}
                 className="input-premium w-full"
                 required
               >
-                <option value="">Select destination...</option>
+                <option value="">{t("select_destination", "Select destination...")}</option>
                 {warehouses.map((w) => (
                   <option key={w.id} value={w.id}>{w.name}</option>
                 ))}
               </select>
             </div>
             <div className="space-y-2">
-              <label className="luxury-label text-[10px] text-muted">Product</label>
+              <label className="luxury-label text-[10px] text-muted">{t("product", "Product")}</label>
               <input
                 type="text"
                 value={productQuery}
@@ -164,10 +164,10 @@ export function TransfersClient({
                   setProductQuery(e.target.value);
                   setSelectedProduct(null);
                 }}
-                placeholder="Search products..."
+                placeholder={t("search_products_inventory", "Search products...")}
                 className="input-premium w-full"
               />
-              {searching && <p className="text-xs text-muted">Searching...</p>}
+              {searching && <p className="text-xs text-muted">{t("searching", "Searching...")}</p>}
               {searchResults.length > 0 && !selectedProduct && (
                 <div className="mt-1 max-h-40 overflow-y-auto rounded-card border border-white/[0.06] bg-surface">
                   {searchResults.map((p) => (
@@ -205,7 +205,7 @@ export function TransfersClient({
               )}
             </div>
             <div className="space-y-2">
-              <label className="luxury-label text-[10px] text-muted">Quantity</label>
+              <label className="luxury-label text-[10px] text-muted">{t("quantity", "Quantity")}</label>
               <input
                 type="number"
                 min={1}
@@ -217,13 +217,13 @@ export function TransfersClient({
             </div>
             <div className="md:col-span-2">
               <div className="space-y-2">
-                <label className="luxury-label text-[10px] text-muted">Reason (Optional)</label>
+                <label className="luxury-label text-[10px] text-muted">{t("reason_optional", "Reason (Optional)")}</label>
                 <textarea
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
                   rows={2}
                   className="input-premium w-full min-h-[60px] resize-y px-4 py-3"
-                  placeholder="Why is this transfer needed?"
+                  placeholder={t("why_transfer_needed", "Why is this transfer needed?")}
                 />
               </div>
             </div>
@@ -239,17 +239,17 @@ export function TransfersClient({
       </div>
 
       <div>
-        <p className="luxury-label mb-4 text-[10px] text-muted">Recent Transfers</p>
+        <p className="luxury-label mb-4 text-[10px] text-muted">{t("recent_transfers", "Recent Transfers")}</p>
         <div className="glass overflow-hidden rounded-card border border-white/[0.06]">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
                 <tr className="border-b border-white/[0.06] text-xs uppercase tracking-[0.1em] text-muted">
-                  <th className="px-5 py-4 font-medium">Date</th>
-                  <th className="px-5 py-4 font-medium">Product</th>
-                  <th className="px-5 py-4 font-medium">Warehouse</th>
-                  <th className="px-5 py-4 font-medium text-right">Qty</th>
-                  <th className="px-5 py-4 font-medium">Reason</th>
+                  <th className="px-5 py-4 font-medium">{t("date", "Date")}</th>
+                  <th className="px-5 py-4 font-medium">{t("product", "Product")}</th>
+                  <th className="px-5 py-4 font-medium">{t("warehouse", "Warehouse")}</th>
+                  <th className="px-5 py-4 font-medium text-right">{t("qty", "Qty")}</th>
+                  <th className="px-5 py-4 font-medium">{t("reason", "Reason")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/[0.06]">

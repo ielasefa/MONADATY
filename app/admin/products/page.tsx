@@ -161,7 +161,7 @@ export default function ProductsPage() {
   const handleExport = async (format: string) => {
     try {
       const res = await fetch(`/api/admin/products/export?format=${format}`);
-      if (!res.ok) throw new Error("Export failed");
+      if (!res.ok) throw new Error(t("export_failed", "Export failed"));
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -240,7 +240,7 @@ export default function ProductsPage() {
           <h1 className="font-display text-3xl text-white md:text-4xl">{t("products")}</h1>
           <p className="mt-1 text-sm text-muted">
             {loading ? (
-              <span data-testid="products-loading">Loading...</span>
+              <span data-testid="products-loading">{t("loading", "Loading...")}</span>
             ) : (
               <span data-testid="products-count">{products.length} product(s)</span>
             )}
@@ -315,14 +315,14 @@ export default function ProductsPage() {
         >
           <option value="">{t("featured_all", "Featured: All")}</option>
           <option value="true">{t("featured_only")}</option>
-          <option value="false">Non-Featured</option>
+          <option value="false">{t("non_featured", "Non-Featured")}</option>
         </select>
         <select
           value={filterBestSeller}
           onChange={(e) => setFilterBestSeller(e.target.value)}
           className="rounded-button border border-white/[0.06] bg-bg px-3 py-2 text-xs text-white outline-none"
         >
-          <option value="">Best Seller: All</option>
+          <option value="">{t("best_seller_only", "Best Seller: All")}</option>
           <option value="true">{t("best_seller_only")}</option>
           <option value="false">{t("non_best_seller", "Non-Best Seller")}</option>
         </select>
@@ -357,7 +357,7 @@ export default function ProductsPage() {
               onChange={(e) => setBulkValue(e.target.value)}
               className="rounded-button border border-white/[0.06] bg-[#171717] px-3 py-1.5 text-xs text-white outline-none transition focus:border-gold/30 focus:ring-1 focus:ring-gold/20"
             >
-              <option value="">Select category...</option>
+              <option value="">{t("select_category_placeholder", "Select category...")}</option>
               {categories.map((cat) => (
                 <option key={cat.id} value={cat.id}>{cat.name}</option>
               ))}
@@ -369,7 +369,7 @@ export default function ProductsPage() {
               onChange={(e) => setBulkValue(e.target.value)}
               className="rounded-button border border-white/[0.06] bg-[#171717] px-3 py-1.5 text-xs text-white outline-none transition focus:border-gold/30 focus:ring-1 focus:ring-gold/20"
             >
-              <option value="">Select collection...</option>
+              <option value="">{t("select_collection_placeholder", "Select collection...")}</option>
               {collections.map((col) => (
                 <option key={col.id} value={col.id}>{col.name}</option>
               ))}
@@ -418,8 +418,8 @@ export default function ProductsPage() {
                 </th>
                 <th className="w-14 px-4 py-3">{t("image")}</th>
                 <th className="px-4 py-3">{t("product")}</th>
-                <th className="px-4 py-3">SKU</th>
-                <th className="px-4 py-3">Status</th>
+                <th className="px-4 py-3">{t("sku", "SKU")}</th>
+                <th className="px-4 py-3">{t("status", "Status")}</th>
                 <th className="px-4 py-3 text-right">{t("price")}</th>
                 <th className="px-4 py-3 text-right">{t("stock")}</th>
                 <th className="px-4 py-3 text-right">{t("variants")}</th>

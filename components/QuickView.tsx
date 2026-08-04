@@ -105,7 +105,7 @@ export function QuickView({ product, open, onClose }: QuickViewProps) {
                   fill
                   sizes="(min-width: 768px) 40vw, 80vw"
                   className="object-contain"
-                  fallback={<div className="text-sm font-semibold uppercase tracking-[0.3em] text-ivory/10">MD</div>}
+                  fallback={<div className="text-sm font-semibold uppercase tracking-[0.3em] text-ivory/10">{t("img", "IMG")}</div>}
                 />
               </div>
             </div>

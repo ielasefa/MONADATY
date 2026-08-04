@@ -97,12 +97,12 @@ export function PurchaseOrderDetailClient({
         router.push("/admin/inventory/purchase-orders");
         router.refresh();
       } catch (e: unknown) {
-        setError(e instanceof Error ? e.message : "An error occurred");
+        setError(e instanceof Error ? e.message : t("an_error_occurred", "An error occurred"));
       } finally {
         setSaving(false);
       }
     },
-    [isNew, order, router]
+    [isNew, order, router, t]
   );
 
   const updateStatus = async (newStatus: string) => {
@@ -120,7 +120,7 @@ export function PurchaseOrderDetailClient({
       setLocalOrder((prev) => (prev ? { ...prev, status: newStatus } : prev));
       router.refresh();
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "An error occurred");
+      setError(e instanceof Error ? e.message : t("an_error_occurred", "An error occurred"));
     } finally {
       setSaving(false);
     }
@@ -137,13 +137,13 @@ export function PurchaseOrderDetailClient({
       });
       if (!res.ok) {
         const err = await res.json();
-        throw new Error(err.error || "Failed to receive items");
+        throw new Error(err.error || t("failed_receive_items", "Failed to receive items"));
       }
       setReceiveQuantities({});
-      setLocalOrder((prev) => (prev ? { ...prev, status: "Received" } : prev));
+      setLocalOrder((prev) => (prev ? { ...prev, status: t("received", "Received") } : prev));
       router.refresh();
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "An error occurred");
+      setError(e instanceof Error ? e.message : t("an_error_occurred", "An error occurred"));
     } finally {
       setSaving(false);
     }
@@ -158,26 +158,26 @@ export function PurchaseOrderDetailClient({
           <Link href="/admin/inventory/purchase-orders" className="mb-2 inline-flex items-center gap-1 text-xs text-muted transition hover:text-white">
             {t("back_to_purchase_orders", "← Back to Purchase Orders")}
           </Link>
-          <h1 className="text-3xl font-semibold tracking-tight text-white">New Purchase Order</h1>
+          <h1 className="text-3xl font-semibold tracking-tight text-white">{t("new_purchase_order", "New Purchase Order")}</h1>
         </div>
         {error && <div className="mb-6 rounded-card border border-burgundy/20 bg-burgundy/10 px-4 py-3 text-sm text-burgundy">{error}</div>}
         <form action={handleSave} className="space-y-8">
           <div className="luxury-card rounded-card border border-white/[0.06] bg-card p-6">
-            <p className="luxury-label mb-6 text-[10px] text-muted">Order Details</p>
+            <p className="luxury-label mb-6 text-[10px] text-muted">{t("po_order_details", "Order Details")}</p>
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
               <div className="space-y-2">
-                <label className="luxury-label text-[10px] text-muted">Supplier</label>
+                <label className="luxury-label text-[10px] text-muted">{t("supplier", "Supplier")}</label>
                 <select name="supplierId" className="input-premium w-full" required>
-                  <option value="">Select supplier...</option>
+                  <option value="">{t("select_supplier", "Select supplier...")}</option>
                   {suppliers.map((s) => (
                     <option key={s.id} value={s.id}>{s.name}</option>
                   ))}
                 </select>
               </div>
               <div className="space-y-2">
-                <label className="luxury-label text-[10px] text-muted">Warehouse</label>
+                <label className="luxury-label text-[10px] text-muted">{t("warehouse", "Warehouse")}</label>
                 <select name="warehouseId" className="input-premium w-full" required>
-                  <option value="">Select warehouse...</option>
+                  <option value="">{t("po_select_warehouse", "Select warehouse...")}</option>
                   {warehouses.map((w) => (
                     <option key={w.id} value={w.id}>{w.name}</option>
                   ))}
@@ -185,7 +185,7 @@ export function PurchaseOrderDetailClient({
               </div>
               <div className="md:col-span-2">
                 <div className="space-y-2">
-                  <label className="luxury-label text-[10px] text-muted">Notes</label>
+                  <label className="luxury-label text-[10px] text-muted">{t("supplier_notes", "Notes")}</label>
                   <textarea name="notes" rows={3} className="input-premium w-full min-h-[80px] resize-y px-4 py-3" />
                 </div>
               </div>
@@ -226,15 +226,15 @@ export function PurchaseOrderDetailClient({
 
       <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
         <div className="luxury-card rounded-card border border-white/[0.06] bg-card p-5">
-          <p className="luxury-label text-[10px] text-muted">Supplier</p>
+          <p className="luxury-label text-[10px] text-muted">{t("supplier", "Supplier")}</p>
           <p className="mt-1 text-sm font-medium text-white">{localOrder!.supplierName}</p>
         </div>
         <div className="luxury-card rounded-card border border-white/[0.06] bg-card p-5">
-          <p className="luxury-label text-[10px] text-muted">Warehouse</p>
+          <p className="luxury-label text-[10px] text-muted">{t("warehouse", "Warehouse")}</p>
           <p className="mt-1 text-sm font-medium text-white">{localOrder!.warehouseName}</p>
         </div>
         <div className="luxury-card rounded-card border border-white/[0.06] bg-card p-5">
-          <p className="luxury-label text-[10px] text-muted">Created</p>
+          <p className="luxury-label text-[10px] text-muted">{t("created", "Created")}</p>
           <p className="mt-1 text-sm font-medium text-white">
             {new Date(localOrder!.createdAt).toLocaleDateString("en-US", {
               year: "numeric", month: "long", day: "numeric",
@@ -245,7 +245,7 @@ export function PurchaseOrderDetailClient({
 
       {nextStatuses.length > 0 && (
         <div className="mb-8 flex flex-wrap items-center gap-3 rounded-card border border-white/[0.06] bg-card p-4">
-          <span className="text-xs text-muted">Update Status:</span>
+          <span className="text-xs text-muted">{t("update_status", "Update Status:")}</span>
           {nextStatuses.map((s) => (
             <button
               key={s}
@@ -264,19 +264,19 @@ export function PurchaseOrderDetailClient({
       )}
 
       <div className="mb-8">
-        <p className="luxury-label mb-4 text-[10px] text-muted">Items</p>
+        <p className="luxury-label mb-4 text-[10px] text-muted">{t("po_items", "Items")}</p>
         <div className="glass overflow-hidden rounded-card border border-white/[0.06]">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
                 <tr className="border-b border-white/[0.06] text-xs uppercase tracking-[0.1em] text-muted">
-                  <th className="px-5 py-4 font-medium">Product</th>
-                  <th className="px-5 py-4 font-medium">SKU</th>
-                  <th className="px-5 py-4 font-medium text-right">Qty Ordered</th>
-                  <th className="px-5 py-4 font-medium text-right">Cost</th>
-                  <th className="px-5 py-4 font-medium text-right">Received</th>
-                  <th className="px-5 py-4 font-medium text-right">Remaining</th>
-                  <th className="px-5 py-4 font-medium text-right">Subtotal</th>
+                  <th className="px-5 py-4 font-medium">{t("product", "Product")}</th>
+                  <th className="px-5 py-4 font-medium">{t("sku", "SKU")}</th>
+                  <th className="px-5 py-4 font-medium text-right">{t("qty_ordered", "Qty Ordered")}</th>
+                  <th className="px-5 py-4 font-medium text-right">{t("po_cost", "Cost")}</th>
+                  <th className="px-5 py-4 font-medium text-right">{t("received", "Received")}</th>
+                  <th className="px-5 py-4 font-medium text-right">{t("remaining", "Remaining")}</th>
+                  <th className="px-5 py-4 font-medium text-right">{t("po_subtotal", "Subtotal")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/[0.06]">
@@ -303,7 +303,7 @@ export function PurchaseOrderDetailClient({
 
       {localOrder!.status === "Ordered" && (
         <div className="mb-8 luxury-card rounded-card border border-white/[0.06] bg-card p-6">
-          <p className="luxury-label mb-4 text-[10px] text-muted">Receive Items</p>
+          <p className="luxury-label mb-4 text-[10px] text-muted">{t("receive_items", "Receive Items")}</p>
           <div className="space-y-4">
             {localItems.map((item) => (
               <div key={item.id} className="flex items-center gap-4">
@@ -323,7 +323,7 @@ export function PurchaseOrderDetailClient({
                     }))
                   }
                   className="input-premium w-24 text-center"
-                  placeholder="Qty"
+                  placeholder={t("qty", "Qty")}
                 />
               </div>
             ))}
@@ -341,15 +341,15 @@ export function PurchaseOrderDetailClient({
       <div className="flex justify-end border-t border-white/[0.06] pt-4">
         <div className="w-64 space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="text-muted">Subtotal</span>
+            <span className="text-muted">{t("po_subtotal", "Subtotal")}</span>
             <span className="text-white">{localOrder!.subtotal}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-muted">Tax</span>
+            <span className="text-muted">{t("po_tax", "Tax")}</span>
             <span className="text-white">{localOrder!.tax}</span>
           </div>
           <div className="flex justify-between text-base font-semibold">
-            <span className="text-white">Total</span>
+            <span className="text-white">{t("po_total", "Total")}</span>
             <span className="text-gold">{localOrder!.total}</span>
           </div>
         </div>

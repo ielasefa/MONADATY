@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 import { loadProducts } from "@/lib/data";
+import { getLanguage, getTranslation, loadTranslations } from "@/lib/translations";
 import { DashboardClient } from "./DashboardClient";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Dashboard",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await getLanguage();
+  const translations = await loadTranslations("admin");
+  return { title: getTranslation(translations, "dashboard", lang, "Tableau de bord") };
+}
 
 function parsePrice(val: string | null): number {
   if (!val) return 0;

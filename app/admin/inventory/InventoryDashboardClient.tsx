@@ -84,25 +84,25 @@ export function InventoryDashboardClient(props: Props) {
       <div className="mb-10 flex items-center justify-between">
         <div>
           <h1 className="font-display text-3xl font-bold tracking-tight text-white">{t("inventory_dashboard")}</h1>
-          <p className="mt-1 text-sm text-muted">Overview of your inventory</p>
+          <p className="mt-1 text-sm text-muted">{t("inventory_overview", "Overview of your inventory")}</p>
         </div>
       </div>
 
       <div className="mb-10">
-        <p className="luxury-label mb-4 text-[10px] text-muted">Key Metrics</p>
+        <p className="luxury-label mb-4 text-[10px] text-muted">{t("key_metrics", "Key Metrics")}</p>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
-          <StatCard label="Total Products" value={props.totalProducts} href="/admin/inventory" />
-          <StatCard label="Warehouses" value={props.totalWarehouses} href="/admin/inventory/warehouses" accent="emerald" />
+          <StatCard label={t("total_products_label", "Total Products")} value={props.totalProducts} href="/admin/inventory" />
+          <StatCard label={t("warehouses_label", "Warehouses")} value={props.totalWarehouses} href="/admin/inventory/warehouses" accent="emerald" />
           <StatCard label={t("suppliers_count")} value={props.totalSuppliers} href="/admin/inventory/suppliers" accent="gold" />
           <StatCard label={t("out_of_stock_count")} value={props.outOfStockCount} href="/admin/inventory" accent="red" />
-          <StatCard label="Low Stock" value={props.lowStockCount} href="/admin/inventory" accent="gold" />
-          <StatCard label="Movements Today" value={props.movementsToday} href="/admin/inventory/audit" />
+          <StatCard label={t("low_stock_label_inventory", "Low Stock")} value={props.lowStockCount} href="/admin/inventory" accent="gold" />
+          <StatCard label={t("movements_today", "Movements Today")} value={props.movementsToday} href="/admin/inventory/audit" />
         </div>
       </div>
 
       <div className="mb-10 grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div>
-          <p className="luxury-label mb-4 text-[10px] text-muted">Latest Movements</p>
+          <p className="luxury-label mb-4 text-[10px] text-muted">{t("latest_movements", "Latest Movements")}</p>
           <div className="glass rounded-card border border-white/[0.06] p-6">
             {props.latestMovements.length === 0 ? (
               <p className="text-sm text-muted">{t("no_movements")}</p>
@@ -143,7 +143,7 @@ export function InventoryDashboardClient(props: Props) {
         </div>
 
         <div>
-          <p className="luxury-label mb-4 text-[10px] text-muted">Low Stock Forecast</p>
+          <p className="luxury-label mb-4 text-[10px] text-muted">{t("low_stock_forecast", "Low Stock Forecast")}</p>
           <div className="glass rounded-card border border-white/[0.06] p-6">
             {props.lowStockProducts.length === 0 ? (
               <p className="text-sm text-muted">{t("no_low_stock")}</p>
@@ -169,21 +169,21 @@ export function InventoryDashboardClient(props: Props) {
       </div>
 
       <div className="mb-10">
-        <p className="luxury-label mb-4 text-[10px] text-muted">Quick Actions</p>
+        <p className="luxury-label mb-4 text-[10px] text-muted">{t("quick_actions", "Quick Actions")}</p>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           <Link
             href="/admin/inventory/warehouses"
             className="luxury-card rounded-card border border-white/[0.06] bg-card p-5 text-center transition hover:border-gold/20"
           >
-            <p className="text-sm font-medium text-white">Warehouses</p>
-            <p className="mt-1 text-xs text-muted">Manage locations</p>
+            <p className="text-sm font-medium text-white">{t("warehouses", "Warehouses")}</p>
+            <p className="mt-1 text-xs text-muted">{t("manage_locations", "Manage locations")}</p>
           </Link>
           <Link
             href="/admin/inventory/suppliers"
             className="luxury-card rounded-card border border-white/[0.06] bg-card p-5 text-center transition hover:border-gold/20"
           >
-            <p className="text-sm font-medium text-white">Suppliers</p>
-            <p className="mt-1 text-xs text-muted">Manage vendors</p>
+            <p className="text-sm font-medium text-white">{t("suppliers", "Suppliers")}</p>
+            <p className="mt-1 text-xs text-muted">{t("manage_vendors", "Manage vendors")}</p>
           </Link>
           <Link
             href="/admin/inventory/purchase-orders"

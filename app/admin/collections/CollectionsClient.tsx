@@ -22,7 +22,7 @@ export function CollectionsClient({
   return (
     <div>
       <div className="mb-8">
-        <p className="luxury-label mb-2">Catalog</p>
+        <p className="luxury-label mb-2">{t("catalog")}</p>
         <h1 className="text-3xl font-semibold tracking-tight text-white">{t("collections")}</h1>
         <p className="mt-1 text-sm text-muted">{collections.length} collections</p>
       </div>
@@ -36,14 +36,14 @@ export function CollectionsClient({
             {editing && <input type="hidden" name="original" value={editing.slug} />}
             <div className="grid grid-cols-2 gap-4">
               <Field label={t("title_label")} name="title" defaultValue={editing?.title} />
-              <Field label="Slug" name="slug" defaultValue={editing?.slug} />
+              <Field label={t("slug_label")} name="slug" defaultValue={editing?.slug} />
             </div>
             <Field label={t("description_label")} name="description" defaultValue={editing?.description} rows={2} />
             <div className="grid grid-cols-2 gap-4">
-              <Field label="Accent Color" name="accent" defaultValue={editing?.accent || "#D5B87D"} type="color" />
-              <Field label="Preview Label" name="previewLabel" defaultValue={editing?.previewLabel} />
+              <Field label={t("accent_color", "Accent Color")} name="accent" defaultValue={editing?.accent || "#D5B87D"} type="color" />
+              <Field label={t("preview_label", "Preview Label")} name="previewLabel" defaultValue={editing?.previewLabel} />
             </div>
-            <SingleImageUploader label="Collection Image" value={editing?.image || ""} onChange={(_url) => {}} folder="monadaty/collections" />
+            <SingleImageUploader label={t("collection_image", "Collection Image")} value={editing?.image || ""} onChange={(_url) => {}} folder="monadaty/collections" />
             <input type="hidden" name="image" defaultValue={editing?.image || ""} />
             <Field label={t("order_label")} name="order" type="number" defaultValue={editing?.order?.toString()} />
             <div className="flex gap-3 pt-2">

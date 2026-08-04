@@ -36,13 +36,12 @@ export default async function ShopPage() {
                 {t(translations, "shop_our_range", lang)}
               </h1>
               <p className="mt-3 max-w-lg text-[0.82rem] leading-[1.85] text-white/55">
-                Discover our curated selection of premium Moroccan beverages,
-                crafted with exceptional ingredients and delivered to your door.
+                {t(translations, "shop_hero_description", lang)}
               </p>
             </div>
 
             <p className="label-utility tracking-[0.4em] text-white/30">
-              {products.length} {products.length === 1 ? "DRINK" : "DRINKS"}
+              {products.length} {products.length === 1 ? t(translations, "drink_unit", lang) : t(translations, "drink_unit_plural", lang)}
             </p>
           </div>
         </div>

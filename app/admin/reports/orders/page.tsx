@@ -71,7 +71,7 @@ export default function OrdersReportPage() {
           <table className="w-full text-left text-sm">
             <thead>
               <tr className="border-b border-white/[0.06] text-xs text-muted">
-                <th className="pb-3 font-medium">Order #</th>
+                <th className="pb-3 font-medium">{t("order_number_prefix", "Order #")}</th>
                 <th className="pb-3 font-medium">{t("customer")}</th>
                 <th className="pb-3 font-medium">{t("total_header")}</th>
                 <th className="pb-3 font-medium">{t("status")}</th>

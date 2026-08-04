@@ -61,31 +61,50 @@ function AnimatedCounter({ value, duration = 1200 }: { value: number; duration?:
   return <>{display}</>;
 }
 
-function StatCard({ label, value, href, accent }: { label: string; value: React.ReactNode; href: string; accent?: "gold" | "red" | "emerald" }) {
-  const accentMap = {
-    gold: "text-gold",
-    red: "text-burgundy",
-    emerald: "text-secondary",
-  };
-  return (
-    <motion.div
-      whileHover={{ y: -4, borderColor: "rgba(212,175,55,0.15)", transition: { duration: 0.25 } }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-    >
-      <Link
-        href={href}
-        className="luxury-card group block rounded-card border border-white/[0.06] bg-card p-6 transition-all duration-300 hover:border-gold/20"
-      >
-        <p className="luxury-label text-[10px] text-muted">{label}</p>
-        <p className={`mt-2 font-display text-3xl font-semibold tracking-tight ${accent ? accentMap[accent] : "text-white"}`}>
-          {value}
-        </p>
-      </Link>
-    </motion.div>
-  );
+function StatCard({
+ label,
+ value,
+ href,
+ accent,
+}: {
+ label: string;
+ value: React.ReactNode;
+ href: string;
+ accent?: "gold" | "red" | "emerald";
+}) {
+ const accentMap = {
+   gold: "text-gold",
+   red: "text-burgundy",
+   emerald: "text-secondary",
+ };
+ return (
+   <motion.div
+     whileHover={{
+       y: -4,
+       scale: 1.01,
+       transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+     }}
+     transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+     initial={{ opacity: 0, y: 18, scale: 0.97, filter: "blur(3px)" }}
+     whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+     viewport={{ once: true, margin: "-40px" }}
+     className="will-change-transform"
+   >
+     <Link
+       href={href}
+       className="luxury-card group block rounded-card border border-white/[0.06] bg-card p-6 transition-all duration-300 hover:border-gold/20 hover:shadow-gold hover:shadow-lg"
+     >
+       <p className="luxury-label text-[10px] text-muted">{label}</p>
+       <p
+         className={`mt-2 font-display text-3xl font-semibold tracking-tight ${
+           accent ? accentMap[accent] : "text-white"
+         }`}
+       >
+         {value}
+       </p>
+     </Link>
+   </motion.div>
+ );
 }
 
 export function DashboardClient(props: Props) {
@@ -136,19 +155,27 @@ export function DashboardClient(props: Props) {
 
   return (
     <div>
-      <div className="mb-10 flex items-center justify-between">
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="mb-10 flex items-center justify-between"
+      >
         <div>
           <h1 className="font-display text-3xl font-bold tracking-tight text-white">{t("dashboard")}</h1>
           <p className="mt-1 text-sm text-muted">{t("overview_of_store")}</p>
         </div>
-        <button
+        <motion.button
           onClick={refresh}
+          whileHover={{ y: -1, scale: 1.01 }}
+          whileTap={{ scale: 0.97 }}
+          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
           className="btn-secondary h-12 rounded-button border border-white/[0.06] bg-card px-5 text-sm text-muted transition hover:bg-surface hover:text-white"
           aria-label={t("refresh_data")}
         >
           {t("refresh")}
-        </button>
-      </div>
+       </motion.button>
+     </motion.div>
 
       <div className="mb-10">
         <p className="luxury-label mb-4 text-[10px] text-muted">{t("key_metrics")}</p>
@@ -172,8 +199,8 @@ export function DashboardClient(props: Props) {
       <div className="mb-10">
         <p className="luxury-label mb-4 text-[10px] text-muted">{t("revenue_and_orders")}</p>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
-          <StatCard label={t("total_revenue")} value={<><AnimatedCounter value={totalRevenue} /> DH</>} href="/admin/orders" accent="gold" />
-          <StatCard label={t("todays_revenue")} value={<><AnimatedCounter value={todayRevenue} /> DH</>} href="/admin/orders" accent="gold" />
+          <StatCard label={t("total_revenue")} value={<><AnimatedCounter value={totalRevenue} /> {t("currency_dh", "DH")}</>} href="/admin/orders" accent="gold" />
+          <StatCard label={t("todays_revenue")} value={<><AnimatedCounter value={todayRevenue} /> {t("currency_dh", "DH")}</>} href="/admin/orders" accent="gold" />
           <StatCard label={t("orders_today")} value={<AnimatedCounter value={ordersToday} />} href="/admin/orders" accent="red" />
           <StatCard label={t("total_orders")} value={<AnimatedCounter value={totalOrders} />} href="/admin/orders" />
           <StatCard label={t("customers_count")} value={<AnimatedCounter value={customerCount} />} href="/admin/customers" accent="emerald" />

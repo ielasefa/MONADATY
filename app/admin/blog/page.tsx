@@ -1,53 +1,13 @@
 import type { Metadata } from "next";
-import { getArticles, saveArticles } from "@/lib/data";
-import { revalidatePath } from "next/cache";
-import { getAuthenticatedAdmin } from "@/lib/auth";
+import { getArticles } from "@/lib/data";
+import { getLanguage, getTranslation, loadTranslations } from "@/lib/translations";
 import { BlogClient } from "./BlogClient";
+import { saveArticle, deleteArticle } from "@/lib/actions/admin-blog";
 
-export const dynamic = "force-dynamic";
-
-export const metadata: Metadata = {
-  title: "Blog",
-};
-
-async function saveArticle(formData: FormData) {
-  "use server";
-  const admin = await getAuthenticatedAdmin();
-  if (!admin) throw new Error("Unauthorized");
-  const articles = await getArticles();
-  const id = formData.get("id") as string;
-  const title = formData.get("title") as string;
-  const slug = formData.get("slug") as string;
-  const content = formData.get("content") as string;
-  const coverImage = formData.get("coverImage") as string || "";
-  const author = formData.get("author") as string || "";
-  const tags = (formData.get("tags") as string || "").split(",").map((t) => t.trim()).filter(Boolean);
-  const publishDate = formData.get("publishDate") as string || new Date().toISOString();
-  const published = formData.getAll("published").includes("true");
-  const order = parseInt(formData.get("order") as string) || 0;
-
-  const entry = { id: id || Math.random().toString(36).slice(2, 11), title, slug, content, coverImage, author, tags, publishDate, published, order };
-
-  if (id) {
-    const idx = articles.findIndex((a) => a.id === id);
-    if (idx !== -1) articles[idx] = entry;
-  } else {
-    articles.push(entry);
-  }
-  await saveArticles(articles);
-  revalidatePath("/");
-  revalidatePath("/admin/blog");
-}
-
-async function deleteArticle(formData: FormData) {
-  "use server";
-  const admin = await getAuthenticatedAdmin();
-  if (!admin) throw new Error("Unauthorized");
-  const id = formData.get("id") as string;
-  const allArt = await getArticles();
-  await saveArticles(allArt.filter((a) => a.id !== id));
-  revalidatePath("/");
-  revalidatePath("/admin/blog");
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await getLanguage();
+  const translations = await loadTranslations("admin");
+  return { title: getTranslation(translations, "blog_page_title", lang, "Blog — Admin") };
 }
 
 export default async function AdminBlogPage() {

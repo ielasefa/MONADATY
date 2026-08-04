@@ -227,7 +227,7 @@ export function EditProductForm({
 
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || "Failed to update product");
+        setError(data.error || t("failed_to_update_product", "Failed to update product"));
         setSaving(false);
         return;
       }
@@ -238,7 +238,7 @@ export function EditProductForm({
       setDeletedImageIds([]);
       setTimeout(() => router.push("/admin/products"), 2000);
     } catch {
-      setError("Network error");
+      setError(t("network_error", "Network error"));
       setSaving(false);
     }
   };
@@ -276,7 +276,7 @@ export function EditProductForm({
 
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-2xl text-white md:text-3xl">Edit Product</h1>
+          <h1 className="font-display text-2xl text-white md:text-3xl">{t("edit_product", "Edit Product")}</h1>
           <p className="mt-1 text-sm text-white/50">{product.name}</p>
         </div>
         <button
@@ -312,7 +312,7 @@ export function EditProductForm({
             <div className="space-y-4">
               <div>
                 <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
-                  Product Name <span className="text-burgundy">*</span>
+                  {t("product_name", "Product Name")} <span className="text-burgundy">*</span>
                 </label>
                 <input
                   type="text"
@@ -333,7 +333,7 @@ export function EditProductForm({
               </div>
               <div>
                 <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
-                  Slug
+                  {t("slug", "Slug")}
                 </label>
                 <div className="relative">
                   <input
@@ -341,7 +341,7 @@ export function EditProductForm({
                     value={form.slug}
                     onChange={(e) => handleSlugChange(e.target.value)}
                     className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 pr-10 text-sm text-white outline-none transition focus:border-gold/30"
-                    placeholder="product-slug"
+                    placeholder={t("product_slug_placeholder", "product-slug")}
                     required
                   />
                   {slugAvailable !== null && (
@@ -361,7 +361,7 @@ export function EditProductForm({
               </div>
               <div>
                 <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
-                  Short Description
+                  {t("short_description", "Short Description")}
                 </label>
                 <input
                   type="text"
@@ -373,7 +373,7 @@ export function EditProductForm({
               </div>
               <div>
                 <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
-                  Full Description
+                  {t("full_description", "Full Description")}
                 </label>
                 <textarea
                   rows={4}
@@ -386,7 +386,7 @@ export function EditProductForm({
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
-                    SKU
+                    {t("sku", "SKU")}
                   </label>
                   <input
                     type="text"
@@ -398,7 +398,7 @@ export function EditProductForm({
                 </div>
                 <div>
                   <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
-                    Barcode
+                    {t("barcode", "Barcode")}
                   </label>
                   <input
                     type="text"
@@ -417,7 +417,7 @@ export function EditProductForm({
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <div>
                 <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
-                  Regular Price <span className="text-burgundy">*</span>
+                  {t("regular_price", "Regular Price")} <span className="text-burgundy">*</span>
                 </label>
                 <div className="relative">
                   <input
@@ -426,7 +426,7 @@ export function EditProductForm({
                     value={form.regularPrice}
                     onChange={(e) => handlePriceChange("regularPrice", e.target.value)}
                     className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 pr-14 text-sm text-white outline-none transition focus:border-gold/30"
-                    placeholder="0.00"
+                    placeholder={t("price_zero_placeholder", "0.00")}
                     required
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-white/50">{form.currency}</span>
@@ -443,7 +443,7 @@ export function EditProductForm({
                     value={form.salePrice}
                     onChange={(e) => handlePriceChange("salePrice", e.target.value)}
                     className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 pr-14 text-sm text-white outline-none transition focus:border-gold/30"
-                    placeholder="0.00"
+                    placeholder={t("price_zero_placeholder", "0.00")}
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-white/50">{form.currency}</span>
                 </div>
@@ -459,7 +459,7 @@ export function EditProductForm({
                     value={form.costPrice}
                     onChange={(e) => handlePriceChange("costPrice", e.target.value)}
                     className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 pr-14 text-sm text-white outline-none transition focus:border-gold/30"
-                    placeholder="0.00"
+                    placeholder={t("price_zero_placeholder", "0.00")}
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-white/50">{form.currency}</span>
                 </div>

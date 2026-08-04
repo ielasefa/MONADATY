@@ -57,8 +57,8 @@ export function PurchaseOrdersClient({
     <div>
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="luxury-label mb-2">Inventory</p>
-          <h1 className="text-3xl font-semibold tracking-tight text-white">Purchase Orders</h1>
+          <p className="luxury-label mb-2">{t("inventory", "Inventory")}</p>
+          <h1 className="text-3xl font-semibold tracking-tight text-white">{t("po_title", "Purchase Orders")}</h1>
           <p className="mt-1 text-sm text-muted">{initial.length} total orders</p>
         </div>
         <Link
@@ -77,7 +77,7 @@ export function PurchaseOrdersClient({
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search orders..."
+          placeholder={t("search_orders", "Search orders...")}
           className="input-premium w-64"
         />
         <select
@@ -107,13 +107,13 @@ export function PurchaseOrdersClient({
           <table className="w-full text-left text-sm">
             <thead>
               <tr className="border-b border-white/[0.06] text-xs uppercase tracking-[0.1em] text-muted">
-                <th className="px-5 py-4 font-medium">Order #</th>
-                <th className="px-5 py-4 font-medium">Supplier</th>
-                <th className="px-5 py-4 font-medium">Warehouse</th>
-                <th className="px-5 py-4 font-medium">Status</th>
+                <th className="px-5 py-4 font-medium">{t("order_number_prefix", "Order #")}</th>
+                <th className="px-5 py-4 font-medium">{t("supplier", "Supplier")}</th>
+                <th className="px-5 py-4 font-medium">{t("warehouse", "Warehouse")}</th>
+                <th className="px-5 py-4 font-medium">{t("status", "Status")}</th>
                 <th className="px-5 py-4 font-medium text-right">{t("total")}</th>
-                <th className="px-5 py-4 font-medium text-right">Date</th>
-                <th className="px-5 py-4 font-medium text-right">Actions</th>
+                <th className="px-5 py-4 font-medium text-right">{t("date", "Date")}</th>
+                <th className="px-5 py-4 font-medium text-right">{t("actions", "Actions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/[0.06]">

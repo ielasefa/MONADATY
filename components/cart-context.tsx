@@ -137,7 +137,7 @@ export function CartProvider({ children }: Readonly<{ children: React.ReactNode 
     });
 
     setDrawerOpen(true);
-    setToastMessage(`${product.name} added to box`);
+    setToastMessage(t("added_to_box", "{name} added to box").replace("{name}", product.name));
   }
 
   function updateQuantity(id: string, quantity: number) {
@@ -150,7 +150,7 @@ export function CartProvider({ children }: Readonly<{ children: React.ReactNode 
 
   function removeItem(id: string) {
     setItems((currentItems) => currentItems.filter((item) => item.id !== id));
-    setToastMessage("Item removed from box");
+    setToastMessage(t("item_removed", "Item removed from box"));
   }
 
   function clearCart() {

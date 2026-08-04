@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "@/hooks/useTranslation";
 import { ORDER_STATUS_WORKFLOW, TERMINAL_STATUSES, getWorkflowIndex, isTerminalStatus } from "@/lib/config";
 
 type OrderTimelineProps = {
@@ -37,13 +38,14 @@ function statusStepDate(
 }
 
 export function OrderTimeline({ orderStatus, updatedAt, createdAt, actualDeliveryDate }: OrderTimelineProps) {
+  const { t } = useTranslation("orders");
   const activeIdx = getWorkflowIndex(orderStatus);
   const terminal = TERMINAL_STATUSES[orderStatus];
   const showTerminal = terminal && activeIdx < 0;
 
   return (
     <div className="space-y-2">
-      <p className="text-[0.55rem] font-semibold uppercase tracking-[0.2em] text-gold/70 text-ivory/50">Order Timeline</p>
+      <p className="text-[0.55rem] font-semibold uppercase tracking-[0.2em] text-gold/70 text-ivory/50">{t("order_timeline", "Order Timeline")}</p>
       <div className="relative">
         {/* Vertical line */}
         <div className="absolute left-[1.125rem] top-3 bottom-3 w-px bg-ivory/[0.06]" />
@@ -104,7 +106,7 @@ export function OrderTimeline({ orderStatus, updatedAt, createdAt, actualDeliver
                     <span
                       className={`rounded-full px-2 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.15em] ${step.badgeColor}`}
                     >
-                      Current
+                      {t("current", "Current")}
                     </span>
                   )}
                 </div>

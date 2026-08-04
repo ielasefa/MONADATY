@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { getAuthenticatedAdmin, clearSessionDB, SESSION_COOKIE, MUST_CHANGE_COOKIE } from "@/lib/auth";
+import {
+  getAuthenticatedAdmin,
+  clearSessionDB,
+  SESSION_COOKIE,
+  MUST_CHANGE_COOKIE,
+  SESSION_COOKIE_OPTIONS,
+} from "@/lib/auth";
 import { requireOrigin } from "@/lib/csrf";
 import { createAuditLog } from "@/lib/audit";
 import { logError } from "@/lib/logger";
@@ -24,10 +30,11 @@ export async function POST(request: Request) {
       await clearSessionDB(signed);
     }
 
-    const res = NextResponse.json({ success: true });
-    res.cookies.delete(SESSION_COOKIE);
-    res.cookies.delete(MUST_CHANGE_COOKIE);
-    res.headers.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+  const res = NextResponse.json({ success: true });
+  const expireOpts = { ...SESSION_COOKIE_OPTIONS, maxAge: 0 };
+  res.cookies.set(SESSION_COOKIE, "", expireOpts);
+  res.cookies.set(MUST_CHANGE_COOKIE, "", expireOpts);
+  res.headers.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
     res.headers.set("Pragma", "no-cache");
     res.headers.set("Expires", "0");
     res.headers.set("Clear-Site-Data", '"cache", "cookies", "storage"');

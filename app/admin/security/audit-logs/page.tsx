@@ -37,8 +37,8 @@ export default function AuditLogsPage() {
   return (
     <div className="container-shell mx-auto px-6 py-10">
       <div className="mb-6">
-        <p className="luxury-label mb-2">Security</p>
-        <h1 className="text-3xl font-semibold tracking-tight text-white">Audit Logs</h1>
+        <p className="luxury-label mb-2">{t("security", "Security")}</p>
+        <h1 className="text-3xl font-semibold tracking-tight text-white">{t("audit_logs", "Audit Logs")}</h1>
         <div className="mt-4 flex flex-wrap gap-2">
           {actions.map(a => (
             <button

@@ -303,6 +303,7 @@ type InvoiceTranslations = {
   morocco: string;
   luxury_soda: string;
   company_name: string;
+  monadaty: string;
 };
 
 type Props = {
@@ -342,6 +343,7 @@ const DEFAULT_TRANSLATIONS: InvoiceTranslations = {
   morocco: "Morocco",
   luxury_soda: "Luxury Soda",
   company_name: "Luxury Soda",
+  monadaty: "MONADATY",
 };
 
 export function InvoiceDocument({ order, invoiceNumber, invoiceDate, qrDataUrl, isCreditNote, creditNoteNumber, translations: tOverrides }: Props) {
@@ -416,7 +418,7 @@ export function InvoiceDocument({ order, invoiceNumber, invoiceDate, qrDataUrl, 
                   <Text style={styles.logoText}>M</Text>
                 </View>
                 <View>
-                  <Text style={styles.brandName}>MONADATY</Text>
+                  <Text style={styles.brandName}>{t("monadaty")}</Text>
                   <Text style={{ fontSize: 7, color: colors.muted, marginTop: 1 }}>{t("company_name")}</Text>
                 </View>
               </View>

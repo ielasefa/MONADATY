@@ -63,12 +63,12 @@ export function WarehouseForm({
         router.push("/admin/inventory/warehouses");
         router.refresh();
       } catch (e: unknown) {
-        setError(e instanceof Error ? e.message : "An error occurred");
+        setError(e instanceof Error ? e.message : t("an_error_occurred", "An error occurred"));
       } finally {
         setSaving(false);
       }
     },
-    [isNew, warehouse, router]
+    [isNew, warehouse, router, t]
   );
 
   return (
@@ -95,10 +95,10 @@ export function WarehouseForm({
 
       <form action={handleSubmit} className="space-y-8">
         <div className="luxury-card rounded-card border border-white/[0.06] bg-card p-6">
-          <p className="luxury-label mb-6 text-[10px] text-muted">Warehouse Information</p>
+          <p className="luxury-label mb-6 text-[10px] text-muted">{t("warehouse_information", "Warehouse Information")}</p>
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-            <Field label="Warehouse Name" name="name" defaultValue={warehouse?.name} required />
-            <Field label="Code" name="code" defaultValue={warehouse?.code} required />
+            <Field label={t("warehouse_name", "Warehouse Name")} name="name" defaultValue={warehouse?.name} required />
+            <Field label={t("code_label", "Code")} name="code" defaultValue={warehouse?.code} required />
             <div className="md:col-span-2">
               <Field label={t("address_field")} name="address" defaultValue={warehouse?.address} />
             </div>
@@ -117,7 +117,7 @@ export function WarehouseForm({
                 defaultChecked={warehouse?.isDefault ?? false}
                 className="h-4 w-4 rounded border-white/20 bg-white/5 accent-gold"
               />
-              <span className="text-sm text-white">Default Warehouse</span>
+              <span className="text-sm text-white">{t("default_warehouse", "Default Warehouse")}</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -126,7 +126,7 @@ export function WarehouseForm({
                 defaultChecked={warehouse?.isActive ?? true}
                 className="h-4 w-4 rounded border-white/20 bg-white/5 accent-gold"
               />
-              <span className="text-sm text-white">Active</span>
+              <span className="text-sm text-white">{t("active", "Active")}</span>
             </label>
           </div>
         </div>
@@ -156,11 +156,11 @@ export function WarehouseForm({
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="border-b border-white/[0.06] text-xs uppercase tracking-[0.1em] text-muted">
-                    <th className="px-5 py-4 font-medium">Product</th>
-                    <th className="px-5 py-4 font-medium">SKU</th>
-                    <th className="px-5 py-4 font-medium text-right">Stock</th>
-                    <th className="px-5 py-4 font-medium text-right">Reserved</th>
-                    <th className="px-5 py-4 font-medium text-right">Available</th>
+                    <th className="px-5 py-4 font-medium">{t("product", "Product")}</th>
+                    <th className="px-5 py-4 font-medium">{t("sku", "SKU")}</th>
+                    <th className="px-5 py-4 font-medium text-right">{t("stock", "Stock")}</th>
+                    <th className="px-5 py-4 font-medium text-right">{t("reserved_stock", "Reserved")}</th>
+                    <th className="px-5 py-4 font-medium text-right">{t("available_stock", "Available")}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/[0.06]">

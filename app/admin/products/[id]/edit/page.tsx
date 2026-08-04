@@ -2,13 +2,16 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { isAuthenticated } from "@/lib/auth";
+import { getLanguage, getTranslation, loadTranslations } from "@/lib/translations";
 import { EditProductForm } from "@/components/admin/EditProductForm";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Edit Product — Admin",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await getLanguage();
+  const translations = await loadTranslations("admin");
+  return { title: getTranslation(translations, "product_form_edit_title", lang, "Modifier le produit — Admin") };
+}
 
 export default async function EditProductPage({
   params,

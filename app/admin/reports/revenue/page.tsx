@@ -52,26 +52,26 @@ export default function RevenueReportPage() {
 
       <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
         <div className="rounded-card border border-white/[0.06] bg-card p-4">
-          <p className="text-[10px] text-muted">Gross Revenue</p>
+          <p className="text-[10px] text-muted">{t("gross_revenue", "Gross Revenue")}</p>
           <p className="mt-1 text-xl font-semibold text-white">{summary.totalRevenue.toFixed(2)} DH</p>
         </div>
         <div className="rounded-card border border-white/[0.06] bg-card p-4">
-          <p className="text-[10px] text-muted">Net Revenue</p>
+          <p className="text-[10px] text-muted">{t("net_revenue", "Net Revenue")}</p>
           <p className="mt-1 text-xl font-semibold text-gold">{summary.netRevenue.toFixed(2)} DH</p>
         </div>
         <div className="rounded-card border border-white/[0.06] bg-card p-4">
-          <p className="text-[10px] text-muted">Shipping</p>
+          <p className="text-[10px] text-muted">{t("shipping_admin", "Shipping")}</p>
           <p className="mt-1 text-xl font-semibold text-gold">{summary.shippingRevenue.toFixed(2)} DH</p>
         </div>
         <div className="rounded-card border border-white/[0.06] bg-card p-4">
-          <p className="text-[10px] text-muted">Discounts</p>
+          <p className="text-[10px] text-muted">{t("discounts_admin", "Discounts")}</p>
           <p className="mt-1 text-xl font-semibold text-burgundy">{summary.discountTotal.toFixed(2)} DH</p>
         </div>
       </div>
 
       <div className="mb-6 grid gap-6 md:grid-cols-2">
         <div className="rounded-card border border-white/[0.06] bg-card p-6">
-          <h3 className="mb-4 text-sm font-semibold text-white">Monthly Revenue</h3>
+          <h3 className="mb-4 text-sm font-semibold text-white">{t("monthly_revenue", "Monthly Revenue")}</h3>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data}>

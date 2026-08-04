@@ -135,9 +135,11 @@ function FilterChip({
 function FilterPill({
   label,
   onClear,
+  removeAriaLabel,
 }: {
   label: string;
   onClear: () => void;
+  removeAriaLabel: string;
 }) {
   return (
     <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-[#1E1E1E] px-3 py-1.5 text-[0.6rem] text-white/65">
@@ -145,7 +147,7 @@ function FilterPill({
       <button
         type="button"
         onClick={onClear}
-        aria-label="Remove filter"
+        aria-label={removeAriaLabel}
         className="flex h-4 w-4 items-center justify-center rounded-full text-white/40 transition-colors duration-200 hover:text-burgundy"
       >
         <svg aria-hidden="true" className="h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
@@ -571,30 +573,35 @@ export function ProductFilters({
           <div className="flex flex-wrap items-center gap-2">
             {normalizedSearch && (
               <FilterPill
+                removeAriaLabel={t("remove_filter", "Remove filter")}
                 label={`${tShop("search")}: ${query}`}
                 onClear={handleClearSearch}
               />
             )}
             {collectionSlug && (
               <FilterPill
+                removeAriaLabel={t("remove_filter", "Remove filter")}
                 label={CATEGORY_MAP[collectionSlug] ?? collectionSlug}
                 onClear={handleClearCollection}
               />
             )}
             {(minPrice != null || maxPrice != null) && (
               <FilterPill
+                removeAriaLabel={t("remove_filter", "Remove filter")}
                 label={`${tShop("price_label")}: ${minPrice ?? ""}${minPrice != null && maxPrice != null ? "–" : ""}${maxPrice ?? ""}`}
                 onClear={() => updateUrl({ minPrice: null, maxPrice: null })}
               />
             )}
             {availabilityOnly && (
               <FilterPill
+                removeAriaLabel={t("remove_filter", "Remove filter")}
                 label={tShop("in_stock")}
                 onClear={() => updateUrl({ availability: false })}
               />
             )}
             {sort && sort !== "default" && (
               <FilterPill
+                removeAriaLabel={t("remove_filter", "Remove filter")}
                 label={
                   SORT_OPTIONS.find(o => o.value === sort)?.fallback ?? sort
                 }

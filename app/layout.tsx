@@ -10,7 +10,7 @@ import { NavbarWrapper } from "@/components/NavbarWrapper";
 import { ToastProvider } from "@/components/ToastProvider";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 import { GlobalErrorHandler } from "@/components/GlobalErrorHandler";
-import { getLanguageFromCookie, LANGUAGE_COOKIE } from "@/lib/translations";
+import { getLanguageFromCookie, getTranslation, loadTranslations, LANGUAGE_COOKIE } from "@/lib/translations";
 
 const dmSerifDisplay = DM_Serif_Display({
   subsets: ["latin"],
@@ -54,6 +54,8 @@ export default async function RootLayout({
   const cookieStore = await cookies();
   const langFromCookie = getLanguageFromCookie(cookieStore.get(LANGUAGE_COOKIE)?.value);
   const dirFromLang = langFromCookie === "ar" ? "rtl" : "ltr";
+  const commonTr = await loadTranslations("common");
+  const skipLabel = getTranslation(commonTr, "skip_to_main", langFromCookie, "Skip to main content");
 
   return (
     <html lang={langFromCookie} dir={dirFromLang} className={`${dmSerifDisplay.variable} ${dmSans.variable}`}>
@@ -66,9 +68,9 @@ export default async function RootLayout({
         <link rel="prefetch" href="/shop" as="document" />
       </head>
       <body>
-        <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-burgundy focus:px-6 focus:py-3 focus:text-sm focus:font-semibold focus:text-white focus:outline-none" aria-label="Skip to main content">
-          Skip to main content
-        </a>
+<a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-burgundy focus:px-6 focus:py-3 focus:text-sm focus:font-semibold focus:text-white focus:outline-none" aria-label={skipLabel}>
+  {skipLabel}
+</a>
         {isAdmin ? (
           <LanguageProvider initialLang={langFromCookie}>
             <main id="main-content" role="main">{children}</main>

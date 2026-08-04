@@ -55,13 +55,13 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || "Failed to save variants");
+        setError(data.error || t("failed_to_save_variants", "Failed to save variants"));
         return;
       }
       onVariantsChange(data.variants || activeVariants);
       onHistoryChange();
     } catch {
-      setError("Network error");
+      setError(t("network_error", "Network error"));
     } finally {
       setSaving(false);
     }
@@ -87,7 +87,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
       setShowAddForm(false);
       onHistoryChange();
     } catch {
-      setError("Network error");
+      setError(t("network_error", "Network error"));
     } finally {
       setSaving(false);
     }
@@ -117,7 +117,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
         method: "POST",
       });
       const data = await res.json();
-      if (!res.ok) throw new Error("Duplicate failed");
+      if (!res.ok) throw new Error(t("duplicate_failed", "Duplicate failed"));
       onVariantsChange([...variants, data.variant]);
       onHistoryChange();
     } catch {
@@ -149,7 +149,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
       <div className="space-y-4">
         <div className="flex flex-col items-center gap-3 rounded-lg border border-white/[0.06] bg-[#171717]/50 py-8">
           <p className="text-sm text-white/50">{t("no_variants")}</p>
-          <p className="text-xs text-white/50">Add sizes like 250ml, 330ml, 500ml, 1L</p>
+          <p className="text-xs text-white/50">{t("variant_sizes_hint", "Add sizes like 250ml, 330ml, 500ml, 1L")}</p>
           <button
             type="button"
             onClick={() => setShowAddForm(true)}
@@ -171,7 +171,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
       )}
 
       <div className="flex items-center justify-between">
-        <p className="text-xs text-white/50">{variants.length} variant(s)</p>
+        <p className="text-xs text-white/50">{variants.length} {t("variants_count", "variant(s)")}</p>
         <div className="flex gap-2">
           {variants.length > 0 && (
             <button
@@ -188,7 +188,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
             onClick={() => setShowAddForm(true)}
             className="btn-secondary h-8 rounded-md px-3 text-[10px] font-semibold uppercase tracking-[0.1em]"
           >
-            + Add Variant
+            {t("add_variant", "+ Add Variant")}
           </button>
         </div>
       </div>
@@ -229,7 +229,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
                   setNewVariant((prev) => ({ ...prev, price: val }));
                 }}
                 className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-3 py-2 text-sm text-white outline-none transition focus:border-gold/30"
-                placeholder="0.00"
+                placeholder={t("price_zero_placeholder", "0.00")}
               />
            </div>
             <div>
@@ -259,7 +259,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
                 value={newVariant.barcode}
                 onChange={(e) => setNewVariant((prev) => ({ ...prev, barcode: e.target.value }))}
                 className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-3 py-2 text-sm text-white outline-none transition focus:border-gold/30"
-                placeholder="Optional"
+                placeholder={t("optional", "Optional")}
               />
            </div>
             <div>
@@ -273,7 +273,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
                   setNewVariant((prev) => ({ ...prev, salePrice: val }));
                 }}
                 className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-3 py-2 text-sm text-white outline-none transition focus:border-gold/30"
-                placeholder="0.00"
+                placeholder={t("price_zero_placeholder", "0.00")}
               />
            </div>
             <div>
@@ -325,7 +325,7 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
               }}
               className="btn-secondary h-8 rounded-md px-4 text-[10px] font-semibold uppercase tracking-[0.1em]"
             >
-              Cancel
+              {t("cancel", "Cancel")}
            </button>
          </div>
        </div>

@@ -689,7 +689,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
                   <button
                     onClick={() => handleSetCover(idx)}
                     className="rounded bg-white/20 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-white backdrop-blur-sm transition hover:bg-white/30"
-                    aria-label="Set as cover image"
+                    aria-label={t("set_as_cover", "Set as cover image")}
                   >
                     Cover
                   </button>

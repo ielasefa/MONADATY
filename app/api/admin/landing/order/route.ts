@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAuthenticatedAdmin } from "@/lib/auth";
 import { saveSectionOrder } from "@/lib/landing-cms";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { requireOrigin } from "@/lib/csrf";
 
 export async function PUT(request: Request) {
@@ -21,10 +21,9 @@ export async function PUT(request: Request) {
 
     await saveSectionOrder(configId, order, admin.name);
 
-    revalidatePath("/");
-    revalidatePath("/admin/landing");
+  revalidateTag("landing");
 
-    return NextResponse.json({ success: true });
+  return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Failed to save order" }, { status: 500 });
   }

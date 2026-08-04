@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
+import { getLanguage, getTranslation, loadTranslations } from "@/lib/translations";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { WarehouseForm } from "./WarehouseForm";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Warehouse",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await getLanguage();
+  const translations = await loadTranslations("admin");
+  return { title: getTranslation(translations, "warehouse", lang, "Warehouse") };
+}
 
 export default async function WarehouseDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

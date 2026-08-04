@@ -281,7 +281,7 @@ export function SingleImageUploader({ value, onChange, label, folder = "products
             </svg>
           </div>
           <p className="text-sm text-white/80">{t("drop_image")}</p>
-          <p className="mt-1 text-xs text-white/50">JPG, PNG, WebP, AVIF — Up to 10 MB</p>
+          <p className="mt-1 text-xs text-white/50">{t("upload_formats_hint", "JPG, PNG, WebP, AVIF — Up to 10 MB")}</p>
           <button
             type="button"
             onClick={(e) => { e.stopPropagation(); cameraRef.current?.click(); }}

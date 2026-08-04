@@ -2,13 +2,16 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { getAuthenticatedAdmin } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { getLanguage, getTranslation, loadTranslations } from "@/lib/translations";
 import { AdminManagement } from "./AdminManagement";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Admin Management",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await getLanguage();
+  const translations = await loadTranslations("admin");
+  return { title: getTranslation(translations, "admin_management_title", lang, "Gestion des administrateurs — Admin") };
+}
 
 export default async function AdminsPage() {
   const admin = await getAuthenticatedAdmin();

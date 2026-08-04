@@ -1097,6 +1097,7 @@ model LandingFeatured {
   subtitle  String   @default("")
   buttonText  String   @default("")
   buttonLink  String   @default("")
+  productIds String   @default("")
 
   @@map("landing_featured")
 }
@@ -1110,6 +1111,7 @@ model LandingCollectionHeader {
   subtitle  String   @default("")
   buttonText  String   @default("")
   buttonLink  String   @default("")
+  selectedCollectionIds String @default("")
 
   @@map("landing_collection_headers")
 }

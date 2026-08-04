@@ -64,8 +64,9 @@ export function t(
   translations: Record<string, Record<string, string>> | Record<string, string>,
   key: string,
   lang: Language = DEFAULT_LANGUAGE,
+  replacements?: Record<string, string | number | undefined>,
 ): string {
-  return getTranslation(translations, key, lang, key);
+  return getTranslation(translations, key, lang, key, replacements);
 }
 
 export async function translate(

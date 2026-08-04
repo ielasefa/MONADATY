@@ -1,3 +1,4 @@
+import React from "react";
 import { Hero } from "@/components/Hero";
 import {
   FeaturedProducts,
@@ -8,7 +9,7 @@ import {
   Newsletter,
   FinalCTA,
 } from "@/components/HomepageCommerce";
-import { getProducts, getTestimonials, getLandingCollections, getLandingContent } from "@/lib/db";
+import { getLandingFeaturedProducts, getTestimonials, getLandingCollections, getLandingContent } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
@@ -18,11 +19,11 @@ export const metadata = {
 };
 
 export default async function HomePage() {
-  const [content, testimonialRows, allProducts, landingCollections] =
+  const [content, testimonialRows, landingProducts, landingCollections] =
     await Promise.all([
       getLandingContent(),
       getTestimonials(),
-      getProducts(),
+      getLandingFeaturedProducts(),
       getLandingCollections(),
     ]);
 
@@ -35,7 +36,9 @@ export default async function HomePage() {
     .filter((t) => t.visible)
     .map((t) => ({ id: t.id, name: t.name, role: t.role, content: t.content }));
 
-  const shopProducts = allProducts.slice(0, 4);
+  // Landing products come directly from the CMS selection — no automatic fallback.
+  // If no products are selected, the featured section is simply not rendered.
+
   const sectionOrder = (content.sectionOrder || []).length > 0
     ? content.sectionOrder
     : ["hero", "featured", "collections", "about", "testimonials", "moroccan_moment", "newsletter", "final_cta"];
@@ -62,9 +65,9 @@ export default async function HomePage() {
             }} />;
           }
 
-          if (shopProducts.length > 0 && content.featuredProducts.enabled) {
-            map.featured = <FeaturedProducts products={shopProducts} />;
-          }
+          if (landingProducts.length > 0 && content.featuredProducts.enabled) {
+  map.featured = <FeaturedProducts products={landingProducts} />;
+}
 
           if (landingCollections.length > 0 && content.collectionsSection.enabled) {
             map.collections = <CollectionsShowcase collections={landingCollections} />;
@@ -109,7 +112,7 @@ export default async function HomePage() {
             map.final_cta = <FinalCTA />;
           }
 
-          return sectionOrder.map((key) => map[key]).filter(Boolean);
+          return sectionOrder.map((k) => <React.Fragment key={k}>{map[k]}</React.Fragment>).filter(Boolean);
         })()}
       </div>
     </>

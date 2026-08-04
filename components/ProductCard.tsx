@@ -142,7 +142,7 @@ export const ProductCard = memo(function ProductCard({
 
             {/* Premium badge */}
             <span className="absolute start-2.5 top-2.5 z-10 inline-flex items-center px-2 py-0.5 text-[0.32rem] font-semibold uppercase tracking-[0.2em] text-gold/70">
-              Premium
+              {t("premium", "Premium")}
             </span>
           </div>
         </Link>

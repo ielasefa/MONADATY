@@ -60,11 +60,11 @@ return (
           {/* Bottom markers */}
           <div className="mt-20 flex items-center justify-between md:mt-28 lg:mt-36">
             <span className="label-utility tracking-[0.5em] text-ivory/12">
-              {String(collections.length).padStart(2, "0")} COLLECTIONS
+              {String(collections.length).padStart(2, "0")} {t(translations, "collections_count_label", lang)}
        </span>
             <span className="hidden h-px flex-1 mx-6 bg-ivory/[0.04] md:block" />
             <span className="label-utility tracking-[0.5em] text-ivory/12">
-              ESTABLISHED 2024
+              {t(translations, "established_label", lang)}
        </span>
       </div>
       </div>
@@ -108,7 +108,7 @@ return (
                 {/* Editorial index — top right */}
                 <div className="absolute right-6 top-6 z-10 hidden md:flex items-center gap-3">
                     <span className="label-utility text-[0.4rem] tracking-[0.4em] text-ivory/30">
-                    N° 01
+                    {t(translations, "editorial_index_label", lang, { num: "01" })}
            </span>
                     <span className="h-px w-8 bg-ivory/15" />
           </div>
@@ -136,7 +136,7 @@ return (
                 <div className="mt-6 inline-flex items-center gap-2.5 label-utility tracking-[0.3em] text-ivory/45 transition-all duration-300 group-hover:gap-3 group-hover:text-ivory/70">
                   <span>
                     {counts[featured.slug] != null
-                      ? `${counts[featured.slug]} ${counts[featured.slug] === 1 ? "drink" : "drinks"}`
+                      ? `${counts[featured.slug]} ${counts[featured.slug] === 1 ? t(translations, "drink_count", lang) : t(translations, "drink_count_plural", lang)}`
                       : t(translations, "shop_label", lang)}
           </span>
                   <span className="transition-transform duration-300 group-hover:translate-x-1">
@@ -165,7 +165,7 @@ return (
 
               <div className="hidden md:block">
                   <span className="label-utility tracking-[0.4em] text-ivory/12">
-                  CHAPTER · 02
+                  {t(translations, "chapter_label", lang, { num: "02" })}
            </span>
              </div>
            </div>
@@ -239,7 +239,7 @@ return (
                           <div className="mt-4 inline-flex items-center gap-2 label-utility tracking-[0.3em] text-ivory/25 transition-all duration-300 group-hover:gap-2.5 group-hover:text-ivory/45">
                             <span>
                               {counts[col.slug] != null
-                                ? `${counts[col.slug]} ${counts[col.slug] === 1 ? "drink" : "drinks"}`
+                                ? `${counts[col.slug]} ${counts[col.slug] === 1 ? t(translations, "drink_count", lang) : t(translations, "drink_count_plural", lang)}`
                                 : t(translations, "shop_label", lang)}
                   </span>
                         <span className="transition-transform duration-300 group-hover:translate-x-0.5">→</span>
