@@ -65,7 +65,7 @@ export function CollectionCard({ collection, image }: CollectionCardProps) {
         <p className="text-[0.38rem] font-semibold uppercase tracking-[0.35em] text-white/30">
           {t("collection")}
         </p>
-        <h3 className="font-display text-lg leading-[0.92] tracking-[-0.01em] text-[#C8A96A] transition-colors duration-300 group-hover:text-white">
+        <h3 className="font-display text-lg leading-[0.92] tracking-[-0.01em] text-gold transition-colors duration-300 group-hover:text-white">
           {collection.title}
         </h3>
         {collection.description && (

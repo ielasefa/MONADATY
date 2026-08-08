@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
+import { toast } from "sonner";
 import type { StoredProductImage } from "@/types";
 
 type UploadResult = {
@@ -118,7 +119,6 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
   const [dragOver, setDragOver] = useState(false);
   const [validationError, setValidationError] = useState("");
   const [duplicateMessage, setDuplicateMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const cameraRef = useRef<HTMLInputElement>(null);
   const dropRef = useRef<HTMLDivElement>(null);
@@ -282,9 +282,9 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
         }),
       );
 
-      if (batchSuccessCount > 0) {
-        setSuccessMessage(t("upload_completed", "Upload completed"));
-      }
+       if (batchSuccessCount > 0) {
+         toast.success(t("upload_completed", "Upload completed"));
+       }
     } finally {
       processingRef.current = false;
       const stillPending = queueRef.current.filter((u) => u.status === "pending").length;
@@ -294,11 +294,10 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
     }
   }, [t]);
 
-  const addFiles = useCallback(
-    async (fileList: FileList | File[]) => {
-      setValidationError("");
-      setDuplicateMessage("");
-      setSuccessMessage("");
+   const addFiles = useCallback(
+     async (fileList: FileList | File[]) => {
+       setValidationError("");
+       setDuplicateMessage("");
       const files = Array.from(fileList);
       const currentCount = imagesRef.current.length;
       const uploadingCount = uploadingRef.current.filter(
@@ -438,10 +437,9 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
     processQueue();
   };
 
-  const handleDismissCompleted = () => {
-    clearCompletedItems();
-    setSuccessMessage("");
-  };
+   const handleDismissCompleted = () => {
+     clearCompletedItems();
+   };
 
   const totalImages = images.length;
   const canAddMore = totalImages < maxFiles;
@@ -462,25 +460,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
       </div>
       )}
 
-      {successMessage && !hasActive && (
-        <div className="flex items-center justify-between rounded-lg border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-xs text-emerald-400" data-testid="upload-success-banner">
-          <span className="flex items-center gap-2">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0F8B6F" strokeWidth="2.5">
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
-            {successMessage}
-          </span>
-          <button
-            type="button"
-            onClick={handleDismissCompleted}
-            className="ml-3 rounded bg-emerald-400/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-emerald-400 transition hover:bg-emerald-400/30"
-          >
-            Dismiss
-          </button>
-        </div>
-      )}
-
-      {/* Hidden inputs */}
+       {/* Hidden inputs */}
       <input
         ref={inputRef}
         type="file"
@@ -506,7 +486,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
-        className={`rounded-xl border-2 border-dashed p-6 text-center transition ${
+        className={`flex min-h-[176px] max-w-4xl flex-col justify-center rounded-xl border-2 border-dashed p-5 text-center transition sm:p-6 ${
           dragOver
             ? "border-yellow bg-yellow/5"
             : "border-white/[0.08] hover:border-white/20"
@@ -531,7 +511,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
             onClick={() => canAddMore && inputRef.current?.click()}
             className="inline-flex h-9 items-center rounded-md border border-white/[0.12] bg-white/5 px-4 text-[11px] font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-white/10 disabled:opacity-50"
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mr-1.5">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="me-1.5">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
               <polyline points="14 2 14 8 20 8" />
            </svg>
@@ -542,7 +522,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
             onClick={() => canAddMore && cameraRef.current?.click()}
             className="inline-flex h-9 items-center rounded-md border border-white/[0.12] bg-white/5 px-4 text-[11px] font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-white/10 disabled:opacity-50"
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mr-1.5">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="me-1.5">
               <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
               <circle cx="12" cy="13" r="4" />
             </svg>
@@ -662,7 +642,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
 
       {/* Image preview grid */}
       {images.length > 0 && (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(140px,190px))] justify-start gap-3">
           {images.map((img, idx) => (
             <div
               key={img.id}
@@ -680,7 +660,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
                 />
               </div>
               {img.isCover && (
-                <span className="absolute left-1.5 top-1.5 rounded bg-yellow/90 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.1em] text-black">
+                <span className="absolute start-1.5 top-1.5 rounded bg-yellow/90 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.1em] text-black">
                   Cover
               </span>
               )}

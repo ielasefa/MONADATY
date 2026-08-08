@@ -24,12 +24,10 @@ export function AdminManagement({ admins: initialAdmins }: { admins: AdminRecord
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<"ADMIN" | "SUPER_ADMIN">("ADMIN");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
-    setError("");
     setLoading(true);
 
     const res = await fetch("/api/admin/admins", {
@@ -49,25 +47,25 @@ export function AdminManagement({ admins: initialAdmins }: { admins: AdminRecord
       setPassword("");
       setRole("ADMIN");
       router.refresh();
+      toast.success(t("admin_created_success", "Admin created successfully"));
     } else {
       const data = await res.json();
-      setError(data.error || t("fail_create_admin"));
+      toast.error(data.error || t("fail_create_admin"));
     }
   }
 
-  async function handleDelete(id: string) {
-    if (!confirm(t("confirm_delete_admin"))) return;
+   async function handleDelete(id: string) {
+     const res = await fetch(`/api/admin/admins/${id}`, { method: "DELETE" });
 
-    const res = await fetch(`/api/admin/admins/${id}`, { method: "DELETE" });
-
-    if (res.ok) {
-      setAdmins((prev) => prev.filter((a) => a.id !== id));
-      router.refresh();
-    } else {
-      const data = await res.json();
-      toast.error(data.error || t("fail_delete_admin"));
-    }
-  }
+     if (res.ok) {
+       setAdmins((prev) => prev.filter((a) => a.id !== id));
+       router.refresh();
+       toast.success(t("admin_deleted_success", "Admin deleted successfully"));
+     } else {
+       const data = await res.json();
+       toast.error(data.error || t("fail_delete_admin"));
+     }
+   }
 
   return (
     <div>
@@ -134,8 +132,6 @@ export function AdminManagement({ admins: initialAdmins }: { admins: AdminRecord
                 </select>
               </div>
             </div>
-
-            {error && <p className="text-sm text-burgundy">{error}</p>}
 
             <button
               type="submit"

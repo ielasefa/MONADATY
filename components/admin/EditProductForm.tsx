@@ -79,9 +79,7 @@ export function EditProductForm({
 }) {
   const { t } = useTranslation("admin");
   const router = useRouter();
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
+   const [saving, setSaving] = useState(false);
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
   const [slugAvailable, setSlugAvailable] = useState<boolean | null>(null);
   const slugTimeout = useRef<NodeJS.Timeout | null>(null);
@@ -193,7 +191,6 @@ export function EditProductForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
     setSaving(true);
 
     try {
@@ -227,54 +224,32 @@ export function EditProductForm({
 
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || t("failed_to_update_product", "Failed to update product"));
+        toast.error(data.error || t("failed_to_update_product", "Failed to update product"));
         setSaving(false);
         return;
       }
 
-      toast.success(t("product_updated_success", "Product updated successfully"));
-      setSuccess(true);
-      setHistoryKey((prev) => prev + 1);
+       toast.success(t("product_updated_success", "Product updated successfully"));
+       setHistoryKey((prev) => prev + 1);
       setDeletedImageIds([]);
       setTimeout(() => router.push("/admin/products"), 2000);
     } catch {
-      setError(t("network_error", "Network error"));
+      toast.error(t("network_error", "Network error"));
       setSaving(false);
     }
   };
 
   const tabClass = (tab: string) =>
-    `rounded-md px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] transition ${
+    `w-full rounded-md px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.08em] transition sm:w-auto sm:px-4 sm:tracking-[0.1em] ${
       activeTab === tab
         ? "bg-gold/20 text-gold"
         : "text-white/50 hover:text-white"
     }`;
 
-  if (success) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-400/10">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0F8B6F" strokeWidth="2.5">
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
-          </div>
-          <h2 className="text-2xl font-semibold text-white">{t("product_updated")}</h2>
-          <p className="mt-2 text-white/50">{t("redirecting")}</p>
-        </div>
-      </div>
-    );
-  }
+   return (
+     <form onSubmit={handleSubmit} className="space-y-6">
 
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {error && (
-        <div className="rounded-lg border border-red/20 bg-red/10 px-4 py-3 text-sm text-red">
-          {error}
-        </div>
-      )}
-
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 border-b border-white/[0.06] pb-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="font-display text-2xl text-white md:text-3xl">{t("edit_product", "Edit Product")}</h1>
           <p className="mt-1 text-sm text-white/50">{product.name}</p>
@@ -289,7 +264,7 @@ export function EditProductForm({
       </div>
 
       {/* Tab Navigation */}
-      <div className="flex flex-wrap gap-2 border-b border-white/[0.06] pb-2">
+        <div className="grid max-w-full grid-cols-2 gap-2 border-b border-white/[0.06] pb-2 sm:flex">
         <button type="button" onClick={() => setActiveTab("general")} className={tabClass("general")}>
           {t("general")}
         </button>
@@ -306,8 +281,8 @@ export function EditProductForm({
 
       {/* General Tab */}
       {activeTab === "general" && (
-        <div className="space-y-6">
-          <section className="rounded-xl p-6">
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+          <section className="rounded-xl border border-white/[0.07] bg-[#121211] p-5 sm:p-6 xl:col-span-2">
             <h2 className="mb-5 text-base font-semibold text-white">{t("basic_information")}</h2>
             <div className="space-y-4">
               <div>
@@ -340,12 +315,12 @@ export function EditProductForm({
                     type="text"
                     value={form.slug}
                     onChange={(e) => handleSlugChange(e.target.value)}
-                    className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 pr-10 text-sm text-white outline-none transition focus:border-gold/30"
+                    className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 pe-10 text-sm text-white outline-none transition focus:border-gold/30"
                     placeholder={t("product_slug_placeholder", "product-slug")}
                     required
                   />
                   {slugAvailable !== null && (
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2">
+                    <span className="absolute end-3 top-1/2 -translate-y-1/2">
                       {slugAvailable ? (
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0F8B6F" strokeWidth="2.5">
                           <polyline points="20 6 9 17 4 12" />
@@ -412,7 +387,7 @@ export function EditProductForm({
             </div>
           </section>
 
-          <section className="rounded-xl p-6">
+          <section className="rounded-xl border border-white/[0.07] bg-[#121211] p-5 sm:p-6 xl:col-span-2">
             <h2 className="mb-5 text-base font-semibold text-white">{t("pricing")}</h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <div>
@@ -425,11 +400,11 @@ export function EditProductForm({
                     inputMode="decimal"
                     value={form.regularPrice}
                     onChange={(e) => handlePriceChange("regularPrice", e.target.value)}
-                    className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 pr-14 text-sm text-white outline-none transition focus:border-gold/30"
+                    className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 pe-14 text-sm text-white outline-none transition focus:border-gold/30"
                     placeholder={t("price_zero_placeholder", "0.00")}
                     required
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-white/50">{form.currency}</span>
+                  <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-white/50">{form.currency}</span>
                 </div>
               </div>
               <div>
@@ -442,10 +417,10 @@ export function EditProductForm({
                     inputMode="decimal"
                     value={form.salePrice}
                     onChange={(e) => handlePriceChange("salePrice", e.target.value)}
-                    className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 pr-14 text-sm text-white outline-none transition focus:border-gold/30"
+                    className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 pe-14 text-sm text-white outline-none transition focus:border-gold/30"
                     placeholder={t("price_zero_placeholder", "0.00")}
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-white/50">{form.currency}</span>
+                  <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-white/50">{form.currency}</span>
                 </div>
               </div>
               <div>
@@ -458,10 +433,10 @@ export function EditProductForm({
                     inputMode="decimal"
                     value={form.costPrice}
                     onChange={(e) => handlePriceChange("costPrice", e.target.value)}
-                    className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 pr-14 text-sm text-white outline-none transition focus:border-gold/30"
+                    className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 pe-14 text-sm text-white outline-none transition focus:border-gold/30"
                     placeholder={t("price_zero_placeholder", "0.00")}
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-white/50">{form.currency}</span>
+                  <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-white/50">{form.currency}</span>
                 </div>
               </div>
               <div>
@@ -495,7 +470,7 @@ export function EditProductForm({
             </div>
           </section>
 
-          <section className="rounded-xl p-6">
+          <section className="rounded-xl border border-white/[0.07] bg-[#121211] p-5 sm:p-6">
             <h2 className="mb-5 text-base font-semibold text-white">{t("inventory")}</h2>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
@@ -529,7 +504,7 @@ export function EditProductForm({
             </div>
           </section>
 
-          <section className="rounded-xl p-6">
+          <section className="rounded-xl border border-white/[0.07] bg-[#121211] p-5 sm:p-6">
             <h2 className="mb-5 text-base font-semibold text-white">{t("organization")}</h2>
             <div className="grid gap-4 sm:grid-cols-3">
               <div>
@@ -577,7 +552,7 @@ export function EditProductForm({
             </div>
           </section>
 
-          <section className="rounded-xl p-6">
+          <section className="rounded-xl border border-white/[0.07] bg-[#121211] p-5 sm:p-6 xl:col-span-2">
             <h2 className="mb-5 text-base font-semibold text-white">{t("status_and_flags")}</h2>
             <div className="flex flex-wrap items-center gap-6">
               <div>
@@ -620,7 +595,7 @@ export function EditProductForm({
 
       {/* Images Tab */}
       {activeTab === "images" && (
-        <section className="rounded-xl p-6">
+        <section className="rounded-xl border border-white/[0.07] bg-[#121211] p-5 sm:p-6">
           <h2 className="mb-5 text-base font-semibold text-white">{t("images")}</h2>
           <ImageUploader
             images={images}
@@ -631,7 +606,7 @@ export function EditProductForm({
 
       {/* Variants Tab */}
       {activeTab === "variants" && (
-        <section className="rounded-xl p-6">
+        <section className="rounded-xl border border-white/[0.07] bg-[#121211] p-5 sm:p-6">
           <h2 className="mb-5 text-base font-semibold text-white">{t("variants")}</h2>
           <VariantManager
             productId={product.id}
@@ -644,13 +619,13 @@ export function EditProductForm({
 
       {/* History Tab */}
       {activeTab === "history" && (
-        <section className="rounded-xl p-6">
+        <section className="rounded-xl border border-white/[0.07] bg-[#121211] p-5 sm:p-6">
           <h2 className="mb-5 text-base font-semibold text-white">{t("version_history")}</h2>
           <ProductHistory key={historyKey} productId={product.id} />
         </section>
       )}
 
-      <div className="flex items-center justify-end gap-3 pb-10">
+      <div className="flex flex-col-reverse gap-3 pb-6 sm:flex-row sm:items-center sm:justify-end">
         <button
           type="button"
           onClick={() => router.push("/admin/products")}

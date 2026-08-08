@@ -6,19 +6,19 @@
    DESIGN TOKENS
    ============================================================ */
 :root {
-  --bg: #171717;
-  --surface: #1E1E1E;
-  --card: #252525;
-  --bg-1: #171717;
-  --bg-2: #1E1E1E;
-  --bg-3: #252525;
-  --gold: #C8A96A;
-  --gold-light: #D4BC7E;
-  --gold-dark: #A88A4A;
-  --rouge: #9B2638;
-  --rouge-hover: #9B2638;
-  --rouge-dark: #741A28;
-  --black: #171717;
+  --bg: #0B0B0A;
+  --surface: #121211;
+  --card: #1A1A18;
+  --bg-1: #0B0B0A;
+  --bg-2: #121211;
+  --bg-3: #1A1A18;
+  --gold: #B89B5E;
+  --gold-light: #C9AD75;
+  --gold-dark: #9D824B;
+  --rouge: #6E1F2A;
+  --rouge-hover: #8B2735;
+  --rouge-dark: #5A1822;
+  --black: #0B0B0A;
   --ivory: #F8F6F2;
   --muted: #7A7670;
   --text-primary: #FFFFFF;
@@ -95,8 +95,8 @@ html, body {
 }
 
 body {
- @apply bg-[#171717] text-white antialiased;
- font-family: var(--font-dm-sans, "DM Sans", ui-sans-serif, system-ui);
+  @apply bg-[#0B0B0A] text-white antialiased;
+  font-family: var(--font-dm-sans, "DM Sans", ui-sans-serif, system-ui);
 }
 
 input, textarea, select {
@@ -213,35 +213,35 @@ select option { background-color: #171717; color: #FFFFFF; }
    LUXURY GLASS SYSTEM
    ============================================================ */
 .glass {
- background: var(--glass-bg);
- backdrop-filter: blur(var(--glass-blur)) saturate(1.2);
- -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.2);
- border: 1px solid var(--glass-border);
- box-shadow:
-  inset 0 1px 0 0 var(--glass-highlight),
-  0 8px 32px -8px rgba(0,0,0,0.45);
-}
+   background: rgba(11, 11, 10, 0.72);
+   backdrop-filter: blur(var(--glass-blur)) saturate(1.2);
+   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.2);
+   border: 1px solid var(--glass-border);
+   box-shadow:
+    inset 0 1px 0 0 var(--glass-highlight),
+    0 8px 32px -8px rgba(0,0,0,0.45);
+  }
 
-.glass-heavy {
- background: var(--glass-bg-heavy);
- backdrop-filter: blur(var(--glass-blur-heavy)) saturate(1.3);
- -webkit-backdrop-filter: blur(var(--glass-blur-heavy)) saturate(1.3);
- border: 1px solid var(--glass-border);
- box-shadow:
-  inset 0 1px 0 0 rgba(255,255,255,0.05),
-  0 12px 40px -8px rgba(0,0,0,0.5);
-}
+  .glass-heavy {
+   background: rgba(11, 11, 10, 0.88);
+   backdrop-filter: blur(var(--glass-blur-heavy)) saturate(1.3);
+   -webkit-backdrop-filter: blur(var(--glass-blur-heavy)) saturate(1.3);
+   border: 1px solid var(--glass-border);
+   box-shadow:
+    inset 0 1px 0 0 rgba(255,255,255,0.05),
+    0 12px 40px -8px rgba(0,0,0,0.5);
+  }
 
-.glass-elevated {
- background: rgba(23,23,23,0.82);
- backdrop-filter: blur(22px) saturate(1.25);
- -webkit-backdrop-filter: blur(22px) saturate(1.25);
- border: 1px solid rgba(255,255,255,0.07);
- box-shadow:
-  inset 0 1px 0 0 rgba(255,255,255,0.05),
-  0 4px 16px rgba(0,0,0,0.22),
-  0 12px 40px -8px rgba(0,0,0,0.45);
-}
+  .glass-elevated {
+   background: rgba(11, 11, 10, 0.82);
+   backdrop-filter: blur(22px) saturate(1.25);
+   -webkit-backdrop-filter: blur(22px) saturate(1.25);
+   border: 1px solid rgba(255,255,255,0.07);
+   box-shadow:
+    inset 0 1px 0 0 rgba(255,255,255,0.05),
+    0 4px 16px rgba(0,0,0,0.22),
+    0 12px 40px -8px rgba(0,0,0,0.45);
+  }
 
 /* ============================================================
    KEYFRAMES — 3D & DEPTH
@@ -447,8 +447,8 @@ select option { background-color: #171717; color: #FFFFFF; }
 
 /* ── Skeleton ───────────────────────────────────────────── */
 .skeleton {
- @apply relative overflow-hidden rounded-md;
- background: rgba(23, 23, 23, 0.03);
+  @apply relative overflow-hidden rounded-md;
+  background: rgba(11, 11, 10, 0.03);
 }
 .skeleton::after {
  content: "";
@@ -465,49 +465,49 @@ select option { background-color: #171717; color: #FFFFFF; }
    COMPONENT CLASSES
    ============================================================ */
 @layer components {
- .btn-primary {
-  @apply inline-flex h-11 items-center justify-center gap-2.5 rounded-btn bg-rouge px-7 text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-white transition-all duration-300 hover:bg-rouge-dark hover:translate-y-[-1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rouge/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-[0.97] active:translate-y-0;
- }
- .btn-gold {
-  @apply inline-flex items-center justify-center bg-rouge text-white transition-all duration-300 hover:bg-rouge-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rouge/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-[0.97] disabled:opacity-50;
- }
- .l-input {
-  @apply h-11 w-full border-0 border-b border-white/[0.1] bg-transparent px-0 text-[0.85rem] text-white outline-none transition-all duration-200 focus:border-gold/50;
-  &::placeholder { color: rgba(255,255,255,0.25); }
- }
- .input-premium {
-  @apply h-12 w-full rounded-input border border-white/[0.06] bg-[#1E1E1E] px-4 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/35 focus:border-gold/50 focus:ring-1 focus:ring-gold/20;
- }
- .l-input-error {
-  @apply border-b border-rouge/60 text-rouge;
- }
- .btn-primary-sm {
-  @apply inline-flex h-9 items-center justify-center gap-2 rounded-btn bg-rouge px-5 text-[0.5rem] font-semibold uppercase tracking-[0.18em] text-white transition-all duration-300 hover:bg-rouge-dark hover:translate-y-[-1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rouge/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-[0.97] active:translate-y-0;
- }
- .btn-secondary {
-  @apply inline-flex h-11 items-center justify-center gap-2.5 rounded-btn border border-gold/40 bg-transparent px-7 text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-gold transition-all duration-300 hover:bg-gold/[0.06] hover:border-gold/60 hover:translate-y-[-1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-[0.97];
- }
- .btn-link {
-  @apply inline-flex items-center gap-2 text-[0.52rem] font-semibold uppercase tracking-[0.32em] text-white/50 transition-colors duration-300 hover:text-gold;
- }
- .label-utility {
-  @apply text-[0.42rem] font-semibold uppercase tracking-[0.4em] text-white/35;
- }
- .rule-gold  { @apply h-px bg-gold/35; }
- .rule-ivory { @apply h-px bg-white/[0.06]; }
- .rounded-button { @apply rounded-lg; }
- .luxury-card {
-  @apply rounded-card border border-white/[0.06] bg-black-surface;
- }
- .luxury-label {
-  @apply text-xs font-semibold uppercase tracking-[0.15em] text-muted;
- }
- .badge-gold {
-  @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.12em] bg-gold/10 text-gold;
- }
- .badge-red {
-  @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.12em] bg-rouge/10 text-rouge;
- }
+.btn-primary {
+   @apply inline-flex h-11 items-center justify-center gap-2.5 rounded-btn bg-rouge px-7 text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-white transition-all duration-300 hover:bg-rouge-hover hover:translate-y-[-1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rouge/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-[0.97] active:translate-y-0;
+  }
+  .btn-gold {
+   @apply inline-flex items-center justify-center bg-rouge text-white transition-all duration-300 hover:bg-rouge-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rouge/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-[0.97] disabled:opacity-50;
+  }
+  .l-input {
+   @apply h-11 w-full border-0 border-b border-white/[0.1] bg-transparent px-0 text-[0.85rem] text-white outline-none transition-all duration-200 focus:border-gold/50;
+   &::placeholder { color: rgba(255,255,255,0.25); }
+  }
+  .input-premium {
+   @apply h-12 w-full rounded-input border border-white/[0.06] bg-[#1A1A18] px-4 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/35 focus:border-gold/50 focus:ring-1 focus:ring-gold/20;
+  }
+  .l-input-error {
+   @apply border-b border-rouge/60 text-rouge;
+  }
+  .btn-primary-sm {
+   @apply inline-flex h-9 items-center justify-center gap-2 rounded-btn bg-rouge px-5 text-[0.5rem] font-semibold uppercase tracking-[0.18em] text-white transition-all duration-300 hover:bg-rouge-hover hover:translate-y-[-1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rouge/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-[0.97] active:translate-y-0;
+  }
+  .btn-secondary {
+   @apply inline-flex h-11 items-center justify-center gap-2.5 rounded-btn border-2 border-rouge bg-transparent px-7 text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-white transition-all duration-300 hover:bg-rouge hover:border-rouge focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rouge/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-[0.97];
+  }
+  .btn-link {
+   @apply inline-flex items-center gap-2 text-[0.52rem] font-semibold uppercase tracking-[0.32em] text-white/50 transition-colors duration-300 hover:text-gold;
+  }
+  .label-utility {
+   @apply text-[0.42rem] font-semibold uppercase tracking-[0.4em] text-white/35;
+  }
+  .rule-gold  { @apply h-px bg-gold/35; }
+  .rule-ivory { @apply h-px bg-white/[0.06]; }
+  .rounded-button { @apply rounded-lg; }
+  .luxury-card {
+   @apply rounded-card border border-white/[0.06] bg-black-surface;
+  }
+  .luxury-label {
+   @apply text-xs font-semibold uppercase tracking-[0.15em] text-muted;
+  }
+  .badge-gold {
+   @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.12em] bg-gold/10 text-gold;
+  }
+  .badge-red {
+   @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.12em] bg-rouge/10 text-rouge;
+  }
  .glass {
   background: var(--glass-bg);
   backdrop-filter: blur(var(--glass-blur)) saturate(1.2);

@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import crypto from "crypto";
 import { logError } from "./logger";
+import { formatMoney, parseMoney } from "./money";
 
 type RawOrderItem = {
   productId: string | null;
@@ -69,6 +70,12 @@ export type OrderCreateInput = {
   idempotencyKey?: string;
 };
 
+const MAX_ORDER_ITEMS = 50;
+const MAX_ITEM_QUANTITY = 99;
+const TAX_RATE = 0.08;
+
+class OrderValidationError extends Error {}
+
 export async function createOrder(input: OrderCreateInput): Promise<{ orderNumber: string; id: string } | { error: string }> {
   const key = input.idempotencyKey ?? crypto.randomUUID();
 
@@ -77,32 +84,34 @@ export async function createOrder(input: OrderCreateInput): Promise<{ orderNumbe
     return { orderNumber: existing.orderNumber, id: existing.id };
   }
 
+  if (!Array.isArray(input.items) || input.items.length === 0) {
+    return { error: "At least one item is required" };
+  }
+  if (input.items.length > MAX_ORDER_ITEMS) {
+    return { error: "Too many items in order" };
+  }
+  for (const item of input.items) {
+    if (!item || typeof item !== "object" || !item.productId || typeof item.productId !== "string") {
+      return { error: "Invalid item in order" };
+    }
+    if (!Number.isInteger(item.quantity) || item.quantity < 1 || item.quantity > MAX_ITEM_QUANTITY) {
+      return { error: `Invalid quantity for "${item.name}"` };
+    }
+  }
+
   const orderNumber = `MON-${Date.now().toString(36).toUpperCase()}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
 
-  let discountAmount = "0.00 DH";
+  let coupon: { id: string; discountPercent: number; discountAmount: string; minPurchase: string; maxUsage: number; expiresAt: Date | null } | null = null;
 
   if (input.couponCode) {
-    const coupon = await prisma.coupon.findUnique({ where: { code: input.couponCode } });
-    if (!coupon || !coupon.isActive) {
+    const found = await prisma.coupon.findUnique({ where: { code: input.couponCode } });
+    if (!found || !found.isActive) {
       return { error: "Invalid or expired coupon code" };
     }
-    if (coupon.maxUsage > 0 && coupon.usageCount >= coupon.maxUsage) {
-      return { error: "Coupon usage limit reached" };
-    }
-    if (coupon.expiresAt && coupon.expiresAt < new Date()) {
+    if (found.expiresAt && found.expiresAt < new Date()) {
       return { error: "Coupon has expired" };
     }
-    const subtotalNum = parseFloat(input.subtotal.replace(/[^0-9.]/g, "")) || 0;
-    const minPurchaseNum = parseFloat(coupon.minPurchase.replace(/[^0-9.]/g, "")) || 0;
-    if (subtotalNum < minPurchaseNum) {
-      return { error: `Minimum purchase of ${coupon.minPurchase} required for this coupon` };
-    }
-    discountAmount = coupon.discountAmount;
-
-    await prisma.coupon.update({
-      where: { id: coupon.id },
-      data: { usageCount: { increment: 1 } },
-    });
+    coupon = found;
   }
 
   try {
@@ -114,23 +123,44 @@ export async function createOrder(input: OrderCreateInput): Promise<{ orderNumbe
       const products = productIds.length > 0
         ? await tx.product.findMany({
             where: { id: { in: productIds } },
-            select: { id: true, name: true, stock: true, available: true, status: true },
+            select: { id: true, name: true, price: true, stock: true, available: true, status: true },
           })
         : [];
       const productMap = new Map(products.map((p) => [p.id, p]));
+
+      let serverSubtotal = 0;
 
       for (const item of input.items) {
         if (!item.productId) continue;
 
         const product = productMap.get(item.productId);
         if (!product) {
-          throw new Error(`Product "${item.name}" no longer exists`);
+          throw new OrderValidationError(`Product "${item.name}" no longer exists`);
         }
         if (!product.available || product.status !== "Active") {
-          throw new Error(`Product "${product.name}" is not available for purchase`);
+          throw new OrderValidationError(`Product "${product.name}" is not available for purchase`);
         }
         if (product.stock < item.quantity) {
-          throw new Error(`Insufficient stock for "${product.name}": only ${product.stock} left, requested ${item.quantity}`);
+          throw new OrderValidationError(`Insufficient stock for "${product.name}": only ${product.stock} left, requested ${item.quantity}`);
+        }
+        serverSubtotal += parseMoney(product.price) * item.quantity;
+      }
+
+      let discountNum = 0;
+      if (coupon) {
+        if (serverSubtotal < parseMoney(coupon.minPurchase)) {
+          throw new OrderValidationError(`Minimum purchase of ${coupon.minPurchase} required for this coupon`);
+        }
+        discountNum = parseMoney(coupon.discountAmount) || (coupon.discountPercent > 0 ? (serverSubtotal * coupon.discountPercent) / 100 : 0);
+        const usage = await tx.coupon.updateMany({
+          where: {
+            id: coupon.id,
+            ...(coupon.maxUsage > 0 ? { usageCount: { lt: coupon.maxUsage } } : {}),
+          },
+          data: { usageCount: { increment: 1 } },
+        });
+        if (usage.count === 0) {
+          throw new OrderValidationError("Coupon usage limit reached");
         }
       }
 
@@ -143,9 +173,12 @@ export async function createOrder(input: OrderCreateInput): Promise<{ orderNumbe
         if (updateResult.count === 0) {
           const product = await tx.product.findUnique({ where: { id: item.productId } });
           const available = product?.stock ?? 0;
-          throw new Error(`Insufficient stock for "${item.name}": only ${available} left, requested ${item.quantity}`);
+          throw new OrderValidationError(`Insufficient stock for "${item.name}": only ${available} left, requested ${item.quantity}`);
         }
       }
+
+      const taxNum = serverSubtotal * TAX_RATE;
+      const totalNum = serverSubtotal + taxNum - discountNum;
 
       const created = await tx.order.create({
         data: {
@@ -157,13 +190,13 @@ export async function createOrder(input: OrderCreateInput): Promise<{ orderNumbe
           city: input.city,
           postalCode: input.postalCode,
           country: input.country ?? "Morocco",
-          subtotal: input.subtotal,
-          shipping: input.shipping,
+          subtotal: formatMoney(serverSubtotal),
+          shipping: "0.00 DH",
           shippingMethod: input.shippingMethod,
-          tax: input.tax,
-          total: input.total,
+          tax: formatMoney(taxNum),
+          total: formatMoney(totalNum),
           couponCode: input.couponCode ?? null,
-          discountAmount,
+          discountAmount: formatMoney(discountNum),
           idempotencyKey: key,
           items: {
             create: input.items.map((item) => ({
@@ -172,8 +205,8 @@ export async function createOrder(input: OrderCreateInput): Promise<{ orderNumbe
               slug: item.slug ?? "",
               image: item.image ?? "",
               quantity: item.quantity,
-              unitPrice: item.unitPrice,
-              totalPrice: item.totalPrice,
+              unitPrice: productMap.get(item.productId)?.price ?? "",
+              totalPrice: formatMoney(parseMoney(productMap.get(item.productId)?.price ?? "0") * item.quantity),
             })),
           },
         },
@@ -185,6 +218,9 @@ export async function createOrder(input: OrderCreateInput): Promise<{ orderNumbe
 
     return { orderNumber, id: order.id };
   } catch (e) {
+    if (e instanceof OrderValidationError) {
+      return { error: e.message };
+    }
     logError(e, "createOrder transaction failed");
     return { error: "Failed to create order. Please try again." };
   }

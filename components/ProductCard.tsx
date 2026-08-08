@@ -7,6 +7,7 @@ import type { Product } from "@/types";
 import { useCart } from "@/components/cart-context";
 import { useWishlist } from "@/components/wishlist-context";
 import { SafeImage } from "@/components/SafeImage";
+import { ProductVisual, isPlaceholderImage } from "@/components/ProductVisual";
 import { useTranslation } from "@/hooks/useTranslation";
 
 type ProductCardProps = Pick<
@@ -34,7 +35,7 @@ export const ProductCard = memo(function ProductCard({
   const isWishlisted = contains(id);
 
   return (
-    <article className="group flex flex-col">
+    <article className="group flex flex-col h-full">
       <div className="relative">
         <Link
           href={`/product/${id}`}
@@ -43,7 +44,7 @@ export const ProductCard = memo(function ProductCard({
         >
           <div
             className="
-              relative aspect-[4/5] w-full overflow-hidden rounded-xl
+              relative aspect-[3/4] w-full overflow-hidden rounded-xl
               bg-black-soft shadow-card
               transition-all duration-500 ease-premium
               group-hover:shadow-card-hover group-hover:-translate-y-1
@@ -64,34 +65,37 @@ export const ProductCard = memo(function ProductCard({
               className="pointer-events-none absolute inset-0 z-10 rounded-xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
               style={{
                 boxShadow:
-                  "inset 0 0 0 1px rgba(200,169,106,0.12), inset 0 1px 0 rgba(255,255,255,0.04)",
+                  "inset 0 0 0 1px rgba(184,155,94,0.12), inset 0 1px 0 rgba(255,255,255,0.04)",
               }}
             />
 
-            {image ? (
+            {!isPlaceholderImage(image) ? (
               <SafeImage
                 src={image}
                 alt={name}
                 fill
                 sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 50vw"
-                className="object-contain p-6 transition-transform duration-700 ease-premium group-hover:scale-[1.05]"
+                className="object-contain p-5 transition-transform duration-700 ease-premium group-hover:scale-[1.02]"
                 fallback={
                   <div className="flex h-full w-full items-center justify-center">
-                    <span className="font-display text-[2.5rem] font-light tracking-[0.08em] text-white/[0.08]">
+                    <span className="font-display text-[2rem] font-light tracking-[0.08em] text-white/[0.08]">
                       {name.charAt(0)}
                     </span>
                   </div>
                 }
               />
             ) : visual ? (
-              <div className="flex h-full w-full items-center justify-center">
-                <span className="font-display text-[1.5rem] font-light text-white/[0.08]">
-                  {visual.toUpperCase()}
-                </span>
+              <div className="flex h-full w-full items-center justify-center p-5">
+                <ProductVisual
+                  name={name}
+                  visual={visual}
+                  accent={accent}
+                  className="h-full w-auto max-w-full drop-shadow-[0_18px_30px_rgba(0,0,0,0.5)]"
+                />
               </div>
             ) : (
               <div className="flex h-full w-full items-center justify-center">
-                <span className="font-display text-[2.5rem] font-light text-white/[0.08]">
+                <span className="font-display text-[2rem] font-light text-white/[0.08]">
                   {name.charAt(0)}
                 </span>
               </div>
@@ -148,17 +152,17 @@ export const ProductCard = memo(function ProductCard({
         </Link>
       </div>
 
-      <div className="mt-4 space-y-2">
+      <div className="mt-4 flex flex-1 flex-col space-y-2">
         {shortDescription ? (
-          <p className="text-[0.6rem] font-medium uppercase tracking-[0.2em] text-muted">
+          <p className="line-clamp-1 text-[0.6rem] font-medium uppercase tracking-[0.2em] text-muted">
             {shortDescription}
           </p>
         ) : category ? (
-          <p className="text-[0.6rem] font-medium uppercase tracking-[0.2em] text-muted">
+          <p className="line-clamp-1 text-[0.6rem] font-medium uppercase tracking-[0.2em] text-muted">
             {category}
           </p>
         ) : null}
-        <h3 className="font-display text-base leading-[0.95] tracking-[-0.015em] text-white">
+        <h3 className="line-clamp-2 min-h-[2.75rem] font-display text-base leading-snug tracking-[-0.015em] text-white">
           <Link
             href={`/product/${id}`}
             className="transition-colors duration-300 hover:text-gold"
@@ -186,16 +190,11 @@ export const ProductCard = memo(function ProductCard({
               1,
             )
           }
-          className="btn-primary-sm w-full"
+          className="btn-primary-sm mt-auto w-full h-11"
           aria-label={`${t("add_to_cart")} ${name}`}
-          whileHover={{ scale: 1.02 }}
+          whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.97 }}
           transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          style={
-            {
-              "--tw-shadow-color": "rgba(200,169,106,0.18)",
-            } as React.CSSProperties
-          }
         >
           {t("add_to_cart")}
         </motion.button>

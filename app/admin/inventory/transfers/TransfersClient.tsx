@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
+import { toast } from "sonner";
 
 type Warehouse = { id: string; name: string };
 type RecentTransfer = {
@@ -36,8 +37,6 @@ export function TransfersClient({
   const [quantity, setQuantity] = useState(1);
   const [reason, setReason] = useState("");
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
@@ -64,17 +63,15 @@ export function TransfersClient({
     async (e: React.FormEvent) => {
       e.preventDefault();
       if (!fromWarehouse || !toWarehouse || !selectedProduct || quantity < 1) {
-        setError(t("fill_required_fields", "Please fill all required fields"));
+        toast.error(t("fill_required_fields", "Please fill all required fields"));
         return;
       }
       if (fromWarehouse === toWarehouse) {
-        setError(t("different_warehouses_required", "Source and destination warehouses must be different"));
+        toast.error(t("different_warehouses_required", "Source and destination warehouses must be different"));
         return;
       }
       setSaving(true);
-      setError("");
-      setSuccess("");
-      try {
+       try {
         const res = await fetch("/api/admin/inventory/transfers", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -91,7 +88,7 @@ export function TransfersClient({
           const err = await res.json();
           throw new Error(err.error || "Transfer failed");
         }
-        setSuccess(t("transfer_completed", "Transfer completed successfully"));
+         toast.success(t("transfer_completed", "Transfer completed successfully"));
         setFromWarehouse("");
         setToWarehouse("");
         setSelectedProduct(null);
@@ -100,7 +97,7 @@ export function TransfersClient({
         setReason("");
         router.refresh();
       } catch (e: unknown) {
-        setError(e instanceof Error ? e.message : t("an_error_occurred", "An error occurred"));
+        toast.error(e instanceof Error ? e.message : t("an_error_occurred", "An error occurred"));
       } finally {
         setSaving(false);
       }
@@ -115,13 +112,6 @@ export function TransfersClient({
         <h1 className="text-3xl font-semibold tracking-tight text-white">{t("stock_transfers", "Stock Transfers")}</h1>
         <p className="mt-1 text-sm text-muted">{t("stock_transfers_desc", "Transfer stock between warehouses")}</p>
       </div>
-
-      {error && (
-        <div className="mb-6 rounded-card border border-burgundy/20 bg-burgundy/10 px-4 py-3 text-sm text-burgundy">{error}</div>
-      )}
-      {success && (
-        <div className="mb-6 rounded-card border border-emerald/20 bg-emerald/10 px-4 py-3 text-sm text-gold">{success}</div>
-      )}
 
       <div className="mb-10 luxury-card rounded-card border border-white/[0.06] bg-card p-6">
         <p className="luxury-label mb-6 text-[10px] text-muted">{t("new_transfer", "New Transfer")}</p>

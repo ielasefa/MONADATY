@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
+import { toast } from "sonner";
 
 const NAMESPACES = [
   "common", "navbar", "footer", "home", "products", "collections",
@@ -46,7 +47,6 @@ export default function AdminTranslationsPage() {
   const [newNamespace, setNewNamespace] = useState("common");
   const [showNew, setShowNew] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState("");
 
   const fetchTranslations = useCallback(async () => {
     setLoading(true);
@@ -73,23 +73,26 @@ export default function AdminTranslationsPage() {
 
   const handleSave = async (id: string) => {
     setSaving(true);
-    await fetch("/api/admin/translations", {
+    const res = await fetch("/api/admin/translations", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, data: editValues }),
     });
     setSaving(false);
+    if (!res.ok) {
+      toast.error(t("translation_update_failed", "Failed to update translation"));
+      return;
+    }
     setEditingId(null);
     fetchTranslations();
     fetchStats();
-    setMessage(t("translation_updated"));
-    setTimeout(() => setMessage(""), 3000);
+    toast.success(t("translation_updated_success", "Translation saved"));
   };
 
   const handleCreate = async () => {
     if (!newKey.trim()) return;
     setSaving(true);
-    await fetch("/api/admin/translations", {
+    const res = await fetch("/api/admin/translations", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -98,24 +101,31 @@ export default function AdminTranslationsPage() {
       }),
     });
     setSaving(false);
+    if (!res.ok) {
+      toast.error(t("translation_create_failed", "Failed to create translation"));
+      return;
+    }
     setNewKey("");
     setShowNew(false);
     fetchTranslations();
     fetchStats();
-    setMessage(t("translation_created"));
-    setTimeout(() => setMessage(""), 3000);
+    toast.success(t("translation_created_success", "Translation created"));
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm(t("delete_key_confirm"))) return;
-    await fetch("/api/admin/translations", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "delete", id }),
-    });
-    fetchTranslations();
-    fetchStats();
-  };
+   const handleDelete = async (id: string) => {
+     const res = await fetch("/api/admin/translations", {
+       method: "POST",
+       headers: { "Content-Type": "application/json" },
+       body: JSON.stringify({ action: "delete", id }),
+     });
+     if (!res.ok) {
+       toast.error(t("translation_delete_failed", "Failed to delete translation"));
+       return;
+     }
+     fetchTranslations();
+     fetchStats();
+     toast.success(t("translation_deleted", "Translation deleted successfully"));
+   };
 
   const handleExport = async () => {
     const res = await fetch("/api/admin/translations?limit=10000");
@@ -135,7 +145,7 @@ export default function AdminTranslationsPage() {
     const text = await file.text();
     let items;
     try { items = JSON.parse(text); } catch {
-      setMessage(t("invalid_json"));
+      toast.error(t("invalid_json"));
       return;
     }
     if (!Array.isArray(items)) items = [items];
@@ -145,12 +155,13 @@ export default function AdminTranslationsPage() {
       body: JSON.stringify({ action: "import", items }),
     });
     if (res.ok) {
-      setMessage(t("translations_imported", { count: items.length }));
+      toast.success(t("translations_imported", { count: items.length }));
       fetchTranslations();
       fetchStats();
+    } else {
+      toast.error(t("translation_import_failed", "Failed to import translations"));
     }
     e.target.value = "";
-    setTimeout(() => setMessage(""), 3000);
   };
 
   return (
@@ -170,10 +181,6 @@ export default function AdminTranslationsPage() {
           </label>
         </div>
       </div>
-
-      {message && (
-        <div className="mb-4 rounded-card border border-emerald/20 bg-emerald/5 p-3 text-sm text-gold">{message}</div>
-      )}
 
       {stats && (
         <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">

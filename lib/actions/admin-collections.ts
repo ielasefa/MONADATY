@@ -32,6 +32,7 @@ export async function saveCollection(formData: FormData) {
   revalidatePath("/collections");
   revalidatePath("/");
   revalidatePath("/admin/collections");
+  revalidatePath("/admin/dashboard");
 }
 
 export async function deleteCollection(formData: FormData) {
@@ -45,4 +46,5 @@ export async function deleteCollection(formData: FormData) {
   revalidatePath("/collections");
   revalidatePath("/");
   revalidatePath("/admin/collections");
+  revalidatePath("/admin/dashboard");
 }

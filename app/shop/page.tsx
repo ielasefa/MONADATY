@@ -8,13 +8,15 @@ export const dynamic = "force-dynamic";
 
 export default async function ShopPage() {
   const lang = await getLanguage();
-  const translations = await loadTranslations("shop");
+  const [translations, commonTranslations] = await Promise.all([
+    loadTranslations("shop"),
+    loadTranslations("common"),
+  ]);
 
   const [categories, products] = await Promise.all([
     getCategories(),
     loadProducts(),
   ]);
-
   const categoriesData = categories.map(c => ({ slug: c.slug, name: c.name }));
 
   return (
@@ -61,7 +63,7 @@ export default async function ShopPage() {
               </div>
             }
           >
-            <ProductFiltersSync categories={categoriesData} products={products} />
+            <ProductFiltersSync categories={categoriesData} products={products} commonTranslations={commonTranslations} />
           </Suspense>
         </div>
       </section>

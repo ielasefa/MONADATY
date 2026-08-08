@@ -113,6 +113,7 @@ export async function saveProduct(formData: FormData) {
           stock,
           featured,
           available,
+          status: "Active",
         },
       });
     }
@@ -124,4 +125,5 @@ export async function saveProduct(formData: FormData) {
   revalidatePath("/shop");
   revalidatePath("/");
   revalidatePath("/admin/shop");
+  revalidatePath("/admin/dashboard");
 }

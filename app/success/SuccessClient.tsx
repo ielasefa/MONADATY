@@ -1,30 +1,54 @@
 "use client";
 
 import { Confetti } from "@/components/Confetti";
+import { useEffect, useState, useRef } from "react";
 
 export function SuccessClient() {
+  const [hasDrawn, setHasDrawn] = useState(false);
+  const pathRef = useRef<SVGPathElement>(null);
+
+  useEffect(() => {
+    const tm = setTimeout(() => setHasDrawn(true), 300);
+    return () => clearTimeout(tm);
+  }, []);
+
   return (
     <>
       <Confetti particleCount={50} />
 
-      {/* Success checkmark — minimal icon */}
-      <div
-        className="relative mx-auto flex h-24 w-24 items-center justify-center border border-burgundy/15"
-      >
-        <svg
-          aria-hidden="true"
-          viewBox="0 0 24 24"
-          className="h-10 w-10"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M20 6L9 17l-5-5" />
-      </svg>
-        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 h-px w-16 bg-burgundy/40" />
-    </div>
-   </>
+      <div className="relative mx-auto flex">
+        <div className="relative mx-auto flex h-28 w-28 items-center justify-center">
+          <div className="absolute inset-0 rounded-full bg-gold/[0.06] animate-pulse" />
+
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            className="relative h-12 w-12 text-gold"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+              className="stroke-white/[0.08]"
+              strokeWidth="0.8"
+            />
+            <path
+              ref={pathRef}
+              d="M8 12.5l2.5 2.5 5.5-5.5"
+              style={{
+                strokeDasharray: 16,
+                strokeDashoffset: hasDrawn ? 0 : 16,
+                transition: "stroke-dashoffset 0.6s cubic-bezier(0.22, 1, 0.36, 1)",
+              }}
+            />
+          </svg>
+        </div>
+      </div>
+    </>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
-
+ 
 import { useTranslation } from "@/hooks/useTranslation";
+import { toast } from "sonner";
 import { SettingsFormWrapper } from "./SettingsFormWrapper";
 import { SingleImageUploader } from "@/components/admin/SingleImageUploader";
 import type { SiteSettings } from "@/types";
@@ -13,10 +14,21 @@ type Props = {
 export function SettingsForm({ settings, saveSettingsAction }: Props) {
   const { t } = useTranslation("admin");
 
-  return (
-    <SettingsFormWrapper>
-      <div className="luxury-card mb-10 p-8">
-        <form action={saveSettingsAction} className="space-y-5">
+   const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
+     e.preventDefault();
+     const formData = new FormData(e.currentTarget);
+     try {
+       await saveSettingsAction(formData);
+       toast.success(t("settings_saved", "Settings saved successfully"));
+     } catch {
+       toast.error(t("settings_save_failed", "Failed to save settings"));
+     }
+   };
+
+   return (
+     <SettingsFormWrapper>
+       <div className="luxury-card mb-10 p-8">
+         <form onSubmit={handleSave} className="space-y-5">
           <div className="grid grid-cols-2 gap-4">
             <Field label={t("website_name")} name="websiteName" defaultValue={settings.websiteName} />
             <SingleImageUploader

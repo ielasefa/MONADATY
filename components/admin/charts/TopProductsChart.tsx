@@ -21,7 +21,7 @@ export default function TopProductsChart({ data }: Props) {
     return (
       <div className="rounded-xl border border-white/[0.06] bg-surface p-6">
         <p className="mb-4 text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-white/50">
-          Top Products
+          {t("top_products", "Top Products")}
         </p>
         <div className="flex h-48 items-center justify-center">
           <p className="text-sm text-muted">{t("no_data_yet", "No data yet")}</p>
@@ -33,7 +33,7 @@ export default function TopProductsChart({ data }: Props) {
   return (
     <div className="rounded-xl border border-white/[0.06] bg-surface p-6">
       <p className="mb-4 text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-white/50">
-        Top Products
+        {t("top_products", "Top Products")}
       </p>
       <div className="h-48">
         <ResponsiveContainer width="100%" height="100%">
@@ -66,7 +66,7 @@ export default function TopProductsChart({ data }: Props) {
                 color: "#fff",
                 fontSize: "12px",
               }}
-              formatter={(value) => [value, "Sold"]}
+              formatter={(value) => [value, t("sold_label", "sold")]}
             />
   <Bar
     dataKey="value"

@@ -3,6 +3,7 @@
 import { useLanguage, type Language } from "@/context/LanguageContext";
 import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useRouter } from "next/navigation";
 
 const LANGUAGES: { code: Language; label: string; flag: string }[] = [
   { code: "fr", label: "Français", flag: "🇫🇷" },
@@ -13,6 +14,7 @@ const LANGUAGES: { code: Language; label: string; flag: string }[] = [
 export function LanguageSwitcher({ className = "" }: { className?: string }) {
   const { lang, setLang } = useLanguage();
   const { t } = useTranslation("system");
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -27,6 +29,12 @@ export function LanguageSwitcher({ className = "" }: { className?: string }) {
   }, []);
 
   const current = LANGUAGES.find((l) => l.code === lang) ?? LANGUAGES[0];
+
+  const handleLanguageChange = (newLang: Language) => {
+    setLang(newLang);
+    setOpen(false);
+    router.refresh();
+  };
 
   return (
     <div ref={ref} className={`relative ${className}`}>
@@ -56,10 +64,7 @@ export function LanguageSwitcher({ className = "" }: { className?: string }) {
           {LANGUAGES.map((l) => (
             <button
               key={l.code}
-              onClick={() => {
-                setLang(l.code);
-                setOpen(false);
-              }}
+              onClick={() => handleLanguageChange(l.code)}
               className={`flex w-full items-center gap-3 px-3.5 py-2.5 text-left text-sm transition-colors duration-150 ${
                 lang === l.code
                   ? "bg-ivory/[0.04] text-ivory"

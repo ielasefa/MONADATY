@@ -470,7 +470,7 @@ export function Navbar({
           {!isShopPage && (
             <form
               onSubmit={handleSearchSubmit}
-              className="hidden md:flex md:items-center"
+              className="hidden xl:flex xl:items-center"
             >
               <label htmlFor="global-search" className="sr-only">
                 {t("search_drinks")}
@@ -571,11 +571,12 @@ export function Navbar({
 >
  <div className="max-h-[85vh] overflow-y-auto">
  <div className="flex items-center justify-between px-6 pt-4 pb-2">
-   <Link
-     href="/"
-     onClick={() => setIsMenuOpen(false)}
-     className="font-display text-[0.7rem] font-normal uppercase tracking-[0.5em] text-[#C8A96A] transition-colors duration-300"
-   >
+<Link
+          href="/"
+          onClick={() => setIsMenuOpen(false)}
+          className="font-display text-[0.7rem] font-normal uppercase tracking-[0.5em] text-gold transition-colors duration-300"
+          aria-label={`${websiteName} — ${t("home", "Home")}`}
+        >
      {websiteName}
    </Link>
    <button

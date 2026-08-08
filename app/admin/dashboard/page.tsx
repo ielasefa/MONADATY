@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { loadProducts } from "@/lib/data";
 import { getLanguage, getTranslation, loadTranslations } from "@/lib/translations";
+import { getCollectionShowcaseStats } from "@/lib/db";
+import { getAuthenticatedAdmin } from "@/lib/auth";
 import { DashboardClient } from "./DashboardClient";
 import { prisma } from "@/lib/prisma";
 
@@ -71,6 +73,7 @@ function toStoredOrder(order: {
 
 export default async function AdminDashboardPage() {
   const products = await loadProducts();
+  const admin = await getAuthenticatedAdmin();
 
   const now = new Date();
   const todayStart = new Date(now);
@@ -88,6 +91,7 @@ export default async function AdminDashboardPage() {
     cancelledOrders,
     paidOrderCount,
     refundedOrders,
+    showcaseStats,
   ] = await Promise.all([
     prisma.order.count(),
     prisma.order.count({ where: { orderStatus: "pending" } }),
@@ -96,6 +100,7 @@ export default async function AdminDashboardPage() {
     prisma.order.count({ where: { orderStatus: "cancelled" } }),
     prisma.order.count({ where: { paymentStatus: "paid" } }),
     prisma.order.count({ where: { paymentStatus: "refunded" } }),
+    getCollectionShowcaseStats(),
   ]);
 
   const [paidOrders, paidOrdersToday, ordersTodayCount, paidOrdersMonth, ordersMonth, newCustomerCount] = await Promise.all([
@@ -214,6 +219,7 @@ export default async function AdminDashboardPage() {
 
   const topSellingAgg = await prisma.orderItem.groupBy({
     by: ["productId", "name"],
+    where: { productId: { not: null } },
     _sum: { quantity: true },
     orderBy: { _sum: { quantity: "desc" } },
     take: 5,
@@ -271,6 +277,12 @@ export default async function AdminDashboardPage() {
     .map(([id, rev]) => ({ name: collectionMap.get(id) ?? "Unknown", value: Math.round(rev) }))
     .sort((a, b) => b.value - a.value);
 
+  const showcaseCollections = collections.map((c) => ({
+    id: c.id,
+    name: c.name,
+    configured: showcaseStats.perCollection[c.id] ?? 0,
+  }));
+
   let bestCollection: string | null = null;
   let bestCollectionValue = 0;
   for (const cs of collectionSalesData) {
@@ -303,6 +315,7 @@ export default async function AdminDashboardPage() {
     <div className="min-h-screen bg-bg">
       <div className="container-shell mx-auto px-6 py-10">
         <DashboardClient
+          adminName={admin?.name ?? null}
           totalOrders={totalOrders}
           totalRevenue={totalRevenue}
           todayRevenue={todayRevenue}
@@ -331,6 +344,12 @@ export default async function AdminDashboardPage() {
           topProductsChart={topProductsChart}
           collectionSalesData={collectionSalesData}
           monthlyRevenueData={monthlyRevenueData}
+          showcaseStats={{
+            configuredCollections: showcaseStats.configuredCollections,
+            configuredProducts: showcaseStats.configuredProducts,
+            totalCollections: collections.length,
+          }}
+          showcaseCollections={showcaseCollections}
         />
       </div>
     </div>

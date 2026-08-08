@@ -21,7 +21,7 @@ export default function CollectionSalesChart({ data }: Props) {
     return (
       <div className="rounded-xl border border-white/[0.06] bg-surface p-6">
         <p className="mb-4 text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-white/50">
-          Sales by Collection
+          {t("sales_by_collection", "Sales by Collection")}
         </p>
         <div className="flex h-48 items-center justify-center">
           <p className="text-sm text-muted">{t("no_data_yet", "No data yet")}</p>
@@ -33,7 +33,7 @@ export default function CollectionSalesChart({ data }: Props) {
   return (
     <div className="rounded-xl border border-white/[0.06] bg-surface p-6">
       <p className="mb-4 text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-white/50">
-        Sales by Collection
+        {t("sales_by_collection", "Sales by Collection")}
       </p>
       <div className="flex h-48 items-center justify-center">
         <ResponsiveContainer width="100%" height="100%">
@@ -61,7 +61,7 @@ export default function CollectionSalesChart({ data }: Props) {
                 color: "#fff",
                 fontSize: "12px",
               }}
-              formatter={(value) => [`${Number(value).toFixed(2)} DH`, "Revenue"]}
+              formatter={(value) => [`${Number(value).toFixed(2)} DH`, t("revenue", "Revenue")]}
             />
           </PieChart>
         </ResponsiveContainer>

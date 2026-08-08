@@ -93,6 +93,8 @@ export function CartProvider({ children }: Readonly<{ children: React.ReactNode 
   );
 
   function addItem(product: Product, quantity: number) {
+    const safeQuantity = Number.isFinite(quantity) && quantity > 0 ? Math.min(Math.floor(quantity), 99) : 1;
+
     // Stock validation: never allow adding more than available stock.
     const availableStock = typeof product.stock === "number" ? product.stock : Number.POSITIVE_INFINITY;
     const isAvailable = typeof product.available === "boolean" ? product.available : true;
@@ -105,7 +107,7 @@ export function CartProvider({ children }: Readonly<{ children: React.ReactNode 
     const currentInCart =
       items.find((item) => item.id === product.id)?.quantity ?? 0;
 
-    if (currentInCart + quantity > availableStock) {
+    if (currentInCart + safeQuantity > availableStock) {
       setToastMessage(t("product_unavailable", "This product is unavailable"));
       return;
     }
@@ -115,7 +117,7 @@ export function CartProvider({ children }: Readonly<{ children: React.ReactNode 
 
       if (existingItem) {
         return currentItems.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item,
+          item.id === product.id ? { ...item, quantity: Math.min(item.quantity + safeQuantity, 99) } : item,
         );
       }
 
@@ -131,7 +133,7 @@ export function CartProvider({ children }: Readonly<{ children: React.ReactNode 
           accent: product.accent ?? undefined,
           price: product.price,
           category: product.category,
-          quantity,
+          quantity: safeQuantity,
         },
       ];
     });
@@ -143,7 +145,11 @@ export function CartProvider({ children }: Readonly<{ children: React.ReactNode 
   function updateQuantity(id: string, quantity: number) {
     setItems((currentItems) =>
       currentItems
-        .map((item) => (item.id === id ? { ...item, quantity } : item))
+        .map((item) => {
+          if (item.id !== id) return item;
+          if (!Number.isFinite(quantity) || quantity <= 0) return { ...item, quantity: 0 };
+          return { ...item, quantity: Math.min(Math.floor(quantity), 99) };
+        })
         .filter((item) => item.quantity > 0),
     );
   }

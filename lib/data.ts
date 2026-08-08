@@ -77,6 +77,7 @@ export async function getSettings(): Promise<SiteSettings> {
 
 export async function saveProducts(products: StoredProduct[]): Promise<void> {
   for (const p of products) {
+    if (!p.id || p.id.length === 0) continue;
     const cat = p.category ? await prisma.category.findUnique({ where: { slug: p.category.toLowerCase() } }) : null;
     const coll = p.collection ? await prisma.collection.findUnique({ where: { slug: p.collection } }) : null;
     await prisma.product.upsert({

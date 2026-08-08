@@ -4,7 +4,11 @@ import { unstable_cache } from "next/cache";
 import type { ProductData, CollectionData, SiteSettings } from "@/types";
 import { logError, logWarning } from "@/lib/logger";
 
-export const productInclude = { category: true, collection: true } as const;
+export const productInclude = {
+  category: true,
+  collection: true,
+  images: { orderBy: { sortOrder: "asc" as const } },
+} as const;
 
 export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   websiteName: "MONADATY",
@@ -48,10 +52,11 @@ export function mapProductToData(p: {
   badges: string[]; stock: number; featured: boolean; isBestSeller?: boolean; available: boolean;
   category: { name: string } | null;
   collection: { slug: string } | null;
+  images?: { url: string; isCover: boolean; sortOrder: number }[];
 }): ProductData {
   return {
     id: p.id, name: p.name, slug: p.slug, price: p.price, comparePrice: p.comparePrice,
-    image: p.image, gallery: p.gallery ?? [], category: p.category?.name ?? "",
+    image: resolveProductImage(p), gallery: p.gallery ?? [], category: p.category?.name ?? "",
     collection: p.collection?.slug ?? "", visual: p.visual as "can" | "bottle" | "glass" | undefined,
     accent: p.accent || undefined, description: p.description, shortDescription: p.shortDescription ?? "",
     ingredients: p.ingredients ?? "", nutrition: p.nutrition ?? "", badges: p.badges ?? [],
@@ -65,13 +70,15 @@ export function mapCollectionData(c: {
 }): CollectionData {
   return {
     slug: c.slug, title: c.name, description: c.description, accent: c.accent,
-    tone: c.tone, previewLabel: c.previewLabel, image: c.image || "", order: c.order,
+    tone: c.tone, previewLabel: c.previewLabel,
+    image: isUsableImage(c.image) ? c.image.trim() : "", order: c.order,
   };
 }
 
 export const getProducts = cache(async (): Promise<ProductData[]> => {
   try {
     const rows = await prisma.product.findMany({
+      where: { available: true, status: "Active" },
       include: productInclude,
       orderBy: { createdAt: "desc" },
     });
@@ -84,7 +91,10 @@ export const getProducts = cache(async (): Promise<ProductData[]> => {
 
 export const getProductById = cache(async (id: string): Promise<ProductData | null> => {
   try {
-    const p = await prisma.product.findUnique({ where: { id }, include: productInclude });
+    const p = await prisma.product.findUnique({ 
+      where: { id, available: true, status: "Active" }, 
+      include: productInclude 
+    });
     if (!p) return null;
     return mapProductToData(p);
   } catch (error) {
@@ -181,7 +191,7 @@ export const getLandingCollections = unstable_cache(
   }
 },
   [],
-  { tags: ["landing"] },
+  { tags: ["landing"], revalidate: 60 },
 );
 
 export const getCategories = cache(async () => {
@@ -192,6 +202,166 @@ export const getCategories = cache(async () => {
     return [];
   }
 });
+
+export const PLACEHOLDER_IMAGE = "/images/placeholder.svg";
+
+export function isUsableImage(src?: string | null): boolean {
+  const value = (src || "").trim();
+  return value !== "" && value !== PLACEHOLDER_IMAGE;
+}
+
+export function resolveProductImage(p: {
+  image?: string | null;
+  images?: { url?: string; isCover?: boolean; sortOrder?: number }[] | null;
+  gallery?: string[] | null;
+}): string {
+  if (isUsableImage(p.image)) return p.image!.trim();
+
+  const sortedImages = p.images
+    ? [...p.images].sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
+    : [];
+  const coverImage = sortedImages.find((i) => i.isCover && isUsableImage(i.url));
+  if (coverImage?.url) return coverImage.url.trim();
+  const firstImage = sortedImages.find((i) => isUsableImage(i.url));
+  if (firstImage?.url) return firstImage.url.trim();
+
+  for (const galleryUrl of p.gallery ?? []) {
+    if (isUsableImage(galleryUrl)) return galleryUrl.trim();
+  }
+
+  return "";
+}
+
+export type CollectionShowcaseEntry = {
+  collectionId: string;
+  collectionSlug: string;
+  collectionName: string;
+  products: ProductData[];
+};
+
+export const getCollectionShowcase = unstable_cache(
+  async (): Promise<CollectionShowcaseEntry[]> => {
+  try {
+    const rows = await prisma.collectionShowcaseProduct.findMany({
+      orderBy: [{ collectionId: "asc" }, { position: "asc" }],
+      include: {
+        collection: { select: { id: true, slug: true, name: true } },
+        product: {
+          include: {
+            ...productInclude,
+            images: { orderBy: { sortOrder: "asc" }, take: 1 },
+          },
+        },
+      },
+    });
+
+    const grouped = new Map<string, CollectionShowcaseEntry>();
+    for (const row of rows) {
+      const p = row.product;
+      const entry = grouped.get(row.collectionId) ?? {
+        collectionId: row.collection.id,
+        collectionSlug: row.collection.slug,
+        collectionName: row.collection.name,
+        products: [],
+      };
+      const data = mapProductToData({
+        id: p.id, name: p.name, slug: p.slug, price: p.price, comparePrice: p.comparePrice,
+        image: p.image, gallery: p.gallery, visual: p.visual, accent: p.accent,
+        description: p.description, shortDescription: p.shortDescription,
+        ingredients: p.ingredients, nutrition: p.nutrition, badges: p.badges,
+        stock: p.stock, featured: p.featured, isBestSeller: p.isBestSeller, available: p.available,
+        category: p.category, collection: p.collection,
+        images: (p as { images?: { url: string; isCover: boolean; sortOrder: number }[] }).images,
+      });
+      entry.products.push(data);
+      grouped.set(row.collectionId, entry);
+    }
+    return Array.from(grouped.values());
+  } catch (error) {
+    logError(error, "Database error in getCollectionShowcase");
+    return [];
+  }
+},
+  [],
+  { tags: ["landing"], revalidate: 60 },
+);
+
+export type AdminShowcaseProduct = {
+  id: string;
+  name: string;
+  price: string;
+  image: string;
+  slug: string;
+};
+
+export type AdminShowcaseCollection = {
+  id: string;
+  name: string;
+  slug: string;
+  products: AdminShowcaseProduct[];
+  selection: { productId: string; position: number }[];
+};
+
+export async function getAdminCollectionShowcase(): Promise<AdminShowcaseCollection[]> {
+  try {
+    const [collections, showcaseRows] = await Promise.all([
+      prisma.collection.findMany({
+        orderBy: { order: "asc" },
+        include: { products: { include: { images: { orderBy: { sortOrder: "asc" }, take: 1 } } } },
+      }),
+      prisma.collectionShowcaseProduct.findMany({
+        orderBy: [{ collectionId: "asc" }, { position: "asc" }],
+      }),
+    ]);
+
+    const selectionByCollection = new Map<string, { productId: string; position: number }[]>();
+    for (const row of showcaseRows) {
+      const list = selectionByCollection.get(row.collectionId) ?? [];
+      list.push({ productId: row.productId, position: row.position });
+      selectionByCollection.set(row.collectionId, list);
+    }
+
+    return collections.map((c) => ({
+      id: c.id,
+      name: c.name,
+      slug: c.slug,
+      products: c.products.map((p) => ({
+        id: p.id,
+        name: p.name,
+        price: p.price,
+        slug: p.slug,
+        image: resolveProductImage(p),
+      })),
+      selection: (selectionByCollection.get(c.id) ?? []).sort((a, b) => a.position - b.position),
+    }));
+  } catch (error) {
+    logError(error, "Database error in getAdminCollectionShowcase");
+    return [];
+  }
+}
+
+export async function getCollectionShowcaseStats() {
+  try {
+    const [configuredCollections, configuredProducts] = await Promise.all([
+      prisma.collectionShowcaseProduct.groupBy({
+        by: ["collectionId"],
+        _count: { productId: true },
+      }),
+      prisma.collectionShowcaseProduct.count(),
+    ]);
+    return {
+      configuredCollections: configuredCollections.length,
+      configuredProducts,
+      perCollection: configuredCollections.reduce<Record<string, number>>((acc, row) => {
+        acc[row.collectionId] = row._count.productId;
+        return acc;
+      }, {}),
+    };
+  } catch (error) {
+    logError(error, "Database error in getCollectionShowcaseStats");
+    return { configuredCollections: 0, configuredProducts: 0, perCollection: {} };
+  }
+}
 
 export const getTestimonials = unstable_cache(
   async () => {
@@ -207,7 +377,7 @@ export const getTestimonials = unstable_cache(
   }
 },
   [],
-  { tags: ["landing"] },
+  { tags: ["landing"], revalidate: 60 },
 );
 
 export const getAllTestimonials = cache(async () => {
@@ -263,7 +433,7 @@ export const getLandingFeaturedProducts = unstable_cache(
   }
 },
   [],
-  { tags: ["landing"] },
+  { tags: ["landing"], revalidate: 60 },
 );
 
 export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
@@ -532,6 +702,6 @@ export const getLandingContent = unstable_cache(
   }
 },
   [],
-  { tags: ["landing"] },
+  { tags: ["landing"], revalidate: 60 },
 );
 

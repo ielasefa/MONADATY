@@ -21,11 +21,12 @@ export async function ProductFiltersWrapper() {
   }
 }
 
-export function ProductFiltersSync({ categories, products }: { categories: { slug: string; name: string }[]; products: Product[] }) {
+export function ProductFiltersSync({ categories, products, commonTranslations }: { categories: { slug: string; name: string }[]; products: Product[]; commonTranslations?: Record<string, Record<string, string>> }) {
   return (
     <ProductFilters
       categories={categories}
       products={products}
+      commonTranslations={commonTranslations}
     />
   );
 }

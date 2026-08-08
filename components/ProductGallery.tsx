@@ -15,90 +15,137 @@ type ProductGalleryProps = {
   accent?: string;
 };
 
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+const PLACEHOLDER_SRC = "/images/placeholder.svg";
+
 export function ProductGallery({ name, gallery, image, visual, accent }: ProductGalleryProps) {
-  const galleryImages = useMemo(() => (gallery || []).filter((g) => Boolean(g && g.length > 0)), [gallery]);
-  const gallerySource = useMemo(() => galleryImages.length > 0 ? galleryImages : (image ? [image] : []), [galleryImages, image]);
-  const [activeImage, setActiveImage] = useState(gallerySource[0] ?? "");
+  const galleryImages = useMemo(
+    () => (gallery || []).filter((g) => Boolean(g && g.trim().length > 0 && g !== PLACEHOLDER_SRC)),
+    [gallery],
+  );
+  const gallerySource = useMemo(() => {
+    const main = image && image !== PLACEHOLDER_SRC ? image : "";
+    const source: string[] = main ? [main] : [];
+    for (const g of galleryImages) {
+      if (!source.includes(g)) source.push(g);
+    }
+    return source;
+  }, [image, galleryImages]);
+
+  const [activeIndex, setActiveIndex] = useState(0);
   const hasGallery = gallerySource.length > 0;
+  const activeImage = gallerySource[Math.min(activeIndex, Math.max(0, gallerySource.length - 1))] ?? "";
 
   useEffect(() => {
-    setActiveImage(gallerySource[0] ?? "");
-  }, [gallerySource]);
+    if (gallerySource.length > 0 && activeIndex >= gallerySource.length) {
+      setActiveIndex(0);
+    }
+  }, [gallerySource, activeIndex]);
 
   return (
-    <div className="space-y-6">
-      {/* Main image — floats on black, no border */}
-      <div className="relative aspect-[3/4] overflow-visible flex items-center justify-center group">
-        <div className="relative h-full w-full flex items-center justify-center">
-          {hasGallery ? (
-            <AnimatePresence mode="wait">
-              {activeImage ? (
-                <motion.div
-                  key={activeImage}
-                  initial={{ opacity: 0, scale: 0.96 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.96 }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                  className="h-full w-full transition-transform duration-700 ease-out group-hover:scale-[1.015]"
-                >
-                  <SafeImage
-                    src={activeImage}
-                    alt={name}
-                    fill
-                    priority
-                    sizes="(min-width: 1024px) 48vw, 100vw"
-                    className="object-contain drop-shadow-[0_16px_48px_rgba(0,0,0,0.5)]"
-                    fallback={
-                      <div className="flex h-full w-full items-center justify-center">
-                        <span className="text-sm font-medium tracking-[0.24em] text-ivory/8">{name.split(" ").slice(0, 2).map((part) => part[0]).join("")}</span>
-                      </div>
-                    }
+    <div className="flex flex-col items-center gap-6 md:gap-8">
+      {/* Main image — premium white card, rounded-3xl, luxurious shadow */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: EASE }}
+      >
+        <div className="group relative mx-auto w-[280px] h-[280px] sm:w-[340px] sm:h-[340px] lg:w-[400px] lg:h-[400px] max-w-[420px] overflow-hidden rounded-3xl border border-gold/20 bg-white shadow-[0_24px_96px_-32px_rgba(0,0,0,0.7)] transition-all duration-700 ease-premium hover:scale-[1.02] hover:shadow-[0_32px_128px_-40px_rgba(0,0,0,0.85)]">
+          <div className="relative h-full w-full">
+            {hasGallery ? (
+              <AnimatePresence mode="wait" initial={false}>
+                {activeImage ? (
+                  <motion.div
+                    key={activeImage}
+                    initial={{ opacity: 0, scale: 0.97 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.97 }}
+                    transition={{ duration: 0.5, ease: EASE }}
+                    className="relative h-full w-full"
+                  >
+<SafeImage
+          src={activeImage}
+          alt={name}
+          fill
+          priority
+          sizes="(min-width: 1024px) 400px, (min-width: 768px) 340px, 280px"
+          className="object-contain p-8 md:p-12 transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+          fallback={
+                        <div className="flex h-full w-full items-center justify-center">
+                          <span className="font-display text-4xl font-light tracking-[0.08em] text-[#0B0B0A]/15">
+                            {name.split(" ").slice(0, 2).map((part) => part[0]).join("")}
+                          </span>
+                        </div>
+                      }
                   />
                 </motion.div>
-              ) : null}
-            </AnimatePresence>
-          ) : visual ? (
-            <div className="mx-auto transition-all duration-300 ease-in-out drop-shadow-[0_16px_48px_rgba(0,0,0,0.5)]">
-              {visual === "can" ? (
-                <SodaCan width={300} height={400} accent={accent} label={name} />
-              ) : visual === "bottle" ? (
-                <SodaBottle width={280} height={420} accent={accent} label={name} />
-              ) : (
-                <GlassDrink width={320} height={320} accent={accent} label={name} />
-              )}
-            </div>
-          ) : null}
-        </div>
-      </div>
+                ) : null}
+              </AnimatePresence>
+            ) : visual ? (
+              <div className="flex h-full w-full items-center justify-center p-10 md:p-14">
+                {visual === "can" ? (
+                  <SodaCan width={240} height={300} accent={accent} label={name} />
+                ) : visual === "bottle" ? (
+                  <SodaBottle width={220} height={310} accent={accent} label={name} />
+                ) : (
+                  <GlassDrink width={240} height={240} accent={accent} label={name} />
+                )}
+              </div>
+            ) : (
+              <div className="flex h-full w-full items-center justify-center">
+                <span className="font-display text-4xl font-light tracking-[0.08em] text-[#0B0B0A]/15">
+                  {name.charAt(0)}
+                </span>
+              </div>
+            )}
 
-      {/* Thumbnails — minimal, no bg, gold ring on active */}
+            {/* Counter chip */}
+            {gallerySource.length > 1 && (
+              <span className="pointer-events-none absolute bottom-4 end-4 z-10 inline-flex items-center gap-2 rounded-full bg-[#0B0B0A]/50 px-3.5 py-1.5 text-[0.56rem] font-medium tracking-[0.22em] text-white/60 backdrop-blur-sm">
+                <span className="h-1 w-1 rounded-full bg-gold/70" />
+                {String(activeIndex + 1).padStart(2, "0")} / {String(gallerySource.length).padStart(2, "0")}
+              </span>
+            )}
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Thumbnails — rounded-xl, gold active border, smooth transitions */}
       {gallerySource.length > 1 && (
-        <div className="grid grid-cols-4 gap-3">
-          {gallerySource.map((thumb) => (
-            <button
-              key={thumb}
-              type="button"
-              onClick={() => setActiveImage(thumb)}
-              className={`relative aspect-square overflow-hidden transition-all duration-300 ${
-                activeImage === thumb
-                  ? "ring-1 ring-gold/40 ring-offset-2 ring-offset-black"
-                  : "opacity-30 hover:opacity-60"
-              }`}
-            >
-              <SafeImage
-                src={thumb}
-                alt={name}
-                fill
-                sizes="(min-width: 1024px) 12vw, 25vw"
-                className="object-contain p-2"
-                fallback={
-                  <div className="flex h-full w-full items-center justify-center">
-                    <span className="text-[0.6rem] font-medium tracking-[0.22em] text-ivory/10">{name.split(" ").slice(0, 2).map((part) => part[0]).join("")}</span>
-                  </div>
-                }
-              />
-            </button>
-          ))}
+        <div className="flex items-center gap-3 sm:gap-4">
+          {gallerySource.map((thumb, index) => {
+            const isActive = index === activeIndex;
+            return (
+              <button
+                key={thumb}
+                type="button"
+                onClick={() => setActiveIndex(index)}
+                aria-label={`${name} — image ${index + 1} of ${gallerySource.length}`}
+                aria-pressed={isActive}
+                className={`relative h-16 w-16 overflow-hidden rounded-xl border bg-white transition-all duration-500 sm:h-20 sm:w-20 ${
+                  isActive
+                    ? "border-gold/70 shadow-[0_16px_40px_-20px_rgba(0,0,0,0.7)] ring-1 ring-gold/30 scale-105"
+                    : "border-white/10 opacity-50 hover:border-gold/40 hover:opacity-100 hover:scale-[1.02]"
+                }`}
+              >
+                <SafeImage
+                  src={thumb}
+                  alt=""
+                  fill
+                  sizes="80px"
+                  className="object-contain p-1.5"
+                  fallback={
+                    <div className="flex h-full w-full items-center justify-center">
+                      <span className="font-display text-base font-light text-[#0B0B0A]/20">
+                        {name.charAt(0)}
+                      </span>
+                    </div>
+                  }
+                />
+              </button>
+            );
+          })}
         </div>
       )}
     </div>

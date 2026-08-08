@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
+import { toast } from "sonner";
 import type { StoredOrder } from "@/types";
 import Link from "next/link";
 import { STATUS_COLORS, getPaymentMethodLabel, PAYMENT_STATUSES } from "@/lib/config";
@@ -74,64 +75,73 @@ export default function AdminOrderDetailPage() {
     }
   }, [id]);
 
-  const updateStatus = useCallback(async (field: "orderStatus" | "paymentStatus", value: string) => {
-    if (!order) return;
-    setUpdating(true);
-    try {
-      const res = await fetch("/api/orders/update-status", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: order.id, [field]: value }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setOrder(data.order);
-      }
-    } catch {
-      // ignore
-    }
-    setUpdating(false);
-  }, [order]);
+   const updateStatus = useCallback(async (field: "orderStatus" | "paymentStatus", value: string) => {
+     if (!order) return;
+     setUpdating(true);
+     try {
+       const res = await fetch("/api/orders/update-status", {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({ id: order.id, [field]: value }),
+       });
+       if (res.ok) {
+         const data = await res.json();
+         setOrder(data.order);
+         toast.success(t("order_status_updated", "Order status updated successfully"));
+       } else {
+         toast.error(t("order_status_update_failed", "Failed to update order status"));
+       }
+     } catch {
+       toast.error(t("order_status_update_failed", "Failed to update order status"));
+     }
+     setUpdating(false);
+   }, [order, t]);
 
-  async function saveDeliveryDate() {
-    if (!order) return;
-    setUpdating(true);
-    try {
-      const res = await fetch("/api/orders/update-status", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: order.id, estimatedDelivery: deliveryDate }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setOrder(data.order);
-        setDateSaved(true);
-        setTimeout(() => setDateSaved(false), 2000);
-      }
-    } catch {
-      // ignore
-    }
-    setUpdating(false);
-  }
+   async function saveDeliveryDate() {
+     if (!order) return;
+     setUpdating(true);
+     try {
+       const res = await fetch("/api/orders/update-status", {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({ id: order.id, estimatedDelivery: deliveryDate }),
+       });
+       if (res.ok) {
+         const data = await res.json();
+         setOrder(data.order);
+         setDateSaved(true);
+         setTimeout(() => setDateSaved(false), 2000);
+         toast.success(t("delivery_date_saved", "Delivery date saved successfully"));
+       } else {
+         toast.error(t("delivery_date_save_failed", "Failed to save delivery date"));
+       }
+     } catch {
+       toast.error(t("delivery_date_save_failed", "Failed to save delivery date"));
+     }
+     setUpdating(false);
+   }
 
-  async function saveDeliveryField(field: string, value: string) {
-    if (!order) return;
-    setUpdating(true);
-    try {
-      const res = await fetch("/api/orders/update-status", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: order.id, [field]: value }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setOrder(data.order);
-      }
-    } catch {
-      // ignore
-    }
-    setUpdating(false);
-  }
+   async function saveDeliveryField(field: string, value: string) {
+     if (!order) return;
+     setUpdating(true);
+     try {
+       const res = await fetch("/api/orders/update-status", {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({ id: order.id, [field]: value }),
+       });
+       if (res.ok) {
+         const data = await res.json();
+         setOrder(data.order);
+         toast.success(t("delivery_field_saved", "Delivery field saved successfully"));
+       } else {
+         toast.error(t("delivery_field_save_failed", "Failed to save delivery field"));
+       }
+     } catch {
+       toast.error(t("delivery_field_save_failed", "Failed to save delivery field"));
+     }
+     setUpdating(false);
+   }
 
   if (loading) {
     return (

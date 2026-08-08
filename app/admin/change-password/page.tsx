@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 import { AdminLogo } from "@/components/admin/AdminLogo";
 import { useTranslation } from "@/hooks/useTranslation";
 
@@ -15,21 +16,19 @@ export default function ChangePasswordPage() {
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (loading) return;
-    setError("");
 
     if (newPassword.length < 8) {
-      setError(t("password_too_short"));
+      toast.error(t("password_too_short"));
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setError(t("password_mismatch"));
+      toast.error(t("password_mismatch"));
       return;
     }
 
@@ -42,15 +41,17 @@ export default function ChangePasswordPage() {
         body: JSON.stringify({ currentPassword, newPassword, confirmPassword }),
       });
 
-      if (res.ok) {
-        router.push("/admin/dashboard");
-      } else {
+       if (res.ok) {
+         toast.success(t("password_changed_success", "Password changed successfully"));
+         router.push("/admin/dashboard");
+         router.refresh();
+       } else {
         const data = await res.json().catch(() => ({}));
-        setError(data.error || t("change_password_failed"));
+        toast.error(data.error || t("change_password_failed"));
         setLoading(false);
       }
     } catch {
-      setError(t("network_error"));
+      toast.error(t("network_error"));
       setLoading(false);
     }
   }
@@ -130,12 +131,6 @@ export default function ChangePasswordPage() {
               <ToggleButton on={showConfirm} onClick={() => setShowConfirm((s) => !s)} label={t("confirm_password_label", "confirm password")} />
             </div>
           </div>
-
-          {error && (
-            <div className="rounded-xl border border-burgundy/20 bg-burgundy/10 px-4 py-3 text-sm text-burgundy" role="alert">
-              {error}
-            </div>
-          )}
 
           <button
             type="submit"

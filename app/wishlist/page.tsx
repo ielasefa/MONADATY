@@ -16,7 +16,7 @@ export default async function WishlistPage() {
   const products: Product[] = rows;
 
 return (
-<div className="bg-[#171717]">
+<div className="bg-black">
       <section className="relative overflow-hidden">
         <div className="mx-auto max-w-[1600px] px-6 py-24 md:px-10 md:py-32 lg:px-16 lg:py-40">
           <div className="flex items-center gap-3">

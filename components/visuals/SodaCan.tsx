@@ -1,32 +1,37 @@
-import React from "react";
+import React, { useId } from "react";
 
 type SodaCanProps = {
   width?: number;
   height?: number;
   accent?: string;
   label?: string;
+  className?: string;
 };
 
-export function SodaCan({ width = 240, height = 320, accent = "#D5B87D", label = "" }: SodaCanProps) {
+export function SodaCan({ width = 240, height = 320, accent = "#D5B87D", label = "", className }: SodaCanProps) {
+  const uid = useId().replace(/:/g, "");
+  const g1 = `c1-${uid}`;
+  const g2 = `c2-${uid}`;
+  const shadow = `cs-${uid}`;
   return (
-    <svg width={width} height={height} viewBox="0 0 240 320" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label={label}>
+    <svg className={className} width={width} height={height} viewBox="0 0 240 320" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label={label}>
       <defs>
-        <linearGradient id="g1" x1="0" x2="1">
+        <linearGradient id={g1} x1="0" x2="1">
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
           <stop offset="100%" stopColor="#f6f6f5" />
         </linearGradient>
-        <linearGradient id="g2" x1="0" x2="1">
+        <linearGradient id={g2} x1="0" x2="1">
           <stop offset="0%" stopColor={accent} stopOpacity="0.14" />
           <stop offset="100%" stopColor={accent} stopOpacity="0.06" />
         </linearGradient>
-        <filter id="s" x="-20%" y="-20%" width="140%" height="140%">
+        <filter id={shadow} x="-20%" y="-20%" width="140%" height="140%">
           <feDropShadow dx="0" dy="14" stdDeviation="20" floodColor="#000" floodOpacity="0.06" />
         </filter>
       </defs>
 
-      <g filter="url(#s)">
-        <rect x="36" y="20" rx="20" ry="20" width="168" height="280" fill="url(#g1)" />
-        <rect x="36" y="20" rx="20" ry="20" width="168" height="280" fill="url(#g2)" />
+      <g filter={`url(#${shadow})`}>
+        <rect x="36" y="20" rx="20" ry="20" width="168" height="280" fill={`url(#${g1})`} />
+        <rect x="36" y="20" rx="20" ry="20" width="168" height="280" fill={`url(#${g2})`} />
         <rect x="36" y="20" rx="20" ry="20" width="168" height="48" fill="#fff" opacity="0.6" />
       </g>
 

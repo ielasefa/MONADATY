@@ -4,11 +4,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
 import { SafeImage } from "@/components/SafeImage";
+import { CollectionArtwork } from "@/components/CollectionArtwork";
+import { ProductVisual, isPlaceholderImage } from "@/components/ProductVisual";
 import { Reveal } from "@/components/Reveal";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useCart } from "@/components/cart-context";
 import { useWishlist } from "@/components/wishlist-context";
 import type { ProductData, CollectionData } from "@/types";
+import type { CollectionShowcaseEntry } from "@/lib/db";
 
 type Testimonial = {
   id: string;
@@ -196,8 +199,13 @@ function ProductCardLite({ product }: { product: ProductData }) {
   const { t } = useTranslation("products");
 
   const isWishlisted = contains(product.id);
+  const productImage =
+    product.image?.trim() ||
+    (product.gallery?.[0]?.trim() ?? "") ||
+    "";
 
   return (
+  
     <article className="group flex flex-col">
       <div className="relative">
         <Link
@@ -209,7 +217,7 @@ function ProductCardLite({ product }: { product: ProductData }) {
             initial={false}
             whileHover={{ y: -6, transition: { duration: 0.22, ease: EASE } }}
             transition={{ duration: 0.22, ease: EASE }}
-            className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-black-soft shadow-card transition-shadow duration-500 ease-premium group-hover:shadow-card-hover group-hover:border group-hover:border-gold/12"
+            className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-black-soft shadow-card transition-shadow duration-500 ease-premium group-hover:shadow-card-hover group-hover:border group-hover:border-gold/12"
           >
             {/* Shimmer sweep on hover */}
             <motion.div
@@ -231,11 +239,11 @@ function ProductCardLite({ product }: { product: ProductData }) {
               transition={{ duration: 0.3 }}
               style={{
                 boxShadow:
-                  "inset 0 0 0 1px rgba(200,169,106,0.12), inset 0 1px 0 rgba(255,255,255,0.04)",
+                  "inset 0 0 0 1px rgba(184,155,94,0.12), inset 0 1px 0 rgba(255,255,255,0.04)",
               }}
             />
 
-            {product.image ? (
+            {!isPlaceholderImage(productImage) ? (
               <motion.div
                 initial={false}
                 whileHover={{ scale: 1.04, transition: { duration: 0.6, ease: EASE } }}
@@ -243,7 +251,7 @@ function ProductCardLite({ product }: { product: ProductData }) {
                 className="h-full w-full"
               >
                 <SafeImage
-                  src={product.image}
+                  src={productImage}
                   alt={product.name}
                   fill
                   sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 50vw"
@@ -252,10 +260,13 @@ function ProductCardLite({ product }: { product: ProductData }) {
                 />
               </motion.div>
             ) : product.visual ? (
-              <div className="flex h-full w-full items-center justify-center">
-                <span className="font-display text-[1.5rem] font-light text-white/[0.08]">
-                  {product.visual.toUpperCase()}
-                </span>
+              <div className="flex h-full w-full items-center justify-center p-6">
+                <ProductVisual
+                  name={product.name}
+                  visual={product.visual}
+                  accent={product.accent}
+                  className="h-full w-auto max-w-full drop-shadow-[0_18px_30px_rgba(0,0,0,0.5)]"
+                />
               </div>
             ) : (
               <div className="flex h-full w-full items-center justify-center">
@@ -313,17 +324,17 @@ function ProductCardLite({ product }: { product: ProductData }) {
         </Link>
       </div>
 
-      <div className="mt-4 space-y-2">
+      <div className="mt-4 flex flex-1 flex-col space-y-2">
         {product.shortDescription ? (
-          <p className="text-[0.6rem] font-medium uppercase tracking-[0.2em] text-white/45">
+          <p className="line-clamp-1 text-[0.6rem] font-medium uppercase tracking-[0.2em] text-white/45">
             {product.shortDescription}
           </p>
         ) : product.category ? (
-          <p className="text-[0.6rem] font-medium uppercase tracking-[0.2em] text-white/45">
+          <p className="line-clamp-1 text-[0.6rem] font-medium uppercase tracking-[0.2em] text-white/45">
             {product.category}
           </p>
         ) : null}
-        <h3 className="font-display text-base leading-[0.95] tracking-[-0.015em] text-white">
+        <h3 className="line-clamp-2 min-h-[2.75rem] font-display text-base leading-snug tracking-[-0.015em] text-white">
           <Link
             href={`/product/${product.id}`}
             className="transition-colors duration-300 hover:text-gold"
@@ -351,7 +362,7 @@ function ProductCardLite({ product }: { product: ProductData }) {
               1,
             )
           }
-          className="btn-primary-sm w-full"
+          className="btn-primary-sm mt-auto w-full"
           aria-label={`${t("add_to_cart")} ${product.name}`}
           initial={false}
           whileHover={{ scale: 1.02, y: -1 }}
@@ -368,25 +379,159 @@ function ProductCardLite({ product }: { product: ProductData }) {
 /* ============================================================
    COLLECTIONS SHOWCASE
    ============================================================ */
-export function CollectionsShowcase({
-  collections,
+function ShowcaseProductCard({
+  product,
+  collectionLabel,
 }: {
-  collections: CollectionData[];
+  product: ProductData;
+  collectionLabel: string;
 }) {
-  const { t } = useTranslation("home");
-  if (collections.length === 0) return null;
+  const { addItem } = useCart();
+  const { t } = useTranslation("products");
 
-  const featured = collections[0];
-  const secondary = collections.slice(1, 3);
+  const productImage =
+    product.image?.trim() ||
+    product.gallery?.[0]?.trim() ||
+    "";
 
   return (
-    <section className="relative w-full overflow-hidden bg-black">
-      <div className="mx-auto max-w-[1400px] px-6 py-16 md:px-10 md:py-20 lg:px-16 lg:py-24">
+    <article className="group flex flex-col">
+      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-black-soft shadow-card transition-shadow duration-500 ease-premium group-hover:shadow-card-hover group-hover:border group-hover:border-gold/12">
+        {!isPlaceholderImage(productImage) ? (
+          <Link
+            href={`/product/${product.id}`}
+            aria-label={`${t("view_flavor")} ${product.name}`}
+            className="block h-full w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/40"
+          >
+            <motion.div
+              initial={false}
+              whileHover={{ scale: 1.04, transition: { duration: 0.6, ease: EASE } }}
+              transition={{ duration: 0.6, ease: EASE }}
+              className="h-full w-full"
+            >
+              <SafeImage
+                src={productImage}
+                alt={product.name}
+                fill
+                sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                className="object-contain p-6"
+                fallback={null}
+              />
+            </motion.div>
+          </Link>
+        ) : product.visual ? (
+          <div className="flex h-full w-full items-center justify-center p-6">
+            <ProductVisual
+              name={product.name}
+              visual={product.visual}
+              accent={product.accent}
+              className="h-full w-auto max-w-full drop-shadow-[0_18px_30px_rgba(0,0,0,0.5)]"
+            />
+          </div>
+        ) : (
+          <div className="flex h-full w-full items-center justify-center">
+            <span className="font-display text-[2.5rem] font-light text-white/[0.08]">
+              {product.name.charAt(0)}
+            </span>
+          </div>
+        )}
+
+        {product.available === false ? (
+          <span className="absolute start-2.5 top-2.5 inline-flex items-center rounded-full bg-black/80 px-2.5 py-1 text-[0.5rem] font-semibold uppercase tracking-[0.18em] text-white/80 backdrop-blur">
+            {t("out_of_stock")}
+          </span>
+        ) : (
+          <span className="absolute start-2.5 top-2.5 inline-flex items-center rounded-full bg-gold/[0.12] px-2.5 py-1 text-[0.5rem] font-semibold uppercase tracking-[0.18em] text-gold-dark backdrop-blur">
+            {collectionLabel}
+          </span>
+        )}
+      </div>
+
+      <div className="mt-4 flex flex-1 flex-col space-y-2">
+        <p className="line-clamp-1 text-[0.6rem] font-medium uppercase tracking-[0.2em] text-white/40">
+          {collectionLabel}
+        </p>
+        <h3 className="line-clamp-2 min-h-[2.75rem] font-display text-base leading-snug tracking-[-0.015em] text-white">
+          <Link
+            href={`/product/${product.id}`}
+            className="transition-colors duration-300 hover:text-gold"
+          >
+            {product.name}
+          </Link>
+        </h3>
+        <p className="font-display text-sm font-light text-gold">{product.price}</p>
+        <div className="mt-auto flex gap-2 pt-2">
+          <motion.button
+            type="button"
+            onClick={() =>
+              addItem(
+                {
+                  id: product.id,
+                  slug: product.slug,
+                  name: product.name,
+                  price: product.price,
+                  image: product.image,
+                  category: product.category,
+                  visual: product.visual,
+                  accent: product.accent,
+                  description: product.description,
+                  gallery: product.gallery,
+                },
+                1,
+              )
+            }
+            className="btn-primary-sm flex-1"
+            aria-label={`${t("add_to_cart")} ${product.name}`}
+            initial={false}
+            whileHover={{ scale: 1.02, y: -1 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ duration: 0.18, ease: EASE }}
+          >
+            {t("add_to_cart")}
+          </motion.button>
+          <Link
+            href={`/product/${product.id}`}
+            className="inline-flex h-9 flex-1 items-center justify-center rounded-btn border border-gold/40 px-4 text-[0.5rem] font-semibold uppercase tracking-[0.18em] text-gold transition-all duration-300 hover:bg-gold/[0.06] hover:border-gold/60"
+          >
+            {t("view_product", "View Product")}
+          </Link>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+export function CollectionsShowcase({
+  collections,
+  showcase = [],
+}: {
+  collections: CollectionData[];
+  showcase?: CollectionShowcaseEntry[];
+}) {
+  const { t } = useTranslation("home");
+  const [activeSlug, setActiveSlug] = useState<string | null>(null);
+
+  // Deduplicate collections by stable slug to prevent rendering duplicates
+  const uniqueCollections = Array.from(
+    new Map(collections.map((c) => [c.slug, c])).values()
+  );
+  if (uniqueCollections.length === 0) return null;
+
+  const showcaseBySlug = new Map(showcase.map((s) => [s.collectionSlug, s]));
+  const active = activeSlug ? showcaseBySlug.get(activeSlug) : undefined;
+  const activeCollection = activeSlug
+    ? uniqueCollections.find((c) => c.slug === activeSlug) ?? null
+    : null;
+  const activeProducts = active?.products ?? [];
+
+  return (
+    <section className="relative w-full overflow-hidden bg-black" id="collections">
+      <div className="mx-auto max-w-[1080px] px-6 py-16 md:px-10 md:py-20 lg:px-16 lg:py-24">
         <Reveal>
           <div className="flex items-center gap-3">
             <span className="h-px w-8 bg-gold" />
             <span className="label-utility tracking-[0.55em] text-gold/60">
-              {t("curated_collections", "CURATED COLLECTIONS")}
+              {t("collection_showcase_eyebrow", "CURATED COLLECTIONS")}
             </span>
           </div>
           <motion.h2
@@ -395,7 +540,7 @@ export function CollectionsShowcase({
             transition={{ duration: 0.7, ease: EASE, delay: 0.1 }}
             className="mt-5 font-display text-[clamp(1.75rem,4vw,3rem)] leading-[1.0] tracking-[-0.02em] text-white"
           >
-            {t("collections_title", "DISCOVER THE MONADATY COLLECTIONS")}
+            {t("collection_showcase_title", "OUR COLLECTIONS")}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}
@@ -404,131 +549,281 @@ export function CollectionsShowcase({
             className="mt-3 max-w-[600px] text-[0.9rem] leading-[1.6] text-white/60"
           >
             {t(
-              "collections_desc",
-              "Explore carefully selected Moroccan products, crafted to bring premium quality and authentic character to your everyday moments.",
+              "collection_showcase_desc",
+              "Select a collection to explore the three signature products curated by our team.",
             )}
           </motion.p>
         </Reveal>
 
-        <div className="mx-auto mt-12">
-          <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-[2.2fr_1fr] lg:gap-6">
-            {featured && (
-              <Reveal>
-                <Link
-                  href={`/shop?category=${featured.slug}`}
-                  className="group block h-full"
-                >
-                  <motion.div
-                    initial={false}
-                    whileHover={{ scale: 1.01, transition: { duration: 0.5, ease: EASE } }}
-                    transition={{ duration: 0.5, ease: EASE }}
-                    className="relative h-[460px] w-full overflow-hidden rounded-2xl sm:h-[500px] md:h-[540px] lg:h-[620px]"
-                  >
-                    <ProductImageOrFallback
-                      src={featured.image}
-                      alt={featured.title}
-                      sizes="(min-width: 1024px) 52vw, 100vw"
-                      className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
-                      fallback={null}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
-                    <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-8 lg:p-10">
-                      <motion.p
-                        initial={false}
-                        className="text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-gold/80"
-                      >
-                        {featured.previewLabel ||
-                          t("collection_label", "COLLECTION")}
-                      </motion.p>
-                      <motion.h3
-                        initial={false}
-                        whileHover={{ x: 3 }}
-                        transition={{ duration: 0.22, ease: EASE }}
-                        className="mt-2 font-display text-[1.25rem] leading-[1.0] tracking-[-0.015em] text-white sm:text-[1.5rem] lg:text-[1.75rem]"
-                      >
-                        {featured.title}
-                      </motion.h3>
-                      {featured.description && (
-                        <p className="mt-2 max-w-md text-[0.78rem] leading-relaxed text-white/70">
-                          {featured.description}
+        <div className="mt-12 w-full">
+          <div className="grid w-full grid-cols-1 items-stretch gap-5 md:grid-cols-[minmax(0,2fr)_minmax(220px,1fr)] md:gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(280px,1fr)] lg:gap-6">
+            {/* Large card: first collection (left) */}
+            {uniqueCollections[0] && (
+              <Reveal
+                key={uniqueCollections[0].slug}
+                delay={0.08}
+                className={`min-w-0 ${uniqueCollections.length === 1 ? "md:col-span-2" : ""}`}
+              >
+                {(() => {
+                  const col = uniqueCollections[0];
+                  const hasShowcase = (showcaseBySlug.get(col.slug)?.products.length ?? 0) > 0;
+                  const isActive = activeSlug === col.slug;
+
+                  const cardContent = (
+                    <motion.div
+                      initial={false}
+                      className={`group relative h-[360px] w-full overflow-hidden rounded-2xl transition-shadow duration-500 ease-premium sm:h-[400px] md:h-[420px] lg:h-[460px] ${
+                        isActive
+                          ? "shadow-luxury ring-1 ring-gold/50"
+                          : "shadow-card ring-1 ring-white/[0.05] hover:shadow-card-hover"
+                      }`}
+                    >
+                      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                      <CollectionArtwork
+                        image={col.image}
+                        title={col.title}
+                        accent={col.accent}
+                        sizes="(min-width: 1024px) 50vw, 100vw"
+                        className="object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                        monogramSize="text-[7rem] md:text-[9rem] lg:text-[11rem]"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-tr from-gold/[0.06] via-transparent to-transparent" />
+                      <div className="absolute inset-x-0 bottom-0 flex flex-col justify-end p-6 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1.5 motion-reduce:transition-none sm:p-7 lg:p-9">
+                        <p className="text-[0.55rem] font-semibold uppercase tracking-[0.22em] text-gold/90">
+                          {col.previewLabel || t("collection_label", "COLLECTION")}
                         </p>
+                        <h3 className="mt-2 font-display text-2xl leading-[0.98] tracking-[-0.01em] text-white sm:text-[1.625rem] lg:text-[1.875rem]">
+                          {col.title}
+                        </h3>
+                        {col.description && (
+                          <p className="mt-3 line-clamp-2 max-w-md text-[0.78rem] leading-[1.7] text-white/55">
+                            {col.description}
+                          </p>
+                        )}
+                        {hasShowcase && (
+                          <span className="mt-4 inline-flex items-center gap-1.5 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-gold transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none lg:opacity-0 lg:group-hover:opacity-100 motion-reduce:lg:opacity-100">
+                            {isActive
+                              ? t("showcase_close", "CLOSE")
+                              : t("showcase_view_products", "VIEW PRODUCTS")}
+                            {isActive ? (
+                              <span aria-hidden>✕</span>
+                            ) : (
+                              <ArrowRight />
+                            )}
+                          </span>
+                        )}
+                      </div>
+                      {isActive && (
+                        <motion.span
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ duration: 0.25, ease: EASE }}
+                          className="absolute end-4 top-4 z-10 inline-flex h-8 w-8 items-center justify-center rounded-full bg-gold text-black shadow-gold-focus"
+                          aria-hidden
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M20 6L9 17l-5-5" />
+                          </svg>
+                        </motion.span>
                       )}
-                      <motion.span
-                        initial={false}
-                        whileHover={{ x: 2 }}
-                        transition={{ duration: 0.18, ease: EASE }}
-                        className="mt-4 inline-flex items-center gap-2 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white/60 transition-colors duration-200 group-hover:text-gold"
+                      {!isActive && hasShowcase && (
+                        <span className="absolute inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent sm:inset-x-7 lg:inset-x-9" />
+                      )}
+                    </motion.div>
+                  );
+
+                  if (!hasShowcase) {
+                    return (
+                      <Link
+                        href={`/shop?category=${col.slug}`}
+                        className="group block h-full"
                       >
-                        {t("view_collection", "VIEW COLLECTION")}
-                        <ArrowRight />
-                      </motion.span>
-                    </div>
-                  </motion.div>
-                </Link>
+                        {cardContent}
+                      </Link>
+                    );
+                  }
+
+                  return (
+                    <button
+                      type="button"
+                      onClick={() => setActiveSlug(isActive ? null : col.slug)}
+                      aria-expanded={isActive}
+                      aria-label={`${t("showcase_view_products", "View products")} ${col.title}`}
+                      className="group block h-full w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                    >
+                      {cardContent}
+                    </button>
+                  );
+                })()}
               </Reveal>
             )}
 
-            {secondary.length > 0 && (
-              <div className="flex flex-col gap-4 md:grid md:grid-cols-2 md:gap-5 lg:flex lg:flex-col lg:gap-6">
-                {secondary.slice(0, 2).map((col, i) => (
-                  <Reveal key={col.slug} delay={0.08 * (i + 1)}>
-                    <Link
-                      href={`/shop?category=${col.slug}`}
-                      className="group block h-full"
-                    >
-                      <motion.div
-                        initial={false}
-                        whileHover={{ scale: 1.01, transition: { duration: 0.5, ease: EASE } }}
-                        transition={{ duration: 0.5, ease: EASE }}
-                        className="relative h-[280px] w-full overflow-hidden rounded-2xl sm:h-[300px] md:h-[320px] lg:h-[298px]"
-                      >
-                        <ProductImageOrFallback
-                          src={col.image}
-                          alt={col.title}
-                          sizes="(min-width: 1024px) 30vw, 100vw"
-                          className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
-                          fallback={null}
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-                        <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6 lg:p-7">
-                          <motion.p
-                            initial={false}
-                            className="text-[0.55rem] font-semibold uppercase tracking-[0.2em] text-gold/80"
-                          >
-                            {col.previewLabel ||
-                              t("collection_label", "COLLECTION")}
-                          </motion.p>
-                          <motion.h3
-                            initial={false}
-                            whileHover={{ x: 2 }}
-                            transition={{ duration: 0.22, ease: EASE }}
-                            className="mt-1 font-display text-[1rem] leading-[1.0] tracking-[-0.01em] text-white sm:text-[1.125rem] lg:text-[1.25rem]"
-                          >
-                            {col.title}
-                          </motion.h3>
-                          {col.description && (
-                            <p className="mt-1 max-w-[22ch] text-[0.68rem] leading-relaxed text-white/65 line-clamp-2">
-                              {col.description}
+            {/* Right column: second and third collections stacked */}
+            {uniqueCollections.length > 1 && (
+              <div className="grid min-w-0 grid-cols-1 gap-5 md:grid-cols-1 lg:gap-6">
+                {uniqueCollections.slice(1, 3).map((col, idx) => (
+                  <Reveal key={col.slug} delay={0.08 * (idx + 2)} className="h-full">
+                    {(() => {
+                      const hasShowcase = (showcaseBySlug.get(col.slug)?.products.length ?? 0) > 0;
+                      const isActive = activeSlug === col.slug;
+
+                      const cardContent = (
+                        <motion.div
+                          initial={false}
+                          className={`group relative h-[220px] w-full overflow-hidden rounded-2xl transition-shadow duration-500 ease-premium md:h-[200px] lg:h-[218px] ${
+                            isActive
+                              ? "shadow-luxury ring-1 ring-gold/50"
+                              : "shadow-card ring-1 ring-white/[0.07] hover:shadow-luxury hover:ring-gold/20"
+                          }`}
+                        >
+                          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                          <CollectionArtwork
+                            image={col.image}
+                            title={col.title}
+                            accent={col.accent}
+                            sizes="(min-width: 1024px) 25vw, 100vw"
+                            className="object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                            monogramSize="text-[4rem] md:text-[5rem] lg:text-[6rem]"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent" />
+                          <div className="absolute inset-0 bg-gradient-to-tr from-gold/[0.05] via-transparent to-transparent" />
+                          <div className="absolute inset-x-0 bottom-0 flex flex-col justify-end p-5 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1 motion-reduce:transition-none sm:p-6">
+                            <p className="text-[0.5rem] font-semibold uppercase tracking-[0.2em] text-gold/90">
+                              {col.previewLabel || t("collection_label", "COLLECTION")}
                             </p>
+                            <h3 className="mt-1.5 font-display text-[1.05rem] leading-[1.05] tracking-[-0.01em] text-white sm:text-[1.15rem] lg:text-[1.25rem]">
+                              {col.title}
+                            </h3>
+                            {hasShowcase && (
+                              <span className="mt-2.5 inline-flex items-center gap-1.5 text-[0.55rem] font-semibold uppercase tracking-[0.16em] text-gold transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none lg:opacity-0 lg:group-hover:opacity-100 motion-reduce:lg:opacity-100">
+                                {isActive
+                                  ? t("showcase_close", "CLOSE")
+                                  : t("showcase_view_products", "VIEW PRODUCTS")}
+                                {isActive ? (
+                                  <span aria-hidden>✕</span>
+                                ) : (
+                                  <ArrowRight />
+                                )}
+                              </span>
+                            )}
+                          </div>
+                          {isActive && (
+                            <motion.span
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              transition={{ duration: 0.25, ease: EASE }}
+                              className="absolute end-3 top-3 z-10 inline-flex h-7 w-7 items-center justify-center rounded-full bg-gold text-black shadow-gold-focus"
+                              aria-hidden
+                            >
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M20 6L9 17l-5-5" />
+                              </svg>
+                            </motion.span>
                           )}
-                          <motion.span
-                            initial={false}
-                            whileHover={{ x: 1 }}
-                            transition={{ duration: 0.18, ease: EASE }}
-                            className="mt-2 inline-flex items-center gap-1.5 text-[0.5rem] font-semibold uppercase tracking-[0.16em] text-white/50 transition-colors duration-200 group-hover:text-gold"
+                          {!isActive && hasShowcase && (
+                            <span className="absolute inset-x-5 bottom-0 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent lg:inset-x-6" />
+                          )}
+                        </motion.div>
+                      );
+
+                      if (!hasShowcase) {
+                        return (
+                          <Link
+                            href={`/shop?category=${col.slug}`}
+                            className="group block h-full"
                           >
-                            {t("view_collection", "VIEW")}
-                            <ArrowRight />
-                          </motion.span>
-                        </div>
-                      </motion.div>
-                    </Link>
+                            {cardContent}
+                          </Link>
+                        );
+                      }
+
+                      return (
+                        <button
+                          type="button"
+                          onClick={() => setActiveSlug(isActive ? null : col.slug)}
+                          aria-expanded={isActive}
+                          aria-label={`${t("showcase_view_products", "View products")} ${col.title}`}
+                          className="group block h-full w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                        >
+                          {cardContent}
+                        </button>
+                      );
+                    })()}
                   </Reveal>
                 ))}
               </div>
             )}
           </div>
         </div>
+
+        <AnimatePresence mode="wait">
+          {activeCollection && (
+            <motion.div
+              key={activeCollection.slug}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.4, ease: EASE }}
+              className="relative mt-12 overflow-hidden rounded-2xl border border-white/[0.08] bg-black-soft/60 shadow-luxury"
+            >
+              <div className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-rouge via-gold/60 to-transparent" />
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+              <div className="px-4 py-8 sm:px-8 sm:py-10 lg:px-10">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="label-utility tracking-[0.55em] text-gold/60">
+                    {activeCollection.previewLabel || t("collection_label", "COLLECTION")}
+                  </p>
+                  <h3 className="mt-2 font-display text-[clamp(1.375rem,3vw,2rem)] leading-[1.0] tracking-[-0.02em] text-white">
+                    {activeCollection.title}
+                  </h3>
+                  <p className="mt-2 text-[0.72rem] text-white/40">
+                    {t("showcase_three_products", "3 signature products curated for this collection")}
+                  </p>
+                </div>
+                <Link
+                  href={`/shop?category=${activeCollection.slug}`}
+                  className="inline-flex items-center gap-2 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white/60 transition-colors duration-200 hover:text-gold"
+                >
+                  {t("view_collection", "VIEW COLLECTION")}
+                  <ArrowRight />
+                </Link>
+              </div>
+
+              {activeProducts.length === 0 ? (
+                <div className="mt-10 flex flex-col items-center gap-3 rounded-2xl border border-dashed border-white/[0.08] py-16 text-center">
+                  <p className="font-display text-lg text-white/70">
+                    {t("showcase_empty", "This collection is being curated.")}
+                  </p>
+                  <Link
+                    href={`/shop?category=${activeCollection.slug}`}
+                    className="btn-secondary mt-2"
+                  >
+                    {t("view_collection", "VIEW COLLECTION")}
+                  </Link>
+                </div>
+              ) : (
+                <div className="mt-10 grid grid-cols-1 gap-x-4 gap-y-10 md:grid-cols-2 md:gap-x-6 lg:grid-cols-3">
+                  {activeProducts.slice(0, 3).map((product, idx) => (
+                    <motion.div
+                      key={product.id}
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, ease: EASE, delay: 0.06 * idx }}
+                    >
+                      <ShowcaseProductCard
+                        product={product}
+                        collectionLabel={activeCollection.title}
+                      />
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );
@@ -779,13 +1074,22 @@ export function BuildYourBox({ products }: { products: ProductData[] }) {
                           : "border-white/[0.08] bg-black-surface hover:border-white/15"
                       }`}
                     >
-                      {product.image ? (
+                      {!isPlaceholderImage(product.image) ? (
                         <div className="relative aspect-square w-full max-w-[120px]">
                           <SafeImage
                             src={product.image}
                             alt={product.name}
                             fill
                             className="object-contain p-3"
+                          />
+                        </div>
+                      ) : product.visual ? (
+                        <div className="aspect-square w-full max-w-[120px] flex items-center justify-center">
+                          <ProductVisual
+                            name={product.name}
+                            visual={product.visual}
+                            accent={product.accent}
+                            compact
                           />
                         </div>
                       ) : (
@@ -974,7 +1278,7 @@ export function SocialProof({
                 initial={false}
                 whileHover={{
                   y: -4,
-                  borderColor: "rgba(200,169,106,0.12)",
+                  borderColor: "rgba(184,155,94,0.12)",
                   transition: { duration: 0.22, ease: EASE },
                 }}
                 transition={{ duration: 0.22, ease: EASE }}

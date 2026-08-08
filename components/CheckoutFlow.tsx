@@ -263,7 +263,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
           <form onSubmit={handleSubmit} className="space-y-12">
             <div>
               <div className="mb-8 flex items-center gap-4">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#9B2638] text-[0.55rem] font-semibold text-white">1</span>
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-rouge text-[0.55rem] font-semibold text-white">1</span>
                 <div>
                   <p className="label-utility text-gold/60">{t("step_delivery", "Delivery")}</p>
                   <h2 className="mt-1 font-display text-xl text-white">{t("deliver_to_door")}</h2>
@@ -273,9 +273,9 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
               <div className="space-y-5">
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <label htmlFor="checkout-name" className="text-[0.62rem] font-medium text-white/60">
-                      {t("full_name")} <span className="text-[#9B2638]">*</span>
-                    </label>
+<label htmlFor="checkout-name" className="text-[0.62rem] font-medium text-white/60">
+                       {t("full_name")} <span className="text-rouge">*</span>
+                     </label>
                     <input
                       id="checkout-name"
                       type="text"
@@ -289,13 +289,13 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                       aria-describedby={errors.fullName ? "err-fullName" : undefined}
                       required
                     />
-                    {errors.fullName && <p id="err-fullName" className="text-[0.6rem] text-[#9B2638]">{errors.fullName}</p>}
+                    {errors.fullName && <p id="err-fullName" className="text-[0.6rem] text-rouge">{errors.fullName}</p>}
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="checkout-email" className="text-[0.62rem] font-medium text-white/60">
-                      {t("email")} <span className="text-[#9B2638]">*</span>
-                    </label>
+<label htmlFor="checkout-email" className="text-[0.62rem] font-medium text-white/60">
+                       {t("email")} <span className="text-rouge">*</span>
+                     </label>
                     <input
                       id="checkout-email"
                       type="email"
@@ -309,14 +309,14 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                       aria-describedby={errors.email ? "err-email" : undefined}
                       required
                     />
-                    {errors.email && <p id="err-email" className="text-[0.6rem] text-[#9B2638]">{errors.email}</p>}
+                    {errors.email && <p id="err-email" className="text-[0.6rem] text-rouge">{errors.email}</p>}
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="checkout-phone" className="text-[0.62rem] font-medium text-white/60">
-                    {t("phone")} <span className="text-[#9B2638]">*</span>
-                  </label>
+<label htmlFor="checkout-phone" className="text-[0.62rem] font-medium text-white/60">
+                     {t("phone")} <span className="text-rouge">*</span>
+                   </label>
                   <input
                     id="checkout-phone"
                     type="tel"
@@ -330,14 +330,14 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                     aria-describedby={errors.phone ? "err-phone" : undefined}
                     required
                   />
-                  {errors.phone && <p id="err-phone" className="text-[0.6rem] text-[#9B2638]">{errors.phone}</p>}
+                  {errors.phone && <p id="err-phone" className="text-[0.6rem] text-rouge">{errors.phone}</p>}
                 </div>
 
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <label htmlFor="checkout-city" className="text-[0.62rem] font-medium text-white/60">
-                      {t("city")} <span className="text-[#9B2638]">*</span>
-                    </label>
+<label htmlFor="checkout-city" className="text-[0.62rem] font-medium text-white/60">
+                       {t("city")} <span className="text-rouge">*</span>
+                     </label>
                     <select
                       id="checkout-city"
                       name="city"
@@ -353,13 +353,13 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                         <option key={city.name} value={city.name} className="bg-[#171717]">{city.name}</option>
                       ))}
                     </select>
-                    {errors.city && <p id="err-city" className="text-[0.6rem] text-[#9B2638]">{errors.city}</p>}
+                    {errors.city && <p id="err-city" className="text-[0.6rem] text-rouge">{errors.city}</p>}
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="checkout-address" className="text-[0.62rem] font-medium text-white/60">
-                      {t("address")} <span className="text-[#9B2638]">*</span>
-                    </label>
+<label htmlFor="checkout-address" className="text-[0.62rem] font-medium text-white/60">
+                       {t("address")} <span className="text-rouge">*</span>
+                     </label>
                     <input
                       id="checkout-address"
                       type="text"
@@ -373,7 +373,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                       aria-describedby={errors.address ? "err-address" : undefined}
                       required
                     />
-                    {errors.address && <p id="err-address" className="text-[0.6rem] text-[#9B2638]">{errors.address}</p>}
+                    {errors.address && <p id="err-address" className="text-[0.6rem] text-rouge">{errors.address}</p>}
                   </div>
                 </div>
 
@@ -392,7 +392,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                       className="input-premium"
                       style={{ caretColor: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                     />
-                    {errors.postalCode && <p className="text-[0.6rem] text-[#9B2638]">{errors.postalCode}</p>}
+                    {errors.postalCode && <p className="text-[0.6rem] text-rouge">{errors.postalCode}</p>}
                   </div>
 
                   <div className="space-y-2">
@@ -416,7 +416,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
 
             <div>
               <div className="mb-8 flex items-center gap-4">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#9B2638] text-[0.55rem] font-semibold text-white">2</span>
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-rouge text-[0.55rem] font-semibold text-white">2</span>
                 <div>
                   <p className="label-utility text-gold/60">{t("step_payment", "Payment")}</p>
                   <h2 className="mt-1 font-display text-xl text-white">{t("cash_on_delivery")}</h2>
@@ -425,8 +425,8 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
 
               <div className="rounded-card border border-white/[0.06] bg-[#1E1E1E] p-5">
                 <div className="flex items-center gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#9B2638]/10">
-                    <svg aria-hidden="true" width={18} height={18} viewBox="0 0 24 24" className="shrink-0 text-[#C8A96A]" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+<div className="flex h-10 w-10 items-center justify-center rounded-full bg-rouge/10">
+                     <svg aria-hidden="true" width={18} height={18} viewBox="0 0 24 24" className="shrink-0 text-gold" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M12 2a10 10 0 1 0 10 10" />
                       <path d="M12 6v6l4 2" />
                     </svg>
@@ -511,10 +511,10 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                       <p className="text-[0.38rem] uppercase tracking-[0.28em] text-white/30">{item.category}</p>
                     )}
                     <p className="truncate font-display text-[0.78rem] text-white">{item.name}</p>
-                    <div className="mt-1 flex items-center justify-between gap-2 text-[0.6rem] text-white/40">
-                      <span>{t("qty_label")} {item.quantity}</span>
-                      <span className="font-medium text-[#C8A96A]">{item.lineTotal}</span>
-                    </div>
+<div className="mt-1 flex items-center justify-between gap-2 text-[0.6rem] text-white/40">
+                       <span>{t("qty_label")} {item.quantity}</span>
+                       <span className="font-medium text-gold">{item.lineTotal}</span>
+                     </div>
                   </div>
                 </div>
               ))}
@@ -530,8 +530,8 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                 <span className="font-medium text-white">{formatMoney(taxValue)}</span>
               </div>
               <div className="flex items-center justify-between border-t border-white/[0.06] pt-4">
-                <span className="label-utility tracking-[0.22em] text-[#C8A96A]">{t("cart_total")}</span>
-                <span className="font-display text-xl text-[#C8A96A]">{formatMoney(totalValue)}</span>
+                <span className="label-utility tracking-[0.22em] text-gold">{t("cart_total")}</span>
+                <span className="font-display text-xl text-gold">{formatMoney(totalValue)}</span>
               </div>
             </div>
           </div>

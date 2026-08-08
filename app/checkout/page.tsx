@@ -11,9 +11,9 @@ export default async function CheckoutPage() {
   const cityNames = cities.map((c) => ({ name: c.name }));
 
   return (
-    <div className="bg-[#171717]">
+    <div className="bg-black">
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(200,169,106,0.04)_0%,transparent_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(184,155,94,0.04)_0%,transparent_55%)]" />
 
         <div className="mx-auto max-w-[1400px] px-6 md:px-10 lg:px-16">
           <div className="py-16 md:py-20 lg:py-24">

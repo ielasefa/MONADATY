@@ -25,7 +25,7 @@ export async function getLanguage(): Promise<Language> {
   }
 }
 
-export async function loadTranslations(namespace: string): Promise<Record<string, string>> {
+export async function loadTranslations(namespace: string): Promise<Record<string, Record<string, string>>> {
   try {
     const rows = await prisma.translation.findMany({
       where: { namespace },
@@ -37,7 +37,7 @@ export async function loadTranslations(namespace: string): Promise<Record<string
       translations[row.key] = { fr: row.fr, en: row.en, ar: row.ar };
     }
 
-    return translations as unknown as Record<string, string>;
+    return translations;
   } catch {
     return {};
   }

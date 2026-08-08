@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidateTag, revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth-guard";
 import { getAuthenticatedAdmin } from "@/lib/auth";
@@ -52,6 +53,10 @@ export async function GET(
   try {
     const { id } = await params;
 
+    if (!id || !UUID_REGEX.test(id)) {
+      return NextResponse.json({ error: "Invalid product id" }, { status: 400 });
+    }
+
     const product = await prisma.product.findUnique({
       where: { id },
       include: {
@@ -88,6 +93,10 @@ export async function PUT(
   }
 
   const { id } = await params;
+
+  if (!id || !UUID_REGEX.test(id)) {
+    return NextResponse.json({ error: "Invalid product id" }, { status: 400 });
+  }
 
   try {
     const existing = await prisma.product.findUnique({
@@ -352,12 +361,20 @@ export async function PUT(
       },
     });
 
+    revalidateTag("landing");
+    revalidatePath("/");
+    revalidatePath("/shop");
+    revalidatePath(`/product/${id}`);
+    revalidatePath("/wishlist");
+
     return NextResponse.json({ product: updated });
   } catch (err) {
     logError(err, "PRODUCT_UPDATE");
     return NextResponse.json({ error: "Failed to update product" }, { status: 500 });
   }
 }
+
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export async function DELETE(
   request: NextRequest,
@@ -369,6 +386,10 @@ export async function DELETE(
   if (authError) return authError;
 
   const { id } = await params;
+
+  if (!id || !UUID_REGEX.test(id)) {
+    return NextResponse.json({ error: "Invalid product id" }, { status: 400 });
+  }
 
   try {
     // 1. Delete DB records atomically
@@ -398,6 +419,12 @@ export async function DELETE(
         }
       }
     }
+
+    revalidateTag("landing");
+    revalidatePath("/");
+    revalidatePath("/shop");
+    revalidatePath(`/product/${id}`);
+    revalidatePath("/wishlist");
 
     return NextResponse.json({ success: true });
   } catch (err) {

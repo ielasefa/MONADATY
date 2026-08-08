@@ -14,5 +14,15 @@ export default async function SidebarWrapper() {
     getSiteSettings().catch(() => null),
   ]);
 
-  return <AdminSidebar items={items} websiteName={settings?.websiteName} />;
+  const filteredItems = items.filter((item) => {
+    const hrefsToHide = [
+      "/admin/automation",
+      "/admin/inventory",
+      "/admin/blog",
+      "/admin/security",
+    ];
+    return !hrefsToHide.some((h) => item.href === h || item.href.startsWith(h + "/"));
+  });
+
+  return <AdminSidebar items={filteredItems} websiteName={settings?.websiteName} />;
 }

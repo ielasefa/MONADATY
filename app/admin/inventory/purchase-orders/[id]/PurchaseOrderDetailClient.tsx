@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
+import { toast } from "sonner";
 
 type OrderInfo = {
   id: string;
@@ -70,7 +71,6 @@ export function PurchaseOrderDetailClient({
   const router = useRouter();
   const isNew = !order;
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
   const [localOrder, setLocalOrder] = useState(order);
   const [receiveQuantities, setReceiveQuantities] = useState<Record<string, number>>({});
   const localItems = items;
@@ -78,7 +78,6 @@ export function PurchaseOrderDetailClient({
   const handleSave = useCallback(
     async (formData: FormData) => {
       setSaving(true);
-      setError("");
       try {
         const data = Object.fromEntries(formData.entries());
         const method = isNew ? "POST" : "PUT";
@@ -94,10 +93,11 @@ export function PurchaseOrderDetailClient({
           const err = await res.json();
           throw new Error(err.error || "Failed to save");
         }
+        toast.success(isNew ? t("po_created", "Purchase order created") : t("po_updated", "Purchase order updated"));
         router.push("/admin/inventory/purchase-orders");
         router.refresh();
       } catch (e: unknown) {
-        setError(e instanceof Error ? e.message : t("an_error_occurred", "An error occurred"));
+        toast.error(e instanceof Error ? e.message : t("an_error_occurred", "An error occurred"));
       } finally {
         setSaving(false);
       }
@@ -117,10 +117,11 @@ export function PurchaseOrderDetailClient({
         const err = await res.json();
         throw new Error(err.error || "Failed to update status");
       }
+      toast.success(t("status_updated", "Status updated"));
       setLocalOrder((prev) => (prev ? { ...prev, status: newStatus } : prev));
       router.refresh();
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : t("an_error_occurred", "An error occurred"));
+      toast.error(e instanceof Error ? e.message : t("an_error_occurred", "An error occurred"));
     } finally {
       setSaving(false);
     }
@@ -128,7 +129,6 @@ export function PurchaseOrderDetailClient({
 
   const handleReceive = async () => {
     setSaving(true);
-    setError("");
     try {
       const res = await fetch(`/api/admin/inventory/purchase-orders/${order!.id}/receive`, {
         method: "POST",
@@ -139,11 +139,12 @@ export function PurchaseOrderDetailClient({
         const err = await res.json();
         throw new Error(err.error || t("failed_receive_items", "Failed to receive items"));
       }
+      toast.success(t("items_received", "Items received"));
       setReceiveQuantities({});
       setLocalOrder((prev) => (prev ? { ...prev, status: t("received", "Received") } : prev));
       router.refresh();
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : t("an_error_occurred", "An error occurred"));
+      toast.error(e instanceof Error ? e.message : t("an_error_occurred", "An error occurred"));
     } finally {
       setSaving(false);
     }
@@ -160,7 +161,6 @@ export function PurchaseOrderDetailClient({
           </Link>
           <h1 className="text-3xl font-semibold tracking-tight text-white">{t("new_purchase_order", "New Purchase Order")}</h1>
         </div>
-        {error && <div className="mb-6 rounded-card border border-burgundy/20 bg-burgundy/10 px-4 py-3 text-sm text-burgundy">{error}</div>}
         <form action={handleSave} className="space-y-8">
           <div className="luxury-card rounded-card border border-white/[0.06] bg-card p-6">
             <p className="luxury-label mb-6 text-[10px] text-muted">{t("po_order_details", "Order Details")}</p>
@@ -219,10 +219,6 @@ export function PurchaseOrderDetailClient({
           {localOrder!.status}
         </span>
       </div>
-
-      {error && (
-        <div className="mb-6 rounded-card border border-burgundy/20 bg-burgundy/10 px-4 py-3 text-sm text-burgundy">{error}</div>
-      )}
 
       <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
         <div className="luxury-card rounded-card border border-white/[0.06] bg-card p-5">

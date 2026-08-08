@@ -118,7 +118,7 @@ export function Footer({
      transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
      style={{
        background:
-         "linear-gradient(90deg, transparent 0%, rgba(212,188,126,0.45) 50%, transparent 100%)",
+         "linear-gradient(90deg, transparent 0%, rgba(201,173,117,0.45) 50%, transparent 100%)",
        filter: "blur(1px)",
      }}
    />
@@ -151,7 +151,7 @@ export function Footer({
                 <motion.span
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                  className="block font-display text-[clamp(2rem,4vw,2.75rem)] font-normal leading-[0.9] tracking-[-0.04em] text-[#C8A96A] transition-colors duration-700 group-hover:text-gold/70"
+                  className="block font-display text-[clamp(2rem,4vw,2.75rem)] font-normal leading-[0.9] tracking-[-0.04em] text-gold transition-colors duration-700 group-hover:text-gold/70"
                 >
                   {websiteName || "MONADATY"}
                 </motion.span>

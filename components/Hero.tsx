@@ -17,6 +17,7 @@ type HeroSettings = {
 
 type HeroProps = {
   settings: HeroSettings;
+  fallbackImage?: string;
 };
 
 function ArrowRight({ animating }: { animating: boolean }) {
@@ -74,17 +75,14 @@ function AmbientDust({ left, top, size, opacity, dur }: {
         height: size,
         left,
         top,
-        background: `radial-gradient(circle, rgba(200,169,106,${opacity}) 0%, transparent 70%)`,
+        background: `radial-gradient(circle, rgba(184,155,94,${opacity}) 0%, transparent 70%)`,
         animation: `ambientDrift ${dur}s ease-in-out infinite`,
       }}
     />
   );
 }
 
-export function Hero({ settings }: HeroProps) {
-  const heroImage =
-    settings.media?.[0] ||
-    "/uploads/monadaty/hero/8236e9ab9f624611.png";
+export function Hero({ settings, fallbackImage }: HeroProps) {
   const { t } = useTranslation("home");
 
   const [isLoaded, setIsLoaded] = useState(false);
@@ -103,12 +101,12 @@ export function Hero({ settings }: HeroProps) {
     useTransform(scrollY, [0, 600], [0, 55]),
     { stiffness: 70, damping: 20, mass: 0.8 }
   );
-const parallaxParticles = useSpring(
-  useTransform(scrollY, [0, 500], [0, -30]),
-  { stiffness: 120, damping: 22, mass: 0.6 }
-);
+  const parallaxParticles = useSpring(
+    useTransform(scrollY, [0, 500], [0, -30]),
+    { stiffness: 120, damping: 22, mass: 0.6 }
+  );
 
-/* Scroll exit — depth recession */
+  /* Scroll exit — depth recession */
   const scrollExit = useSpring(
     useTransform(scrollY, [0, 500], [0, 1]),
     { stiffness: 60, damping: 18, mass: 0.9 }
@@ -185,6 +183,9 @@ const parallaxParticles = useSpring(
   const ctaText     = settings.ctaText  || t("hero_cta_primary", "SHOP NOW");
   const titleLines  = titleText.split(/\r?\n+/).map(s => s.trim()).filter(Boolean);
 
+  const cmsHeroImage = settings.media?.[0] && settings.media[0].length > 0 ? settings.media[0] : undefined;
+  const heroImage = cmsHeroImage || (fallbackImage && fallbackImage.trim().length > 0 ? fallbackImage.trim() : undefined);
+
   return (
     <section className="relative w-full overflow-hidden bg-black">
       {/* ══════════════════════════════════════════════
@@ -195,9 +196,9 @@ const parallaxParticles = useSpring(
    className="pointer-events-none absolute inset-0 z-0 will-change-transform"
    style={{ y: parallaxBg }}
  >
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_-30%,rgba(200,169,106,0.07)_0%,transparent_55%,transparent_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_75%_55%,rgba(155,38,56,0.04)_0%,transparent_50%,transparent_100%)]" />
-        <div className="absolute top-[10%] start-[60%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(200,169,106,0.04)_0%,transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_-30%,rgba(184,155,94,0.07)_0%,transparent_55%,transparent_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_75%_55%,rgba(110,31,42,0.04)_0%,transparent_50%,transparent_100%)]" />
+        <div className="absolute top-[10%] start-[60%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(184,155,94,0.04)_0%,transparent_60%)]" />
       </motion.div>
 
       {/* ══════════════════════════════════════════════
@@ -234,7 +235,7 @@ const parallaxParticles = useSpring(
         <div
           className="h-full w-full rounded-full"
           style={{
-            background: `radial-gradient(ellipse_at_center,rgba(200,169,106,${glowIntensity})_0%,transparent_65%)`,
+            background: `radial-gradient(ellipse_at_center,rgba(184,155,94,${glowIntensity})_0%,transparent_65%)`,
           }}
         />
       </motion.div>
@@ -310,8 +311,8 @@ const parallaxParticles = useSpring(
                     className="pointer-events-none absolute inset-0 z-[8] overflow-hidden rounded-3xl"
                     animate={{
                       background: isHovered
-                        ? "linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 35%, rgba(200,169,106,0.06) 100%)"
-                        : "linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 40%, rgba(200,169,106,0.04) 100%)",
+                        ? "linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 35%, rgba(184,155,94,0.06) 100%)"
+                        : "linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 40%, rgba(184,155,94,0.04) 100%)",
                       backdropFilter: isHovered ? "blur(0.5px) saturate(1.15)" : "blur(0.3px) saturate(1.1)",
                     }}
                     transition={{ duration: 0.5, ease: EASE }}
@@ -343,8 +344,8 @@ const parallaxParticles = useSpring(
                       }}
                       style={{
                         background: isHovered
-                          ? "linear-gradient(110deg, transparent 28%, rgba(200,169,106,0.28) 40%, rgba(255,255,255,0.32) 50%, rgba(200,169,106,0.28) 60%, transparent 72%)"
-                          : "linear-gradient(110deg, transparent 32%, rgba(200,169,106,0.18) 43%, rgba(255,255,255,0.22) 50%, rgba(200,169,106,0.18) 57%, transparent 68%)",
+                          ? "linear-gradient(110deg, transparent 28%, rgba(184,155,94,0.28) 40%, rgba(255,255,255,0.32) 50%, rgba(184,155,94,0.28) 60%, transparent 72%)"
+                          : "linear-gradient(110deg, transparent 32%, rgba(184,155,94,0.18) 43%, rgba(255,255,255,0.22) 50%, rgba(184,155,94,0.18) 57%, transparent 68%)",
                         filter: isHovered ? "blur(0.3px)" : "blur(0.5px)",
                       }}
                     />
@@ -398,19 +399,19 @@ const parallaxParticles = useSpring(
                       }}
                       style={{
                         background:
-                          "linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.05) 44%, rgba(212,188,126,0.1) 50%, rgba(255,255,255,0.05) 56%, transparent 65%)",
+                          "linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.05) 44%, rgba(201,173,117,0.1) 50%, rgba(255,255,255,0.05) 56%, transparent 65%)",
                         backgroundSize: "200% 100%",
                       }}
                     />
 
                     {/* Cinematic blur-to-focus entrance */}
                     <motion.div
-                      className="relative h-full w-full"
+                      className="absolute inset-0"
                       style={{
                         filter: isLoaded ? "blur(0px)" : "blur(14px)",
                       }}
                     >
-                      <div className="relative h-full w-full" style={{ filter: "drop-shadow(0 28px 72px rgba(0,0,0,0.5))" }}>
+                      <div className="absolute inset-0" style={{ filter: "drop-shadow(0 28px 72px rgba(0,0,0,0.5))" }}>
                         <SafeImage
                           src={heroImage}
                           alt={t("hero_image_alt", "MONADATY — premium Moroccan beverage")}
@@ -419,8 +420,11 @@ const parallaxParticles = useSpring(
                           sizes="(min-width: 1024px) 620px, (min-width: 768px) 70vw, 85vw"
                           className="relative z-10 object-contain"
                           fallback={
-                            <div className="flex h-full w-full items-center justify-center">
-                              <span className="font-display text-[5rem] font-light text-white/[0.06]">M</span>
+                            <div className="flex h-full w-full flex-col items-center justify-center gap-4 bg-gradient-to-br from-gold/10 via-transparent to-gold/5">
+                              <span className="font-display text-[5rem] font-light leading-none text-gold/40">M</span>
+                              <span className="font-display text-[0.65rem] font-medium uppercase tracking-[0.5em] text-white/40">
+                                {t("hero_eyebrow", "CRAFTED IN MOROCCO")}
+                              </span>
                             </div>
                           }
                         />

@@ -3,6 +3,7 @@
 import { Suspense, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 import { AdminLogo } from "@/components/admin/AdminLogo";
 import { useTranslation } from "@/hooks/useTranslation";
 
@@ -13,13 +14,11 @@ function AdminLoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (loading) return;
-    setError("");
     setLoading(true);
 
     try {
@@ -32,7 +31,15 @@ function AdminLoginForm() {
       if (res.ok) {
         const data = await res.json();
         const redirect = searchParams?.get("redirect");
-        await new Promise((r) => setTimeout(r, 50));
+
+        // The login response sets the admin_session cookie. Navigating with
+        // router.replace() is a soft client-side navigation, so Next.js may
+        // serve the destination from its Router Cache — which holds a stale
+        // pre-login render of the route (cached when middleware redirected the
+        // unauthenticated user to /admin/login). That stale payload is why
+        // dashboard lists first appear empty. router.refresh() clears the
+        // Router Cache and re-renders the destination Server Components with
+        // the new session cookie, so data is present on the very first render.
         if (data.mustChangePassword) {
           router.replace("/admin/change-password");
         } else if (redirect && redirect.startsWith("/admin/")) {
@@ -40,13 +47,14 @@ function AdminLoginForm() {
         } else {
           router.replace("/admin/dashboard");
         }
+        router.refresh();
       } else {
         const data = await res.json().catch(() => ({}));
-        setError(data.error || t("login_failed"));
+        toast.error(data.error || t("login_failed"));
         setLoading(false);
       }
     } catch {
-      setError(t("network_error"));
+      toast.error(t("network_error"));
       setLoading(false);
     }
   }
@@ -123,16 +131,6 @@ const inputPasswordClass = inputBase + " pr-12 text-white";
               </button>
             </div>
           </div>
-
-          {error && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              className="rounded-xl border border-burgundy/20 bg-burgundy/10 px-4 py-3 text-sm text-burgundy" role="alert"
-            >
-              {error}
-            </motion.div>
-          )}
 
           <motion.button
             type="submit"

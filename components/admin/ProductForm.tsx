@@ -47,7 +47,6 @@ export function ProductForm() {
   const { t } = useTranslation("admin");
   const router = useRouter();
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
   const [created, setCreated] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [categories, setCategories] = useState<CategoryOption[]>([]);
@@ -195,7 +194,6 @@ export function ProductForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
     setSaving(true);
 
     try {
@@ -227,7 +225,7 @@ export function ProductForm() {
 
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || t("failed_to_create_product", "Failed to create product"));
+        toast.error(data.error || t("failed_to_create_product", "Failed to create product"));
         setSaving(false);
         return;
       }
@@ -237,7 +235,7 @@ export function ProductForm() {
       setCreated(true);
       setTimeout(() => router.push("/admin/products"), 2000);
     } catch {
-      setError(t("network_error", "Network error"));
+      toast.error(t("network_error", "Network error"));
       setSaving(false);
     }
   };
@@ -266,19 +264,14 @@ export function ProductForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
-      {error && (
-        <div className="rounded-lg border border-red/20 bg-red/10 px-4 py-3 text-sm text-red">
-          {error}
-        </div>
-      )}
+    <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6 xl:grid-cols-2">
 
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 border-b border-white/[0.06] pb-6 sm:flex-row sm:items-end sm:justify-between xl:col-span-2">
         <div>
           <h1 className="font-display text-2xl text-white md:text-3xl">{t("add_product", "Add Product")}</h1>
           <p className="mt-1 text-sm text-muted">{t("product_create_desc")}</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-col-reverse gap-3 sm:flex-row">
           <button
             type="button"
             onClick={discardDraft}
@@ -297,7 +290,7 @@ export function ProductForm() {
       </div>
 
       {/* Basic Information */}
-      <section className="glass rounded-card p-6">
+      <section className="glass rounded-xl p-5 sm:p-6 xl:col-span-2">
         <h2 className="mb-5 text-base font-semibold text-white">{t("basic_information")}</h2>
         <div className="space-y-4">
           <div>
@@ -324,12 +317,12 @@ export function ProductForm() {
                 type="text"
                 value={form.slug}
                 onChange={(e) => handleSlugChange(e.target.value)}
-                className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 pr-10 text-sm text-white outline-none transition focus:border-gold/30"
+                className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 pe-10 text-sm text-white outline-none transition focus:border-gold/30"
                 placeholder={t("product_slug_placeholder")}
                 required
               />
               {slugAvailable !== null && (
-                <span className="absolute right-3 top-1/2 -translate-y-1/2">
+                <span className="absolute end-3 top-1/2 -translate-y-1/2">
                   {slugAvailable ? (
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0F8B6F" strokeWidth="2.5">
                       <polyline points="20 6 9 17 4 12" />
@@ -401,7 +394,7 @@ export function ProductForm() {
       </section>
 
       {/* Pricing */}
-      <section className="glass rounded-card p-6">
+      <section className="glass rounded-xl p-5 sm:p-6 xl:col-span-2">
         <h2 className="mb-5 text-base font-semibold text-white">{t("pricing")}</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div>
@@ -415,11 +408,11 @@ export function ProductForm() {
                 inputMode="decimal"
                 value={form.regularPrice}
                 onChange={(e) => handlePriceChange("regularPrice", e.target.value)}
-                className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 pr-14 text-sm text-white outline-none transition focus:border-gold/30"
+                className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 pe-14 text-sm text-white outline-none transition focus:border-gold/30"
                 placeholder={t("price_zero_placeholder", "0.00")}
                 required
               />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted">{form.currency}</span>
+              <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-muted">{form.currency}</span>
             </div>
           </div>
           <div>
@@ -433,10 +426,10 @@ export function ProductForm() {
                 inputMode="decimal"
                 value={form.salePrice}
                 onChange={(e) => handlePriceChange("salePrice", e.target.value)}
-                className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 pr-14 text-sm text-white outline-none transition focus:border-gold/30"
+                className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 pe-14 text-sm text-white outline-none transition focus:border-gold/30"
                 placeholder={t("price_zero_placeholder", "0.00")}
               />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted">{form.currency}</span>
+              <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-muted">{form.currency}</span>
             </div>
           </div>
           <div>
@@ -450,10 +443,10 @@ export function ProductForm() {
                 inputMode="decimal"
                 value={form.costPrice}
                 onChange={(e) => handlePriceChange("costPrice", e.target.value)}
-                className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 pr-14 text-sm text-white outline-none transition focus:border-gold/30"
+                className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 pe-14 text-sm text-white outline-none transition focus:border-gold/30"
                 placeholder={t("price_zero_placeholder", "0.00")}
               />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted">{form.currency}</span>
+              <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-muted">{form.currency}</span>
             </div>
           </div>
           <div>
@@ -489,7 +482,7 @@ export function ProductForm() {
       </section>
 
       {/* Inventory */}
-      <section className="glass rounded-card p-6">
+      <section className="glass rounded-xl p-5 sm:p-6">
         <h2 className="mb-5 text-base font-semibold text-white">{t("inventory")}</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
@@ -526,7 +519,7 @@ export function ProductForm() {
       </section>
 
       {/* Category / Collection / Brand */}
-      <section className="glass rounded-card p-6">
+      <section className="glass rounded-xl p-5 sm:p-6">
         <h2 className="mb-5 text-base font-semibold text-white">{t("organization")}</h2>
         <div className="grid gap-4 sm:grid-cols-3">
           <div>
@@ -588,7 +581,7 @@ export function ProductForm() {
       </section>
 
       {/* Status & Flags */}
-      <section className="glass rounded-card p-6">
+      <section className="glass rounded-xl p-5 sm:p-6 xl:col-span-2">
         <h2 className="mb-5 text-base font-semibold text-white">{t("status_and_flags")}</h2>
         <div className="flex flex-wrap items-center gap-6">
           <div>
@@ -629,7 +622,7 @@ export function ProductForm() {
       </section>
 
       {/* Images */}
-      <section className="glass rounded-card p-6">
+      <section className="glass rounded-xl p-5 sm:p-6 xl:col-span-2">
         <h2 className="mb-5 text-base font-semibold text-white">{t("images")}</h2>
         <ImageUploader
           images={form.images}
@@ -637,7 +630,7 @@ export function ProductForm() {
         />
       </section>
 
-      <div className="flex items-center justify-end gap-3 pb-10">
+      <div className="flex flex-col-reverse gap-3 pb-6 sm:flex-row sm:items-center sm:justify-end xl:col-span-2">
         <button
           type="button"
           onClick={discardDraft}

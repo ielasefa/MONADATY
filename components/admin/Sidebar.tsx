@@ -45,12 +45,12 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
     pathname === href || pathname.startsWith(href + "/");
 
   return (
-    <aside className="flex w-64 flex-col border-r border-white/[0.06] bg-[#171717]">
-      <div className="flex h-16 items-center gap-3 border-b border-white/[0.06] px-5">
+    <aside className="flex w-16 shrink-0 flex-col border-e border-white/[0.06] bg-[#171717] sm:w-20 lg:w-64">
+      <div className="flex h-16 items-center justify-center border-b border-white/[0.06] px-2 lg:justify-start lg:gap-3 lg:px-5">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gold/15">
           <span className="text-sm font-bold text-gold">M</span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="hidden items-center gap-2 lg:flex">
           <span className="font-display text-lg tracking-wide text-gold">{displayName}</span>
           <span className="rounded-full border border-burgundy/20 bg-burgundy/10 px-2 py-0.5 text-[0.6rem] font-medium uppercase tracking-widest text-burgundy">
             {t("admin_role")}
@@ -58,7 +58,7 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
         </div>
       </div>
 
-  <nav aria-label={t("admin_navigation")} className="flex-1 space-y-1 p-3">
+  <nav aria-label={t("admin_navigation")} className="flex-1 space-y-1 p-2 lg:p-3">
  {items.map((item) => {
    const active = isActive(item.href);
    return (
@@ -73,39 +73,40 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
      >
        <Link
          href={item.href}
-         className={`group relative flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
+         title={item.label}
+         className={`group relative flex items-center justify-center rounded-md px-2 py-2.5 text-sm font-medium transition-all duration-200 lg:justify-start lg:gap-3 lg:px-3 ${
            active
-             ? "border-l-[3px] border-burgundy bg-burgundy/10 pl-[9px] text-white"
-             : "border-l-[3px] border-transparent text-white/50 hover:border-burgundy/40 hover:bg-burgundy/5 hover:text-white"
+             ? "border-s-[3px] border-burgundy bg-burgundy/10 ps-[9px] text-white"
+             : "border-s-[3px] border-transparent text-white/50 hover:border-burgundy/40 hover:bg-burgundy/5 hover:text-white"
          }`}
        >
-         <motion.span
-           aria-hidden="true"
-           className={`w-5 text-center text-base ${
-             active
-               ? "text-burgundy"
-               : "text-white/50 group-hover:text-burgundy"
-           }`}
-           animate={{
-             color: active ? "#9B2638" : undefined,
-             scale: active ? [1, 1.2, 1] : 1,
-           }}
-           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-         >
+<motion.span
+            aria-hidden="true"
+            className={`w-5 text-center text-base ${
+              active
+                ? "text-burgundy"
+                : "text-white/50 group-hover:text-burgundy"
+            }`}
+            animate={{
+              color: active ? "var(--rouge)" : undefined,
+              scale: active ? [1, 1.2, 1] : 1,
+            }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          >
            {item.icon}
          </motion.span>
-         {item.label}
+         <span className="sr-only lg:not-sr-only">{item.label}</span>
          {active && (
            <motion.div
              layoutId="sidebar-active-dot"
-             className="absolute right-3 h-1.5 w-1.5 rounded-full bg-burgundy"
+             className="absolute end-3 hidden h-1.5 w-1.5 rounded-full bg-burgundy lg:block"
              transition={{
                type: "spring",
                stiffness: 500,
                damping: 25,
              }}
              style={{
-               boxShadow: "0 0 6px rgba(155,38,56,0.5)",
+               boxShadow: "0 0 6px rgba(110,31,42,0.5)",
                animation: "pulseSubtle 2s ease-in-out infinite",
              }}
            />
@@ -122,10 +123,11 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
         <button
           onClick={handleSignOut}
           disabled={isSigningOut}
-          className="group flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-white/50 transition-all duration-200 hover:bg-burgundy/10 hover:text-burgundy disabled:opacity-50 disabled:pointer-events-none"
+          title={t("sign_out")}
+          className="group flex w-full items-center justify-center rounded-md px-2 py-2.5 text-sm font-medium text-white/50 transition-all duration-200 hover:bg-burgundy/10 hover:text-burgundy disabled:pointer-events-none disabled:opacity-50 lg:justify-start lg:gap-3 lg:px-3"
         >
           <span aria-hidden="true" className="w-5 text-center text-base transition-colors group-hover:text-burgundy">&#9211;</span>
-          {t("sign_out")}
+          <span className="sr-only lg:not-sr-only">{t("sign_out")}</span>
         </button>
       </div>
     </aside>

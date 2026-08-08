@@ -59,6 +59,14 @@ export async function POST(request: Request) {
     if (!items || !Array.isArray(items) || items.length === 0) {
       return NextResponse.json({ error: "At least one item is required" }, { status: 400 });
     }
+    if (items.length > 50) {
+      return NextResponse.json({ error: "Too many items in order" }, { status: 400 });
+    }
+    for (const item of items) {
+      if (!item || typeof item !== "object") {
+        return NextResponse.json({ error: "Invalid item in order" }, { status: 400 });
+      }
+    }
     if (postalCode && typeof postalCode === "string" && postalCode && !/^\d{5}$/.test(postalCode)) {
       return NextResponse.json({ error: "Invalid postal code format" }, { status: 400 });
     }

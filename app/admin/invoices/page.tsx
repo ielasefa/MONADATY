@@ -1,7 +1,8 @@
 "use client";
-
+ 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { toast } from "sonner";
 import { useTranslation } from "@/hooks/useTranslation";
 
 type InvoiceWithOrder = {
@@ -73,15 +74,15 @@ export default function AdminInvoicesPage() {
     }
   };
 
-  const handleBulkCancel = async () => {
-    if (selected.size === 0) return;
-    if (!confirm(t("cancel_confirm", { count: selected.size }))) return;
-    for (const id of selected) {
-      await fetch(`/api/admin/invoices/${id}/cancel`, { method: "POST" });
-    }
-    setSelected(new Set());
-    fetchInvoices();
-  };
+   const handleBulkCancel = async () => {
+     if (selected.size === 0) return;
+     for (const id of selected) {
+       await fetch(`/api/admin/invoices/${id}/cancel`, { method: "POST" });
+     }
+     setSelected(new Set());
+     fetchInvoices();
+     toast.success(t("invoices_cancelled", "Invoices cancelled successfully"));
+   };
 
   const handleSelectAll = () => {
     if (!data) return;
@@ -257,18 +258,17 @@ export default function AdminInvoicesPage() {
                             </a>
                           )}
                           {inv.status === "Issued" && (
-                            <button
-                              aria-label={`${t("cancel")} ${inv.invoiceNumber}`}
-                              onClick={async () => {
-                                if (confirm(t("cancel_invoice_confirm"))) {
-                                  await fetch(`/api/admin/invoices/${inv.id}/cancel`, { method: "POST" });
-                                  fetchInvoices();
-                                }
-                              }}
-                              className="text-xs font-semibold uppercase tracking-[0.1em] text-burgundy transition hover:brightness-110"
-                            >
-                              {t("cancel")}
-                           </button>
+                             <button
+                               aria-label={`${t("cancel")} ${inv.invoiceNumber}`}
+                               onClick={async () => {
+                                 await fetch(`/api/admin/invoices/${inv.id}/cancel`, { method: "POST" });
+                                 fetchInvoices();
+                                 toast.success(t("invoice_cancelled", "Invoice cancelled successfully"));
+                               }}
+                               className="text-xs font-semibold uppercase tracking-[0.1em] text-burgundy transition hover:brightness-110"
+                             >
+                               {t("cancel")}
+                            </button>
                           )}
                         </div>
                       </td>

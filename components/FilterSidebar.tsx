@@ -4,7 +4,7 @@ import { memo, useEffect, useState } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
 
 type FilterSidebarProps = {
-  activeCategory: string;
+  activeCategorySlug: string | null;
   onCategoryChange: (c: string) => void;
   minPrice: number;
   maxPrice: number;
@@ -15,7 +15,7 @@ type FilterSidebarProps = {
 };
 
 export const FilterSidebar = memo(function FilterSidebar({
-  activeCategory,
+  activeCategorySlug,
   onCategoryChange,
   minPrice,
   maxPrice,
@@ -51,21 +51,25 @@ export const FilterSidebar = memo(function FilterSidebar({
           {t("category")}
         </p>
         <div className="flex flex-col gap-1.5">
-          {[t("all"), ...categories.map(c => c.name)].map(c => (
-            <button
-              key={c}
-              type="button"
-              aria-pressed={activeCategory === c}
-              onClick={() => onCategoryChange(c)}
-              className={`inline-flex h-9 w-full items-center rounded-input px-4 text-[0.65rem] font-medium transition-all duration-200 ${
-                activeCategory === c
-                  ? "bg-burgundy text-white"
-                  : "border border-white/[0.06] bg-transparent text-white/50 hover:border-white/[0.14] hover:text-white"
-              }`}
-            >
-              {c}
-            </button>
-          ))}
+          {["all", ...categories.map(c => c.name)].map(c => {
+            const cat = categories.find(cat => cat.name === c);
+            const slug = c === "all" ? null : cat?.slug ?? null;
+            return (
+              <button
+                key={c}
+                type="button"
+                aria-pressed={activeCategorySlug === slug}
+                onClick={() => onCategoryChange(c)}
+                className={`inline-flex h-9 w-full items-center rounded-input px-4 text-[0.65rem] font-medium transition-all duration-200 ${
+                  activeCategorySlug === slug
+                    ? "bg-burgundy text-white"
+                    : "border border-white/[0.06] bg-transparent text-white/50 hover:border-white/[0.14] hover:text-white"
+                }`}
+              >
+                {c === "all" ? t("all") : c}
+              </button>
+            );
+          })}
         </div>
       </div>
 

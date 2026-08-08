@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
+import { toast } from "sonner";
 
 type ApiKey = {
   id: string;
@@ -58,11 +59,11 @@ export default function ApiKeysPage() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm(t("delete_key_confirm"))) return;
-    await fetch(`/api/admin/api-keys?id=${id}`, { method: "DELETE" });
-    fetchKeys();
-  };
+   const handleDelete = async (id: string) => {
+     await fetch(`/api/admin/api-keys?id=${id}`, { method: "DELETE" });
+     fetchKeys();
+     toast.success(t("key_deleted_success", "API key deleted successfully"));
+   };
 
   return (
     <div className="container-shell mx-auto px-6 py-10">

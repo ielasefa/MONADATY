@@ -10,7 +10,9 @@ import { NavbarWrapper } from "@/components/NavbarWrapper";
 import { ToastProvider } from "@/components/ToastProvider";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 import { GlobalErrorHandler } from "@/components/GlobalErrorHandler";
+import { MotionConfigWrapper } from "@/components/MotionConfigWrapper";
 import { getLanguageFromCookie, getTranslation, loadTranslations, LANGUAGE_COOKIE } from "@/lib/translations";
+import { TranslationHydrator } from "@/components/TranslationHydrator";
 
 const dmSerifDisplay = DM_Serif_Display({
   subsets: ["latin"],
@@ -25,11 +27,40 @@ const dmSans = DM_Sans({
 });
 
 const siteName = process.env.APP_NAME || "MONADATY";
+const siteDescription = process.env.APP_DESCRIPTION || "Crafted in Morocco. Built around taste.";
+const siteUrl = process.env.APP_URL || "http://localhost:3000";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: { default: siteName, template: `%s | ${siteName}` },
-  description: process.env.APP_DESCRIPTION || "Crafted in Morocco. Built around taste.",
-  manifest: "/manifest.json",
+  description: siteDescription,
+  applicationName: siteName,
+  manifest: "/manifest.webmanifest",
+  keywords: ["MONADATY", "Moroccan beverages", "premium drinks", "Morocco"],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName,
+    url: "/",
+    title: siteName,
+    description: siteDescription,
+    locale: "en_US",
+    alternateLocale: ["fr_FR", "ar_MA"],
+    images: [{ url: "/uploads/monadaty/hero/8236e9ab9f624611.png", width: 1200, height: 630, alt: siteName }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteName,
+    description: siteDescription,
+    images: ["/uploads/monadaty/hero/8236e9ab9f624611.png"],
+  },
+  icons: {
+    icon: [
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.svg",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -63,32 +94,49 @@ export default async function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.svg" sizes="180x180" />
         <meta name="msapplication-TileColor" content="#0B0B0A" />
         <meta name="theme-color" content="#0B0B0A" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link rel="prefetch" href="/shop" as="document" />
       </head>
       <body>
-<a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-burgundy focus:px-6 focus:py-3 focus:text-sm focus:font-semibold focus:text-white focus:outline-none" aria-label={skipLabel}>
-  {skipLabel}
-</a>
-        {isAdmin ? (
-          <LanguageProvider initialLang={langFromCookie}>
-            <main id="main-content" role="main">{children}</main>
-          </LanguageProvider>
-        ) : (
-          <CartProvider>
-            <WishlistProvider>
-              <LanguageProvider initialLang={langFromCookie}>
-                <NavbarWrapper />
-                <main id="main-content" role="main">{children}</main>
-                <FooterWrapper />
-              </LanguageProvider>
-            </WishlistProvider>
-          </CartProvider>
-        )}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                name: siteName,
+                url: siteUrl,
+                logo: `${siteUrl}/icons/icon-512.png`,
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                name: siteName,
+                url: siteUrl,
+              },
+            ]),
+          }}
+        />
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-burgundy focus:px-6 focus:py-3 focus:text-sm focus:font-semibold focus:text-white focus:outline-none" aria-label={skipLabel}>
+          {skipLabel}
+        </a>
+        <MotionConfigWrapper>
+        <CartProvider>
+          <WishlistProvider>
+            <LanguageProvider initialLang={langFromCookie}>
+              <TranslationHydrator initialLang={langFromCookie} initialTranslations={commonTr} />
+              {!isAdmin && <NavbarWrapper />}
+              <main id="main-content" role="main">{children}</main>
+              {!isAdmin && <FooterWrapper />}
+            </LanguageProvider>
+          </WishlistProvider>
+        </CartProvider>
         <ToastProvider />
         <ServiceWorkerRegistration />
         <GlobalErrorHandler />
+        </MotionConfigWrapper>
       </body>
     </html>
   );

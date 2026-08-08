@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
+import { toast } from "sonner";
 
 type Warehouse = { id: string; name: string };
 type RecentAdjustment = {
@@ -37,8 +38,6 @@ export function AdjustmentsClient({
   const [newStock, setNewStock] = useState<number | "">("");
   const [reason, setReason] = useState("");
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
@@ -72,13 +71,11 @@ export function AdjustmentsClient({
     async (e: React.FormEvent) => {
       e.preventDefault();
       if (!selectedWarehouse || !selectedProduct || newStock === "" || !reason) {
-        setError(t("fill_required"));
+        toast.error(t("fill_required"));
         return;
       }
       setSaving(true);
-      setError("");
-      setSuccess("");
-      try {
+       try {
         const res = await fetch("/api/admin/inventory/adjustments", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -94,7 +91,7 @@ export function AdjustmentsClient({
           const err = await res.json();
           throw new Error(err.error || "Adjustment failed");
         }
-        setSuccess(t("stock_adjusted"));
+         toast.success(t("stock_adjusted", "Stock adjusted successfully"));
         setSelectedProduct(null);
         setProductQuery("");
         setNewStock("");
@@ -102,7 +99,7 @@ export function AdjustmentsClient({
         setReason("");
         router.refresh();
       } catch (e: unknown) {
-        setError(e instanceof Error ? e.message : t("error_occurred"));
+        toast.error(e instanceof Error ? e.message : t("error_occurred"));
       } finally {
         setSaving(false);
       }
@@ -121,13 +118,6 @@ export function AdjustmentsClient({
         <h1 className="text-3xl font-semibold tracking-tight text-white">{t("adjustments_title", "Stock Adjustments")}</h1>
         <p className="mt-1 text-sm text-muted">{t("adjust_stock_manually", "Adjust stock levels manually")}</p>
       </div>
-
-      {error && (
-        <div className="mb-6 rounded-card border border-burgundy/20 bg-burgundy/10 px-4 py-3 text-sm text-burgundy">{error}</div>
-      )}
-      {success && (
-        <div className="mb-6 rounded-card border border-emerald/20 bg-emerald/10 px-4 py-3 text-sm text-gold">{success}</div>
-      )}
 
       <div className="mb-10 luxury-card rounded-card border border-white/[0.06] bg-card p-6">
         <p className="luxury-label mb-6 text-[10px] text-muted">{t("new_adjustment", "New Adjustment")}</p>

@@ -9,7 +9,7 @@ import {
   Newsletter,
   FinalCTA,
 } from "@/components/HomepageCommerce";
-import { getLandingFeaturedProducts, getTestimonials, getLandingCollections, getLandingContent } from "@/lib/db";
+import { getLandingFeaturedProducts, getTestimonials, getLandingCollections, getLandingContent, getCollectionShowcase } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
@@ -19,12 +19,13 @@ export const metadata = {
 };
 
 export default async function HomePage() {
-  const [content, testimonialRows, landingProducts, landingCollections] =
+  const [content, testimonialRows, landingProducts, landingCollections, collectionShowcase] =
     await Promise.all([
       getLandingContent(),
       getTestimonials(),
       getLandingFeaturedProducts(),
       getLandingCollections(),
+      getCollectionShowcase(),
     ]);
 
   // Apply SEO overrides
@@ -42,6 +43,9 @@ export default async function HomePage() {
   const sectionOrder = (content.sectionOrder || []).length > 0
     ? content.sectionOrder
     : ["hero", "featured", "collections", "about", "testimonials", "moroccan_moment", "newsletter", "final_cta"];
+
+  const firstProduct = landingProducts[0];
+  const heroFallbackImage = firstProduct?.image?.trim() || firstProduct?.gallery?.[0]?.trim() || undefined;
 
   return (
     <>
@@ -62,7 +66,9 @@ export default async function HomePage() {
               ctaText: content.hero.ctaText,
               ctaLink: content.hero.ctaLink,
               media: content.hero.media,
-            }} />;
+            }}
+              fallbackImage={heroFallbackImage}
+            />;
           }
 
           if (landingProducts.length > 0 && content.featuredProducts.enabled) {
@@ -70,7 +76,7 @@ export default async function HomePage() {
 }
 
           if (landingCollections.length > 0 && content.collectionsSection.enabled) {
-            map.collections = <CollectionsShowcase collections={landingCollections} />;
+            map.collections = <CollectionsShowcase collections={landingCollections} showcase={collectionShowcase} />;
           }
 
           if (content.aboutSection.enabled) {

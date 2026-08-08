@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
+import { toast } from "sonner";
 import type { ProductVariantData } from "@/types";
 
 type Props = {
@@ -33,7 +34,6 @@ function stripCurrency(val: string): string {
 export function VariantManager({ productId, variants, onVariantsChange, onHistoryChange }: Props) {
   const { t } = useTranslation("admin");
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
   const [showAddForm, setShowAddForm] = useState(false);
   const [newVariant, setNewVariant] = useState<ProductVariantData>({ ...EMPTY_VARIANT });
 
@@ -45,7 +45,6 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
 
   const handleSaveInline = async () => {
     setSaving(true);
-    setError("");
     try {
       const activeVariants = variants.filter((v) => v.id);
       const res = await fetch(`/api/admin/products/${productId}/variants`, {
@@ -55,13 +54,14 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || t("failed_to_save_variants", "Failed to save variants"));
+        toast.error(data.error || t("failed_to_save_variants", "Failed to save variants"));
         return;
       }
       onVariantsChange(data.variants || activeVariants);
       onHistoryChange();
+      toast.success(t("variants_saved_success", "Variants saved successfully"));
     } catch {
-      setError(t("network_error", "Network error"));
+      toast.error(t("network_error", "Network error"));
     } finally {
       setSaving(false);
     }
@@ -70,7 +70,6 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
   const handleAddVariant = async () => {
     if (!newVariant.name && !newVariant.size) return;
     setSaving(true);
-    setError("");
     try {
       const res = await fetch(`/api/admin/products/${productId}/variants`, {
         method: "POST",
@@ -79,36 +78,37 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || t("add_variant_error"));
+        toast.error(data.error || t("add_variant_error"));
         return;
       }
       onVariantsChange([...variants, data.variant]);
       setNewVariant({ ...EMPTY_VARIANT });
       setShowAddForm(false);
       onHistoryChange();
+      toast.success(t("variant_added_success", "Variant added successfully"));
     } catch {
-      setError(t("network_error", "Network error"));
+      toast.error(t("network_error", "Network error"));
     } finally {
       setSaving(false);
     }
   };
 
-  const handleDeleteVariant = async (variantId: string) => {
-    if (!confirm(t("delete_variant_confirm"))) return;
-    setSaving(true);
-    try {
-      const res = await fetch(`/api/admin/products/${productId}/variants/${variantId}`, {
-        method: "DELETE",
-      });
-      if (!res.ok) throw new Error(t("delete_failed"));
-      onVariantsChange(variants.filter((v) => v.id !== variantId));
-      onHistoryChange();
-    } catch {
-      setError(t("delete_variant_error"));
-    } finally {
-      setSaving(false);
-    }
-  };
+   const handleDeleteVariant = async (variantId: string) => {
+     setSaving(true);
+     try {
+       const res = await fetch(`/api/admin/products/${productId}/variants/${variantId}`, {
+         method: "DELETE",
+       });
+       if (!res.ok) throw new Error(t("delete_failed"));
+       onVariantsChange(variants.filter((v) => v.id !== variantId));
+       onHistoryChange();
+       toast.success(t("variant_deleted_success", "Variant deleted successfully"));
+     } catch {
+       toast.error(t("delete_variant_failed", "Failed to delete variant"));
+     } finally {
+       setSaving(false);
+     }
+   };
 
   const handleDuplicateVariant = async (variantId: string) => {
     setSaving(true);
@@ -120,8 +120,9 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
       if (!res.ok) throw new Error(t("duplicate_failed", "Duplicate failed"));
       onVariantsChange([...variants, data.variant]);
       onHistoryChange();
+      toast.success(t("variant_duplicated_success", "Variant duplicated successfully"));
     } catch {
-      setError(t("duplicate_variant_error"));
+      toast.error(t("duplicate_variant_error"));
     } finally {
       setSaving(false);
     }
@@ -164,11 +165,6 @@ export function VariantManager({ productId, variants, onVariantsChange, onHistor
 
   return (
     <div className="space-y-4">
-      {error && (
-        <div className="rounded-lg border border-burgundy/20 bg-burgundy/10 px-4 py-2 text-xs text-burgundy">
-          {error}
-        </div>
-      )}
 
       <div className="flex items-center justify-between">
         <p className="text-xs text-white/50">{variants.length} {t("variants_count", "variant(s)")}</p>

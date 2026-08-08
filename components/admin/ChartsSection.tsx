@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
 
 const RevenueChart = lazy(() => import("./charts/RevenueChart"));
@@ -11,7 +11,7 @@ const MonthlyRevenueChart = lazy(() => import("./charts/MonthlyRevenueChart"));
 
 function ChartSkeleton() {
   return (
-    <div className="animate-pulse rounded-xl border border-white/[0.06] bg-surface p-6">
+    <div className="animate-pulse rounded-xl border border-white/[0.06] bg-card p-6">
       <div className="mb-4 h-4 w-32 rounded bg-white/5" />
       <div className="h-48 rounded bg-white/5" />
     </div>
@@ -28,48 +28,31 @@ type Props = {
 
 export function ChartsSection({ revenueData, ordersData, topProducts, collectionSales, monthlyRevenue }: Props) {
   const { t } = useTranslation("admin");
-  const [visible, setVisible] = useState(false);
 
   return (
-    <div
-      className="animate-fade-in"
-      ref={(el) => {
-        if (el && !visible) {
-          const observer = new IntersectionObserver(
-            ([entry]) => {
-              if (entry.isIntersecting) {
-                setVisible(true);
-                observer.disconnect();
-              }
-            },
-            { threshold: 0.1 }
-          );
-          observer.observe(el);
-        }
-      }}
-    >
-      <div className="mb-4 flex items-center justify-between">
+    <div className="animate-fade-in">
+      <div className="mb-6 flex items-center justify-between">
         <p className="luxury-label text-[10px] text-white/50">{t("analytics", "Analytics")}</p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Suspense fallback={<ChartSkeleton />}>
-          {visible && <RevenueChart data={revenueData} />}
+          <RevenueChart data={revenueData} />
         </Suspense>
         <Suspense fallback={<ChartSkeleton />}>
-          {visible && <OrdersChart data={ordersData} />}
+          <OrdersChart data={ordersData} />
         </Suspense>
       </div>
 
-      <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
         <Suspense fallback={<ChartSkeleton />}>
-          {visible && <TopProductsChart data={topProducts} />}
+          <TopProductsChart data={topProducts} />
         </Suspense>
         <Suspense fallback={<ChartSkeleton />}>
-          {visible && <CollectionSalesChart data={collectionSales} />}
+          <CollectionSalesChart data={collectionSales} />
         </Suspense>
         <Suspense fallback={<ChartSkeleton />}>
-          {visible && <MonthlyRevenueChart data={monthlyRevenue} />}
+          <MonthlyRevenueChart data={monthlyRevenue} />
         </Suspense>
       </div>
     </div>

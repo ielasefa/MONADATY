@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
+import { toast } from "sonner";
 
 type Warehouse = {
   id: string;
@@ -41,12 +42,10 @@ export function WarehouseForm({
   const isNew = !warehouse;
   const { t } = useTranslation("inventory");
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
 
   const handleSubmit = useCallback(
     async (formData: FormData) => {
       setSaving(true);
-      setError("");
       try {
         const data = Object.fromEntries(formData.entries());
         const method = isNew ? "POST" : "PUT";
@@ -60,10 +59,11 @@ export function WarehouseForm({
           const err = await res.json();
           throw new Error(err.error || "Failed to save");
         }
+        toast.success(isNew ? t("warehouse_created", "Warehouse created") : t("warehouse_updated", "Warehouse updated"));
         router.push("/admin/inventory/warehouses");
         router.refresh();
       } catch (e: unknown) {
-        setError(e instanceof Error ? e.message : t("an_error_occurred", "An error occurred"));
+        toast.error(e instanceof Error ? e.message : t("an_error_occurred", "An error occurred"));
       } finally {
         setSaving(false);
       }
@@ -86,12 +86,6 @@ export function WarehouseForm({
           </h1>
         </div>
       </div>
-
-      {error && (
-        <div className="mb-6 rounded-card border border-burgundy/20 bg-burgundy/10 px-4 py-3 text-sm text-burgundy">
-          {error}
-        </div>
-      )}
 
       <form action={handleSubmit} className="space-y-8">
         <div className="luxury-card rounded-card border border-white/[0.06] bg-card p-6">

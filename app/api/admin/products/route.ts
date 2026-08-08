@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidateTag, revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth-guard";
 import { requireOrigin } from "@/lib/csrf";
@@ -148,6 +149,11 @@ export async function POST(request: NextRequest) {
       include: { images: { orderBy: { sortOrder: "asc" } } },
     });
 
+    revalidateTag("landing");
+    revalidatePath("/");
+    revalidatePath("/shop");
+    revalidatePath("/wishlist");
+
     return NextResponse.json({ product: created }, { status: 201 });
   } catch (err) {
     logError(err, "PRODUCT_CREATE");
@@ -200,6 +206,11 @@ export async function DELETE(request: NextRequest) {
         }
       }
     }
+
+    revalidateTag("landing");
+    revalidatePath("/");
+    revalidatePath("/shop");
+    revalidatePath("/wishlist");
 
     return NextResponse.json({ success: true });
   } catch (err) {

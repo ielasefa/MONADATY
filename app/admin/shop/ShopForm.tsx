@@ -24,7 +24,7 @@ export function ShopForm({ products, categories, collections, saveProduct }: Pro
   const [removedIds, setRemovedIds] = useState<Set<string>>(new Set());
   const deleteLockRef = useRef(false);
 
-  const visibleProducts = products.filter((p) => !removedIds.has(p.id));
+  const visibleProducts = products.filter((p) => !removedIds.has(p.id) && p.id && p.id.length > 0);
 
   const editing = editingId ? visibleProducts.find((p) => p.id === editingId) ?? null : null;
 
@@ -95,22 +95,23 @@ export function ShopForm({ products, categories, collections, saveProduct }: Pro
                 if (deleting || deleteLockRef.current) return;
                 deleteLockRef.current = true;
                 setDeleting(p.id);
-                try {
-                  const res = await fetch(`/api/admin/products/${p.id}`, { method: "DELETE" });
-                  if (!res.ok) {
-                    const body = await res.text();
-                    throw new Error(body.slice(0, 100));
-                  }
-                  setRemovedIds((prev) => new Set([...prev, p.id]));
-                  setDeleting(null);
-                  router.refresh();
-                } catch (e) {
-                  logError(e, "Delete failed:");
-                  toast.error(t("delete_failed") || "Delete failed");
-                  setDeleting(null);
-                } finally {
-                  deleteLockRef.current = false;
-                }
+               try {
+                   const res = await fetch(`/api/admin/products/${p.id}`, { method: "DELETE" });
+                   if (!res.ok) {
+                     const body = await res.text();
+                     throw new Error(body.slice(0, 100));
+                   }
+                   setRemovedIds((prev) => new Set([...prev, p.id]));
+                   setDeleting(null);
+                   router.refresh();
+                   toast.success(t("product_deleted_success", "Product deleted successfully"));
+                 } catch (e) {
+                   logError(e, "Delete failed:");
+                   toast.error(t("delete_failed") || "Delete failed");
+                   setDeleting(null);
+                 } finally {
+                   deleteLockRef.current = false;
+                 }
               }}
               disabled={deleting === p.id}
               className="badge-red rounded-full bg-burgundy/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-burgundy transition hover:bg-burgundy/20 disabled:opacity-50"

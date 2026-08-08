@@ -43,12 +43,14 @@ export default async function EditProductPage({
   const collections = await prisma.collection.findMany({ orderBy: { name: "asc" } });
 
   return (
-    <div className="container-shell py-10">
+    <div className="min-h-[calc(100vh-4rem)] min-w-0 bg-[#0B0B0A]">
+      <div className="mx-auto w-full max-w-[1500px] px-4 py-7 sm:px-6 lg:px-8 lg:py-10">
       <EditProductForm
         product={JSON.parse(JSON.stringify(product))}
         categories={JSON.parse(JSON.stringify(categories))}
         collections={JSON.parse(JSON.stringify(collections))}
       />
+      </div>
     </div>
   );
 }

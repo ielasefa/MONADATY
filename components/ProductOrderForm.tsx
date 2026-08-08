@@ -10,239 +10,157 @@ type ProductOrderFormProps = {
   product: Product;
 };
 
-type OrderFormState = {
-  name: string;
-  phone: string;
-  city: string;
-  address: string;
-};
-
-type OrderFormErrors = Partial<Record<keyof OrderFormState, string>>;
-
-const emptyForm: OrderFormState = {
-  name: "",
-  phone: "",
-  city: "",
-  address: "",
-};
-
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export function ProductOrderForm({ product }: ProductOrderFormProps) {
   const { addItem } = useCart();
   const { t } = useTranslation("products");
   const [quantity, setQuantity] = useState(1);
-  const [formState, setFormState] = useState<OrderFormState>(emptyForm);
-  const [errors, setErrors] = useState<OrderFormErrors>({});
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [submitting, setSubmitting] = useState(false);
   const [adding, setAdding] = useState(false);
-
-  useEffect(() => {
-    if (!successMessage) return;
-    const timeout = window.setTimeout(() => setSuccessMessage(null), 2800);
-    return () => window.clearTimeout(timeout);
-  }, [successMessage]);
+  const [buying, setBuying] = useState(false);
 
   const isOutOfStock = product.stock !== undefined && product.stock <= 0;
 
+  useEffect(() => {
+    if (!buying) return;
+    const timeout = window.setTimeout(() => setBuying(false), 1500);
+    return () => window.clearTimeout(timeout);
+  }, [buying]);
+
   function handleAddToCart() {
-    if (isOutOfStock || adding) return;
+    if (isOutOfStock || adding || buying) return;
     setAdding(true);
     addItem(product, quantity);
     window.setTimeout(() => setAdding(false), 350);
   }
 
-  function handleChange(field: keyof OrderFormState, value: string) {
-    setFormState((current) => ({ ...current, [field]: value }));
-    setErrors((currentErrors) => ({ ...currentErrors, [field]: undefined }));
-  }
-
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const nextErrors: OrderFormErrors = {};
-    (Object.keys(formState) as Array<keyof OrderFormState>).forEach((field) => {
-      if (formState[field].trim().length === 0) {
-        nextErrors[field] = t("required_field");
-      }
-    });
-    if (Object.keys(nextErrors).length > 0) {
-      setErrors(nextErrors);
-      return;
-    }
-    setErrors({});
-    setSubmitting(true);
+  function handleBuyNow() {
+    if (isOutOfStock || adding || buying) return;
+    setBuying(true);
+    addItem(product, quantity);
     window.setTimeout(() => {
-      setSuccessMessage(t("box_request_ready"));
-      setFormState(emptyForm);
-      setQuantity(1);
-      setSubmitting(false);
-    }, 380);
+      window.location.assign("/checkout");
+    }, 300);
   }
 
-  return (
-    <section className="space-y-5">
-      {successMessage && (
-        <motion.div
-          role="status"
-          aria-live="polite"
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, ease: EASE }}
-          className="mb-4 px-1 py-3 text-sm text-ivory"
-        >
-          <span className="font-medium">{t("success")}</span> {successMessage}
-        </motion.div>
-      )}
+  const controlsDisabled = isOutOfStock || adding || buying;
 
-      <div className="flex flex-wrap items-center gap-3 border-b border-ivory/[0.04] pb-4">
-        <div className="flex items-center gap-1 rounded-input border border-ivory/[0.04] bg-black p-0.5">
-          <motion.button
-            type="button"
-            onClick={() => setQuantity((current) => Math.max(1, current - 1))}
-            whileTap={{ scale: 0.92 }}
-            transition={{ duration: 0.15, ease: EASE }}
-            className="h-9 w-9 rounded-input text-ivory/35 transition-colors duration-200 hover:bg-ivory/[0.04] hover:text-ivory flex items-center justify-center text-base font-medium"
-            aria-label={t("decrease_qty")}
-          >
-            &minus;
-          </motion.button>
-          <motion.span
-            key={`qty-${quantity}`}
-            initial={{ opacity: 0.4, y: -3 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2, ease: EASE }}
-            className="min-w-7 text-center text-sm font-medium text-ivory"
-          >
-            {quantity}
-          </motion.span>
-          <motion.button
-            type="button"
-            onClick={() => setQuantity((current) => current + 1)}
-            whileTap={{ scale: 0.92 }}
-            transition={{ duration: 0.15, ease: EASE }}
-            className="h-9 w-9 rounded-input text-ivory/35 transition-colors duration-200 hover:bg-ivory/[0.04] hover:text-ivory flex items-center justify-center text-base font-medium"
-            aria-label={t("increase_qty")}
-          >
-            +
-          </motion.button>
+  const buttonBase =
+    "h-14 flex-1 w-full rounded-xl px-6 text-[0.62rem] font-medium uppercase tracking-[0.18em] whitespace-nowrap transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rouge/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B0B0A] disabled:cursor-not-allowed disabled:opacity-40";
+
+  const qtyControl =
+    "flex h-14 w-14 shrink-0 items-center justify-center rounded-xl text-lg font-light text-white/45 transition-colors duration-200 hover:bg-white/[0.05] hover:text-white disabled:cursor-not-allowed disabled:opacity-40";
+
+return (
+      <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 md:p-8">
+        <div className="flex w-full max-w-[520px] flex-col gap-4 lg:flex-row lg:items-stretch">
+          {/* Quantity selector — quiet, bordered, aligned with the actions */}
+          <div className="flex h-14 shrink-0 items-center justify-between rounded-xl border border-white/10 bg-[#0B0B0A]/40 px-2 lg:px-1">
+          <span className="sr-only">{t("quantity", "Quantity")}</span>
+          <div className="flex h-full items-center gap-1 lg:gap-0">
+            <motion.button
+              type="button"
+              onClick={() => setQuantity((current) => Math.max(1, current - 1))}
+              disabled={controlsDisabled}
+              whileTap={{ scale: 0.92 }}
+              transition={{ duration: 0.15, ease: EASE }}
+              className={qtyControl}
+              aria-label={t("decrease_qty")}
+            >
+              &minus;
+            </motion.button>
+            <motion.span
+              key={`qty-${quantity}`}
+              initial={{ opacity: 0.4, y: -3 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2, ease: EASE }}
+              className="min-w-10 text-center text-sm font-medium tabular-nums text-white"
+            >
+              {quantity}
+            </motion.span>
+            <motion.button
+              type="button"
+              onClick={() => setQuantity((current) => current + 1)}
+              disabled={controlsDisabled}
+              whileTap={{ scale: 0.92 }}
+              transition={{ duration: 0.15, ease: EASE }}
+              className={qtyControl}
+              aria-label={t("increase_qty")}
+            >
+              +
+            </motion.button>
+          </div>
         </div>
 
-        <motion.button
-          type="button"
-          onClick={handleAddToCart}
-          disabled={isOutOfStock || adding}
-          whileHover={isOutOfStock || adding ? undefined : { y: -2, scale: 1.01 }}
-          whileTap={isOutOfStock || adding ? undefined : { scale: 0.97 }}
-          transition={{ duration: 0.2, ease: EASE }}
-          className="btn-primary flex-1 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {adding ? (
-            <span className="flex items-center justify-center gap-2">
-              <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/40 border-t-white" />
-              {t("adding")}
-            </span>
-          ) : (
-            t("add_to_box")
-          )}
-        </motion.button>
+        {/* ADD TO CART / BUY NOW — primary, uncluttered */}
+        <div className="grid grid-cols-2 gap-3 lg:flex lg:flex-1">
+          <motion.button
+            type="button"
+            onClick={handleAddToCart}
+            disabled={controlsDisabled}
+            whileHover={controlsDisabled ? undefined : { y: -1 }}
+            whileTap={controlsDisabled ? undefined : { scale: 0.98 }}
+            transition={{ duration: 0.2, ease: EASE }}
+            className={`${buttonBase} bg-rouge text-white shadow-[0_16px_40px_-20px_rgba(110,31,42,0.6)] hover:bg-rouge-hover`}
+          >
+            {adding ? (
+              <span className="flex items-center justify-center gap-2">
+                <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                {t("adding")}
+              </span>
+            ) : (
+              t("add_to_cart")
+            )}
+          </motion.button>
+
+          <motion.button
+            type="button"
+            onClick={handleBuyNow}
+            disabled={controlsDisabled}
+            whileHover={controlsDisabled ? undefined : { y: -1 }}
+            whileTap={controlsDisabled ? undefined : { scale: 0.98 }}
+            transition={{ duration: 0.2, ease: EASE }}
+            className={`${buttonBase} border-2 border-rouge bg-transparent text-white hover:bg-rouge hover:border-rouge`}
+          >
+            {buying ? (
+              <span className="flex items-center justify-center gap-2">
+                <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-rouge/30 border-t-rouge" />
+                {t("adding")}
+              </span>
+            ) : (
+              t("buy_now", "Buy Now")
+            )}
+          </motion.button>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="mt-4 space-y-3.5">
-        <div className="grid gap-3.5 md:grid-cols-2">
-          <motion.label className="space-y-1.5" whileFocus={{ scale: 1.005 }} transition={{ duration: 0.18, ease: EASE }}>
-            <span className="text-[0.55rem] font-semibold uppercase tracking-[0.2em] text-ivory/50">{t("name")}</span>
-            <input
-              id={`name-${product.id}`}
-              type="text"
-              name="name"
-              value={formState.name}
-              onChange={(event) => handleChange("name", event.target.value)}
-              placeholder={t("full_name_placeholder")}
-              className={`l-input ${errors.name ? "l-input-error" : ""}`}
-              style={{ WebkitTextFillColor: "#FFFFFF", caretColor: "#FFFFFF" }}
-              aria-invalid={Boolean(errors.name)}
-              aria-describedby={errors.name ? `name-error-${product.id}` : undefined}
-              required
-            />
-            {errors.name && <p id={`name-error-${product.id}`} className="text-xs text-burgundy">{errors.name}</p>}
-          </motion.label>
-
-          <motion.label className="space-y-1.5" whileFocus={{ scale: 1.005 }} transition={{ duration: 0.18, ease: EASE }}>
-            <span className="text-[0.55rem] font-semibold uppercase tracking-[0.2em] text-ivory/50">{t("phone")}</span>
-            <input
-              id={`phone-${product.id}`}
-              type="tel"
-              name="phone"
-              value={formState.phone}
-              onChange={(event) => handleChange("phone", event.target.value)}
-              placeholder={t("phone_placeholder")}
-              className={`l-input ${errors.phone ? "l-input-error" : ""}`}
-              style={{ WebkitTextFillColor: "#FFFFFF", caretColor: "#FFFFFF" }}
-              aria-invalid={Boolean(errors.phone)}
-              aria-describedby={errors.phone ? `phone-error-${product.id}` : undefined}
-              required
-            />
-            {errors.phone && <p id={`phone-error-${product.id}`} className="text-xs text-burgundy">{errors.phone}</p>}
-          </motion.label>
-        </div>
-
-        <div className="grid gap-3.5 md:grid-cols-2">
-          <motion.label className="space-y-1.5" whileFocus={{ scale: 1.005 }} transition={{ duration: 0.18, ease: EASE }}>
-            <span className="text-[0.55rem] font-semibold uppercase tracking-[0.2em] text-ivory/50">{t("city")}</span>
-            <input
-              id={`city-${product.id}`}
-              type="text"
-              name="city"
-              value={formState.city}
-              onChange={(event) => handleChange("city", event.target.value)}
-              placeholder={t("city")}
-              className={`l-input ${errors.city ? "l-input-error" : ""}`}
-              style={{ WebkitTextFillColor: "#FFFFFF", caretColor: "#FFFFFF" }}
-              aria-invalid={Boolean(errors.city)}
-              aria-describedby={errors.city ? `city-error-${product.id}` : undefined}
-              required
-            />
-            {errors.city && <p id={`city-error-${product.id}`} className="text-xs text-burgundy">{errors.city}</p>}
-          </motion.label>
-
-          <motion.label className="space-y-1.5" whileFocus={{ scale: 1.005 }} transition={{ duration: 0.18, ease: EASE }}>
-            <span className="text-[0.55rem] font-semibold uppercase tracking-[0.2em] text-ivory/50">{t("address")}</span>
-            <input
-              id={`address-${product.id}`}
-              type="text"
-              name="address"
-              value={formState.address}
-              onChange={(event) => handleChange("address", event.target.value)}
-              placeholder={t("address_placeholder")}
-              className={`l-input ${errors.address ? "l-input-error" : ""}`}
-              style={{ WebkitTextFillColor: "#FFFFFF", caretColor: "#FFFFFF" }}
-              aria-invalid={Boolean(errors.address)}
-              aria-describedby={errors.address ? `address-error-${product.id}` : undefined}
-              required
-            />
-            {errors.address && <p id={`address-error-${product.id}`} className="text-xs text-burgundy">{errors.address}</p>}
-          </motion.label>
-        </div>
-
-        <motion.button
-          type="submit"
-          disabled={submitting}
-          whileHover={submitting ? undefined : { y: -2, scale: 1.005 }}
-          whileTap={submitting ? undefined : { scale: 0.98 }}
-          transition={{ duration: 0.2, ease: EASE }}
-          className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {submitting ? (
-            <span className="flex items-center justify-center gap-2">
-              <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/40 border-t-white" />
-              {t("submitting")}
-            </span>
-          ) : (
-            t("build_drink_order")
-          )}
-        </motion.button>
-      </form>
-    </section>
-  );
-}
+      {/* Panel footer — stock + trust cue */}
+      <div className="mt-6 flex items-center justify-between border-t border-white/[0.08] pt-6">
+        <p className="flex items-center gap-3 text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-white/45">
+          <span
+            aria-hidden="true"
+            className={`h-1.5 w-1.5 rounded-full ${isOutOfStock ? "bg-white/20" : "bg-gold"}`}
+          />
+          {isOutOfStock ? t("out_of_stock") : t("in_stock")}
+        </p>
+        <p className="flex items-center gap-2 text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-white/30">
+          <svg
+            aria-hidden="true"
+            width={12}
+            height={12}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect x="4" y="10" width="16" height="11" rx="2.5" />
+            <path d="M8 10V7a4 4 0 1 1 8 0v3" />
+          </svg>
+          {t("benefit_payment", "Secure Payment")}
+        </p>
+      </div>
+      </div>
+    );
+  }

@@ -14,8 +14,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AdminCustomersPage() {
   const customers = await getCustomers();
   return (
-    <div className="min-h-screen bg-bg">
-      <div className="container-shell mx-auto px-6 py-10">
+    <div className="min-h-[calc(100vh-4rem)] bg-[#0B0B0A]">
+      <div className="mx-auto w-full max-w-[1600px] px-4 py-7 sm:px-6 lg:px-8 lg:py-10">
         <CustomersClient customers={customers} />
       </div>
     </div>

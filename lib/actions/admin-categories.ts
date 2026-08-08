@@ -28,6 +28,7 @@ export async function saveCategory(formData: FormData) {
   revalidatePath("/");
   revalidatePath("/shop");
   revalidatePath("/admin/categories");
+  revalidatePath("/admin/dashboard");
 }
 
 export async function deleteCategory(formData: FormData) {
@@ -50,4 +51,5 @@ export async function deleteCategory(formData: FormData) {
   revalidatePath("/");
   revalidatePath("/shop");
   revalidatePath("/admin/categories");
+  revalidatePath("/admin/dashboard");
 }

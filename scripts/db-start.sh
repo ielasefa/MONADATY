@@ -34,7 +34,7 @@ npx pglite-server \
   -d "$DB_DIR/data.db" \
   -p "$PG_PORT" \
   -h "$PG_HOST" \
-  -m 5 \
+  -m 10 \
   > "$DB_DIR/server.log" 2>&1 &
 
 echo $! > "$PIDFILE"

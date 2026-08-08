@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
+import { toast } from "sonner";
 
 type Props = {
   open: boolean;
@@ -14,7 +15,6 @@ export function CategoryCreateModal({ open, onClose, onCreated }: Props) {
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   if (!open) return null;
 
@@ -36,7 +36,6 @@ export function CategoryCreateModal({ open, onClose, onCreated }: Props) {
     e.preventDefault();
     if (!name.trim() || !slug.trim()) return;
     setLoading(true);
-    setError("");
     try {
       const res = await fetch("/api/admin/categories/create", {
         method: "POST",
@@ -45,15 +44,16 @@ export function CategoryCreateModal({ open, onClose, onCreated }: Props) {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || "Failed to create category");
+        toast.error(data.error || "Failed to create category");
         return;
       }
       onCreated(data.category);
       setName("");
       setSlug("");
       onClose();
+      toast.success(t("category_created_success", "Category created successfully"));
     } catch {
-      setError(t("network_error"));
+      toast.error(t("network_error"));
     } finally {
       setLoading(false);
     }
@@ -106,7 +106,6 @@ export function CategoryCreateModal({ open, onClose, onCreated }: Props) {
               required
             />
           </div>
-          {error && <p className="text-xs text-red">{error}</p>}
           <div className="flex justify-end gap-3 pt-2">
             <button type="button" onClick={onClose} className="btn-secondary h-10 rounded-md px-5 text-xs font-semibold uppercase tracking-[0.1em]">
               {t("cancel")}

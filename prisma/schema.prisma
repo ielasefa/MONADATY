@@ -57,7 +57,7 @@ model Product {
   featured         Boolean       @default(false)
   isBestSeller     Boolean       @default(false)
   available        Boolean       @default(true)
-  status           ProductStatus @default(Draft)
+  status           ProductStatus @default(Active)
   sku              String        @default("")
   barcode          String        @default("")
   brand            String        @default("")
@@ -69,6 +69,12 @@ model Product {
   variants         ProductVariant[]
   history          ProductHistory[]
   landingSections  LandingSection[]
+  warehouseStocks  ProductWarehouseStock[]
+  inventoryMovements InventoryMovement[]
+  supplierLinks    ProductSupplier[]
+  purchaseOrderItems PurchaseOrderItem[]
+  inventoryReservations InventoryReservation[]
+  showcaseEntries  CollectionShowcaseProduct[]
 
   @@index([categoryId])
   @@index([collectionId])
@@ -170,11 +176,27 @@ model Collection {
   landingEnabled Boolean  @default(false)
   landingOrder  Int       @default(0)
   products      Product[]
+  showcaseProducts CollectionShowcaseProduct[]
 
   @@index([slug])
   @@index([order])
   @@index([landingEnabled, landingOrder])
   @@map("collections")
+}
+
+model CollectionShowcaseProduct {
+  id           String     @id @default(uuid())
+  collectionId String
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  productId    String
+  product      Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  position     Int        @default(0)
+  createdAt    DateTime   @default(now())
+
+  @@unique([collectionId, productId])
+  @@unique([collectionId, position])
+  @@index([collectionId, position])
+  @@map("collection_showcase_products")
 }
 
 model Customer {
@@ -556,6 +578,7 @@ model ProductWarehouseStock {
   warehouseId    String
   warehouse      Warehouse @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
   productId      String
+  product        Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
   variantId      String  @default("")
   stock          Int     @default(0)
   reservedStock  Int     @default(0)
@@ -593,6 +616,7 @@ model Supplier {
 model ProductSupplier {
   id         String   @id @default(uuid())
   productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   supplierId String
   supplier   Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
   createdAt  DateTime @default(now())
@@ -632,6 +656,7 @@ model PurchaseOrderItem {
   purchaseOrderId  String
   purchaseOrder    PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
   productId        String
+  product          Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
   variantId        String   @default("")
   quantity         Int      @default(0)
   cost             String   @default("0.00 DH")
@@ -646,6 +671,7 @@ model PurchaseOrderItem {
 model InventoryMovement {
   id            String       @id @default(uuid())
   productId     String
+  product       Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
   variantId     String       @default("")
   warehouseId   String
   warehouse     Warehouse    @relation(fields: [warehouseId], references: [id])
@@ -671,6 +697,7 @@ model InventoryReservation {
   id          String   @id @default(uuid())
   orderId     String   @default("")
   productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   variantId   String   @default("")
   warehouseId String
   quantity    Int      @default(0)

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
+import { toast } from "sonner";
 
 type DeviceSession = {
   id: string;
@@ -29,16 +30,17 @@ export default function DeviceSessionsPage() {
 
   useEffect(() => { fetchSessions(); }, [fetchSessions]);
 
-  const handleTerminate = async (id: string) => {
-    await fetch(`/api/admin/device-sessions?id=${id}`, { method: "DELETE" });
-    fetchSessions();
-  };
+   const handleTerminate = async (id: string) => {
+     await fetch(`/api/admin/device-sessions?id=${id}`, { method: "DELETE" });
+     fetchSessions();
+     toast.success(t("session_terminated", "Session terminated successfully"));
+   };
 
-  const handleTerminateAll = async () => {
-    if (!confirm(t("terminate_all_confirm"))) return;
-    await fetch("/api/admin/device-sessions?allExceptCurrent=true", { method: "DELETE" });
-    fetchSessions();
-  };
+   const handleTerminateAll = async () => {
+     await fetch("/api/admin/device-sessions?allExceptCurrent=true", { method: "DELETE" });
+     fetchSessions();
+     toast.success(t("sessions_terminated", "All other sessions terminated successfully"));
+   };
 
   return (
     <div className="container-shell mx-auto px-6 py-10">

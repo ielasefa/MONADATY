@@ -2,9 +2,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProductGallery } from "@/components/ProductGallery";
 import { ProductOrderForm } from "@/components/ProductOrderForm";
+import { ProductTabs } from "@/components/ProductTabs";
 import { RelatedProducts } from "@/components/RelatedProducts";
 import { getProductById, getRelatedProducts, getProducts } from "@/lib/db";
-import { loadTranslations, t, getLanguage } from "@/lib/translations";
+import { loadTranslations, getLanguage } from "@/lib/translations";
+import { FadeIn } from "@/components/motion/FadeIn";
+import { SlideUp } from "@/components/motion/SlideUp";
 
 export const dynamic = "force-dynamic";
 
@@ -20,151 +23,279 @@ export async function generateStaticParams() {
   }
 }
 
+const CONTAINER = "mx-auto w-full max-w-[1400px] px-6 sm:px-8 lg:px-12";
+
+const FORMAT_LABELS: Record<string, string> = {
+  can: "Can",
+  bottle: "Bottle",
+  glass: "Glass",
+};
+
+function Stars() {
+  return (
+    <div className="flex items-center gap-1.5" aria-hidden="true">
+      {Array.from({ length: 5 }).map((_, index) => (
+        <svg
+          key={index}
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          aria-hidden="true"
+          className="h-3 w-3 text-gold"
+        >
+          <path d="M12 2l2.9 6.26L21 9.27l-4.5 4.38L17.8 20 12 16.77 6.2 20l1.3-6.35L3 9.27l6.1-1.01L12 2z" />
+        </svg>
+      ))}
+    </div>
+  );
+}
+
 export default async function ProductPage({ params }: ProductPageProps) {
   const { id } = await params;
   const product = await getProductById(id);
   if (!product) notFound();
 
   const lang = await getLanguage();
-  const translations = await loadTranslations("products");
-  const relatedProducts = await getRelatedProducts(product.id, product.category);
+  const [productsTranslations, navbarTranslations, commonTranslations, buttonsTranslations] =
+    await Promise.all([
+      loadTranslations("products"),
+      loadTranslations("navbar"),
+      loadTranslations("common"),
+      loadTranslations("buttons"),
+    ]);
+  const translations = {
+    ...navbarTranslations,
+    ...productsTranslations,
+    ...commonTranslations,
+    ...buttonsTranslations,
+  };
+  const relatedProducts = await getRelatedProducts(product.id, product.category, 4);
+
+  // `gt` never renders a raw key: uses the DB translation when present,
+  // otherwise the English fallback (some product keys are absent from the DB).
+  const gt = (key: string, fallback: string) => {
+    const entry = translations[key] as unknown as Record<string, string> | undefined;
+    if (entry) {
+      const value = entry[lang] || entry.fr || fallback;
+      if (value && value.trim()) return value;
+    }
+    return fallback;
+  };
+
+  // `loc` provides full fr/en/ar fallbacks for strings missing from the DB.
+  const loc = (key: string, fr: string, en: string, ar: string) => {
+    const entry = translations[key] as unknown as Record<string, string> | undefined;
+    if (entry) {
+      const value = entry[lang] || entry.fr || en;
+      if (value && value.trim()) return value;
+    }
+    return lang === "fr" ? fr : lang === "ar" ? ar : en;
+  };
 
   const hasIngredients = Boolean(product.ingredients && product.ingredients.trim().length > 0);
   const hasNutrition = Boolean(product.nutrition && product.nutrition.trim().length > 0);
+  const hasCompare = Boolean(
+    product.comparePrice &&
+      product.comparePrice.trim().length > 0 &&
+      product.comparePrice !== product.price,
+  );
+  const hasStock = typeof product.stock === "number";
+  const isOutOfStock = hasStock && product.stock <= 0;
+  const primaryBadge = product.badges?.[0];
 
   return (
-    <div className="min-h-screen bg-black">
-      {/* Breadcrumb — minimal editorial */}
-      <div className="container-premium pt-8 md:pt-10">
-        <nav aria-label={t(translations, "breadcrumb_aria_label", lang)} className="flex items-center gap-2 label-utility tracking-[0.32em] text-ivory/12">
-          <Link href="/shop" className="transition-colors hover:text-ivory/35">
-            {t(translations, "back_to_drinks", lang)}
-         </Link>
-          <span aria-hidden="true" className="text-ivory/6">/</span>
-          <span className="text-ivory/15">{product.category}</span>
-          <span aria-hidden="true" className="text-ivory/6">/</span>
-          <span className="text-ivory/25">{product.name}</span>
-       </nav>
-     </div>
+    <div className="bg-[#0B0B0A]">
+      {/* Breadcrumb — restrained, generous top rhythm */}
+      <div className={`${CONTAINER} pt-10 md:pt-16`}>
+        <nav
+          aria-label={gt("breadcrumb_aria_label", "Breadcrumb")}
+          className="flex items-center gap-3 overflow-hidden text-[0.6rem] font-medium uppercase tracking-[0.24em] text-white/30"
+        >
+          <Link href="/" className="shrink-0 transition-colors duration-300 hover:text-white/80">
+            {gt("home", "Home")}
+          </Link>
+          <span aria-hidden="true" className="text-white/15">
+            /
+          </span>
+          <Link href="/shop" className="shrink-0 transition-colors duration-300 hover:text-white/80">
+            {gt("shop", "Shop")}
+          </Link>
+          <span aria-hidden="true" className="text-white/15">
+            /
+          </span>
+          <span className="truncate text-white/45">{product.category}</span>
+          <span aria-hidden="true" className="text-white/15">
+            /
+          </span>
+          <span className="truncate text-white/70">{product.name}</span>
+        </nav>
+      </div>
 
-      {/* Hero — asymmetric gallery / sticky info */}
-      <section className="container-premium py-12 md:py-20 lg:py-28">
-        <div className="grid gap-8 lg:grid-cols-[1.4fr_0.6fr] lg:items-start lg:gap-16 xl:gap-24">
-          {/* Gallery — large floating product */}
-          <div className="relative">
-            <ProductGallery
-              name={product.name}
-              gallery={product.gallery}
-              image={product.image}
-              visual={product.visual as "can" | "bottle" | "glass" | undefined}
-              accent={product.accent}
-            />
-         </div>
+      {/* Hero — gallery 5 / information 7, composed with whitespace */}
+      <section className={`${CONTAINER} pb-24 pt-8 md:pb-32 md:pt-12`}>
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-14 xl:gap-20">
+          {/* Gallery — clean, never dominates */}
+          <FadeIn delay={0.1} y={20} duration={0.6}>
+            <div className="lg:col-span-5 mt-4 lg:mt-6">
+              <ProductGallery
+                name={product.name}
+                gallery={product.gallery}
+                image={product.image}
+                visual={product.visual as "can" | "bottle" | "glass" | undefined}
+                accent={product.accent}
+              />
+            </div>
+          </FadeIn>
 
-          {/* Sticky info column */}
-          <div className="lg:sticky lg:top-32 space-y-10 lg:pt-8">
-            {/* Eyebrow — category */}
-            <div className="flex items-center gap-3">
-              <span className="h-px w-8 bg-gold/30" />
-              <p className="label-utility tracking-[0.55em] text-gold/35">
-                {product.category}
-             </p>
-           </div>
+          {/* Information — the primary focus, sticky */}
+          <SlideUp delay={0.15} y={20} duration={0.7}>
+            <div className="lg:col-span-7 lg:sticky lg:top-24 lg:self-start lg:pt-2">
+{/* Category eyebrow + badge */}
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
+          <div className="flex items-center gap-4">
+            <span className="h-px w-10 bg-gold/60" />
+            <p className="text-[0.68rem] font-medium uppercase tracking-[0.3em] text-gold">
+              {product.category || gt("artisan_collection", "Artisan Collection")}
+            </p>
+          </div>
+          {primaryBadge && (
+            <span className="inline-flex items-center rounded-full border border-white/10 px-3.5 py-1.5 text-[0.58rem] font-medium uppercase tracking-[0.2em] text-white/55">
+              {primaryBadge}
+            </span>
+          )}
+        </div>
 
-            {/* Editorial number indicator */}
-            <div className="flex items-center gap-4">
-              <span className="label-utility tracking-[0.4em] text-ivory/12">
-                N° {String(product.id).slice(-3).padStart(3, "0")}
-             </span>
-              <span className="h-px w-8 bg-ivory/10" />
-           </div>
+        {/* Display title */}
+        <h1 className="mt-4 max-w-[20ch] font-display text-4xl leading-[1.02] tracking-[-0.01em] text-white sm:text-5xl lg:text-[3.4rem]">
+          {product.name}
+        </h1>
 
-            {/* Product name — massive display */}
-            <h1 className="font-display text-[clamp(2.5rem,5vw,4.5rem)] leading-[0.88] tracking-[-0.035em] text-ivory">
-              {product.name}
-           </h1>
+            {/* Rating + stock */}
+            <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
+              <Stars />
+              {hasStock && (
+                <p
+                  className={`flex items-center gap-3 text-[0.62rem] font-medium uppercase tracking-[0.2em] ${
+                    isOutOfStock ? "text-white/35" : "text-white/50"
+                  }`}
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`h-1.5 w-1.5 rounded-full ${
+                      isOutOfStock ? "bg-white/20" : "bg-gold"
+                    }`}
+                  />
+                  {isOutOfStock ? gt("out_of_stock", "Out of stock") : gt("in_stock", "In stock")}
+                </p>
+              )}
+            </div>
 
-            {/* Price — champagne gold */}
-            <div className="flex items-baseline gap-4">
-              <p className="font-display text-2xl font-light text-gold md:text-3xl">
-                {product.price}
-             </p>
-           </div>
+{/* Luxury pricing block */}
+        <div className="mt-5 flex flex-wrap items-end justify-between gap-6 border-y border-white/[0.08] py-8">
+              <div>
+                <p className="text-[0.6rem] font-medium uppercase tracking-[0.26em] text-white/35">
+                  {loc("price_label", "Prix", "Price", "السعر")}
+                </p>
+                <div className="mt-3 flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                  <p className="font-display text-[2rem] leading-none tracking-[-0.01em] text-gold md:text-[2.5rem]">
+                    {product.price}
+                  </p>
+                  {hasCompare && (
+                    <p className="text-sm font-medium text-white/30 line-through">
+                      {product.comparePrice}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
 
-            {/* Thin gold divider */}
-            <div className="h-px w-16 bg-gold/20" />
+{/* Description */}
+        {product.description && (
+          <p className="mt-6 max-w-xl text-[0.95rem] leading-[1.85] text-white/55">
+            {product.description}
+          </p>
+        )}
 
-            {product.description && (
-              <p className="max-w-md text-[0.85rem] leading-[2] text-ivory/25">
-                {product.description}
-             </p>
-            )}
+        {/* Purchase box */}
+        <div className="mt-8">
+          <ProductOrderForm product={product} />
+        </div>
 
-            {/* Order form — sticky CTAs */}
-            <div className="pt-4">
-              <ProductOrderForm product={product} />
-           </div>
+{/* Product information — premium metadata block */}
+            <div className="mt-10 border-t border-gold/15 pt-10">
+              <div className="grid grid-cols-1 gap-y-5 sm:grid-cols-3 sm:gap-x-8">
+                <div>
+                  <p className="text-[0.55rem] font-medium uppercase tracking-[0.3em] text-gold">
+                    {gt("category", "CATEGORY")}
+                  </p>
+                  <p className="mt-2 text-[0.9rem] font-medium text-white/90">
+                    {product.category || "—"}
+                  </p>
+                </div>
+                <div className="sm:border-l sm:border-white/[0.08] sm:pl-8">
+                  <p className="text-[0.55rem] font-medium uppercase tracking-[0.3em] text-gold">
+                    {gt("collection", "COLLECTION")}
+                  </p>
+                  <p className="mt-2 text-[0.9rem] font-medium text-white/90">
+                    {product.collection ? product.collection.replace(/-/g, " ") : "—"}
+                  </p>
+                </div>
+                <div className="sm:border-l sm:border-white/[0.08] sm:pl-8">
+                  <p className="text-[0.55rem] font-medium uppercase tracking-[0.3em] text-gold">
+                    {gt("format_label", "FORMAT")}
+                  </p>
+                  <p className="mt-2 text-[0.9rem] font-medium text-white/90">
+                    {product.visual ? FORMAT_LABELS[product.visual] : "—"}
+                  </p>
+                </div>
+              </div>
 
-            {/* Trust signature — editorial micro-mark */}
-            <div className="pt-6 flex items-center gap-3">
-              <span className="h-px w-10 bg-ivory/[0.04]" />
-              <span className="label-utility tracking-[0.4em] text-ivory/12">
-                {t(translations, "crafted_in_morocco_label", lang)}
-             </span>
-           </div>
-         </div>
-       </div>
-     </section>
+              {/* Fabriqué au Maroc — centered, gold, premium label */}
+              <div className="mt-8 flex items-center gap-4 border-t border-gold/15 pt-8">
+                <span className="h-px flex-1 bg-gold/20" />
+                <span className="text-[0.55rem] font-medium uppercase tracking-[0.35em] text-gold/80">
+                  {gt("crafted_in_morocco_label", "FABRIQUÉ AU MAROC · 2024")}
+                </span>
+                <span className="h-px flex-1 bg-gold/20" />
+              </div>
+            </div>
+            </div>
+          </SlideUp>
+        </div>
+      </section>
 
-      {/* Editorial section divider */}
+      {/* Details tabs */}
       {(hasIngredients || hasNutrition) && (
-        <section className="container-premium py-16 md:py-24 lg:py-32">
-          <div className="space-y-12">
-            {/* Section eyebrow */}
-            <div className="flex items-baseline justify-between">
-              <p className="label-utility tracking-[0.55em] text-gold/35">
-                {t(translations, "ingredients", lang)}
-             </p>
-              <span className="font-display text-[3rem] font-light leading-none tracking-[-0.04em] text-ivory/[0.04] md:text-[4rem]">
-                02
-             </span>
-           </div>
-            <div className="h-px w-full bg-ivory/[0.03]" />
-
-            <div className="grid gap-12 md:grid-cols-2 lg:gap-20">
-              {hasIngredients && (
-                <div className="space-y-5">
-                  <p className="label-utility tracking-[0.4em] text-ivory/18">
-                    {t(translations, "ingredients", lang)}
-                 </p>
-                  <p className="text-[0.88rem] leading-[2] text-ivory/25">
-                    {product.ingredients}
-                 </p>
-               </div>
-              )}
-              {hasNutrition && (
-                <div className="space-y-5">
-                  <p className="label-utility tracking-[0.4em] text-ivory/18">
-                    {t(translations, "nutrition", lang)}
-                 </p>
-                  <p className="text-[0.88rem] leading-[2] text-ivory/25">
-                    {product.nutrition}
-                 </p>
-               </div>
-              )}
-           </div>
-         </div>
-       </section>
+        <FadeIn delay={0.2} y={20} duration={0.6}>
+          <section className="border-t border-white/[0.06] bg-white/[0.01]">
+            <div className={`${CONTAINER} py-20 md:py-24`}>
+              <header className="mb-12 md:mb-14">
+                <div className="flex items-center gap-4">
+                  <span className="h-px w-10 bg-gold/50" />
+                  <p className="text-[0.68rem] font-medium uppercase tracking-[0.3em] text-gold">
+                    {gt("product_details", "Product Details")}
+                  </p>
+                </div>
+              </header>
+              <ProductTabs
+                description={product.description}
+                ingredients={product.ingredients}
+                nutrition={product.nutrition}
+              />
+            </div>
+          </section>
+        </FadeIn>
       )}
 
-      {/* Related products — editorial divider */}
+      {/* Related products */}
       {relatedProducts.length > 0 && (
-        <section className="border-t border-ivory/[0.03]">
-          <div className="container-premium py-16 md:py-24 lg:py-32">
-            <RelatedProducts products={relatedProducts} />
-         </div>
-       </section>
+        <FadeIn delay={0.25} y={20} duration={0.6}>
+          <section className="border-t border-white/[0.06]">
+            <div className={`${CONTAINER} py-20 md:py-24`}>
+              <RelatedProducts products={relatedProducts} />
+            </div>
+          </section>
+        </FadeIn>
       )}
-   </div>
+    </div>
   );
 }

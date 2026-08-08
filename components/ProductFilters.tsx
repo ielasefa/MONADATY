@@ -163,13 +163,18 @@ function FilterPill({
 export function ProductFilters({
   products: propProducts,
   categories,
+  commonTranslations,
 }: {
   products?: Product[];
   categories: { slug: string; name: string }[];
+  commonTranslations?: Record<string, Record<string, string>>;
 }) {
   const { t } = useTranslation("common");
   const { t: tShop } = useTranslation("shop");
   const { t: tErrors } = useTranslation("errors");
+
+  // Get "all" label from server-provided translations to avoid hydration mismatch
+  const allLabel = commonTranslations?.all?.fr ?? commonTranslations?.all?.en ?? "All";
 
   const productsSafe = useMemo(
     () => (Array.isArray(propProducts) ? propProducts : []),
@@ -185,7 +190,7 @@ export function ProductFilters({
 
   // state
   const [query, setQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState(t("all"));
+  const [activeCategorySlug, setActiveCategorySlug] = useState<string | null>(null);
   const [collectionSlug, setCollectionSlug] = useState<string | null>(null);
   const [minPrice, setMinPrice] = useState<number | null>(null);
   const [maxPrice, setMaxPrice] = useState<number | null>(null);
@@ -203,19 +208,19 @@ export function ProductFilters({
   // URL → state sync
   useEffect(() => {
     const sp = searchParams ?? new URLSearchParams(window.location.search);
-    const parsed = parseParams(sp, CATEGORY_MAP, t("all"));
+    const parsed = parseParams(sp, CATEGORY_MAP, "all");
     const urlStr = sp.toString();
-    if (urlStr === lastUrlStrRef.current && activeCategory === parsed.activeCategory) return;
+    if (urlStr === lastUrlStrRef.current && activeCategorySlug === parsed.collectionSlug) return;
     lastUrlStrRef.current = urlStr;
 
     setQuery(parsed.query);
     setCollectionSlug(parsed.collectionSlug);
-    setActiveCategory(parsed.activeCategory);
+    setActiveCategorySlug(parsed.collectionSlug);
     setMinPrice(parsed.minPrice);
     setMaxPrice(parsed.maxPrice);
     setAvailabilityOnly(parsed.availabilityOnly);
     setSort(parsed.sort ?? "default");
-  }, [searchParams, CATEGORY_MAP, t, activeCategory]);
+  }, [searchParams, CATEGORY_MAP, activeCategorySlug]);
 
   // cleanup debounce
   useEffect(() => () => {
@@ -332,8 +337,8 @@ export function ProductFilters({
         setCollectionSlug(updates.collection);
         const label = updates.collection
           ? CATEGORY_MAP[updates.collection] ?? updates.collection
-          : t("all");
-        setActiveCategory(label);
+          : "all";
+        setActiveCategorySlug(label === "all" ? null : label);
       }
       if (updates.minPrice !== undefined) setMinPrice(updates.minPrice);
       if (updates.maxPrice !== undefined) setMaxPrice(updates.maxPrice);
@@ -341,17 +346,17 @@ export function ProductFilters({
       if (updates.sort !== undefined) setSort(updates.sort);
       router.replace(url, { scroll: false });
     },
-    [query, collectionSlug, minPrice, maxPrice, availabilityOnly, sort, searchParams, router, CATEGORY_MAP, t],
+    [query, collectionSlug, minPrice, maxPrice, availabilityOnly, sort, searchParams, router, CATEGORY_MAP],
   );
 
   // handlers
   const handleCategoryChange = useCallback(
     (c: string) => {
       const cat = categories.find(cat => cat.name === c);
-      const slug = c === t("all") ? null : cat?.slug ?? null;
+      const slug = c === "all" ? null : cat?.slug ?? null;
       updateUrl({ collection: slug });
     },
-    [updateUrl, categories, t],
+    [updateUrl, categories],
   );
 
   const handleSearchChange = useCallback(
@@ -454,14 +459,18 @@ export function ProductFilters({
       <section className="space-y-10">
         {/* ── Category chips ─────────────────────────────────────────────── */}
         <div className="flex flex-wrap gap-2">
-          {[t("all"), ...categories.map(c => c.name)].map(c => (
-            <FilterChip
-              key={c}
-              label={c}
-              active={activeCategory === c}
-              onClick={() => handleCategoryChange(c)}
-            />
-          ))}
+          {["all", ...categories.map(c => c.name)].map(c => {
+            const cat = categories.find(cat => cat.name === c);
+            const slug = c === "all" ? null : cat?.slug ?? null;
+            return (
+              <FilterChip
+                key={c}
+                label={c === "all" ? allLabel : c}
+                active={activeCategorySlug === slug}
+                onClick={() => handleCategoryChange(c)}
+              />
+            );
+          })}
         </div>
 
         {/* ── Search + sort + filter button ─────────────────────────────── */}
@@ -740,7 +749,7 @@ export function ProductFilters({
                 {/* Body */}
                 <div className="flex-1 overflow-y-auto p-6">
                   <FilterSidebar
-                    activeCategory={activeCategory}
+                    activeCategorySlug={activeCategorySlug}
                     onCategoryChange={handleCategoryChange}
                     minPrice={minPrice ?? 0}
                     maxPrice={maxPrice ?? 0}

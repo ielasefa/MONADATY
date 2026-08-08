@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getAuthenticatedAdmin } from "@/lib/auth";
-import { getTestimonials } from "@/lib/data";
 import {
   getAdminLanding,
   getFeaturedSectionEntries,
@@ -26,9 +25,8 @@ export default async function AdminLandingPage() {
 
   const configId = await getLatestLandingConfigId();
 
-  const [landingData, testimonials, featuredEntries, versions, allCollections] = await Promise.all([
+  const [landingData, featuredEntries, versions, allCollections] = await Promise.all([
     getAdminLanding(),
-    getTestimonials(),
     getFeaturedSectionEntries(configId),
     getVersions(configId),
     getLandingCollections(),
@@ -38,7 +36,6 @@ export default async function AdminLandingPage() {
     <LandingCMS
       configId={configId}
       landingData={landingData}
-      testimonials={testimonials}
       featuredEntries={featuredEntries}
       allCollections={allCollections}
       versions={versions.map((v: { id: string; version: number; status: string; label: string; createdBy: string; createdAt: Date | string }) => ({

@@ -89,7 +89,7 @@ export const getLatestLandingConfigId = unstable_cache(async (): Promise<string>
   return config.id;
 },
   [],
-  { tags: ["landing"] },
+  { tags: ["landing"], revalidate: 60 },
 );
 
 export const getLandingConfigWithRelations = unstable_cache(async (configId: string) => {
@@ -99,7 +99,7 @@ export const getLandingConfigWithRelations = unstable_cache(async (configId: str
   });
 },
   [],
-  { tags: ["landing"] },
+  { tags: ["landing"], revalidate: 60 },
 );
 
 export const getAdminLanding = unstable_cache(async (): Promise<LandingPageData> => {
@@ -138,7 +138,7 @@ export const getAdminLanding = unstable_cache(async (): Promise<LandingPageData>
   }
 },
   [],
-  { tags: ["landing"] },
+  { tags: ["landing"], revalidate: 60 },
 );
 
 export async function saveSection(configId: string, sectionType: string, data: Record<string, unknown>, adminName: string) {
@@ -244,7 +244,7 @@ export const getVersions = unstable_cache(async (configId: string) => {
   });
 },
   [],
-  { tags: ["landing"] },
+  { tags: ["landing"], revalidate: 60 },
 );
 
 export type FeaturedSectionEntry = {
@@ -276,7 +276,7 @@ export const getFeaturedSectionEntries = unstable_cache(async (configId: string)
   });
 },
   [],
-  { tags: ["landing"] },
+  { tags: ["landing"], revalidate: 60 },
 );
 
 export const getLandingCollections = unstable_cache(async () => {
@@ -290,7 +290,7 @@ export const getLandingCollections = unstable_cache(async () => {
   }));
 },
   [],
-  { tags: ["landing"] },
+  { tags: ["landing"], revalidate: 60 },
 );
 
 export async function getVersion(configId: string, versionId: string) {

@@ -521,10 +521,11 @@ async function main() {
     { label: "Shop", href: "/admin/shop", icon: "□", requireSuperAdmin: false, displayOrder: 8 },
     { label: "Categories", href: "/admin/categories", icon: "⊞", requireSuperAdmin: false, displayOrder: 9 },
     { label: "Collections", href: "/admin/collections", icon: "⊟", requireSuperAdmin: false, displayOrder: 10 },
-    { label: "Blog", href: "/admin/blog", icon: "△", requireSuperAdmin: false, displayOrder: 11 },
-    { label: "Inventory", href: "/admin/inventory", icon: "▤", requireSuperAdmin: false, displayOrder: 12 },
-    { label: "Admins", href: "/admin/admins", icon: "✦", requireSuperAdmin: true, displayOrder: 13 },
-    { label: "Settings", href: "/admin/settings", icon: "⚙", requireSuperAdmin: false, displayOrder: 14 },
+    { label: "Collection Showcase", href: "/admin/collections-showcase", icon: "◆", requireSuperAdmin: false, displayOrder: 11 },
+    { label: "Blog", href: "/admin/blog", icon: "△", requireSuperAdmin: false, displayOrder: 12 },
+    { label: "Inventory", href: "/admin/inventory", icon: "▤", requireSuperAdmin: false, displayOrder: 13 },
+    { label: "Admins", href: "/admin/admins", icon: "✦", requireSuperAdmin: true, displayOrder: 14 },
+    { label: "Settings", href: "/admin/settings", icon: "⚙", requireSuperAdmin: false, displayOrder: 15 },
   ];
   for (const item of adminMenuItems) {
     await prisma.adminMenuItem.upsert({

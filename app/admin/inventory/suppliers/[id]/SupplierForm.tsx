@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useTranslation } from "@/hooks/useTranslation";
+import { toast } from "sonner";
 
 type Supplier = {
   id: string;
@@ -24,12 +25,10 @@ export function SupplierForm({ supplier }: { supplier: Supplier | null }) {
   const router = useRouter();
   const isNew = !supplier;
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
 
   const handleSubmit = useCallback(
     async (formData: FormData) => {
       setSaving(true);
-      setError("");
       try {
         const data = Object.fromEntries(formData.entries());
         const method = isNew ? "POST" : "PUT";
@@ -43,10 +42,11 @@ export function SupplierForm({ supplier }: { supplier: Supplier | null }) {
           const err = await res.json();
           throw new Error(err.error || "Failed to save");
         }
+        toast.success(isNew ? t("supplier_created", "Supplier created") : t("supplier_updated", "Supplier updated"));
         router.push("/admin/inventory/suppliers");
         router.refresh();
       } catch (e: unknown) {
-        setError(e instanceof Error ? e.message : t("an_error_occurred", "An error occurred"));
+        toast.error(e instanceof Error ? e.message : t("an_error_occurred", "An error occurred"));
       } finally {
         setSaving(false);
       }
@@ -69,12 +69,6 @@ export function SupplierForm({ supplier }: { supplier: Supplier | null }) {
           </h1>
         </div>
       </div>
-
-      {error && (
-        <div className="mb-6 rounded-card border border-burgundy/20 bg-burgundy/10 px-4 py-3 text-sm text-burgundy">
-          {error}
-        </div>
-      )}
 
       <form action={handleSubmit} className="space-y-8">
         <div className="luxury-card rounded-card border border-white/[0.06] bg-card p-6">

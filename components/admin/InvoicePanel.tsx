@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
+import { toast } from "sonner";
 
 type InvoiceData = {
   id: string;
@@ -21,11 +22,9 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
   const { t, lang } = useTranslation("invoice");
   const [invoice, setInvoice] = useState<InvoiceData | null>(initialInvoice);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const handleCreate = useCallback(async () => {
     setLoading(true);
-    setError("");
     try {
       const res = await fetch("/api/admin/invoices/create", {
         method: "POST",
@@ -38,15 +37,15 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
       }
       const data = await res.json();
       setInvoice(data.invoice);
+      toast.success(t("invoice_created_success", "Invoice created successfully"));
     } catch (err) {
-      setError(err instanceof Error ? err.message : t("create_invoice_error"));
+      toast.error(err instanceof Error ? err.message : t("create_invoice_error"));
     }
     setLoading(false);
   }, [orderId, t]);
 
   const handleDownload = useCallback(async () => {
     if (!invoice) return;
-    setError("");
     try {
       const res = await fetch(`/api/admin/invoices/${invoice.id}/download`);
       if (!res.ok) {
@@ -63,13 +62,12 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (err) {
-      setError(err instanceof Error ? err.message : t("download_invoice_error"));
+      toast.error(err instanceof Error ? err.message : t("download_invoice_error"));
     }
   }, [invoice, t]);
 
   const handlePrint = useCallback(async () => {
     if (!invoice) return;
-    setError("");
     try {
       const res = await fetch(`/api/admin/invoices/${invoice.id}/download`);
       if (!res.ok) {
@@ -86,14 +84,13 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
         };
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : t("print_invoice_error"));
+      toast.error(err instanceof Error ? err.message : t("print_invoice_error"));
     }
   }, [invoice, t]);
 
   const handleCancel = useCallback(async () => {
     if (!invoice) return;
     setLoading(true);
-    setError("");
     try {
       const res = await fetch(`/api/admin/invoices/${invoice.id}/cancel`, {
         method: "POST",
@@ -104,8 +101,9 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
       }
       const data = await res.json();
       setInvoice(data.invoice);
+      toast.success(t("invoice_cancelled_success", "Invoice cancelled successfully"));
     } catch (err) {
-      setError(err instanceof Error ? err.message : t("cancel_invoice_error"));
+      toast.error(err instanceof Error ? err.message : t("cancel_invoice_error"));
     }
     setLoading(false);
   }, [invoice, t]);
@@ -153,7 +151,6 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
              </span>
             )}
          </button>
-          {error && <p className="mt-2 text-xs text-burgundy" role="alert">{error}</p>}
       </div>
       ) : (
         <div className="mt-4 space-y-4">
@@ -234,8 +231,6 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
               </button>
             </div>
           )}
-
-          {error && <p className="text-xs text-red-400" role="alert">{error}</p>}
         </div>
       )}
     </section>

@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
+import { toast } from "sonner";
 
 type Props = {
   value: string;
@@ -10,6 +11,7 @@ type Props = {
   folder?: string;
   aspectRatio?: string;
   className?: string;
+  fieldName?: string;
 };
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/avif"];
@@ -74,13 +76,12 @@ function compressImage(file: File): Promise<File> {
   });
 }
 
-export function SingleImageUploader({ value, onChange, label, folder = "products", aspectRatio, className = "" }: Props) {
+export function SingleImageUploader({ value, onChange, label, folder = "products", aspectRatio, className = "", fieldName }: Props) {
   const { t } = useTranslation("admin");
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [processing, setProcessing] = useState(false);
   const [completed, setCompleted] = useState(false);
-  const [error, setError] = useState("");
   const [dragOver, setDragOver] = useState(false);
   const [preview, setPreview] = useState(value);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -109,10 +110,9 @@ export function SingleImageUploader({ value, onChange, label, folder = "products
   }, []);
 
   async function handleFile(file: File) {
-    setError("");
     const validationError = validateFile(file);
     if (validationError) {
-      setError(validationError);
+      toast.error(validationError);
       return;
     }
 
@@ -167,7 +167,7 @@ export function SingleImageUploader({ value, onChange, label, folder = "products
       setCompleted(true);
       setTimeout(() => setCompleted(false), 3000);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Upload failed");
+      toast.error(err instanceof Error ? err.message : "Upload failed");
       setUploading(false);
       setProcessing(false);
     }
@@ -203,6 +203,7 @@ export function SingleImageUploader({ value, onChange, label, folder = "products
   return (
     <div className={`space-y-2 ${className}`}>
       {label && <label className="luxury-label">{label}</label>}
+      {fieldName && <input type="hidden" name={fieldName} value={value} />}
 
       <input ref={inputRef} type="file" accept="image/jpeg,image/png,image/webp,image/avif" className="hidden" onChange={handleInputChange} />
       <input ref={cameraRef} type="file" accept="image/jpeg,image/png,image/webp,image/avif" capture="environment" className="hidden" onChange={handleCameraCapture} />
@@ -296,10 +297,9 @@ export function SingleImageUploader({ value, onChange, label, folder = "products
         </div>
       )}
 
-      {error && <p className="text-xs text-red">{error}</p>}
       {uploading && <p className="text-xs text-yellow">{t("uploading", "Uploading")}... {progress}%</p>}
       {processing && <p className="text-xs text-yellow">{t("processing", "Processing...")}</p>}
-      {completed && !uploading && !processing && !error && <p className="text-xs text-emerald-400">{t("upload_completed", "Upload completed")}</p>}
+      {completed && !uploading && !processing && <p className="text-xs text-emerald-400">{t("upload_completed", "Upload completed")}</p>}
       <input type="hidden" name="image" value={value} />
     </div>
   );
