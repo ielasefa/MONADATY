@@ -3,6 +3,7 @@ import { ProductFiltersSync } from "@/components/ProductFiltersWrapper";
 import { loadTranslations, t, getLanguage } from "@/lib/translations";
 import { getCategories } from "@/lib/db";
 import { loadProducts } from "@/lib/data";
+import { getLandingCopy } from "@/lib/landing-copy";
 
 export const dynamic = "force-dynamic";
 
@@ -18,39 +19,37 @@ export default async function ShopPage() {
     loadProducts(),
   ]);
   const categoriesData = categories.map(c => ({ slug: c.slug, name: c.name }));
+  const copy = getLandingCopy(lang);
 
   return (
-    <div className="bg-black-soft">
-      <section className="relative overflow-hidden">
-        <div className="mx-auto max-w-[1400px] px-6 md:px-10 lg:px-16 py-16 md:py-20 lg:py-24">
-          <div className="flex items-center gap-3">
-            <span className="h-px w-8 bg-gold" />
-            <span className="label-utility tracking-[0.55em] text-gold/60">
-              {t(translations, "the_collection", lang)}
-            </span>
-          </div>
+    <div className="bg-black">
+      <section className="relative overflow-hidden border-b border-gold/[0.16] bg-surface">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_0%,rgba(214,179,90,0.09),transparent_36%)]" />
+        <div className="storefront-container storefront-section relative">
+          <p className="storefront-eyebrow">
+            <span className="h-px w-9 bg-gold" />
+            {copy.shop.eyebrow}
+          </p>
 
-          <div className="mt-5 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="mt-6 flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl">
-              <h1
-                className="font-display text-[clamp(1.875rem,3.5vw,2.5rem)] leading-[0.95] tracking-[-0.03em] text-white"
-              >
-                {t(translations, "shop_our_range", lang)}
+              <h1 className="storefront-page-title">
+                {copy.shop.title}
               </h1>
-              <p className="mt-3 max-w-lg text-[0.82rem] leading-[1.85] text-white/55">
-                {t(translations, "shop_hero_description", lang)}
+              <p className="mt-5 max-w-xl text-sm leading-[1.85] text-white/58 sm:text-[0.95rem]">
+                {copy.shop.description}
               </p>
             </div>
 
-            <p className="label-utility tracking-[0.4em] text-white/30">
+            <p className="rounded-full border border-gold/[0.16] bg-black/30 px-4 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.2em] text-white/55">
               {products.length} {products.length === 1 ? t(translations, "drink_unit", lang) : t(translations, "drink_unit_plural", lang)}
             </p>
           </div>
         </div>
       </section>
 
-      <section className="relative border-t border-white/[0.06]">
-        <div className="mx-auto max-w-[1400px] px-6 md:px-10 lg:px-16 py-16 md:py-20 lg:py-24">
+      <section className="relative">
+        <div className="storefront-container py-12 md:py-16 lg:py-20">
           <Suspense
             fallback={
               <div className="flex items-center justify-center py-32">

@@ -2,8 +2,10 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useTranslation } from "@/hooks/useTranslation";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { getLandingCopy } from "@/lib/landing-copy";
 
 type SocialLinks = {
   twitter?: string;
@@ -58,7 +60,9 @@ export function Footer({
   collections: _collections = [],
   websiteName,
 }: FooterProps) {
-  const { t } = useTranslation("footer");
+  const { t, lang } = useTranslation("footer");
+  const copy = getLandingCopy(lang);
+  const isHomePage = usePathname() === "/";
 
   const copyright =
     settings?.copyright ?? t("copyright", "© 2025 MONADATY. All rights reserved.");
@@ -97,7 +101,7 @@ export function Footer({
   const socialEntries = Object.entries(socialLinks).filter(([, value]) => value);
 
   return (
-    <footer className="relative w-full overflow-hidden bg-black">
+    <footer className="storefront-theme relative w-full overflow-hidden bg-[#080807]">
       {/* Top gold divider */}
  {/* Top gold divider — luxury shimmer reveal */}
  <motion.div
@@ -105,7 +109,7 @@ export function Footer({
    whileInView={{ opacity: 1, scaleX: 1 }}
    viewport={{ once: true, margin: "-100px" }}
    transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-   className="mx-auto max-w-[1400px] px-6 md:px-10 lg:px-16"
+   className="mx-auto max-w-[1520px] px-5 sm:px-8 md:px-10 lg:px-16 xl:px-20"
  >
  <div className="relative h-px w-full overflow-hidden">
    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
@@ -117,13 +121,52 @@ export function Footer({
      viewport={{ once: true }}
      transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
      style={{
-       background:
-         "linear-gradient(90deg, transparent 0%, rgba(201,173,117,0.45) 50%, transparent 100%)",
+       background: "linear-gradient(90deg, transparent 0%, rgba(214,179,90,0.5) 50%, transparent 100%)",
        filter: "blur(1px)",
      }}
    />
  </div>
  </motion.div>
+
+      {isHomePage ? (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+          className="mx-auto max-w-[1520px] px-5 sm:px-8 md:px-10 lg:px-16 xl:px-20"
+        >
+          <div className="grid gap-7 border-b border-white/[0.08] py-14 md:grid-cols-2 md:items-end md:py-16 lg:grid-cols-12 lg:gap-12">
+            <div className="lg:col-span-6">
+              <p className="text-[0.58rem] font-semibold uppercase tracking-[0.34em] text-gold">
+                {copy.footer.newsletterEyebrow}
+              </p>
+              <h2 className="mt-4 max-w-[15ch] font-display text-[clamp(2rem,4vw,3.75rem)] font-light leading-[0.92] tracking-[-0.04em] text-white">
+                {copy.footer.newsletterTitle}
+              </h2>
+            </div>
+            <form
+              className="flex w-full max-w-xl flex-col gap-3 sm:flex-row lg:col-span-5 lg:col-start-8 lg:justify-self-end"
+              onSubmit={(event) => event.preventDefault()}
+            >
+              <label className="min-w-0 flex-1">
+                <span className="sr-only">{copy.footer.emailLabel}</span>
+                <input
+                  type="email"
+                  placeholder={copy.footer.emailPlaceholder}
+                  className="storefront-input bg-white/[0.035]"
+                />
+              </label>
+              <button
+                type="submit"
+                className="btn-primary h-12"
+              >
+                {copy.footer.newsletterButton}
+              </button>
+            </form>
+          </div>
+        </motion.div>
+      ) : null}
 
       {/* Main content */}
       <motion.div
@@ -131,9 +174,9 @@ export function Footer({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="mx-auto max-w-[1400px] px-6 md:px-10 lg:px-16"
+        className="mx-auto max-w-[1520px] px-5 sm:px-8 md:px-10 lg:px-16 xl:px-20"
       >
-        <div className="pt-16 pb-12 md:pt-20 md:pb-16 lg:pt-24 lg:pb-20">
+        <div className="pb-14 pt-14 md:pb-16 md:pt-16 lg:pb-20 lg:pt-20">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-10">
             {/* Brand column */}
             <motion.div
@@ -156,11 +199,8 @@ export function Footer({
                   {websiteName || "MONADATY"}
                 </motion.span>
               </Link>
-              <p className="mt-5 max-w-xs text-[0.72rem] leading-[1.8] text-white/55">
-                {t(
-                  "brand_desc",
-                  "Crafted in Casablanca. Premium Moroccan refreshment, built around taste.",
-                )}
+              <p className="mt-5 max-w-sm text-sm leading-[1.8] text-white/55">
+                {copy.footer.brandDescription}
               </p>
               <div className="mt-6 flex items-center gap-5">
                 {socialEntries.map(([key, value]) => (
@@ -234,18 +274,18 @@ export function Footer({
      ease: [0.16, 1, 0.3, 1],
      delay: 0.2,
    }}
-   className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:col-span-7 lg:col-start-6"
+   className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:col-span-7 lg:col-start-6 lg:gap-12"
  >
  <nav aria-label={t("shop", "Shop")}>
- <p className="label-utility text-[0.42rem] font-semibold uppercase tracking-[0.25em] text-white/40">
+ <p className="text-[0.55rem] font-semibold uppercase tracking-[0.25em] text-white/40">
    {t("shop", "SHOP")}
  </p>
- <ul className="mt-5 space-y-3">
+ <ul className="mt-5 space-y-3.5">
    {shopLinks.map((link) => (
      <li key={link.label} className="relative">
        <Link
          href={link.href}
-         className="text-[0.7rem] tracking-[0.04em] text-white/50 transition-all duration-300 hover:text-gold hover:translate-x-0.5 relative after:absolute after:bottom-0 after:start-0 after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
+         className="relative text-[0.78rem] tracking-[0.03em] text-white/50 transition-all duration-300 after:absolute after:bottom-0 after:start-0 after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:translate-x-0.5 hover:text-gold hover:after:w-full"
        >
          {link.label}
        </Link>
@@ -255,15 +295,15 @@ export function Footer({
  </nav>
 
  <nav aria-label={t("discover", "Discover")}>
- <p className="label-utility text-[0.42rem] font-semibold uppercase tracking-[0.25em] text-white/40">
+ <p className="text-[0.55rem] font-semibold uppercase tracking-[0.25em] text-white/40">
    {t("discover", "DISCOVER")}
  </p>
- <ul className="mt-5 space-y-3">
+ <ul className="mt-5 space-y-3.5">
    {discoverLinks.map((link) => (
      <li key={link.label} className="relative">
        <Link
          href={link.href}
-         className="text-[0.7rem] tracking-[0.04em] text-white/50 transition-all duration-300 hover:text-gold hover:translate-x-0.5 relative after:absolute after:bottom-0 after:start-0 after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
+         className="relative text-[0.78rem] tracking-[0.03em] text-white/50 transition-all duration-300 after:absolute after:bottom-0 after:start-0 after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:translate-x-0.5 hover:text-gold hover:after:w-full"
        >
          {link.label}
        </Link>
@@ -273,15 +313,15 @@ export function Footer({
  </nav>
 
  <nav aria-label={t("help", "Help")}>
- <p className="label-utility text-[0.42rem] font-semibold uppercase tracking-[0.25em] text-white/40">
+ <p className="text-[0.55rem] font-semibold uppercase tracking-[0.25em] text-white/40">
    {t("help", "HELP")}
  </p>
- <ul className="mt-5 space-y-3">
+ <ul className="mt-5 space-y-3.5">
    {helpLinks.map((link) => (
      <li key={link.label} className="relative">
        <Link
          href={link.href}
-         className="text-[0.7rem] tracking-[0.04em] text-white/50 transition-all duration-300 hover:text-gold hover:translate-x-0.5 relative after:absolute after:bottom-0 after:start-0 after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
+         className="relative text-[0.78rem] tracking-[0.03em] text-white/50 transition-all duration-300 after:absolute after:bottom-0 after:start-0 after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:translate-x-0.5 hover:text-gold hover:after:w-full"
        >
          {link.label}
        </Link>
@@ -302,7 +342,7 @@ export function Footer({
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className="border-t border-white/[0.06]"
       >
-        <div className="mx-auto max-w-[1400px] flex flex-col items-start justify-between gap-5 px-6 py-8 md:flex-row md:items-center md:px-10 lg:px-16">
+        <div className="mx-auto flex max-w-[1520px] flex-col items-start justify-between gap-5 px-5 py-8 sm:px-8 md:flex-row md:items-center md:px-10 lg:px-16 xl:px-20">
           <motion.p
             initial={{ opacity: 0, y: 6 }}
             whileInView={{ opacity: 1, y: 0 }}

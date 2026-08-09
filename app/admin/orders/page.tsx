@@ -65,22 +65,39 @@ export default function AdminOrdersPage() {
   const [loadError, setLoadError] = useState(false);
   const [page, setPage] = useState(0);
 
-  const loadOrders = useCallback(async () => {
-    setLoading(true);
-    setLoadError(false);
+  const loadOrders = useCallback(async (background = false) => {
+    if (!background) {
+      setLoading(true);
+      setLoadError(false);
+    }
     try {
-      const response = await fetch("/api/orders/list");
+      const response = await fetch("/api/orders/list", { cache: "no-store" });
       if (!response.ok) throw new Error("Failed to load orders");
       const data = await response.json();
       setOrders(data.orders || []);
+      setLoadError(false);
     } catch {
-      setLoadError(true);
+      if (!background) setLoadError(true);
     } finally {
-      setLoading(false);
+      if (!background) setLoading(false);
     }
   }, []);
 
-  useEffect(() => { loadOrders(); }, [loadOrders]);
+  useEffect(() => {
+    void loadOrders();
+
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === "visible") void loadOrders(true);
+    };
+    const refreshOnFocus = () => void loadOrders(true);
+
+    document.addEventListener("visibilitychange", refreshWhenVisible);
+    window.addEventListener("focus", refreshOnFocus);
+    return () => {
+      document.removeEventListener("visibilitychange", refreshWhenVisible);
+      window.removeEventListener("focus", refreshOnFocus);
+    };
+  }, [loadOrders]);
 
   const filtered = useMemo(() => {
     const query = search.toLowerCase().trim();
@@ -150,7 +167,7 @@ export default function AdminOrdersPage() {
         {loading ? (
           <div className="space-y-2 rounded-xl border border-white/[0.06] bg-[#121211] p-4" role="status"><span className="sr-only">{t("loading_orders", "Loading orders")}</span>{[0, 1, 2, 3, 4, 5].map((item) => <div key={item} className="h-[76px] animate-pulse rounded-lg bg-white/[0.035]" />)}</div>
         ) : loadError ? (
-          <section className="rounded-xl border border-burgundy/30 bg-burgundy/[0.06] px-6 py-14 text-center" role="alert"><p className="text-sm font-medium text-white/80">{t("orders_load_failed", "Failed to load orders")}</p><button type="button" onClick={loadOrders} className="btn-primary mt-4 h-10 px-5 text-[0.6rem]">{t("retry", "Retry")}</button></section>
+          <section className="rounded-xl border border-burgundy/30 bg-burgundy/[0.06] px-6 py-14 text-center" role="alert"><p className="text-sm font-medium text-white/80">{t("orders_load_failed", "Failed to load orders")}</p><button type="button" onClick={() => void loadOrders()} className="btn-primary mt-4 h-10 px-5 text-[0.6rem]">{t("retry", "Retry")}</button></section>
         ) : filtered.length === 0 ? (
           <section className="rounded-xl border border-dashed border-white/[0.1] bg-[#121211] px-6 py-20 text-center"><div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.03] text-gold/60" aria-hidden>□</div><h2 className="mt-4 text-sm font-semibold text-white/80">{t("no_orders_found", "No orders found")}</h2><p className="mx-auto mt-2 max-w-sm text-xs leading-relaxed text-white/40">{t("no_orders_found_desc", "Orders matching your filters will appear here.")}</p>{hasFilters && <button type="button" onClick={clearFilters} className="mt-5 inline-flex h-10 items-center rounded-md border border-gold/25 px-4 text-[0.6rem] font-semibold uppercase tracking-[0.1em] text-gold">{t("clear_filters", "Clear filters")}</button>}</section>
         ) : (

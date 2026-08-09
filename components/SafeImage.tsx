@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 type SafeImageProps = {
   src?: string | null;
@@ -42,8 +42,16 @@ export function SafeImage({
   const imgWidth = fill ? undefined : (width ?? 1200);
   const imgHeight = fill ? undefined : (height ?? 1200);
 
+  useEffect(() => {
+    setImageError(false);
+    setIsLoaded(false);
+  }, [normalizedSrc]);
+
   return (
-    <span className={fill ? "relative block h-full w-full" : "relative inline-block"}>
+    <span
+      className={`${fill ? "relative block h-full w-full" : "relative inline-block"} storefront-image-shell`}
+      data-image-loaded={isLoaded || imageError ? "true" : "false"}
+    >
       <Image
         src={resolvedSrc}
         alt={alt}

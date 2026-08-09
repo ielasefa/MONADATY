@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import type { StoredOrder } from "@/types";
 import type { CustomerInfo } from "@/lib/customers";
 import { DashboardHeader } from "@/components/admin/dashboard/DashboardHeader";
@@ -36,10 +37,10 @@ type Props = {
   latestCustomers: CustomerInfo[];
   revenueChartData: { date: string; revenue: number }[];
   ordersChartData: { date: string; orders: number }[];
-  topProducts: { id: string; name: string; qty: number; total: number }[];
+  topProducts: { id: string; name: string; qty: number; total: number; image: string }[];
   averageOrderValue: number;
-  bestSellingProduct: string | null;
-  bestCollection: string | null;
+  bestSellingProduct: { id: string; name: string; qty: number; total: number; image: string } | null;
+  bestCollection: { name: string; revenue: number; orders: number } | null;
   topProductsChart: { name: string; value: number }[];
   collectionSalesData: { name: string; value: number }[];
   monthlyRevenueData: { month: string; revenue: number }[];
@@ -51,6 +52,21 @@ const fmtMoney = (n: number) => `${n.toLocaleString(undefined, { maximumFraction
 
 export function DashboardClient(props: Props) {
   const { t } = useTranslation("admin");
+  const router = useRouter();
+
+  useEffect(() => {
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === "visible") router.refresh();
+    };
+    const refreshOnFocus = () => router.refresh();
+
+    document.addEventListener("visibilitychange", refreshWhenVisible);
+    window.addEventListener("focus", refreshOnFocus);
+    return () => {
+      document.removeEventListener("visibilitychange", refreshWhenVisible);
+      window.removeEventListener("focus", refreshOnFocus);
+    };
+  }, [router]);
 
   const kpis: Kpi[] = useMemo(
     () => [
@@ -59,7 +75,7 @@ export function DashboardClient(props: Props) {
         label: t("total_revenue", "Total Revenue"),
         value: props.totalRevenue,
         format: fmtMoney,
-        trendLabel: `${t("revenue_this_month", "Revenue This Month")} · ${fmtMoney(props.revenueThisMonth)}`,
+        trendLabel: `${t("today", "Today")} · ${fmtMoney(props.todayRevenue)}`,
         icon: <IconRevenue className="h-[18px] w-[18px]" />,
         accent: true,
         spark: props.revenueChartData.map((d) => d.revenue),
@@ -69,7 +85,7 @@ export function DashboardClient(props: Props) {
         key: "orders",
         label: t("total_orders", "Total Orders"),
         value: props.totalOrders,
-        trendLabel: `${t("orders_this_month", "Orders This Month")} · ${props.ordersThisMonth}`,
+        trendLabel: `${t("today", "Today")} · ${props.ordersToday}`,
         icon: <IconBag className="h-[18px] w-[18px]" />,
         spark: props.ordersChartData.map((d) => d.orders),
         href: "/admin/orders",
@@ -83,7 +99,7 @@ export function DashboardClient(props: Props) {
             ? `${props.lowStock} ${t("low_stock_count", "low stock")}`
             : t("all_in_stock", "All in stock"),
         icon: <IconBox className="h-[18px] w-[18px]" />,
-        href: "/admin/shop",
+        href: "/admin/products",
       },
       {
         key: "customers",
@@ -98,7 +114,7 @@ export function DashboardClient(props: Props) {
   );
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-6">
       <DashboardHeader adminName={props.adminName} />
 
       <KpiGrid kpis={kpis} />

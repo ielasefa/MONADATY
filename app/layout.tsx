@@ -27,7 +27,9 @@ const dmSans = DM_Sans({
 });
 
 const siteName = process.env.APP_NAME || "MONADATY";
-const siteDescription = process.env.APP_DESCRIPTION || "Crafted in Morocco. Built around taste.";
+const siteDescription =
+  process.env.APP_DESCRIPTION ||
+  "Shop sodas, water, juices and more at great prices with MONADATY.";
 const siteUrl = process.env.APP_URL || "http://localhost:3000";
 
 export const metadata: Metadata = {
@@ -36,7 +38,7 @@ export const metadata: Metadata = {
   description: siteDescription,
   applicationName: siteName,
   manifest: "/manifest.webmanifest",
-  keywords: ["MONADATY", "Moroccan beverages", "premium drinks", "Morocco"],
+  keywords: ["MONADATY", "soda", "water", "juice", "soft drinks", "Morocco"],
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
@@ -128,7 +130,7 @@ export default async function RootLayout({
             <LanguageProvider initialLang={langFromCookie}>
               <TranslationHydrator initialLang={langFromCookie} initialTranslations={commonTr} />
               {!isAdmin && <NavbarWrapper />}
-              <main id="main-content" role="main">{children}</main>
+              <main id="main-content" role="main" className={isAdmin ? undefined : "storefront-shell"}>{children}</main>
               {!isAdmin && <FooterWrapper />}
             </LanguageProvider>
           </WishlistProvider>

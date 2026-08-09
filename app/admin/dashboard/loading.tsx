@@ -1,6 +1,6 @@
 export default function AdminDashboardLoading() {
   return (
-    <div aria-live="polite" aria-busy="true" className="space-y-10">
+    <div aria-live="polite" aria-busy="true" className="container-shell space-y-8">
       {/* Header */}
       <div className="animate-pulse">
         <div className="h-3 w-32 rounded bg-white/[0.05]" />

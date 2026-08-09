@@ -2,8 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/components/cart-context";
-import { SafeImage } from "@/components/SafeImage";
-import { ProductVisual, isPlaceholderImage } from "@/components/ProductVisual";
+import { ProductImage } from "@/components/ProductImage";
 import type { Product } from "@/types";
 import { useTranslation } from "@/hooks/useTranslation";
 
@@ -100,27 +99,13 @@ export function QuickView({ product, open, onClose }: QuickViewProps) {
           <div className="flex-1">
             <div className="aspect-[4/5] overflow-hidden rounded-input bg-black p-4">
               <div className="flex h-full items-center justify-center">
-                {!isPlaceholderImage(product.image) ? (
-                  <SafeImage
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    sizes="(min-width: 768px) 40vw, 80vw"
-                    className="object-contain"
-                    fallback={<div className="text-sm font-semibold uppercase tracking-[0.3em] text-ivory/10">{t("img", "IMG")}</div>}
-                  />
-                ) : product.visual ? (
-                  <ProductVisual
-                    name={product.name}
-                    visual={product.visual}
-                    accent={product.accent}
-                    className="h-full w-auto max-w-full drop-shadow-[0_18px_30px_rgba(0,0,0,0.5)]"
-                  />
-                ) : (
-                  <span className="font-display text-2xl font-light text-ivory/10">
-                    {product.name.charAt(0)}
-                  </span>
-                )}
+                <ProductImage
+                  product={product}
+                  alt={product.name}
+                  fill
+                  sizes="(min-width: 768px) 40vw, 80vw"
+                  className="object-contain p-4"
+                />
               </div>
             </div>
           </div>

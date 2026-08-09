@@ -4,6 +4,8 @@ const mockRequireOrigin = vi.fn<() => null | Response>(() => null);
 const mockGetAuthenticatedAdmin = vi.fn();
 const mockRateLimit = vi.fn<(...args: unknown[]) => boolean>(() => false);
 const mockCreateOrder = vi.fn();
+const mockGetOrderByIdempotencyKey = vi.fn();
+const mockSendConfirmationEmail = vi.fn<(order: unknown) => Promise<void>>(() => Promise.resolve());
 
 vi.mock("@/lib/csrf", () => ({
   requireOrigin: () => mockRequireOrigin(),
@@ -16,13 +18,14 @@ vi.mock("@/lib/rate-limiter", () => ({
 }));
 vi.mock("@/lib/orders", () => ({
   createOrder: (input: unknown) => mockCreateOrder(input),
-  getOrderByNumber: vi.fn(() => null),
+  getOrderByIdempotencyKey: (key: string) => mockGetOrderByIdempotencyKey(key),
 }));
 vi.mock("@/lib/email", () => ({
-  sendOrderConfirmationEmail: vi.fn(() => Promise.resolve()),
+  sendOrderConfirmationEmail: (order: unknown) => mockSendConfirmationEmail(order),
 }));
 vi.mock("next/cache", () => ({
   revalidatePath: vi.fn(),
+  revalidateTag: vi.fn(),
 }));
 
 vi.mock("@/lib/prisma", () => ({
@@ -40,7 +43,7 @@ const validBody = {
   items: [
     { productId: "p1", name: "Item", slug: "item", image: "", quantity: 2, unitPrice: "50.00 DH", totalPrice: "100.00 DH" },
   ],
-  idempotencyKey: "key-1",
+  idempotencyKey: "idem_checkout_key_1",
   subtotal: "100.00 DH",
   shipping: "0.00 DH",
   shippingMethod: "delivery",
@@ -65,7 +68,22 @@ describe("POST /api/orders/create", () => {
     mockRateLimit.mockReset();
     mockRateLimit.mockReturnValue(false);
     mockCreateOrder.mockReset();
-    mockCreateOrder.mockResolvedValue({ orderNumber: "MON-001", id: "o1" });
+    mockGetOrderByIdempotencyKey.mockReset();
+    mockGetOrderByIdempotencyKey.mockResolvedValue(null);
+    mockSendConfirmationEmail.mockClear();
+    mockCreateOrder.mockResolvedValue({
+      orderNumber: "MON-001",
+      id: "o1",
+      total: "108.00 DH",
+      orderStatus: "pending",
+      paymentStatus: "pending",
+      customerName: "Test Customer",
+      customerEmail: "test@example.com",
+      address: "123 Test Street",
+      city: "Casablanca",
+      items: [{ name: "Item", quantity: 2, unitPrice: "50.00 DH" }],
+      replayed: false,
+    });
   });
 
   it("rejects requests with invalid CSRF (origin check)", async () => {
@@ -110,18 +128,83 @@ describe("POST /api/orders/create", () => {
   });
 
   it("creates an order on a valid request", async () => {
-    mockCreateOrder.mockResolvedValueOnce({ orderNumber: "MON-TEST-001", id: "order-1" });
+    mockCreateOrder.mockResolvedValueOnce({
+      orderNumber: "MON-TEST-001",
+      id: "order-1",
+      total: "108.00 DH",
+      orderStatus: "pending",
+      paymentStatus: "pending",
+      customerName: "Test Customer",
+      customerEmail: "test@example.com",
+      address: "123 Test Street",
+      city: "Casablanca",
+      items: [{ name: "Item", quantity: 2, unitPrice: "50.00 DH" }],
+      replayed: false,
+    });
 
     const res = await POST(makeRequest(validBody) as never);
     expect(res.status).toBe(201);
     const body = await res.json();
     expect(body.order.orderNumber).toBe("MON-TEST-001");
+    expect(mockSendConfirmationEmail).toHaveBeenCalledTimes(1);
   });
 
   it("returns 400 when createOrder returns an error", async () => {
-    mockCreateOrder.mockResolvedValueOnce({ error: "Insufficient stock" });
+    mockCreateOrder.mockResolvedValueOnce({ error: "Invalid checkout", code: "VALIDATION_ERROR" });
 
     const res = await POST(makeRequest(validBody) as never);
     expect(res.status).toBe(400);
+  });
+
+  it("returns the original order for an idempotent replay without sending another email", async () => {
+    mockCreateOrder.mockResolvedValueOnce({
+      orderNumber: "MON-TEST-001",
+      id: "order-1",
+      total: "108.00 DH",
+      orderStatus: "pending",
+      paymentStatus: "pending",
+      customerName: "Test Customer",
+      customerEmail: "test@example.com",
+      address: "123 Test Street",
+      city: "Casablanca",
+      items: [{ name: "Item", quantity: 2, unitPrice: "50.00 DH" }],
+      replayed: true,
+    });
+
+    const res = await POST(makeRequest(validBody) as never);
+    expect(res.status).toBe(200);
+    expect((await res.json()).order.orderNumber).toBe("MON-TEST-001");
+    expect(mockSendConfirmationEmail).not.toHaveBeenCalled();
+  });
+
+  it("recovers a committed order before applying the new-write rate limit", async () => {
+    mockRateLimit.mockReturnValueOnce(true);
+    mockGetOrderByIdempotencyKey.mockResolvedValueOnce({
+      orderNumber: "MON-RECOVERED",
+      id: "order-recovered",
+      total: "108.00 DH",
+      orderStatus: "pending",
+      paymentStatus: "pending",
+      customerName: "Test Customer",
+      customerEmail: "test@example.com",
+      address: "123 Test Street",
+      city: "Casablanca",
+      items: [],
+      replayed: true,
+    });
+
+    const res = await POST(makeRequest(validBody) as never);
+    expect(res.status).toBe(200);
+    expect((await res.json()).order.orderNumber).toBe("MON-RECOVERED");
+    expect(mockRateLimit).not.toHaveBeenCalled();
+    expect(mockCreateOrder).not.toHaveBeenCalled();
+  });
+
+  it("returns a conflict for an out-of-stock order", async () => {
+    mockCreateOrder.mockResolvedValueOnce({ error: "Insufficient stock", code: "OUT_OF_STOCK" });
+
+    const res = await POST(makeRequest(validBody) as never);
+    expect(res.status).toBe(409);
+    expect((await res.json()).code).toBe("OUT_OF_STOCK");
   });
 });

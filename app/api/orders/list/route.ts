@@ -9,7 +9,10 @@ export async function GET() {
 
   try {
     const orders = await getOrders();
-    return NextResponse.json({ orders });
+    return NextResponse.json(
+      { orders },
+      { headers: { "Cache-Control": "no-store, no-cache, must-revalidate" } },
+    );
   } catch (e) {
     logError(e, "list-orders error:");
     return NextResponse.json({ error: "Failed to fetch orders" }, { status: 500 });

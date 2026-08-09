@@ -23,7 +23,7 @@ export async function generateStaticParams() {
   }
 }
 
-const CONTAINER = "mx-auto w-full max-w-[1400px] px-6 sm:px-8 lg:px-12";
+const CONTAINER = "storefront-container";
 
 const FORMAT_LABELS: Record<string, string> = {
   can: "Can",
@@ -105,7 +105,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   return (
     <div className="bg-[#0B0B0A]">
       {/* Breadcrumb — restrained, generous top rhythm */}
-      <div className={`${CONTAINER} pt-10 md:pt-16`}>
+      <div className={`${CONTAINER} pt-8 md:pt-12`}>
         <nav
           aria-label={gt("breadcrumb_aria_label", "Breadcrumb")}
           className="flex items-center gap-3 overflow-hidden text-[0.6rem] font-medium uppercase tracking-[0.24em] text-white/30"
@@ -131,15 +131,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </div>
 
       {/* Hero — gallery 5 / information 7, composed with whitespace */}
-      <section className={`${CONTAINER} pb-24 pt-8 md:pb-32 md:pt-12`}>
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-14 xl:gap-20">
+      <section className={`${CONTAINER} pb-16 pt-8 md:pb-20 md:pt-10 lg:pb-24`}>
+        <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14 xl:gap-20">
           {/* Gallery — clean, never dominates */}
-          <FadeIn delay={0.1} y={20} duration={0.6}>
-            <div className="lg:col-span-5 mt-4 lg:mt-6">
+          <FadeIn delay={0.1} y={20} duration={0.6} className="min-w-0">
+            <div className="lg:sticky lg:top-28">
               <ProductGallery
                 name={product.name}
                 gallery={product.gallery}
                 image={product.image}
+                brand={product.brand}
+                category={product.category}
+                collection={product.collection}
                 visual={product.visual as "can" | "bottle" | "glass" | undefined}
                 accent={product.accent}
               />
@@ -147,8 +150,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </FadeIn>
 
           {/* Information — the primary focus, sticky */}
-          <SlideUp delay={0.15} y={20} duration={0.7}>
-            <div className="lg:col-span-7 lg:sticky lg:top-24 lg:self-start lg:pt-2">
+          <SlideUp delay={0.15} y={20} duration={0.7} className="min-w-0">
+            <div className="lg:pt-2">
 {/* Category eyebrow + badge */}
         <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
           <div className="flex items-center gap-4">
@@ -165,7 +168,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
 
         {/* Display title */}
-        <h1 className="mt-4 max-w-[20ch] font-display text-4xl leading-[1.02] tracking-[-0.01em] text-white sm:text-5xl lg:text-[3.4rem]">
+        <h1 className="mt-5 max-w-[18ch] font-display text-[clamp(2.4rem,4.5vw,3.65rem)] font-normal leading-[1] tracking-[-0.025em] text-white">
           {product.name}
         </h1>
 
@@ -190,7 +193,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </div>
 
 {/* Luxury pricing block */}
-        <div className="mt-5 flex flex-wrap items-end justify-between gap-6 border-y border-white/[0.08] py-8">
+        <div className="mt-7 flex flex-wrap items-end justify-between gap-6 border-y border-gold/[0.16] py-7">
               <div>
                 <p className="text-[0.6rem] font-medium uppercase tracking-[0.26em] text-white/35">
                   {loc("price_label", "Prix", "Price", "السعر")}
@@ -210,7 +213,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
 {/* Description */}
         {product.description && (
-          <p className="mt-6 max-w-xl text-[0.95rem] leading-[1.85] text-white/55">
+          <p className="mt-7 max-w-2xl text-[0.95rem] leading-[1.85] text-white/58">
             {product.description}
           </p>
         )}
@@ -231,7 +234,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     {product.category || "—"}
                   </p>
                 </div>
-                <div className="sm:border-l sm:border-white/[0.08] sm:pl-8">
+                <div className="sm:border-s sm:border-white/[0.08] sm:ps-8">
                   <p className="text-[0.55rem] font-medium uppercase tracking-[0.3em] text-gold">
                     {gt("collection", "COLLECTION")}
                   </p>
@@ -239,7 +242,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     {product.collection ? product.collection.replace(/-/g, " ") : "—"}
                   </p>
                 </div>
-                <div className="sm:border-l sm:border-white/[0.08] sm:pl-8">
+                <div className="sm:border-s sm:border-white/[0.08] sm:ps-8">
                   <p className="text-[0.55rem] font-medium uppercase tracking-[0.3em] text-gold">
                     {gt("format_label", "FORMAT")}
                   </p>
@@ -249,11 +252,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </div>
               </div>
 
-              {/* Fabriqué au Maroc — centered, gold, premium label */}
               <div className="mt-8 flex items-center gap-4 border-t border-gold/15 pt-8">
                 <span className="h-px flex-1 bg-gold/20" />
-                <span className="text-[0.55rem] font-medium uppercase tracking-[0.35em] text-gold/80">
-                  {gt("crafted_in_morocco_label", "FABRIQUÉ AU MAROC · 2024")}
+                <span className="text-center text-[0.55rem] font-medium uppercase tracking-[0.28em] text-gold/80">
+                  {loc(
+                    "retail_service_label",
+                    "SÉLECTIONNÉ PAR MONADATY · ACHAT EN LIGNE",
+                    "SELECTED BY MONADATY · SHOP ONLINE",
+                    "مختار من موناداتي · تسوّق عبر الإنترنت",
+                  )}
                 </span>
                 <span className="h-px flex-1 bg-gold/20" />
               </div>

@@ -85,7 +85,7 @@ export const FilterSidebar = memo(function FilterSidebar({
               aria-label={t("min_price", "Minimum price")}
               value={localMin || ""}
               onChange={(e) => setLocalMin(Number(e.target.value))}
-              className="h-10 w-full rounded-input border border-white/[0.08] bg-[#1E1E1E] px-3 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/35 focus:border-gold/50 focus:ring-1 focus:ring-gold/20 caret-white"
+              className="storefront-input"
               style={{ WebkitTextFillColor: "#FFFFFF", caretColor: "#FFFFFF" }}
             />
           </div>
@@ -98,7 +98,7 @@ export const FilterSidebar = memo(function FilterSidebar({
               aria-label={t("max_price", "Maximum price")}
               value={localMax || ""}
               onChange={(e) => setLocalMax(Number(e.target.value))}
-              className="h-10 w-full rounded-input border border-white/[0.08] bg-[#1E1E1E] px-3 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/35 focus:border-gold/50 focus:ring-1 focus:ring-gold/20 caret-white"
+              className="storefront-input"
               style={{ WebkitTextFillColor: "#FFFFFF", caretColor: "#FFFFFF" }}
             />
           </div>

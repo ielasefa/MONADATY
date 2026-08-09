@@ -149,29 +149,29 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
 
   return (
     <div>
-      <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <header className="mb-6 flex flex-col gap-4 border-b border-white/[0.08] pb-6 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="luxury-label mb-2">{t("collection_showcase_breadcrumb", "Collection Showcase")}</p>
-          <h1 className="text-3xl font-semibold tracking-tight text-white">
+          <h1 className="text-white">
             {t("collection_showcase_title", "Collection Showcase Manager")}
           </h1>
           <p className="mt-1 text-sm text-muted">
             {t("collection_showcase_description", "Choose exactly 3 products to feature for each collection on the landing page.")}
           </p>
         </div>
-        <div className="flex gap-3">
-          <div className="luxury-card rounded-xl px-5 py-3">
+        <div className="grid grid-cols-2 gap-3">
+          <div className="admin-panel min-w-0 px-4 py-3">
             <p className="luxury-label text-[10px] text-muted">{t("configured_collections", "Configured Collections")}</p>
             <p className="font-display text-xl font-semibold text-gold">
               {configuredCount} <span className="text-xs font-normal text-muted">/ {collections.length}</span>
             </p>
           </div>
-          <div className="luxury-card rounded-xl px-5 py-3">
+          <div className="admin-panel min-w-0 px-4 py-3">
             <p className="luxury-label text-[10px] text-muted">{t("featured_products", "Featured Products")}</p>
             <p className="font-display text-xl font-semibold text-white">{featuredCount}</p>
           </div>
         </div>
-      </div>
+      </header>
 
       {collections.length === 0 ? (
         <div className="luxury-card flex flex-col items-center gap-3 rounded-xl p-12 text-center">
@@ -185,7 +185,7 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
           {collections.map((c) => {
             const count = selection[c.id]?.length ?? 0;
             const isExpanded = expandedId === c.id;
@@ -195,10 +195,10 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
                 key={c.id}
                 type="button"
                 onClick={() => toggle(c.id)}
-                whileHover={{ y: -3, scale: 1.01 }}
+                whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.99 }}
                 transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                className={`luxury-card rounded-xl border p-5 text-left transition-all duration-300 ${
+                className={`admin-panel border p-5 text-start transition-[transform,border-color,box-shadow] duration-200 ${
                   isExpanded
                     ? "border-gold/40 shadow-gold shadow-lg"
                     : "border-white/[0.06] hover:border-gold/25"
@@ -270,7 +270,7 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="luxury-card mt-8 rounded-xl p-6 md:p-8"
+            className="admin-panel mt-6 p-5 sm:p-6"
           >
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
@@ -300,7 +300,7 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 10 }}
-                    className="flex items-center gap-4 rounded-xl border border-white/[0.06] bg-card p-4"
+                    className="flex flex-wrap items-center gap-3 rounded-xl border border-white/[0.08] bg-[#1A1A16] p-3 sm:flex-nowrap sm:gap-4"
                   >
                     <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gold/10 text-[0.65rem] font-bold text-gold">
                       {index + 1}
@@ -310,7 +310,7 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
                       <p className="truncate text-sm font-medium text-white">{product.name}</p>
                       <p className="text-xs text-gold">{product.price}</p>
                     </div>
-                    <div className="flex items-center gap-1">
+                    <div className="ms-auto flex items-center gap-1">
                       <button
                         type="button"
                         onClick={() => move(index, -1)}
@@ -334,7 +334,7 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
                       type="button"
                       onClick={() => removeProduct(index)}
                       aria-label={`${t("remove_product", "Remove Product")} ${product.name}`}
-                      className="badge-red rounded-lg px-3 py-2 text-xs font-medium"
+                      className="inline-flex h-9 items-center rounded-lg border border-red-500/20 bg-red-500/[0.06] px-3 text-[0.58rem] font-semibold uppercase tracking-[0.1em] text-red-300 transition hover:bg-red-500/10"
                     >
                       {t("remove_product", "Remove")}
                     </button>
@@ -347,7 +347,7 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
               <div className="mt-6">
                 {pickerId === expanded.id ? (
                   <div className="rounded-xl border border-white/[0.08] bg-black-soft p-4">
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                       <input
                         type="search"
                         value={search}
@@ -403,15 +403,15 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
               </div>
             )}
 
-            <div className="mt-6 flex items-center justify-end gap-3 border-t border-white/[0.06] pt-6">
-              <Link href="/admin/collections" className="btn-secondary rounded-xl px-4 py-2.5 text-sm">
+            <div className="mt-6 flex flex-col-reverse gap-3 border-t border-white/[0.08] pt-5 sm:flex-row sm:items-center sm:justify-end">
+              <Link href="/admin/collections" className="btn-secondary w-full px-4 sm:w-auto">
                 {t("edit_collections", "Edit Collections")}
               </Link>
               <button
                 type="button"
                 onClick={handleSave}
                 disabled={saving || selectedIds.length !== MAX_PRODUCTS}
-                className="btn-primary inline-flex items-center gap-2 rounded-xl px-6 py-2.5 text-sm disabled:pointer-events-none disabled:opacity-50"
+                className="btn-primary inline-flex w-full items-center gap-2 px-6 disabled:pointer-events-none disabled:opacity-50 sm:w-auto"
               >
                 {saving && (
                   <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" aria-hidden />

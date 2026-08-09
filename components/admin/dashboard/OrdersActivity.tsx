@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
+import { ProductImage } from "@/components/ProductImage";
 import type { StoredOrder } from "@/types";
 import type { CustomerInfo } from "@/lib/customers";
 import { EASE, Panel, SectionHeading, StatusBadge, EmptyState } from "./ui";
@@ -33,7 +34,7 @@ export function OrdersActivity({
   latestCustomers,
 }: {
   latestOrders: StoredOrder[];
-  topProducts: { id: string; name: string; qty: number; total: number }[];
+  topProducts: { id: string; name: string; qty: number; total: number; image: string }[];
   latestCustomers: CustomerInfo[];
 }) {
   const { t } = useTranslation("admin");
@@ -138,7 +139,19 @@ export function OrdersActivity({
                         >
                           {i + 1}
                         </span>
-                        <span className="truncate text-[0.8rem] font-medium text-white">{p.name}</span>
+                        <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg border border-white/[0.06] bg-black/30">
+                          <ProductImage
+                            product={p}
+                            alt={p.name}
+                            fill
+                            sizes="36px"
+                            className="object-contain p-1"
+                          />
+                        </span>
+                        <span className="min-w-0">
+                          <span className="block truncate text-[0.78rem] font-medium text-white">{p.name}</span>
+                          <span className="mt-0.5 block text-[0.6rem] text-white/35">{p.total.toFixed(2)} DH</span>
+                        </span>
                       </div>
                       <span className="shrink-0 text-[0.72rem] font-semibold text-muted">
                         {p.qty} {t("sold_label", "sold")}

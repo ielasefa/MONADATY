@@ -265,7 +265,7 @@ export function LandingCMS({ configId, landingData, featuredEntries, allCollecti
     <div className="flex h-[calc(100vh-4rem)] min-w-0 overflow-hidden bg-[#0B0B0A]">
 
       {/* ── LEFT SIDEBAR ── */}
-      <aside className="flex w-[72px] shrink-0 flex-col border-e border-white/[0.06] bg-[#121211] xl:w-52">
+      <aside className="flex w-14 shrink-0 flex-col border-e border-white/[0.06] bg-[#121211] xl:w-52">
         <div className="border-b border-white/[0.06] px-3 py-4 xl:px-4">
           <div className="flex items-center justify-between">
             <div className="hidden xl:block">
@@ -328,14 +328,14 @@ export function LandingCMS({ configId, landingData, featuredEntries, allCollecti
             </div>
             {unsaved && <span className="shrink-0 rounded-full bg-gold/10 px-2.5 py-1 text-[0.55rem] font-medium uppercase tracking-[0.12em] text-gold animate-pulse">{t("landing_unsaved", "Unsaved")}</span>}
           </div>
-          <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
+          <div className="flex w-full min-w-0 flex-wrap items-center justify-end gap-2 sm:w-auto sm:shrink-0">
             <span className={`hidden rounded-full border px-2.5 py-1 text-[0.55rem] font-semibold uppercase tracking-[0.14em] sm:inline-flex ${status === "published" ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-400" : "border-gold/20 bg-gold/5 text-gold"}`}>
               <span className={`me-1.5 inline-block h-1.5 w-1.5 rounded-full ${status === "published" ? "bg-emerald-400" : "bg-gold"}`} />
               {status === "published" ? t("landing_published", "Published") : t("landing_draft", "Draft")}
             </span>
-            <button onClick={handleSave} disabled={saving} className="btn-primary-sm h-9 px-4 text-[0.55rem]">{saving ? t("landing_saving", "Saving...") : t("landing_save_draft", "Save Draft")}</button>
-            <button onClick={handlePublish} disabled={publishing || saving} className="btn-gold h-9 px-5 text-[0.55rem]">{publishing ? t("landing_publishing", "Publishing...") : t("landing_publish", "Publish")}</button>
-            <a href="/" target="_blank" rel="noreferrer" className="btn-secondary hidden h-9 px-4 text-[0.55rem] sm:inline-flex">{t("landing_view_site", "View Site")}</a>
+            <button onClick={handleSave} disabled={saving} className="btn-primary-sm h-9 px-4 text-[0.55rem] max-sm:w-full">{saving ? t("landing_saving", "Saving...") : t("landing_save_draft", "Save Draft")}</button>
+            <button onClick={handlePublish} disabled={publishing || saving} className="btn-gold h-9 px-5 text-[0.55rem] max-sm:w-full">{publishing ? t("landing_publishing", "Publishing...") : t("landing_publish", "Publish")}</button>
+            <a href="/" target="_blank" rel="noreferrer" className="btn-secondary h-9 px-4 text-[0.55rem] max-sm:!hidden sm:!inline-flex">{t("landing_view_site", "View Site")}</a>
           </div>
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-6 sm:px-6 lg:px-8 lg:py-8">

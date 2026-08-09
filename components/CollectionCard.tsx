@@ -16,9 +16,10 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 
 export function CollectionCard({ collection, image }: CollectionCardProps) {
   const { t } = useTranslation("common");
+  const imageSource = image || collection.image;
   return (
     <Link
-      href={`/shop?category=${collection.slug}`}
+      href={`/shop?collection=${collection.slug}`}
       className="group block"
     >
       <motion.div
@@ -27,7 +28,7 @@ export function CollectionCard({ collection, image }: CollectionCardProps) {
         transition={{ duration: 0.22, ease: EASE }}
         className="relative aspect-[4/3] overflow-hidden"
       >
-        {image ? (
+        {imageSource ? (
           <motion.div
             initial={false}
             whileHover={{ scale: 1.04, transition: { duration: 0.6, ease: EASE } }}
@@ -35,7 +36,7 @@ export function CollectionCard({ collection, image }: CollectionCardProps) {
             className="h-full w-full"
           >
             <SafeImage
-              src={image}
+              src={imageSource}
               alt={collection.title}
               fill
               sizes="(min-width:1024px) 33vw, (min-width:768px) 50vw, 100vw"

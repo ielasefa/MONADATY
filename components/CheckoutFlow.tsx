@@ -2,15 +2,13 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useCart } from "@/components/cart-context";
 import { formatMoney, parseMoney } from "@/lib/money";
 import { motion, useReducedMotion } from "framer-motion";
-import { SodaCan } from "@/components/visuals/SodaCan";
-import { SodaBottle } from "@/components/visuals/SodaBottle";
-import { GlassDrink } from "@/components/visuals/GlassDrink";
-import { SafeImage } from "@/components/SafeImage";
+import { ProductImage } from "@/components/ProductImage";
+import { resolveDatabaseProductImage } from "@/lib/product-images";
 
 function formatPrice(price: string, quantity: number): string {
   const numeric = parseFloat(price.replace(/[^0-9.]/g, ""));
@@ -26,7 +24,10 @@ type CheckoutFlowProps = {
 
 function generateIdempotencyKey(): string {
   if (typeof window === "undefined") return "";
-  const key = `idem_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
+  const entropy = typeof crypto.randomUUID === "function"
+    ? crypto.randomUUID()
+    : `${Date.now()}_${Math.random().toString(36).substring(2, 12)}`;
+  const key = `idem_${entropy}`;
   sessionStorage.setItem("monadaty-checkout-idem", key);
   return key;
 }
@@ -65,6 +66,44 @@ type DeliveryState = {
 
 type DeliveryErrors = Partial<Record<keyof DeliveryState, string>>;
 
+type CheckoutErrorCode =
+  | "VALIDATION_ERROR"
+  | "PRODUCT_UNAVAILABLE"
+  | "OUT_OF_STOCK"
+  | "COUPON_INVALID"
+  | "RATE_LIMITED"
+  | "ORDER_CREATE_FAILED";
+
+const checkoutErrorCopy = {
+  en: {
+    validation: "Please review your delivery details and try again.",
+    unavailable: "One of your drinks is no longer available. Please return to your cart and update it.",
+    stock: "Stock changed while you were checking out. Please return to your cart and adjust the quantity.",
+    coupon: "This offer is no longer valid. Please review your order and try again.",
+    retry: "We could not confirm the response. Retry safely — the same order will not be created twice.",
+    session: "Your checkout session expired. Please refresh the page and try again.",
+    retryButton: "Retry confirmation",
+  },
+  fr: {
+    validation: "Vérifiez vos informations de livraison, puis réessayez.",
+    unavailable: "Une boisson n’est plus disponible. Revenez au panier pour le mettre à jour.",
+    stock: "Le stock a changé pendant votre commande. Revenez au panier pour ajuster la quantité.",
+    coupon: "Cette offre n’est plus valide. Vérifiez votre commande, puis réessayez.",
+    retry: "La réponse n’a pas pu être confirmée. Réessayez sans risque : la commande ne sera pas créée deux fois.",
+    session: "Votre session de commande a expiré. Actualisez la page, puis réessayez.",
+    retryButton: "Vérifier la commande",
+  },
+  ar: {
+    validation: "يرجى مراجعة معلومات التوصيل ثم المحاولة من جديد.",
+    unavailable: "أحد المشروبات لم يعد متوفراً. ارجع إلى السلة لتحديثها.",
+    stock: "تغيّر المخزون أثناء الطلب. ارجع إلى السلة لتعديل الكمية.",
+    coupon: "هذا العرض لم يعد صالحاً. راجع طلبك ثم حاول من جديد.",
+    retry: "تعذر تأكيد الاستجابة. أعد المحاولة بأمان، ولن يتم إنشاء الطلب مرتين.",
+    session: "انتهت جلسة الطلب. حدّث الصفحة ثم حاول من جديد.",
+    retryButton: "التحقق من الطلب",
+  },
+} as const;
+
 const emptyDeliveryState: DeliveryState = {
   fullName: "",
   email: "",
@@ -79,9 +118,13 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
   const { clearCart, items } = useCart();
   const [deliveryState, setDeliveryState] = useState<DeliveryState>(emptyDeliveryState);
   const [errors, setErrors] = useState<DeliveryErrors>({});
+  const [submissionError, setSubmissionError] = useState("");
+  const [canRetryConfirmation, setCanRetryConfirmation] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const submissionLock = useRef(false);
   const shouldReduce = useReducedMotion();
-  const { t } = useTranslation("checkout");
+  const { t, lang } = useTranslation("checkout");
+  const errorCopy = checkoutErrorCopy[lang];
 
   const subtotalValue = useMemo(
     () => items.reduce((total, item) => total + parseMoney(item.price) * item.quantity, 0),
@@ -103,11 +146,14 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
   function handleChange(field: keyof DeliveryState, value: string) {
     setDeliveryState((currentState) => ({ ...currentState, [field]: value }));
     setErrors((currentErrors) => ({ ...currentErrors, [field]: undefined }));
+    setSubmissionError("");
+    setCanRetryConfirmation(false);
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
+    if (submissionLock.current) return;
     if (!items.length) return;
 
     const nextErrors: DeliveryErrors = {};
@@ -134,11 +180,14 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
 
     const idempotencyKey = getIdempotencyKey();
     if (!idempotencyKey) {
-      setErrors({ fullName: t("session_error") });
+      setSubmissionError(errorCopy.session);
       return;
     }
 
+    submissionLock.current = true;
     setIsSubmitting(true);
+    setSubmissionError("");
+    setCanRetryConfirmation(false);
 
     const body = {
       customerName: deliveryState.fullName.trim(),
@@ -159,7 +208,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
         productId: item.id,
         name: item.name,
         slug: item.slug || item.id,
-        image: item.image || "",
+        image: resolveDatabaseProductImage(item),
         quantity: item.quantity,
         unitPrice: item.price,
         totalPrice: formatPrice(item.price, item.quantity),
@@ -174,8 +223,22 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
       });
 
       if (!res.ok) {
-        const err = await res.json();
-        setErrors({ fullName: err.error || t("order_failed") });
+        const err = (await res.json().catch(() => ({}))) as { code?: CheckoutErrorCode };
+        const message =
+          err.code === "OUT_OF_STOCK"
+            ? errorCopy.stock
+            : err.code === "PRODUCT_UNAVAILABLE"
+              ? errorCopy.unavailable
+              : err.code === "COUPON_INVALID"
+                ? errorCopy.coupon
+                : err.code === "VALIDATION_ERROR"
+                  ? errorCopy.validation
+                  : errorCopy.retry;
+        setSubmissionError(message);
+        setCanRetryConfirmation(
+          err.code === "ORDER_CREATE_FAILED" || err.code === "RATE_LIMITED" || res.status >= 500,
+        );
+        submissionLock.current = false;
         setIsSubmitting(false);
         return;
       }
@@ -185,7 +248,9 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
       clearCart();
       router.push(`/success?order=${data.order.orderNumber}`);
     } catch {
-      setErrors({ fullName: t("something_wrong") });
+      setSubmissionError(errorCopy.retry);
+      setCanRetryConfirmation(true);
+      submissionLock.current = false;
       setIsSubmitting(false);
     }
   }
@@ -199,7 +264,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
         className="flex min-h-[60vh] items-center justify-center"
       >
         <div className="max-w-lg text-center">
-          <div className="mx-auto mb-8 flex h-20 w-20 items-center justify-center rounded-full border border-white/[0.06] bg-[#1E1E1E]">
+          <div className="mx-auto mb-8 flex h-20 w-20 items-center justify-center rounded-full border border-gold/[0.16] bg-card">
             <svg className="h-8 w-8 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121 0 2.09-.773 2.34-1.872l1.836-8.046A1.125 1.125 0 0018.054 3H5.106m2.394 11.25l-1.5-6h13.5" />
             </svg>
@@ -260,7 +325,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
 
       <div className="grid gap-10 lg:grid-cols-[65fr_35fr] lg:items-start">
         <motion.div variants={itemVariants}>
-          <form onSubmit={handleSubmit} className="space-y-12">
+          <form onSubmit={handleSubmit} className="space-y-12" aria-busy={isSubmitting}>
             <div>
               <div className="mb-8 flex items-center gap-4">
                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-rouge text-[0.55rem] font-semibold text-white">1</span>
@@ -348,9 +413,9 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                       aria-describedby={errors.city ? "err-city" : undefined}
                       required
                     >
-                      <option value="" className="bg-[#171717]">{t("select_city")}</option>
+                      <option value="" className="bg-card">{t("select_city")}</option>
                       {cities.map((city) => (
-                        <option key={city.name} value={city.name} className="bg-[#171717]">{city.name}</option>
+                        <option key={city.name} value={city.name} className="bg-card">{city.name}</option>
                       ))}
                     </select>
                     {errors.city && <p id="err-city" className="text-[0.6rem] text-rouge">{errors.city}</p>}
@@ -423,7 +488,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                 </div>
               </div>
 
-              <div className="rounded-card border border-white/[0.06] bg-[#1E1E1E] p-5">
+              <div className="rounded-xl border border-gold/[0.16] bg-card p-5">
                 <div className="flex items-center gap-4">
 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-rouge/10">
                      <svg aria-hidden="true" width={18} height={18} viewBox="0 0 24 24" className="shrink-0 text-gold" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -440,6 +505,14 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
             </div>
 
             <div className="pt-2">
+              {submissionError && (
+                <div
+                  role="alert"
+                  className="mb-4 rounded-xl border border-rouge/35 bg-rouge/10 px-4 py-3 text-[0.68rem] leading-relaxed text-white/80"
+                >
+                  {submissionError}
+                </div>
+              )}
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -454,7 +527,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                     {t("confirming")}
                   </span>
                 ) : (
-                  t("place_order")
+                  canRetryConfirmation ? errorCopy.retryButton : t("place_order")
                 )}
               </button>
             </div>
@@ -465,7 +538,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
           variants={itemVariants}
           className="lg:sticky lg:top-28"
         >
-          <div className="rounded-card border border-white/[0.06] bg-[#1E1E1E] p-6">
+          <div className="rounded-2xl border border-gold/[0.16] bg-card p-5 sm:p-6">
             <div className="mb-6">
               <p className="label-utility text-gold/60">{t("order_summary_title")}</p>
               <h2 className="mt-1 font-display text-white">{items.length} {t("drinks_count")}</h2>
@@ -474,37 +547,14 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
             <div className="space-y-4">
               {lineItems.map((item) => (
                 <div key={item.id} className="flex gap-3">
-                  <div className="relative h-16 w-14 shrink-0 overflow-hidden rounded-md bg-[#171717]">
-                    {item.image ? (
-                      <SafeImage
-                        src={item.image}
-                        alt={item.name}
-                        fill
-                        sizes="56px"
-                        className="object-contain p-1"
-                        fallback={
-                          <div className="flex h-full w-full items-center justify-center text-[0.4rem] font-semibold tracking-[0.24em] text-white/20">
-                            {item.name.split(" ").slice(0, 2).map((part) => part[0]).join("")}
-                          </div>
-                        }
-                      />
-                    ) : item.visual ? (
-                      <div className="flex h-full w-full items-center justify-center p-1">
-                        {item.visual === "can" ? (
-                          <SodaCan width={48} height={60} accent={item.accent} label={item.name} />
-                        ) : item.visual === "bottle" ? (
-                          <SodaBottle width={40} height={72} accent={item.accent} label={item.name} />
-                        ) : (
-                          <GlassDrink width={52} height={56} accent={item.accent} label={item.name} />
-                        )}
-                      </div>
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center">
-                        <span className="text-sm font-medium text-white/10">
-                          {item.name.split(" ").slice(0, 2).map((s) => s[0]).join("")}
-                        </span>
-                      </div>
-                    )}
+                  <div className="relative h-16 w-14 shrink-0 overflow-hidden rounded-lg border border-gold/[0.12] bg-black">
+                    <ProductImage
+                      product={item}
+                      alt={item.name}
+                      fill
+                      sizes="56px"
+                      className="object-contain p-1"
+                    />
                   </div>
                   <div className="flex min-w-0 flex-1 flex-col justify-center">
                     {item.category && (

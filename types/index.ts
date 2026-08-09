@@ -223,6 +223,7 @@ export type ProductData = {
   gallery: string[];
   category: string;
   collection: string;
+  brand?: string;
   visual?: "can" | "bottle" | "glass";
   accent?: string;
   description: string;
@@ -242,6 +243,7 @@ export type Product = {
   price: string;
   image: string;
   category: string;
+  brand?: string;
   visual?: "can" | "bottle" | "glass";
   accent?: string;
   description: string;

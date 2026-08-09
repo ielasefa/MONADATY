@@ -220,7 +220,7 @@ export function CustomersClient({ customers: initial }: { customers: CustomerInf
                     <p className="mt-1 text-xs text-white/35">{formatDate(order.createdAt)}</p>
                   </div>
                   <OrderStatusBadge status={order.orderStatus} />
-                  <p className="min-w-[100px] text-left text-sm font-semibold text-gold sm:text-right">{order.total}</p>
+                  <p className="min-w-[100px] text-start text-sm font-semibold text-gold sm:text-end">{order.total}</p>
                 </div>
               ))}
             </div>
@@ -263,7 +263,7 @@ export function CustomersClient({ customers: initial }: { customers: CustomerInf
 
       <section className="mb-5 flex flex-col gap-3 rounded-xl border border-white/[0.06] bg-[#121211] p-3 sm:flex-row sm:items-center">
         <div className="relative min-w-0 flex-1">
-          <svg className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
+          <svg className="pointer-events-none absolute start-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
             <circle cx="11" cy="11" r="7" />
             <path d="m20 20-4-4" />
           </svg>
@@ -272,7 +272,7 @@ export function CustomersClient({ customers: initial }: { customers: CustomerInf
             value={search}
             onChange={(event) => { setSearch(event.target.value); setPage(0); }}
             placeholder={t("search_customers", "Search name, email, or phone")}
-            className="input-premium h-11 w-full bg-[#0B0B0A] pl-10 pr-4"
+            className="input-premium h-11 w-full bg-[#0B0B0A] ps-10 pe-4"
             aria-label={t("search_customers_aria", "Search customers")}
           />
         </div>
@@ -303,8 +303,8 @@ export function CustomersClient({ customers: initial }: { customers: CustomerInf
         </section>
       ) : (
         <>
-          <div className="hidden overflow-x-auto rounded-xl border border-white/[0.07] bg-[#121211] lg:block">
-            <table className="w-full min-w-[960px] table-fixed text-left text-sm">
+          <div className="hidden overflow-x-auto rounded-xl border border-white/[0.07] bg-[#121211] xl:block">
+            <table className="w-full min-w-[960px] table-fixed text-start text-sm">
               <colgroup>
                 <col className="w-[18%]" />
                 <col className="w-[23%]" />
@@ -320,9 +320,9 @@ export function CustomersClient({ customers: initial }: { customers: CustomerInf
                   <th scope="col" className="px-5 font-semibold">{t("email_header", "Email")}</th>
                   <th scope="col" className="px-5 font-semibold">{t("phone_header", "Phone")}</th>
                   <th scope="col" className="px-5 text-center font-semibold"><button type="button" onClick={() => toggleSort("totalOrders")} className="inline-flex items-center gap-2 transition hover:text-white">{t("total_orders", "Orders")}<SortArrow field="totalOrders" /></button></th>
-                  <th scope="col" className="px-5 text-right font-semibold"><button type="button" onClick={() => toggleSort("totalSpent")} className="inline-flex items-center gap-2 transition hover:text-white">{t("total_spent", "Total spent")}<SortArrow field="totalSpent" /></button></th>
+                  <th scope="col" className="px-5 text-end font-semibold"><button type="button" onClick={() => toggleSort("totalSpent")} className="inline-flex items-center gap-2 transition hover:text-white">{t("total_spent", "Total spent")}<SortArrow field="totalSpent" /></button></th>
                   <th scope="col" className="px-5 font-semibold"><button type="button" onClick={() => toggleSort("lastOrderDate")} className="inline-flex items-center gap-2 transition hover:text-white">{t("last_order", "Last order")}<SortArrow field="lastOrderDate" /></button></th>
-                  <th scope="col" className="px-5 text-right font-semibold">{t("actions_header", "Action")}</th>
+                  <th scope="col" className="px-5 text-end font-semibold">{t("actions_header", "Action")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/[0.06]">
@@ -335,9 +335,9 @@ export function CustomersClient({ customers: initial }: { customers: CustomerInf
                     <td className="px-5"><p className="truncate text-white/55" title={customer.email}>{customer.email}</p></td>
                     <td className="px-5"><p className="truncate text-white/55" title={customer.phone || undefined}>{customer.phone || "—"}</p></td>
                     <td className="px-5 text-center"><span className="inline-flex min-w-8 items-center justify-center rounded-full bg-white/[0.05] px-2.5 py-1 text-xs font-semibold tabular-nums text-white/70">{customer.totalOrders}</span></td>
-                    <td className="px-5 text-right font-semibold tabular-nums text-gold">{customer.totalSpent.toFixed(2)} DH</td>
+                    <td className="px-5 text-end font-semibold tabular-nums text-gold">{customer.totalSpent.toFixed(2)} DH</td>
                     <td className="px-5"><p className="truncate font-mono text-xs text-white/65">{customer.lastOrderNumber || "—"}</p><p className="mt-1 text-[0.68rem] text-white/35">{formatDate(customer.lastOrderDate)}</p></td>
-                    <td className="px-5 text-right">
+                    <td className="px-5 text-end">
                       <button type="button" onClick={() => openHistory(customer)} className="inline-flex h-8 items-center rounded-md border border-gold/20 px-3 text-[0.58rem] font-semibold uppercase tracking-[0.1em] text-gold transition hover:bg-gold/10" aria-label={`${t("view_history", "View history")} ${customer.name}`}>{t("view", "View")}</button>
                     </td>
                   </tr>
@@ -346,7 +346,7 @@ export function CustomersClient({ customers: initial }: { customers: CustomerInf
             </table>
           </div>
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:hidden">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:hidden">
             {paged.map((customer) => (
               <article key={customer.email} className="min-w-0 rounded-xl border border-white/[0.07] bg-[#121211] p-4">
                 <div className="flex items-start justify-between gap-3">
@@ -358,7 +358,7 @@ export function CustomersClient({ customers: initial }: { customers: CustomerInf
                 </div>
                 <div className="mt-4 grid grid-cols-2 gap-3 border-y border-white/[0.06] py-4">
                   <div><p className="text-[0.58rem] uppercase tracking-[0.12em] text-white/35">{t("total_orders", "Orders")}</p><p className="mt-1 text-sm font-semibold text-white/80">{customer.totalOrders}</p></div>
-                  <div className="text-right"><p className="text-[0.58rem] uppercase tracking-[0.12em] text-white/35">{t("total_spent", "Total spent")}</p><p className="mt-1 text-sm font-semibold text-gold">{customer.totalSpent.toFixed(2)} DH</p></div>
+                  <div className="text-end"><p className="text-[0.58rem] uppercase tracking-[0.12em] text-white/35">{t("total_spent", "Total spent")}</p><p className="mt-1 text-sm font-semibold text-gold">{customer.totalSpent.toFixed(2)} DH</p></div>
                 </div>
                 <div className="mt-4 flex items-center justify-between gap-3">
                   <div className="min-w-0"><p className="truncate font-mono text-xs text-white/60">{customer.lastOrderNumber || "—"}</p><p className="mt-1 text-[0.65rem] text-white/30">{formatDate(customer.lastOrderDate)}</p></div>
@@ -371,9 +371,9 @@ export function CustomersClient({ customers: initial }: { customers: CustomerInf
           <nav className="mt-5 flex flex-col gap-3 rounded-xl border border-white/[0.06] bg-[#121211] px-4 py-3 sm:flex-row sm:items-center sm:justify-between" aria-label={t("pagination", "Pagination")}>
             <p className="text-xs tabular-nums text-white/40">{t("showing", "Showing")} {firstVisible}–{lastVisible} {t("of_label", "of")} {filtered.length}</p>
             <div className="flex items-center justify-between gap-2 sm:justify-end">
-              <button type="button" disabled={currentPage === 0} onClick={() => setPage((value) => Math.max(value - 1, 0))} className="inline-flex h-9 items-center rounded-md border border-white/[0.08] px-3 text-[0.6rem] font-semibold uppercase tracking-[0.1em] text-white/55 transition hover:border-gold/25 hover:text-gold disabled:cursor-not-allowed disabled:opacity-30">← <span className="ml-1 hidden sm:inline">{t("previous", "Previous")}</span></button>
+              <button type="button" disabled={currentPage === 0} onClick={() => setPage((value) => Math.max(value - 1, 0))} className="inline-flex h-9 items-center rounded-md border border-white/[0.08] px-3 text-[0.6rem] font-semibold uppercase tracking-[0.1em] text-white/55 transition hover:border-gold/25 hover:text-gold disabled:cursor-not-allowed disabled:opacity-30"><span className="rtl:rotate-180" aria-hidden>←</span> <span className="ms-1 hidden sm:inline">{t("previous", "Previous")}</span></button>
               <span className="min-w-[92px] text-center text-xs tabular-nums text-white/50">{t("page_of", "Page")} {currentPage + 1} {t("of_label", "of")} {Math.max(totalPages, 1)}</span>
-              <button type="button" disabled={currentPage >= totalPages - 1} onClick={() => setPage((value) => Math.min(value + 1, totalPages - 1))} className="inline-flex h-9 items-center rounded-md border border-white/[0.08] px-3 text-[0.6rem] font-semibold uppercase tracking-[0.1em] text-white/55 transition hover:border-gold/25 hover:text-gold disabled:cursor-not-allowed disabled:opacity-30"><span className="mr-1 hidden sm:inline">{t("next", "Next")}</span> →</button>
+              <button type="button" disabled={currentPage >= totalPages - 1} onClick={() => setPage((value) => Math.min(value + 1, totalPages - 1))} className="inline-flex h-9 items-center rounded-md border border-white/[0.08] px-3 text-[0.6rem] font-semibold uppercase tracking-[0.1em] text-white/55 transition hover:border-gold/25 hover:text-gold disabled:cursor-not-allowed disabled:opacity-30"><span className="me-1 hidden sm:inline">{t("next", "Next")}</span> <span className="rtl:rotate-180" aria-hidden>→</span></button>
             </div>
           </nav>
         </>

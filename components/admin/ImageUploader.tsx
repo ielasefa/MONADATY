@@ -407,9 +407,11 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
   };
 
   const handleRemove = (index: number) => {
-    const updated = images.filter((_, i) => i !== index);
+    const updated = images
+      .filter((_, i) => i !== index)
+      .map((image, imageIndex) => ({ ...image, sortOrder: imageIndex }));
     if (images[index]?.isCover && updated.length > 0) {
-      updated[0].isCover = true;
+      updated[0] = { ...updated[0], isCover: true };
     }
     onChange(updated);
   };
@@ -424,7 +426,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
     const updated = [...images];
     const [moved] = updated.splice(from, 1);
     updated.splice(to, 0, moved);
-    onChange(updated);
+    onChange(updated.map((image, index) => ({ ...image, sortOrder: index })));
   };
 
   const handleRetry = (uploadItem: UploadingFile) => {

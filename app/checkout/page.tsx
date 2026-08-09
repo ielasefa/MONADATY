@@ -1,44 +1,39 @@
 import { CheckoutClient } from "@/components/CheckoutClient";
 import { getCities } from "@/lib/db";
-import { loadTranslations, t, getLanguage } from "@/lib/translations";
+import { getLanguage } from "@/lib/translations";
+import { getLandingCopy } from "@/lib/landing-copy";
 
 export const dynamic = "force-dynamic";
 
 export default async function CheckoutPage() {
   const lang = await getLanguage();
-  const translations = await loadTranslations("checkout");
+  const copy = getLandingCopy(lang);
   const cities = await getCities();
   const cityNames = cities.map((c) => ({ name: c.name }));
 
   return (
     <div className="bg-black">
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(184,155,94,0.04)_0%,transparent_55%)]" />
+      <section className="relative overflow-hidden border-b border-gold/[0.16] bg-surface">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_0%,rgba(214,179,90,0.09)_0%,transparent_48%)]" />
 
-        <div className="mx-auto max-w-[1400px] px-6 md:px-10 lg:px-16">
-          <div className="py-16 md:py-20 lg:py-24">
-            <div className="flex items-center gap-3">
-              <span className="h-px w-8 bg-gold" />
-              <span className="label-utility tracking-[0.55em] text-gold">
-                {t(translations, "secure_checkout", lang)}
-              </span>
-            </div>
+        <div className="storefront-container storefront-section relative">
+            <p className="storefront-eyebrow">
+              <span className="h-px w-9 bg-gold" />
+              {copy.checkout.eyebrow}
+            </p>
 
-            <h1 className="mt-6 font-display text-[clamp(2rem,4.5vw,3.5rem)] leading-[0.9] tracking-[-0.04em] text-white">
-              {t(translations, "complete_order_heading", lang)}
+            <h1 className="storefront-page-title mt-6">
+              {copy.checkout.title}
             </h1>
 
-            <p className="mt-6 max-w-lg text-[0.82rem] leading-[1.85] text-white/65">
-              {t(translations, "checkout_description", lang)}
+            <p className="mt-5 max-w-xl text-sm leading-[1.85] text-white/58 sm:text-[0.95rem]">
+              {copy.checkout.description}
             </p>
-          </div>
         </div>
-
-        <div className="h-px w-full bg-gradient-to-r from-transparent via-gold/15 to-transparent" />
       </section>
 
       <section className="relative overflow-hidden">
-        <div className="mx-auto max-w-[1400px] px-6 py-12 md:px-10 md:py-16 lg:px-16 lg:py-20">
+        <div className="storefront-container py-12 md:py-16 lg:py-20">
           <CheckoutClient cities={cityNames} />
         </div>
       </section>

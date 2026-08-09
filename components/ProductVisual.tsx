@@ -1,12 +1,12 @@
 import { SodaCan } from "@/components/visuals/SodaCan";
 import { SodaBottle } from "@/components/visuals/SodaBottle";
 import { GlassDrink } from "@/components/visuals/GlassDrink";
+import { isUsableProductImage, PRODUCT_PLACEHOLDER_IMAGE } from "@/lib/product-images";
 
-export const PLACEHOLDER_IMAGE = "/images/placeholder.svg";
+export const PLACEHOLDER_IMAGE = PRODUCT_PLACEHOLDER_IMAGE;
 
 export function isPlaceholderImage(src?: string | null): boolean {
-  const value = (src || "").trim();
-  return value === "" || value === PLACEHOLDER_IMAGE;
+  return !isUsableProductImage(src);
 }
 
 export type VisualKind = "can" | "bottle" | "glass";

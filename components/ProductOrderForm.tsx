@@ -53,11 +53,11 @@ export function ProductOrderForm({ product }: ProductOrderFormProps) {
 
 return (
       <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 md:p-8">
-        <div className="flex w-full max-w-[520px] flex-col gap-4 lg:flex-row lg:items-stretch">
+        <div className="flex w-full max-w-[540px] flex-col gap-4 xl:flex-row xl:items-stretch">
           {/* Quantity selector — quiet, bordered, aligned with the actions */}
-          <div className="flex h-14 shrink-0 items-center justify-between rounded-xl border border-white/10 bg-[#0B0B0A]/40 px-2 lg:px-1">
+          <div className="flex h-14 shrink-0 items-center justify-between rounded-xl border border-white/10 bg-[#0B0B0A]/40 px-2 xl:px-1">
           <span className="sr-only">{t("quantity", "Quantity")}</span>
-          <div className="flex h-full items-center gap-1 lg:gap-0">
+          <div className="flex h-full items-center gap-1 xl:gap-0">
             <motion.button
               type="button"
               onClick={() => setQuantity((current) => Math.max(1, current - 1))}
@@ -93,7 +93,7 @@ return (
         </div>
 
         {/* ADD TO CART / BUY NOW — primary, uncluttered */}
-        <div className="grid grid-cols-2 gap-3 lg:flex lg:flex-1">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:flex xl:flex-1">
           <motion.button
             type="button"
             onClick={handleAddToCart}

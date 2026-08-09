@@ -17,12 +17,12 @@ export default async function AdminSettingsPage() {
   const translations = await loadTranslations("admin");
 
   return (
-    <div className="container-shell mx-auto px-6 py-10">
-      <div className="mb-8">
-        <p className="luxury-label mb-2">{getTranslation(translations, "configuration", lang, "Configuration")}</p>
-        <h1 className="text-3xl font-semibold tracking-tight text-white">{getTranslation(translations, "settings", lang, "Paramètres")}</h1>
-        <p className="mt-1 text-sm text-muted">{getTranslation(translations, "general_config", lang, "Configuration générale")}</p>
-      </div>
+    <div className="container-shell">
+      <header className="mb-6 border-b border-white/[0.08] pb-6">
+        <p className="luxury-label text-[#D6B35A]/75">{getTranslation(translations, "configuration", lang, "Configuration")}</p>
+        <h1 className="mt-2 text-white">{getTranslation(translations, "settings", lang, "Paramètres")}</h1>
+        <p className="mt-1.5 text-sm text-white/45">{getTranslation(translations, "general_config", lang, "Configuration générale")}</p>
+      </header>
       <SettingsForm settings={settings} saveSettingsAction={saveSettingsAction} />
     </div>
   );

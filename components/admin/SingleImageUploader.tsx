@@ -216,7 +216,7 @@ export function SingleImageUploader({ value, onChange, label, folder = "products
             <div className="absolute inset-0 flex items-center justify-center bg-black/60">
               <div className="text-center">
                 <div className="mb-2 h-2 w-32 overflow-hidden rounded-full bg-white/20">
-                  <div className="h-full rounded-full bg-yellow transition-all" style={{ width: `${progress}%` }} />
+                  <div className="h-full rounded-full bg-gold transition-all" style={{ width: `${progress}%` }} />
                 </div>
                 <p className="text-xs text-white">{progress}%</p>
               </div>

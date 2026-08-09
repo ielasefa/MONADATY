@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import type { Product } from "@/types";
 import { formatMoney, parseMoney } from "@/lib/money";
 import { useTranslation } from "@/hooks/useTranslation";
+import { resolveDatabaseProductImage } from "@/lib/product-images";
 
 export type CartItem = {
   id: string;
@@ -13,6 +14,8 @@ export type CartItem = {
   image: string;
   price: string;
   category: Product["category"];
+  brand?: string;
+  collection?: string;
   // Use explicit visual union instead of depending on Product type here to keep the cart model stable
   visual?: "can" | "bottle" | "glass";
   accent?: string;
@@ -112,12 +115,25 @@ export function CartProvider({ children }: Readonly<{ children: React.ReactNode 
       return;
     }
 
+    const resolvedImage = resolveDatabaseProductImage(product);
+
     setItems((currentItems) => {
       const existingItem = currentItems.find((item) => item.id === product.id);
 
       if (existingItem) {
         return currentItems.map((item) =>
-          item.id === product.id ? { ...item, quantity: Math.min(item.quantity + safeQuantity, 99) } : item,
+          item.id === product.id
+            ? {
+                ...item,
+                image: resolvedImage,
+                brand: product.brand,
+                collection: product.collection,
+                visual: product.visual,
+                accent: product.accent,
+                category: product.category,
+                quantity: Math.min(item.quantity + safeQuantity, 99),
+              }
+            : item,
         );
       }
 
@@ -127,7 +143,9 @@ export function CartProvider({ children }: Readonly<{ children: React.ReactNode 
           id: product.id,
           name: product.name,
           slug: product.slug ?? product.id,
-          image: product.image ?? "",
+          image: resolvedImage,
+          brand: product.brand,
+          collection: product.collection,
           // Coerce visual into the explicit cart union; leave undefined if not present
           visual: (product.visual as "can" | "bottle" | "glass") ?? undefined,
           accent: product.accent ?? undefined,

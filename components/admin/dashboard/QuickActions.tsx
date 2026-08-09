@@ -26,7 +26,7 @@ export function QuickActions() {
   const reduce = useReducedMotion();
 
   const actions: Action[] = [
-    { label: t("add_product", "Add Product"), desc: t("create_new_product"), href: "/admin/shop" },
+    { label: t("add_product", "Add Product"), desc: t("create_new_product"), href: "/admin/products/add" },
     { label: t("order_management", "Order Management"), desc: t("view_all_orders"), href: "/admin/orders" },
     { label: t("customer_management", "Customers"), desc: t("customer_management"), href: "/admin/customers" },
     { label: t("manage_collections", "Collections"), desc: t("manage_collections"), href: "/admin/collections" },
@@ -34,7 +34,7 @@ export function QuickActions() {
   ];
 
   return (
-    <Panel hover={false} className="p-6">
+    <Panel hover={false} className="p-5">
       <SectionHeading
         title={t("quick_actions", "Quick Actions")}
         action={
@@ -45,7 +45,7 @@ export function QuickActions() {
         }
       />
 
-      <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-5">
+      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-5">
         {actions.map((action, i) => {
           const Glyph = GLYPHS[i % GLYPHS.length];
           return (
@@ -57,7 +57,7 @@ export function QuickActions() {
             >
               <Link
                 href={action.href}
-                className="group relative flex h-full flex-col overflow-hidden rounded-lg border border-white/[0.06] bg-card p-4 transition-colors duration-300 hover:border-gold/25"
+                className="group relative flex h-full min-h-28 flex-col overflow-hidden rounded-lg border border-white/[0.06] bg-card p-3.5 transition-colors duration-300 hover:border-gold/25"
               >
                 <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-gold/[0.05] blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
 

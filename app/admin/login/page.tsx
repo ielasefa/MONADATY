@@ -32,22 +32,17 @@ function AdminLoginForm() {
         const data = await res.json();
         const redirect = searchParams?.get("redirect");
 
-        // The login response sets the admin_session cookie. Navigating with
-        // router.replace() is a soft client-side navigation, so Next.js may
-        // serve the destination from its Router Cache — which holds a stale
-        // pre-login render of the route (cached when middleware redirected the
-        // unauthenticated user to /admin/login). That stale payload is why
-        // dashboard lists first appear empty. router.refresh() clears the
-        // Router Cache and re-renders the destination Server Components with
-        // the new session cookie, so data is present on the very first render.
-        if (data.mustChangePassword) {
-          router.replace("/admin/change-password");
-        } else if (redirect && redirect.startsWith("/admin/")) {
-          router.replace(redirect);
-        } else {
-          router.replace("/admin/dashboard");
-        }
+        const destination = data.mustChangePassword
+          ? "/admin/change-password"
+          : redirect && redirect.startsWith("/admin/")
+            ? redirect
+            : "/admin/dashboard";
+
+        // The login route changed the session cookie. Invalidate the pre-login Router
+        // Cache before transitioning so the destination's Server Components are fetched
+        // with the authenticated session on their first render.
         router.refresh();
+        router.replace(destination);
       } else {
         const data = await res.json().catch(() => ({}));
         toast.error(data.error || t("login_failed"));

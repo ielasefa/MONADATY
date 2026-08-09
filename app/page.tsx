@@ -14,8 +14,9 @@ import { getLandingFeaturedProducts, getTestimonials, getLandingCollections, get
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "MONADATY — Premium Moroccan Beverages",
-  description: "Premium Moroccan beverages, crafted with intention. Born in Casablanca.",
+  title: "MONADATY — Soda, Water, Juice & More",
+  description:
+    "Shop sodas, water, juices and more at great prices, with easy ordering and convenient delivery.",
 };
 
 export default async function HomePage() {
@@ -54,7 +55,7 @@ export default async function HomePage() {
       {seoTitle && <meta property="og:title" content={seoTitle} />}
       {seoDesc && <meta property="og:description" content={seoDesc} />}
       {ogImage && <meta property="og:image" content={ogImage} />}
-      <div className="bg-black">
+      <div className="home-premium overflow-x-clip bg-[#0B0B0A] [--home-gold:#D6B35A] [--home-gold-hover:#E6CC88] [--home-gold-dark:#A7893F]">
         {(() => {
           const map: Record<string, React.ReactNode> = {};
 
@@ -100,7 +101,7 @@ export default async function HomePage() {
           }
 
           if (content.moroccanMoment.enabled) {
-            map.moroccan_moment = <MoroccanMoment />;
+            map.moroccan_moment = <MoroccanMoment product={firstProduct} />;
           }
 
           if (content.newsletter.enabled) {

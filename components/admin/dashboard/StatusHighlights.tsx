@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
+import { ProductImage } from "@/components/ProductImage";
 import { EASE, Panel, SectionHeading, AnimatedNumber } from "./ui";
 import { IconChart, IconTrophy, IconLayers, IconChevronRight } from "./icons";
 
@@ -15,8 +16,8 @@ type Props = {
   refundedOrders: number;
   totalOrders: number;
   averageOrderValue: number;
-  bestSellingProduct: string | null;
-  bestCollection: string | null;
+  bestSellingProduct: { id: string; name: string; qty: number; total: number; image: string } | null;
+  bestCollection: { name: string; revenue: number; orders: number } | null;
 };
 
 const STATUS_ITEMS = [
@@ -31,12 +32,6 @@ export function StatusHighlights(props: Props) {
   const reduce = useReducedMotion();
   const paidPct = props.totalOrders > 0 ? (props.paidOrders / props.totalOrders) * 100 : 0;
   const refundPct = props.totalOrders > 0 ? (props.refundedOrders / props.totalOrders) * 100 : 0;
-
-  const highlights = [
-    { label: t("avg_order_value", "Avg Order Value"), value: `${props.averageOrderValue.toFixed(2)} DH`, icon: IconChart },
-    { label: t("best_selling", "Best Selling"), value: props.bestSellingProduct ?? "—", icon: IconTrophy },
-    { label: t("best_collection", "Best Collection"), value: props.bestCollection ?? "—", icon: IconLayers },
-  ];
 
   return (
     <div className="space-y-4">
@@ -105,28 +100,80 @@ export function StatusHighlights(props: Props) {
           </div>
         </Panel>
 
-        <Panel className="flex flex-col justify-between">
-          <div className="space-y-5 px-6 py-5">
+        <Panel className="flex flex-col justify-between overflow-hidden">
+          <div className="px-5 py-5">
             <p className="text-[0.64rem] font-semibold uppercase tracking-[0.16em] text-white/45">
               {t("highlights", "Highlights")}
             </p>
-            {highlights.map((h, i) => (
+
+            <div className="mt-4 divide-y divide-white/[0.06]">
               <motion.div
-                key={h.label}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, ease: EASE, delay: reduce ? 0 : 0.06 * i }}
-                className="flex items-center gap-3"
+                transition={{ duration: 0.4, ease: EASE, delay: reduce ? 0 : 0.04 }}
+                className="flex items-center gap-3 py-3 first:pt-0"
               >
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.03] text-gold/80">
-                  <h.icon className="h-4 w-4" />
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.03] text-gold/80">
+                  <IconChart className="h-4 w-4" />
                 </span>
                 <div className="min-w-0">
-                  <p className="text-[0.6rem] uppercase tracking-[0.14em] text-white/35">{h.label}</p>
-                  <p className="truncate text-[0.82rem] font-semibold text-white">{h.value}</p>
+                  <p className="text-[0.58rem] uppercase tracking-[0.14em] text-white/35">{t("avg_order_value", "Avg Order Value")}</p>
+                  <p className="mt-0.5 text-sm font-semibold text-white">{props.averageOrderValue.toFixed(2)} DH</p>
                 </div>
               </motion.div>
-            ))}
+
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: EASE, delay: reduce ? 0 : 0.08 }}
+                className="flex items-center gap-3 py-3"
+              >
+                {props.bestSellingProduct ? (
+                  <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-white/[0.07] bg-black/30">
+                    <ProductImage
+                      product={props.bestSellingProduct}
+                      alt={props.bestSellingProduct.name}
+                      fill
+                      sizes="40px"
+                      className="object-contain p-1"
+                    />
+                  </span>
+                ) : (
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.03] text-gold/80">
+                    <IconTrophy className="h-4 w-4" />
+                  </span>
+                )}
+                <div className="min-w-0 flex-1">
+                  <p className="text-[0.58rem] uppercase tracking-[0.14em] text-white/35">{t("best_selling", "Best Selling")}</p>
+                  <p className="mt-0.5 truncate text-[0.8rem] font-semibold text-white">{props.bestSellingProduct?.name ?? "—"}</p>
+                  {props.bestSellingProduct && (
+                    <p className="mt-0.5 text-[0.62rem] text-white/38">
+                      {props.bestSellingProduct.qty} {t("sold_label", "sold")} · {props.bestSellingProduct.total.toFixed(2)} DH
+                    </p>
+                  )}
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: EASE, delay: reduce ? 0 : 0.12 }}
+                className="flex items-center gap-3 py-3 pb-0"
+              >
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.03] text-gold/80">
+                  <IconLayers className="h-4 w-4" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[0.58rem] uppercase tracking-[0.14em] text-white/35">{t("best_collection", "Best Collection")}</p>
+                  <p className="mt-0.5 truncate text-[0.8rem] font-semibold text-white">{props.bestCollection?.name ?? "—"}</p>
+                  {props.bestCollection && (
+                    <p className="mt-0.5 text-[0.62rem] text-white/38">
+                      {props.bestCollection.orders} {t("orders_label", "orders")} · {props.bestCollection.revenue.toFixed(2)} DH
+                    </p>
+                  )}
+                </div>
+              </motion.div>
+            </div>
           </div>
           <Link
             href="/admin/reports"

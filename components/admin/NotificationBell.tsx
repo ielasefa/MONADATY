@@ -73,7 +73,7 @@ export function NotificationBell({ initialNotifications, initialUnread }: Props)
 
       {open && (
         <div
-          className="absolute right-0 top-full z-50 mt-2 w-[380px] overflow-hidden rounded-xl border border-white/[0.06] bg-surface shadow-2xl animate-fade-in"
+          className="absolute end-0 top-full z-50 mt-2 w-[min(380px,calc(100vw-5.5rem))] overflow-hidden rounded-xl border border-white/[0.08] bg-[#1A1A16] shadow-2xl animate-fade-in"
           role="menu"
           aria-label={t("notifications")}
         >
@@ -113,7 +113,7 @@ export function NotificationBell({ initialNotifications, initialUnread }: Props)
                       setOpen(false);
                     }}
                     className={`flex gap-3 px-5 py-3 transition hover:bg-white/[0.02] ${
-                      !n.read ? "border-l-2 border-l-gold/60" : "border-l-2 border-l-transparent"
+                      !n.read ? "border-s-2 border-s-gold/60" : "border-s-2 border-s-transparent"
                     }`}
                   >
                     <span className="mt-0.5 text-base leading-none">{typeIcon[n.type] || "\uD83D\uDD14"}</span>

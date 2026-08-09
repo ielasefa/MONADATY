@@ -5,6 +5,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { useTranslation } from "@/hooks/useTranslation";
 import { SafeImage } from "@/components/SafeImage";
+import { resolveDatabaseProductImage } from "@/lib/product-images";
 
 type ProductListItem = {
   id: string;
@@ -277,7 +278,7 @@ export default function ProductsPage() {
 
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 min-[1400px]:hidden">
               {products.map((product) => {
-                const cover = product.images?.find((item) => item.isCover)?.url || product.image;
+                const cover = resolveDatabaseProductImage({ image: product.image, images: product.images });
                 return (
                   <article key={product.id} className={`min-w-0 rounded-xl border bg-[#121211] p-4 transition ${selected.has(product.id) ? "border-gold/30" : "border-white/[0.07]"}`}>
                     <div className="flex items-start gap-3">
@@ -299,7 +300,7 @@ export default function ProductsPage() {
 }
 
 function ProductTableRow({ product, checked, onToggle, t }: { product: ProductListItem; checked: boolean; onToggle: () => void; t: (key: string, fallback?: string) => string }) {
-  const cover = product.images?.find((item) => item.isCover)?.url || product.image;
+  const cover = resolveDatabaseProductImage({ image: product.image, images: product.images });
   const stockTone = product.stock <= 0 ? "bg-burgundy" : product.stock < (product.lowStockThreshold || 5) ? "bg-gold" : "bg-emerald-400";
   return (
     <tr className={`h-[76px] transition-colors hover:bg-white/[0.025] ${checked ? "bg-gold/[0.035]" : ""}`} data-testid="product-row">

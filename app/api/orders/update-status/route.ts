@@ -1,6 +1,5 @@
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 import { updateOrderStatus, getOrderById } from "@/lib/orders";
 import { requireAdmin } from "@/lib/auth-guard";
 import { requireOrigin } from "@/lib/csrf";
@@ -8,8 +7,6 @@ import { getAuthenticatedAdmin } from "@/lib/auth";
 import { createAuditLog } from "@/lib/audit";
 import { ORDER_STATUSES, PAYMENT_STATUSES } from "@/lib/config";
 import { logError } from "@/lib/logger";
-
-const STOCK_RESTORE_STATUSES = new Set(["cancelled", "refunded"]);
 
 export async function POST(request: Request) {
   const originError = requireOrigin(request);
@@ -87,31 +84,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "No fields to update" }, { status: 400 });
     }
 
-    if (body.orderStatus && STOCK_RESTORE_STATUSES.has(body.orderStatus) && !STOCK_RESTORE_STATUSES.has(existing.orderStatus)) {
-      const order = await prisma.order.findUnique({
-        where: { id: body.id },
-        include: { items: true },
-      });
-      if (order) {
-        await prisma.$transaction(
-          order.items
-            .filter((item) => item.productId)
-            .map((item) =>
-              prisma.product.update({
-                where: { id: item.productId! },
-                data: { stock: { increment: item.quantity } },
-              })
-            )
-        );
-        if (order.couponCode) {
-          await prisma.coupon.updateMany({
-            where: { code: order.couponCode, usageCount: { gt: 0 } },
-            data: { usageCount: { decrement: 1 } },
-          });
-        }
-      }
-    }
-
     await updateOrderStatus(body.id, updates);
 
     const admin = await getAuthenticatedAdmin();
@@ -122,10 +94,22 @@ export async function POST(request: Request) {
       entityId: body.id,
     });
 
-    revalidatePath("/admin/orders");
-    revalidatePath(`/admin/orders/${body.id}`);
-    revalidatePath("/admin/dashboard");
-    revalidatePath("/success");
+    try {
+      revalidatePath("/admin/orders");
+      revalidatePath(`/admin/orders/${body.id}`);
+      revalidatePath("/admin/dashboard");
+      revalidatePath("/admin/products");
+      revalidatePath("/admin/inventory");
+      revalidatePath("/success");
+      revalidatePath("/");
+      revalidatePath("/shop");
+      revalidatePath("/collections");
+      revalidatePath("/wishlist");
+      revalidatePath("/product/[slug]", "page");
+      revalidateTag("landing");
+    } catch (error) {
+      logError(error, "ORDER_STATUS_REVALIDATE");
+    }
 
     const updated = await getOrderById(body.id);
 

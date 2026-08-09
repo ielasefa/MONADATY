@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { loadProducts } from "@/lib/data";
 import { getLanguage, getTranslation, loadTranslations } from "@/lib/translations";
 import { getCollectionShowcaseStats } from "@/lib/db";
 import { getAuthenticatedAdmin } from "@/lib/auth";
-import { DashboardClient } from "./DashboardClient";
+import { resolveDatabaseProductImage } from "@/lib/product-images";
 import { prisma } from "@/lib/prisma";
+import { DashboardClient } from "./DashboardClient";
 
 export const dynamic = "force-dynamic";
 
@@ -14,21 +14,48 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: getTranslation(translations, "dashboard", lang, "Tableau de bord") };
 }
 
-function parsePrice(val: string | null): number {
-  if (!val) return 0;
-  return parseFloat(val.replace(/[^0-9.]/g, "")) || 0;
+function parsePrice(value: string | null): number {
+  if (!value) return 0;
+  return Number.parseFloat(value.replace(/[^0-9.]/g, "")) || 0;
 }
 
 function toStoredOrder(order: {
-  id: string; orderNumber: string; customerName: string; customerEmail: string;
-  phone: string; address: string; city: string; postalCode: string; country: string;
-  paymentMethod: string; paymentStatus: string; orderStatus: string; subtotal: string;
-  shipping: string; shippingMethod: string; tax: string; total: string; currency: string;
-  idempotencyKey: string; estimatedDelivery: string; actualDeliveryDate: string;
-  deliveryCompany: string; trackingNumber: string; deliveryNotes: string;
+  id: string;
+  orderNumber: string;
+  customerName: string;
+  customerEmail: string;
+  phone: string;
+  address: string;
+  city: string;
+  postalCode: string;
+  country: string;
+  paymentMethod: string;
+  paymentStatus: string;
+  orderStatus: string;
+  subtotal: string;
+  shipping: string;
+  shippingMethod: string;
+  tax: string;
+  total: string;
+  currency: string;
+  idempotencyKey: string;
+  estimatedDelivery: string;
+  actualDeliveryDate: string;
+  deliveryCompany: string;
+  trackingNumber: string;
+  deliveryNotes: string;
   discountAmount: string;
-  createdAt: Date; updatedAt: Date;
-  items: { productId: string | null; name: string; slug: string; image: string; quantity: number; unitPrice: string; totalPrice: string }[];
+  createdAt: Date;
+  updatedAt: Date;
+  items: Array<{
+    productId: string | null;
+    name: string;
+    slug: string;
+    image: string;
+    quantity: number;
+    unitPrice: string;
+    totalPrice: string;
+  }>;
 }) {
   return {
     id: order.id,
@@ -43,21 +70,29 @@ function toStoredOrder(order: {
     country: order.country,
     paymentMethod: order.paymentMethod,
     paymentStatus: order.paymentStatus as "pending" | "paid" | "refunded",
-    orderStatus: order.orderStatus as "pending" | "processing" | "shipped" | "out_for_delivery" | "delivered" | "completed" | "cancelled" | "refunded",
+    orderStatus: order.orderStatus as
+      | "pending"
+      | "processing"
+      | "shipped"
+      | "out_for_delivery"
+      | "delivered"
+      | "completed"
+      | "cancelled"
+      | "refunded",
     subtotal: order.subtotal,
     shipping: order.shipping,
     shippingMethod: order.shippingMethod,
     tax: order.tax,
     total: order.total,
     currency: order.currency,
-    items: order.items.map((i) => ({
-      productId: i.productId ?? "",
-      name: i.name,
-      slug: i.slug,
-      image: i.image,
-      quantity: i.quantity,
-      unitPrice: i.unitPrice,
-      totalPrice: i.totalPrice,
+    items: order.items.map((item) => ({
+      productId: item.productId ?? "",
+      name: item.name,
+      slug: item.slug,
+      image: item.image,
+      quantity: item.quantity,
+      unitPrice: item.unitPrice,
+      totalPrice: item.totalPrice,
     })),
     idempotencyKey: order.idempotencyKey,
     estimatedDelivery: order.estimatedDelivery,
@@ -72,286 +107,281 @@ function toStoredOrder(order: {
 }
 
 export default async function AdminDashboardPage() {
-  const products = await loadProducts();
-  const admin = await getAuthenticatedAdmin();
-
   const now = new Date();
   const todayStart = new Date(now);
   todayStart.setHours(0, 0, 0, 0);
-
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-  const thirtyDaysAgo = new Date();
+  const thirtyDaysAgo = new Date(now);
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  const sixMonthsStart = new Date(now.getFullYear(), now.getMonth() - 5, 1);
 
+  // Independent reads run together. The dashboard is force-dynamic, so this is canonical
+  // database data on every navigation without a client-side loading race.
   const [
-    totalOrders,
-    pendingOrders,
-    processingOrders,
-    deliveredOrders,
-    cancelledOrders,
-    paidOrderCount,
-    refundedOrders,
+    admin,
+    products,
+    orderStatusRows,
+    paymentStatusRows,
+    ordersToday,
+    ordersThisMonth,
+    paidOrders,
+    recentOrders,
+    customerOrders,
+    latestOrders,
+    salesItems,
+    collections,
     showcaseStats,
   ] = await Promise.all([
-    prisma.order.count(),
-    prisma.order.count({ where: { orderStatus: "pending" } }),
-    prisma.order.count({ where: { orderStatus: "processing" } }),
-    prisma.order.count({ where: { orderStatus: "delivered" } }),
-    prisma.order.count({ where: { orderStatus: "cancelled" } }),
-    prisma.order.count({ where: { paymentStatus: "paid" } }),
-    prisma.order.count({ where: { paymentStatus: "refunded" } }),
+    getAuthenticatedAdmin(),
+    prisma.product.findMany({
+      select: {
+        id: true,
+        name: true,
+        stock: true,
+        lowStockThreshold: true,
+        status: true,
+        collectionId: true,
+        image: true,
+        gallery: true,
+        images: { select: { url: true, isCover: true, sortOrder: true } },
+      },
+    }),
+    prisma.order.groupBy({ by: ["orderStatus"], _count: { _all: true } }),
+    prisma.order.groupBy({ by: ["paymentStatus"], _count: { _all: true } }),
+    prisma.order.count({ where: { createdAt: { gte: todayStart } } }),
+    prisma.order.count({ where: { createdAt: { gte: monthStart } } }),
+    prisma.order.findMany({
+      where: { paymentStatus: "paid" },
+      select: { total: true, createdAt: true },
+    }),
+    prisma.order.findMany({
+      where: { createdAt: { gte: thirtyDaysAgo } },
+      select: { createdAt: true, customerEmail: true },
+      orderBy: { createdAt: "asc" },
+    }),
+    prisma.order.findMany({
+      orderBy: { createdAt: "desc" },
+      select: {
+        customerName: true,
+        customerEmail: true,
+        phone: true,
+        city: true,
+        address: true,
+        postalCode: true,
+        orderNumber: true,
+        total: true,
+        createdAt: true,
+      },
+    }),
+    prisma.order.findMany({ orderBy: { createdAt: "desc" }, take: 5, include: { items: true } }),
+    prisma.orderItem.findMany({
+      where: {
+        productId: { not: null },
+        order: { orderStatus: { notIn: ["cancelled", "refunded"] } },
+      },
+      select: { orderId: true, productId: true, name: true, quantity: true, totalPrice: true },
+    }),
+    prisma.collection.findMany({ select: { id: true, name: true } }),
     getCollectionShowcaseStats(),
   ]);
 
-  const [paidOrders, paidOrdersToday, ordersTodayCount, paidOrdersMonth, ordersMonth, newCustomerCount] = await Promise.all([
-    prisma.order.findMany({
-      where: { paymentStatus: "paid" },
-      select: { total: true },
-    }),
-    prisma.order.findMany({
-      where: { paymentStatus: "paid", createdAt: { gte: todayStart } },
-      select: { total: true },
-    }),
-    prisma.order.count({ where: { createdAt: { gte: todayStart } } }),
-    prisma.order.findMany({
-      where: { paymentStatus: "paid", createdAt: { gte: monthStart } },
-      select: { total: true },
-    }),
-    prisma.order.count({ where: { createdAt: { gte: monthStart } } }),
-    prisma.order.groupBy({
-      by: ["customerEmail"],
-      where: { createdAt: { gte: thirtyDaysAgo } },
-      _count: true,
-    }).then((rows) => rows.length),
-  ]);
+  const orderCounts = new Map(orderStatusRows.map((row) => [row.orderStatus, row._count._all]));
+  const paymentCounts = new Map(paymentStatusRows.map((row) => [row.paymentStatus, row._count._all]));
+  const totalOrders = orderStatusRows.reduce((sum, row) => sum + row._count._all, 0);
+  const paidOrderCount = paymentCounts.get("paid") ?? 0;
 
-  const totalRevenue = paidOrders.reduce((sum, o) => sum + parsePrice(o.total), 0);
-  const todayRevenue = paidOrdersToday.reduce((sum, o) => sum + parsePrice(o.total), 0);
-  const revenueThisMonth = paidOrdersMonth.reduce((sum, o) => sum + parsePrice(o.total), 0);
-  const ordersToday = ordersTodayCount;
-  const ordersThisMonth = ordersMonth;
+  const totalRevenue = paidOrders.reduce((sum, order) => sum + parsePrice(order.total), 0);
+  const todayRevenue = paidOrders
+    .filter((order) => order.createdAt >= todayStart)
+    .reduce((sum, order) => sum + parsePrice(order.total), 0);
+  const revenueThisMonth = paidOrders
+    .filter((order) => order.createdAt >= monthStart)
+    .reduce((sum, order) => sum + parsePrice(order.total), 0);
 
-  const customerCount = await prisma.order.groupBy({
-    by: ["customerEmail"],
-    _count: true,
-  }).then((rows) => rows.length);
+  const recentCustomerEmails = new Set(recentOrders.map((order) => order.customerEmail));
+  const customerMap = new Map<
+    string,
+    {
+      email: string;
+      name: string;
+      firstName: string;
+      lastName: string;
+      phone: string;
+      city: string;
+      address: string;
+      postalCode: string;
+      totalOrders: number;
+      totalSpent: number;
+      avgOrderValue: number;
+      lastOrderNumber: string;
+      lastOrderDate: string;
+      createdAt: string;
+    }
+  >();
 
-  const latestCustomersRaw = await prisma.order.findMany({
-    orderBy: { createdAt: "desc" },
-    select: {
-      customerName: true, customerEmail: true, phone: true, city: true,
-      address: true, postalCode: true, orderNumber: true, total: true,
-      createdAt: true,
-    },
-  });
-  const customerMap = new Map<string, {
-    email: string; name: string; firstName: string; lastName: string;
-    phone: string; city: string; address: string; postalCode: string;
-    totalOrders: number; totalSpent: number; avgOrderValue: number;
-    lastOrderNumber: string; lastOrderDate: string; createdAt: string;
-  }>();
-  for (const o of latestCustomersRaw) {
-    const existing = customerMap.get(o.customerEmail);
+  for (const order of customerOrders) {
+    const amount = parsePrice(order.total);
+    const existing = customerMap.get(order.customerEmail);
     if (existing) {
       existing.totalOrders += 1;
-      existing.totalSpent += parsePrice(o.total);
+      existing.totalSpent += amount;
       existing.avgOrderValue = existing.totalSpent / existing.totalOrders;
-      if (o.createdAt.toISOString() > existing.lastOrderDate) {
-        existing.lastOrderDate = o.createdAt.toISOString();
-        existing.lastOrderNumber = o.orderNumber;
-      }
-    } else {
-      const parts = o.customerName.split(" ");
-      customerMap.set(o.customerEmail, {
-        email: o.customerEmail,
-        name: o.customerName,
-        firstName: parts[0] || "",
-        lastName: parts.slice(1).join(" ") || "",
-        phone: o.phone, city: o.city, address: o.address, postalCode: o.postalCode,
-        totalOrders: 1,
-        totalSpent: parsePrice(o.total),
-        avgOrderValue: 0,
-        lastOrderNumber: o.orderNumber,
-        lastOrderDate: o.createdAt.toISOString(),
-        createdAt: o.createdAt.toISOString(),
-      });
+      continue;
     }
+
+    const parts = order.customerName.trim().split(/\s+/);
+    customerMap.set(order.customerEmail, {
+      email: order.customerEmail,
+      name: order.customerName,
+      firstName: parts[0] || "",
+      lastName: parts.slice(1).join(" "),
+      phone: order.phone,
+      city: order.city,
+      address: order.address,
+      postalCode: order.postalCode,
+      totalOrders: 1,
+      totalSpent: amount,
+      avgOrderValue: amount,
+      lastOrderNumber: order.orderNumber,
+      lastOrderDate: order.createdAt.toISOString(),
+      createdAt: order.createdAt.toISOString(),
+    });
   }
-  const latestCustomers = Array.from(customerMap.values())
-    .sort((a, b) => new Date(b.lastOrderDate).getTime() - new Date(a.lastOrderDate).getTime())
-    .slice(0, 5);
 
-  const productCount = products.length;
-  const lowStock = products.filter((p) => p.stock !== undefined && p.stock <= 5).length;
+  const latestCustomers = [...customerMap.values()].slice(0, 5);
 
-  const latestOrders = await prisma.order.findMany({
-    orderBy: { createdAt: "desc" },
-    take: 5,
-    include: { items: true },
-  });
-  const latestOrdersMapped = latestOrders.map(toStoredOrder);
+  const activeInventoryProducts = products.filter((product) => product.status !== "Archived");
+  const allLowStockProducts = activeInventoryProducts.filter(
+    (product) => product.stock <= product.lowStockThreshold,
+  );
+  const lowStockProducts = allLowStockProducts
+    .sort((a, b) => a.stock - b.stock)
+    .slice(0, 5)
+    .map((product) => ({ id: product.id, name: product.name, stock: product.stock }));
 
-  const recentPaidOrders = await prisma.order.findMany({
-    where: { paymentStatus: "paid", createdAt: { gte: thirtyDaysAgo } },
-    select: { total: true, createdAt: true },
-    orderBy: { createdAt: "asc" },
-  });
-
-  const revenueByDay: Record<string, number> = {};
-  for (const o of recentPaidOrders) {
-    const day = o.createdAt.toISOString().slice(0, 10);
-    revenueByDay[day] = (revenueByDay[day] || 0) + parsePrice(o.total);
+  const productMap = new Map(products.map((product) => [product.id, product]));
+  const salesByProduct = new Map<string, { id: string; name: string; qty: number; total: number }>();
+  for (const item of salesItems) {
+    if (!item.productId) continue;
+    const current = salesByProduct.get(item.productId) ?? {
+      id: item.productId,
+      name: item.name,
+      qty: 0,
+      total: 0,
+    };
+    current.qty += item.quantity;
+    current.total += parsePrice(item.totalPrice);
+    salesByProduct.set(item.productId, current);
   }
-  const revenueChartData = Object.entries(revenueByDay).sort(([a], [b]) => a.localeCompare(b));
 
-  const recentAllOrders = await prisma.order.findMany({
-    where: { createdAt: { gte: thirtyDaysAgo } },
-    select: { createdAt: true },
-    orderBy: { createdAt: "asc" },
-  });
+  const topProducts = [...salesByProduct.values()]
+    .sort((a, b) => b.qty - a.qty)
+    .slice(0, 5)
+    .map((product) => {
+      const databaseProduct = productMap.get(product.id);
+      return {
+        ...product,
+        image: databaseProduct ? resolveDatabaseProductImage(databaseProduct) : "",
+      };
+    });
 
-  const ordersByDay: Record<string, number> = {};
-  for (const o of recentAllOrders) {
-    const day = o.createdAt.toISOString().slice(0, 10);
-    ordersByDay[day] = (ordersByDay[day] || 0) + 1;
-  }
-  const ordersChartData = Object.entries(ordersByDay).sort(([a], [b]) => a.localeCompare(b));
-
-  const topSellingAgg = await prisma.orderItem.groupBy({
-    by: ["productId", "name"],
-    where: { productId: { not: null } },
-    _sum: { quantity: true },
-    orderBy: { _sum: { quantity: "desc" } },
-    take: 5,
-  });
-  const topProductIds = topSellingAgg.map((r) => r.productId).filter(Boolean) as string[];
-  const topProductItems = topProductIds.length
-    ? await prisma.orderItem.findMany({ where: { productId: { in: topProductIds } }, select: { productId: true, totalPrice: true } })
-    : [];
-  const totalByProduct = new Map<string, number>();
-  for (const item of topProductItems) {
-    if (item.productId) {
-      totalByProduct.set(item.productId, (totalByProduct.get(item.productId) || 0) + parsePrice(item.totalPrice));
-    }
-  }
-  const topProducts = topSellingAgg.map((row) => ({
-    id: row.productId ?? "unknown",
-    name: row.name,
-    qty: row._sum.quantity ?? 0,
-    total: totalByProduct.get(row.productId ?? "") ?? 0,
-  }));
-
-  const lowStockProducts = products
-    .filter((p) => p.stock !== undefined && p.stock <= 5)
-    .sort((a, b) => (a.stock ?? 0) - (b.stock ?? 0))
-    .slice(0, 5);
-
-  const averageOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
-
-  const bestSelling = topProducts.length > 0 ? topProducts[0].name : null;
-
-  const allPaidItems = await prisma.orderItem.findMany({
-    where: { order: { paymentStatus: "paid" } },
-    select: { productId: true, totalPrice: true },
-  });
-  const collProductIds = [...new Set(allPaidItems.map((i) => i.productId).filter(Boolean) as string[])];
-  const collProducts = collProductIds.length
-    ? await prisma.product.findMany({
-        where: { id: { in: collProductIds } },
-        select: { id: true, collectionId: true },
-      })
-    : [];
-  const collMap = new Map(collProducts.map((p) => [p.id, p.collectionId]));
   const collectionRevenue = new Map<string, number>();
-  for (const item of allPaidItems) {
-    const pid = item.productId;
-    if (!pid) continue;
-    const collId = collMap.get(pid);
-    if (collId) {
-      collectionRevenue.set(collId, (collectionRevenue.get(collId) || 0) + parsePrice(item.totalPrice));
-    }
+  const collectionOrders = new Map<string, Set<string>>();
+  for (const item of salesItems) {
+    if (!item.productId) continue;
+    const collectionId = productMap.get(item.productId)?.collectionId;
+    if (!collectionId) continue;
+    collectionRevenue.set(collectionId, (collectionRevenue.get(collectionId) ?? 0) + parsePrice(item.totalPrice));
+    const orders = collectionOrders.get(collectionId) ?? new Set<string>();
+    orders.add(item.orderId);
+    collectionOrders.set(collectionId, orders);
   }
-  const collections = await prisma.collection.findMany({ select: { id: true, name: true } });
-  const collectionMap = new Map(collections.map((c) => [c.id, c.name]));
-  const collectionSalesData = Array.from(collectionRevenue.entries())
-    .map(([id, rev]) => ({ name: collectionMap.get(id) ?? "Unknown", value: Math.round(rev) }))
+
+  const collectionMap = new Map(collections.map((collection) => [collection.id, collection.name]));
+  const collectionSalesData = [...collectionRevenue.entries()]
+    .map(([id, value]) => ({ name: collectionMap.get(id) ?? "Unknown", value: Math.round(value) }))
     .sort((a, b) => b.value - a.value);
+  const bestCollectionEntry = [...collectionRevenue.entries()].sort((a, b) => b[1] - a[1])[0];
+  const bestCollection = bestCollectionEntry
+    ? {
+        name: collectionMap.get(bestCollectionEntry[0]) ?? "Unknown",
+        revenue: bestCollectionEntry[1],
+        orders: collectionOrders.get(bestCollectionEntry[0])?.size ?? 0,
+      }
+    : null;
 
-  const showcaseCollections = collections.map((c) => ({
-    id: c.id,
-    name: c.name,
-    configured: showcaseStats.perCollection[c.id] ?? 0,
-  }));
-
-  let bestCollection: string | null = null;
-  let bestCollectionValue = 0;
-  for (const cs of collectionSalesData) {
-    if (cs.value > bestCollectionValue) {
-      bestCollectionValue = cs.value;
-      bestCollection = cs.name;
-    }
+  const revenueByDay = new Map<string, number>();
+  for (const order of paidOrders) {
+    if (order.createdAt < thirtyDaysAgo) continue;
+    const day = order.createdAt.toISOString().slice(0, 10);
+    revenueByDay.set(day, (revenueByDay.get(day) ?? 0) + parsePrice(order.total));
+  }
+  const ordersByDay = new Map<string, number>();
+  for (const order of recentOrders) {
+    const day = order.createdAt.toISOString().slice(0, 10);
+    ordersByDay.set(day, (ordersByDay.get(day) ?? 0) + 1);
   }
 
-  const monthlyRevenueData: { month: string; revenue: number }[] = [];
-  for (let i = 5; i >= 0; i--) {
-    const m = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const mEnd = new Date(now.getFullYear(), now.getMonth() - i + 1, 1);
-    const ms = await prisma.order.findMany({
-      select: { total: true },
-      where: { paymentStatus: "paid", createdAt: { gte: m, lt: mEnd } },
-    });
-    const monthRevenue = ms.reduce((sum, o) => sum + parsePrice(o.total), 0);
+  const monthlyRevenueData: Array<{ month: string; revenue: number }> = [];
+  for (let index = 5; index >= 0; index -= 1) {
+    const month = new Date(now.getFullYear(), now.getMonth() - index, 1);
+    const monthEnd = new Date(now.getFullYear(), now.getMonth() - index + 1, 1);
+    const revenue = paidOrders
+      .filter((order) => order.createdAt >= month && order.createdAt < monthEnd && order.createdAt >= sixMonthsStart)
+      .reduce((sum, order) => sum + parsePrice(order.total), 0);
     monthlyRevenueData.push({
-      month: m.toLocaleString("en-US", { month: "short" }),
-      revenue: monthRevenue,
+      month: month.toLocaleString("en-US", { month: "short" }),
+      revenue,
     });
   }
-
-  const kpiRevenueData = revenueChartData.map(([date, revenue]) => ({ date, revenue }));
-  const kpiOrdersData = ordersChartData.map(([date, orders]) => ({ date, orders }));
-  const topProductsChart = topProducts.map((p) => ({ name: p.name, value: p.qty }));
 
   return (
-    <div className="min-h-screen bg-bg">
-      <div className="container-shell mx-auto px-6 py-10">
-        <DashboardClient
-          adminName={admin?.name ?? null}
-          totalOrders={totalOrders}
-          totalRevenue={totalRevenue}
-          todayRevenue={todayRevenue}
-          revenueThisMonth={revenueThisMonth}
-          ordersToday={ordersToday}
-          ordersThisMonth={ordersThisMonth}
-          customerCount={customerCount}
-          newCustomers30Days={newCustomerCount}
-          pendingOrders={pendingOrders}
-          processingOrders={processingOrders}
-          deliveredOrders={deliveredOrders}
-          cancelledOrders={cancelledOrders}
-          paidOrders={paidOrderCount}
-          refundedOrders={refundedOrders}
-          productCount={productCount}
-          lowStock={lowStock}
-          lowStockProducts={lowStockProducts}
-          latestOrders={latestOrdersMapped}
-          latestCustomers={latestCustomers}
-          topProducts={topProducts}
-          averageOrderValue={averageOrderValue}
-          bestSellingProduct={bestSelling}
-          bestCollection={bestCollection}
-          revenueChartData={kpiRevenueData}
-          ordersChartData={kpiOrdersData}
-          topProductsChart={topProductsChart}
-          collectionSalesData={collectionSalesData}
-          monthlyRevenueData={monthlyRevenueData}
-          showcaseStats={{
-            configuredCollections: showcaseStats.configuredCollections,
-            configuredProducts: showcaseStats.configuredProducts,
-            totalCollections: collections.length,
-          }}
-          showcaseCollections={showcaseCollections}
-        />
-      </div>
+    <div className="container-shell">
+      <DashboardClient
+        adminName={admin?.name ?? null}
+        totalOrders={totalOrders}
+        totalRevenue={totalRevenue}
+        todayRevenue={todayRevenue}
+        revenueThisMonth={revenueThisMonth}
+        ordersToday={ordersToday}
+        ordersThisMonth={ordersThisMonth}
+        customerCount={customerMap.size}
+        newCustomers30Days={recentCustomerEmails.size}
+        pendingOrders={orderCounts.get("pending") ?? 0}
+        processingOrders={orderCounts.get("processing") ?? 0}
+        deliveredOrders={orderCounts.get("delivered") ?? 0}
+        cancelledOrders={orderCounts.get("cancelled") ?? 0}
+        paidOrders={paidOrderCount}
+        refundedOrders={paymentCounts.get("refunded") ?? 0}
+        productCount={products.length}
+        lowStock={allLowStockProducts.length}
+        lowStockProducts={lowStockProducts}
+        latestOrders={latestOrders.map(toStoredOrder)}
+        latestCustomers={latestCustomers}
+        topProducts={topProducts}
+        averageOrderValue={paidOrderCount > 0 ? totalRevenue / paidOrderCount : 0}
+        bestSellingProduct={topProducts[0] ?? null}
+        bestCollection={bestCollection}
+        revenueChartData={[...revenueByDay.entries()]
+          .sort(([left], [right]) => left.localeCompare(right))
+          .map(([date, revenue]) => ({ date, revenue }))}
+        ordersChartData={[...ordersByDay.entries()]
+          .sort(([left], [right]) => left.localeCompare(right))
+          .map(([date, orders]) => ({ date, orders }))}
+        topProductsChart={topProducts.map((product) => ({ name: product.name, value: product.qty }))}
+        collectionSalesData={collectionSalesData}
+        monthlyRevenueData={monthlyRevenueData}
+        showcaseStats={{
+          configuredCollections: showcaseStats.configuredCollections,
+          configuredProducts: showcaseStats.configuredProducts,
+          totalCollections: collections.length,
+        }}
+        showcaseCollections={collections.map((collection) => ({
+          id: collection.id,
+          name: collection.name,
+          configured: showcaseStats.perCollection[collection.id] ?? 0,
+        }))}
+      />
     </div>
   );
 }

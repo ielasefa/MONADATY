@@ -33,6 +33,7 @@ export function Navbar({
   const router = useRouter();
 
   const isShopPage = pathname === "/shop";
+  const isHomePage = pathname === "/";
   const { t } = useTranslation("navbar");
   const { t: tCommon } = useTranslation("common");
 
@@ -177,21 +178,27 @@ export function Navbar({
     initial={{ y: -24, opacity: 0 }}
     animate={{ y: 0, opacity: 1 }}
     transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-    className={`sticky top-0 z-50 transition-all duration-500 will-change-transform ${
+    className={`storefront-theme ${isHomePage ? "fixed inset-x-0 top-0" : "sticky top-0"} z-50 border-b transition-[background-color,border-color,box-shadow,backdrop-filter] duration-500 will-change-transform ${
       scrolled
-        ? "glass-elevated border-b border-white/[0.06]"
-        : "bg-black border-b border-transparent"
+        ? isHomePage
+          ? "border-white/[0.08] bg-[#0B0B0A]/90 backdrop-blur-xl"
+          : "glass-elevated border-white/[0.06]"
+        : isHomePage
+          ? "border-transparent bg-gradient-to-b from-black/65 to-transparent"
+          : "border-transparent bg-black"
     }`}
       style={{
         boxShadow: scrolled
-          ? "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 4px 16px rgba(0,0,0,0.22), 0 12px 40px -8px rgba(0,0,0,0.45)"
+          ? isHomePage
+            ? "0 14px 46px rgba(0,0,0,.26)"
+            : "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 4px 16px rgba(0,0,0,0.22), 0 12px 40px -8px rgba(0,0,0,0.45)"
           : "none",
       }}
     >
-      <div className="mx-auto flex h-16 md:h-20 items-center justify-between gap-2 md:gap-4 max-w-[1400px] px-6 md:px-10 lg:px-16">
+      <div className="mx-auto flex h-[4.5rem] max-w-[1520px] items-center justify-between gap-2 px-5 sm:px-8 md:h-[5.25rem] md:gap-4 md:px-10 lg:px-16 xl:px-20">
         <Link
           href="/"
-          className="group shrink-0 font-display text-[0.8rem] font-normal uppercase tracking-[0.55em] text-gold transition-colors duration-500 hover:text-gold/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-4 focus-visible:ring-offset-black hidden md:inline-block"
+          className="group hidden shrink-0 font-display text-[0.82rem] font-normal uppercase tracking-[0.5em] text-gold transition-colors duration-300 hover:text-gold-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:ring-offset-4 focus-visible:ring-offset-black md:inline-block"
           aria-label={`${websiteName} — ${t("home", "Home")}`}
         >
           <span>{websiteName}</span>
@@ -199,18 +206,18 @@ export function Navbar({
 
         <Link
           href="/"
-          className="group md:hidden shrink-0 font-display text-[0.65rem] font-normal uppercase tracking-[0.45em] text-gold transition-colors duration-500 hover:text-gold/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-4 focus-visible:ring-offset-black"
+          className="group shrink-0 font-display text-[0.69rem] font-normal uppercase tracking-[0.42em] text-gold transition-colors duration-300 hover:text-gold-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:ring-offset-4 focus-visible:ring-offset-black md:hidden"
           aria-label={`${websiteName} — ${t("home", "Home")}`}
         >
           <span>{websiteName}</span>
         </Link>
 
         <nav aria-label={t("primary", "Primary")} className="hidden lg:flex lg:flex-1 lg:justify-center">
-          <ul className="flex items-center gap-12 text-[0.52rem] font-medium uppercase tracking-[0.28em]">
+          <ul className="flex items-center gap-8 text-[0.54rem] font-semibold uppercase tracking-[0.25em] xl:gap-11">
             <li>
               <Link
                 href="/"
-                className={`relative py-2 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none ${
+                className={`relative py-2 transition-colors duration-300 hover:text-gold-light focus-visible:text-gold focus-visible:outline-none ${
                   pathname === "/" ? "text-white" : "text-white/60"
                 }`}
               >
@@ -218,7 +225,7 @@ export function Navbar({
                 {pathname === "/" && (
                   <motion.span
                     layoutId="nav-indicator"
-                    className="absolute -bottom-1.5 left-1/2 h-px w-3.5 -translate-x-1/2 bg-gold"
+                    className="absolute -bottom-1.5 left-1/2 h-px w-4 -translate-x-1/2 bg-gold"
                     transition={{ type: "spring", stiffness: 380, damping: 28 }}
                   />
                 )}
@@ -227,7 +234,7 @@ export function Navbar({
             <li>
               <Link
                 href="/shop"
-                className={`relative py-2 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none ${
+                className={`relative py-2 transition-colors duration-300 hover:text-gold-light focus-visible:text-gold focus-visible:outline-none ${
                   isShopPage ? "text-white" : "text-white/60"
                 }`}
               >
@@ -235,7 +242,7 @@ export function Navbar({
                 {isShopPage && (
                   <motion.span
                     layoutId="nav-indicator"
-                    className="absolute -bottom-1.5 left-1/2 h-px w-3.5 -translate-x-1/2 bg-gold"
+                    className="absolute -bottom-1.5 left-1/2 h-px w-4 -translate-x-1/2 bg-gold"
                     transition={{ type: "spring", stiffness: 380, damping: 28 }}
                   />
                 )}
@@ -282,7 +289,7 @@ export function Navbar({
                 {isCollectionsOpen && (
                   <motion.span
                     layoutId="nav-indicator"
-                    className="absolute -bottom-1.5 left-1/2 h-px w-3.5 -translate-x-1/2 bg-gold"
+                    className="absolute -bottom-1.5 left-1/2 h-px w-4 -translate-x-1/2 bg-gold"
                     transition={{ type: "spring", stiffness: 380, damping: 28 }}
                   />
                 )}
@@ -305,7 +312,7 @@ export function Navbar({
                     }}
                     className="absolute left-1/2 top-full z-40 -translate-x-1/2 pt-5"
                   >
-                    <div className="w-[680px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-input border border-white/[0.1] bg-black/95 backdrop-blur-xl shadow-premium">
+                    <div className="w-[680px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl border border-gold/[0.16] bg-[#0B0B0A]/95 shadow-premium backdrop-blur-xl">
                       <div className="p-7">
                         <p className="mb-5 label-utility tracking-[0.32em] text-white/40">
                           {t("our_collections")}
@@ -338,7 +345,7 @@ export function Navbar({
                 {pathname === "/about" && (
                   <motion.span
                     layoutId="nav-indicator"
-                    className="absolute -bottom-1.5 left-1/2 h-px w-3.5 -translate-x-1/2 bg-gold"
+                    className="absolute -bottom-1.5 left-1/2 h-px w-4 -translate-x-1/2 bg-gold"
                     transition={{ type: "spring", stiffness: 380, damping: 28 }}
                   />
                 )}
@@ -353,7 +360,7 @@ export function Navbar({
           <button
             type="button"
             onClick={() => setCmdOpen(true)}
-            className="hidden lg:inline-flex h-8 w-8 items-center justify-center rounded-input text-white/50 transition-colors duration-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/10 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+            className="hidden h-9 w-9 items-center justify-center rounded-lg text-white/55 transition-colors duration-300 hover:bg-white/[0.05] hover:text-gold-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-2 focus-visible:ring-offset-black lg:inline-flex"
             aria-label={t("open_search")}
           >
             <svg
@@ -376,7 +383,7 @@ export function Navbar({
 
           <Link
             href="/admin/login"
-            className="hidden lg:inline-flex h-9 items-center px-4 rounded-lg bg-burgundy text-xs font-medium text-white transition-all duration-300 hover:bg-burgundy-dark"
+            className="hidden h-9 items-center rounded-lg border border-white/[0.08] bg-[#6E1F2A] px-3.5 text-[0.62rem] font-semibold uppercase tracking-[0.08em] text-white transition-all duration-300 hover:-translate-y-px hover:bg-[#842838] lg:inline-flex"
           >
             {t("admin_login", "Admin")}
           </Link>
@@ -389,9 +396,7 @@ export function Navbar({
                 : ""
             }`}
             className={`relative hidden lg:inline-flex h-8 w-8 items-center justify-center rounded-input transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/10 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
-              wishlistCount > 0
-                ? "text-gold"
-                : "text-white/50 hover:text-white"
+              wishlistCount > 0 ? "text-gold" : "text-white/50 hover:text-white"
             }`}
           >
             <svg
@@ -415,7 +420,7 @@ export function Navbar({
                   stiffness: 500,
                   damping: 20,
                 }}
-                className="absolute -end-1 -top-1 inline-flex h-3.5 min-w-[0.8rem] items-center justify-center rounded-full bg-gold px-1 text-[0.42rem] font-bold text-white"
+                className="absolute -end-1 -top-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-burgundy px-1 text-[0.44rem] font-bold text-white"
               >
                 {wishlistCount}
               </motion.span>
@@ -460,7 +465,7 @@ export function Navbar({
                   stiffness: 500,
                   damping: 20,
                 }}
-                className="absolute -end-1 -top-1 inline-flex h-3.5 min-w-[0.8rem] items-center justify-center rounded-full bg-gold px-1 text-[0.42rem] font-bold text-white"
+                className="absolute -end-1 -top-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-burgundy px-1 text-[0.44rem] font-bold text-white"
               >
                 {itemCount}
               </motion.span>
@@ -481,7 +486,7 @@ export function Navbar({
                 placeholder={tCommon("search")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="h-8 w-28 rounded-input border border-white/[0.15] bg-white/[0.06] px-3 pe-7 text-[0.6rem] text-white outline-none transition-all duration-300 placeholder:text-white/40 focus:w-36 focus:border-white/30 focus:bg-white/[0.1]"
+                className="h-9 w-28 rounded-lg border border-gold/[0.16] bg-white/[0.045] px-3 pe-7 text-[0.62rem] text-white outline-none transition-all duration-300 placeholder:text-white/40 focus:w-36 focus:border-gold/45 focus:bg-white/[0.08]"
                 style={{ WebkitTextFillColor: "#FFFFFF", caretColor: "#FFFFFF" }}
               />
             </form>
@@ -562,9 +567,9 @@ export function Navbar({
  animate={{ opacity: 1, height: "auto" }}
  exit={{ opacity: 0, height: 0 }}
  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
- className="lg:hidden border-t border-white/[0.06] bg-black overflow-hidden"
+ className="overflow-hidden border-t border-white/[0.06] bg-[#0B0B0A] lg:hidden"
  style={{
-   background: "rgba(23,23,23,0.97)",
+   background: "rgba(11,11,10,0.98)",
    backdropFilter: "blur(28px) saturate(1.3)",
    borderTop: "1px solid rgba(255,255,255,0.06)",
  }}
@@ -666,7 +671,7 @@ export function Navbar({
          {collections.map((col) => (
            <Link
              key={col.slug}
-             href={`/shop?category=${col.slug}`}
+             href={`/shop?collection=${col.slug}`}
              onClick={() => setIsMenuOpen(false)}
              className="block rounded-input px-5 py-3 text-[0.68rem] text-white/50 transition-colors duration-200 hover:bg-white/[0.06] hover:text-white"
            >
@@ -789,7 +794,7 @@ export function Navbar({
                       {t("cart", "Cart")}
                     </span>
                     {itemCount > 0 && (
-                      <span className="absolute -end-1.5 -top-1.5 flex h-3.5 min-w-[0.8rem] items-center justify-center rounded-full bg-gold px-1 text-[0.42rem] font-bold text-white">
+                      <span className="absolute -end-1.5 -top-1.5 flex h-3.5 min-w-[0.8rem] items-center justify-center rounded-full bg-burgundy px-1 text-[0.42rem] font-bold text-white">
                         {itemCount}
                       </span>
                     )}

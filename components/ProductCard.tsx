@@ -6,16 +6,19 @@ import Link from "next/link";
 import type { Product } from "@/types";
 import { useCart } from "@/components/cart-context";
 import { useWishlist } from "@/components/wishlist-context";
-import { SafeImage } from "@/components/SafeImage";
-import { ProductVisual, isPlaceholderImage } from "@/components/ProductVisual";
+import { ProductImage } from "@/components/ProductImage";
+import { resolveDatabaseProductImage } from "@/lib/product-images";
 import { useTranslation } from "@/hooks/useTranslation";
 
 type ProductCardProps = Pick<
   Product,
-  "id" | "slug" | "name" | "price" | "image" | "category" | "visual" | "accent"
+  "id" | "slug" | "name" | "price" | "image" | "gallery" | "category" | "collection" | "brand" | "visual" | "accent"
 > & {
   shortDescription?: string;
+  variant?: "default" | "editorial";
 };
+
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 export const ProductCard = memo(function ProductCard({
   id,
@@ -23,7 +26,10 @@ export const ProductCard = memo(function ProductCard({
   name,
   price,
   image,
+  gallery,
   category,
+  collection,
+  brand,
   visual,
   accent,
   shortDescription,
@@ -31,147 +37,82 @@ export const ProductCard = memo(function ProductCard({
   const { addItem } = useCart();
   const { contains, toggle } = useWishlist();
   const { t } = useTranslation("products");
-
   const isWishlisted = contains(id);
-
+  const imageSource = resolveDatabaseProductImage({ image, gallery });
+  const imageProduct = { name, image, gallery, category, collection, brand, visual, accent };
   return (
-    <article className="group flex flex-col h-full">
-      <div className="relative">
+    <motion.article
+      initial={false}
+      whileHover={{ y: -3 }}
+      transition={{ duration: 0.3, ease: EASE }}
+      className="group flex h-full min-w-0 flex-col rounded-2xl border border-white/[0.08] bg-[#171714] p-3 shadow-[0_18px_50px_rgba(0,0,0,0.18)] transition-[border-color,box-shadow] duration-300 hover:border-gold/25 hover:shadow-[0_24px_64px_rgba(0,0,0,0.32)] sm:p-4"
+    >
+      <div
+        className="relative aspect-[4/5] w-full overflow-hidden rounded-xl border border-white/[0.07] bg-[#0B0B0A] transition-[border-color,box-shadow] duration-500 group-hover:border-gold/20 group-hover:shadow-[0_22px_60px_rgba(0,0,0,.25)]"
+      >
         <Link
           href={`/product/${id}`}
           aria-label={`${t("view_flavor")} ${name}`}
-          className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+          className="absolute inset-0 z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 focus-visible:ring-inset"
         >
-          <div
-            className="
-              relative aspect-[3/4] w-full overflow-hidden rounded-xl
-              bg-black-soft shadow-card
-              transition-all duration-500 ease-premium
-              group-hover:shadow-card-hover group-hover:-translate-y-1
-              group-hover:border group-hover:border-gold/15
-            "
-          >
-            {/* Hover shimmer sweep */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 z-20 opacity-0 transition-opacity duration-400 group-hover:opacity-100"
-            >
-              <div className="h-full w-full bg-gradient-to-r from-transparent via-gold/[0.08] to-transparent animate-shimmer-wave" />
-            </div>
-
-            {/* Inner highlight ring on hover */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 z-10 rounded-xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-              style={{
-                boxShadow:
-                  "inset 0 0 0 1px rgba(184,155,94,0.12), inset 0 1px 0 rgba(255,255,255,0.04)",
-              }}
-            />
-
-            {!isPlaceholderImage(image) ? (
-              <SafeImage
-                src={image}
-                alt={name}
-                fill
-                sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 50vw"
-                className="object-contain p-5 transition-transform duration-700 ease-premium group-hover:scale-[1.02]"
-                fallback={
-                  <div className="flex h-full w-full items-center justify-center">
-                    <span className="font-display text-[2rem] font-light tracking-[0.08em] text-white/[0.08]">
-                      {name.charAt(0)}
-                    </span>
-                  </div>
-                }
-              />
-            ) : visual ? (
-              <div className="flex h-full w-full items-center justify-center p-5">
-                <ProductVisual
-                  name={name}
-                  visual={visual}
-                  accent={accent}
-                  className="h-full w-auto max-w-full drop-shadow-[0_18px_30px_rgba(0,0,0,0.5)]"
-                />
-              </div>
-            ) : (
-              <div className="flex h-full w-full items-center justify-center">
-                <span className="font-display text-[2rem] font-light text-white/[0.08]">
-                  {name.charAt(0)}
-                </span>
-              </div>
-            )}
-
-            {/* Wishlist */}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                toggle(id);
-              }}
-              aria-label={
-                isWishlisted
-                  ? `${t("remove_from_wishlist")} ${name}`
-                  : `${t("add_to_wishlist")} ${name}`
-              }
-              aria-pressed={isWishlisted}
-              className={`
-                absolute end-2.5 top-2.5 z-20 inline-flex items-center justify-center rounded-full p-2
-                transition-all duration-300
-                ${
-                  isWishlisted
-                    ? "text-gold opacity-100 animate-heart-pop"
-                    : "text-white/20 opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:text-gold"
-                }
-              `}
-            >
-              <motion.svg
-                aria-hidden="true"
-                className="h-3.5 w-3.5"
-                viewBox="0 0 24 24"
-                fill={isWishlisted ? "currentColor" : "none"}
-                stroke="currentColor"
-                strokeWidth="1.6"
-                animate={
-                  isWishlisted ? { scale: [1, 1.3, 1] } : { scale: 1 }
-                }
-                transition={{
-                  duration: 0.45,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-              >
-                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 10-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z" />
-              </motion.svg>
-            </button>
-
-            {/* Premium badge */}
-            <span className="absolute start-2.5 top-2.5 z-10 inline-flex items-center px-2 py-0.5 text-[0.32rem] font-semibold uppercase tracking-[0.2em] text-gold/70">
-              {t("premium", "Premium")}
-            </span>
-          </div>
+          <ProductImage
+            product={imageProduct}
+            alt={name}
+            fill
+            sizes="(min-width: 1280px) 22vw, (min-width: 768px) 31vw, 46vw"
+            className="object-contain p-4 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100 sm:p-6"
+          />
         </Link>
+
+        <span className="pointer-events-none absolute start-3 top-3 z-20 rounded-full border border-white/[0.08] bg-black/55 px-2.5 py-1 text-[0.48rem] font-medium uppercase tracking-[0.18em] text-gold backdrop-blur-md">
+          {t("premium", "Popular")}
+        </span>
+
+        <button
+          type="button"
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            toggle(id);
+          }}
+          aria-label={
+            isWishlisted
+              ? `${t("remove_from_wishlist")} ${name}`
+              : `${t("add_to_wishlist")} ${name}`
+          }
+          aria-pressed={isWishlisted}
+          className={`absolute end-3 top-3 z-30 inline-flex h-9 w-9 items-center justify-center rounded-full border backdrop-blur-md transition-all duration-300 ${
+            isWishlisted
+              ? "border-gold/35 bg-gold/15 text-gold"
+              : "border-white/10 bg-black/45 text-white/55 hover:border-gold/30 hover:text-gold"
+          }`}
+        >
+          <motion.svg
+            aria-hidden="true"
+            className="h-4 w-4"
+            viewBox="0 0 24 24"
+            fill={isWishlisted ? "currentColor" : "none"}
+            stroke="currentColor"
+            strokeWidth="1.6"
+            animate={isWishlisted ? { scale: [1, 1.22, 1] } : { scale: 1 }}
+            transition={{ duration: 0.4, ease: EASE }}
+          >
+            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 10-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z" />
+          </motion.svg>
+        </button>
       </div>
 
-      <div className="mt-4 flex flex-1 flex-col space-y-2">
-        {shortDescription ? (
-          <p className="line-clamp-1 text-[0.6rem] font-medium uppercase tracking-[0.2em] text-muted">
-            {shortDescription}
-          </p>
-        ) : category ? (
-          <p className="line-clamp-1 text-[0.6rem] font-medium uppercase tracking-[0.2em] text-muted">
-            {category}
-          </p>
-        ) : null}
-        <h3 className="line-clamp-2 min-h-[2.75rem] font-display text-base leading-snug tracking-[-0.015em] text-white">
-          <Link
-            href={`/product/${id}`}
-            className="transition-colors duration-300 hover:text-gold"
-          >
+      <div className="flex flex-1 flex-col px-1 pb-1 pt-4">
+        <p className="line-clamp-1 h-4 text-[0.54rem] font-medium uppercase tracking-[0.2em] text-gold/75">
+          {shortDescription || category || "MONADATY"}
+        </p>
+        <h3 className="mt-2 line-clamp-2 h-[2.8rem] overflow-hidden font-display text-base font-normal leading-[1.3] tracking-[-0.015em] text-white sm:h-[3rem] sm:text-lg">
+          <Link href={`/product/${id}`} className="transition-colors duration-300 hover:text-gold-light">
             {name}
           </Link>
         </h3>
-        <p className="font-display text-sm font-light text-gold">{price}</p>
-        <motion.button
+        <p className="mb-4 mt-2 h-6 font-display text-base font-normal text-gold">{price}</p>
+        <button
           type="button"
           onClick={() =>
             addItem(
@@ -180,25 +121,24 @@ export const ProductCard = memo(function ProductCard({
                 slug,
                 name,
                 price,
-                image,
+                image: imageSource,
                 category,
+                collection,
+                brand,
                 visual,
                 accent,
                 description: shortDescription ?? "",
-                gallery: [],
+                gallery: gallery || [],
               },
               1,
             )
           }
-          className="btn-primary-sm mt-auto w-full h-11"
+          className="btn-primary mt-auto h-11 w-full px-3 text-[0.54rem] sm:px-4 sm:text-[0.58rem]"
           aria-label={`${t("add_to_cart")} ${name}`}
-          whileHover={{ scale: 1.01 }}
-          whileTap={{ scale: 0.97 }}
-          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
         >
           {t("add_to_cart")}
-        </motion.button>
+        </button>
       </div>
-    </article>
+    </motion.article>
   );
 });

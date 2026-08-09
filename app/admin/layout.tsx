@@ -3,10 +3,10 @@ import { headers } from "next/headers";
 import { isAuthenticated } from "@/lib/auth";
 import { getLanguage, getTranslation, loadTranslations } from "@/lib/translations";
 import SidebarWrapper from "@/components/admin/SidebarWrapper";
-import { NotificationBell } from "@/components/admin/NotificationBell";
 import { getNotifications, getUnreadCount } from "@/lib/admin-notifications";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { TranslationHydrator } from "@/components/TranslationHydrator";
+import { AdminTopbar } from "@/components/admin/AdminTopbar";
 
 export const dynamic = "force-dynamic";
 
@@ -60,14 +60,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   return (
     <LanguageProvider initialLang={lang}>
       <TranslationHydrator initialLang={lang} initialTranslations={adminTr} />
-      <div className="flex min-h-screen bg-bg">
+      <div className="admin-shell flex min-h-screen min-w-0 bg-[#0B0B0A]">
         <SidebarWrapper />
-        <main className="flex-1 overflow-auto bg-bg p-0">
-          <div className="sticky top-0 z-40 flex h-16 items-center justify-end gap-3 border-b border-white/[0.06] bg-bg/80 px-3 backdrop-blur-2xl will-change-transform sm:px-4 lg:px-6">
-            <div className="flex items-center gap-3">
-              <NotificationBell initialNotifications={notifications} initialUnread={unreadCount} />
-            </div>
-          </div>
+        <main className="min-w-0 flex-1 overflow-x-clip bg-[#0B0B0A] p-0">
+          <AdminTopbar initialNotifications={notifications} initialUnread={unreadCount} />
           {children}
         </main>
       </div>

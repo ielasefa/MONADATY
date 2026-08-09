@@ -3,6 +3,12 @@ import { cache } from "react";
 import { unstable_cache } from "next/cache";
 import type { ProductData, CollectionData, SiteSettings } from "@/types";
 import { logError, logWarning } from "@/lib/logger";
+import {
+  isUsableProductImage,
+  PRODUCT_PLACEHOLDER_IMAGE,
+  resolveDatabaseProductGallery,
+  resolveDatabaseProductImage,
+} from "@/lib/product-images";
 
 export const productInclude = {
   category: true,
@@ -48,6 +54,7 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
 export function mapProductToData(p: {
   id: string; name: string; slug: string; price: string; comparePrice: string;
   image: string; gallery: string[]; visual: string; accent: string;
+  brand: string;
   description: string; shortDescription: string; ingredients: string; nutrition: string;
   badges: string[]; stock: number; featured: boolean; isBestSeller?: boolean; available: boolean;
   category: { name: string } | null;
@@ -56,9 +63,9 @@ export function mapProductToData(p: {
 }): ProductData {
   return {
     id: p.id, name: p.name, slug: p.slug, price: p.price, comparePrice: p.comparePrice,
-    image: resolveProductImage(p), gallery: p.gallery ?? [], category: p.category?.name ?? "",
+    image: resolveProductImage(p), gallery: resolveDatabaseProductGallery({ image: p.image, images: p.images, gallery: p.gallery }), category: p.category?.name ?? "",
     collection: p.collection?.slug ?? "", visual: p.visual as "can" | "bottle" | "glass" | undefined,
-    accent: p.accent || undefined, description: p.description, shortDescription: p.shortDescription ?? "",
+    brand: p.brand || undefined, accent: p.accent || undefined, description: p.description, shortDescription: p.shortDescription ?? "",
     ingredients: p.ingredients ?? "", nutrition: p.nutrition ?? "", badges: p.badges ?? [],
     stock: p.stock, featured: p.featured, isBestSeller: p.isBestSeller, available: p.available,
   };
@@ -203,11 +210,10 @@ export const getCategories = cache(async () => {
   }
 });
 
-export const PLACEHOLDER_IMAGE = "/images/placeholder.svg";
+export const PLACEHOLDER_IMAGE = PRODUCT_PLACEHOLDER_IMAGE;
 
 export function isUsableImage(src?: string | null): boolean {
-  const value = (src || "").trim();
-  return value !== "" && value !== PLACEHOLDER_IMAGE;
+  return isUsableProductImage(src);
 }
 
 export function resolveProductImage(p: {
@@ -215,21 +221,7 @@ export function resolveProductImage(p: {
   images?: { url?: string; isCover?: boolean; sortOrder?: number }[] | null;
   gallery?: string[] | null;
 }): string {
-  if (isUsableImage(p.image)) return p.image!.trim();
-
-  const sortedImages = p.images
-    ? [...p.images].sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
-    : [];
-  const coverImage = sortedImages.find((i) => i.isCover && isUsableImage(i.url));
-  if (coverImage?.url) return coverImage.url.trim();
-  const firstImage = sortedImages.find((i) => isUsableImage(i.url));
-  if (firstImage?.url) return firstImage.url.trim();
-
-  for (const galleryUrl of p.gallery ?? []) {
-    if (isUsableImage(galleryUrl)) return galleryUrl.trim();
-  }
-
-  return "";
+  return resolveDatabaseProductImage(p);
 }
 
 export type CollectionShowcaseEntry = {
@@ -266,7 +258,7 @@ export const getCollectionShowcase = unstable_cache(
       };
       const data = mapProductToData({
         id: p.id, name: p.name, slug: p.slug, price: p.price, comparePrice: p.comparePrice,
-        image: p.image, gallery: p.gallery, visual: p.visual, accent: p.accent,
+        image: p.image, gallery: p.gallery, visual: p.visual, accent: p.accent, brand: p.brand,
         description: p.description, shortDescription: p.shortDescription,
         ingredients: p.ingredients, nutrition: p.nutrition, badges: p.badges,
         stock: p.stock, featured: p.featured, isBestSeller: p.isBestSeller, available: p.available,
@@ -489,7 +481,7 @@ export const getAdminMenuItems = cache(async (role: "SUPER_ADMIN" | "ADMIN") => 
 
 import type { StoredOrder, StoredOrderItem } from "@/types";
 
-export const getOrders = cache(async (): Promise<StoredOrder[]> => {
+export async function getOrders(): Promise<StoredOrder[]> {
   try {
     const rows = await prisma.order.findMany({
       include: { items: true, customer: true },
@@ -536,9 +528,9 @@ export const getOrders = cache(async (): Promise<StoredOrder[]> => {
     }));
   } catch (error) {
     logError(error, "Database error in getOrders");
-    return [];
+    throw error;
   }
-});
+}
 
 export const getEmailTemplate = cache(async (key: string) => {
   try {
@@ -704,4 +696,3 @@ export const getLandingContent = unstable_cache(
   [],
   { tags: ["landing"], revalidate: 60 },
 );
-

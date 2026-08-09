@@ -121,10 +121,10 @@ function FilterChip({
       type="button"
       aria-pressed={active}
       onClick={onClick}
-      className={`inline-flex h-9 items-center rounded-full px-5 text-[0.6rem] font-semibold uppercase tracking-[0.12em] transition-all duration-200 ${
+      className={`inline-flex h-10 shrink-0 items-center rounded-full px-5 text-[0.58rem] font-semibold uppercase tracking-[0.14em] transition-all duration-300 ${
         active
           ? "bg-burgundy text-white shadow-rouge"
-          : "border border-white/[0.08] text-white/50 hover:border-white/20 hover:text-white"
+          : "border border-gold/[0.16] bg-card text-white/55 hover:border-gold/35 hover:text-white"
       }`}
     >
       {label}
@@ -142,7 +142,7 @@ function FilterPill({
   removeAriaLabel: string;
 }) {
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-[#1E1E1E] px-3 py-1.5 text-[0.6rem] text-white/65">
+    <span className="inline-flex items-center gap-2 rounded-full border border-gold/[0.16] bg-card px-3 py-1.5 text-[0.6rem] text-white/65">
       {label}
       <button
         type="button"
@@ -169,12 +169,12 @@ export function ProductFilters({
   categories: { slug: string; name: string }[];
   commonTranslations?: Record<string, Record<string, string>>;
 }) {
-  const { t } = useTranslation("common");
+  const { t, lang } = useTranslation("common");
   const { t: tShop } = useTranslation("shop");
   const { t: tErrors } = useTranslation("errors");
 
   // Get "all" label from server-provided translations to avoid hydration mismatch
-  const allLabel = commonTranslations?.all?.fr ?? commonTranslations?.all?.en ?? "All";
+  const allLabel = commonTranslations?.all?.[lang] ?? commonTranslations?.all?.en ?? "All";
 
   const productsSafe = useMemo(
     () => (Array.isArray(propProducts) ? propProducts : []),
@@ -285,7 +285,7 @@ export function ProductFilters({
       if (q && !name.toLowerCase().includes(q)) return false;
       if (collSlug) {
         const expectedName = catMap.get(collSlug);
-        if (!expectedName || category !== expectedName) return false;
+        if (expectedName ? category !== expectedName : product.collection !== collSlug) return false;
       }
       if (minPrice != null || maxPrice != null) {
         const numeric = Number(String(product.price ?? "").replace(/[^0-9.]/g, "")) || 0;
@@ -335,10 +335,7 @@ export function ProductFilters({
       if (updates.search !== undefined) setQuery(updates.search);
       if (updates.collection !== undefined) {
         setCollectionSlug(updates.collection);
-        const label = updates.collection
-          ? CATEGORY_MAP[updates.collection] ?? updates.collection
-          : "all";
-        setActiveCategorySlug(label === "all" ? null : label);
+        setActiveCategorySlug(updates.collection);
       }
       if (updates.minPrice !== undefined) setMinPrice(updates.minPrice);
       if (updates.maxPrice !== undefined) setMaxPrice(updates.maxPrice);
@@ -346,7 +343,7 @@ export function ProductFilters({
       if (updates.sort !== undefined) setSort(updates.sort);
       router.replace(url, { scroll: false });
     },
-    [query, collectionSlug, minPrice, maxPrice, availabilityOnly, sort, searchParams, router, CATEGORY_MAP],
+    [query, collectionSlug, minPrice, maxPrice, availabilityOnly, sort, searchParams, router],
   );
 
   // handlers
@@ -456,9 +453,9 @@ export function ProductFilters({
     <ShopErrorBoundary
       t={k => (tErrors as unknown as Record<string, string>)[k] ?? k}
     >
-      <section className="space-y-10">
+      <section className="space-y-8 md:space-y-10">
         {/* ── Category chips ─────────────────────────────────────────────── */}
-        <div className="flex flex-wrap gap-2">
+        <div className="flex max-w-full flex-wrap gap-2">
           {["all", ...categories.map(c => c.name)].map(c => {
             const cat = categories.find(cat => cat.name === c);
             const slug = c === "all" ? null : cat?.slug ?? null;
@@ -474,7 +471,7 @@ export function ProductFilters({
         </div>
 
         {/* ── Search + sort + filter button ─────────────────────────────── */}
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+        <div className="flex flex-col gap-3 rounded-2xl border border-gold/[0.16] bg-surface p-3 sm:flex-row sm:items-center sm:gap-3 md:p-4">
           {/* Search */}
           <div className="relative flex-1">
             <svg
@@ -493,7 +490,7 @@ export function ProductFilters({
               value={query}
               onChange={(e) => handleSearchChange(e.target.value)}
               placeholder={tShop("search_drinks", "Search drinks...")}
-              className="h-11 w-full rounded-xl border border-white/[0.08] bg-[#1E1E1E] px-4 ps-11 pr-10 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/35 focus:border-gold/40 focus:ring-2 focus:ring-gold/10 caret-white"
+              className="storefront-input ps-11 pe-10"
               style={{ WebkitTextFillColor: "#FFFFFF" }}
             />
             {query && (
@@ -527,10 +524,10 @@ export function ProductFilters({
               value={sort}
               onChange={(e) => handleSortChange(e.target.value)}
               aria-label={tShop("sort_by", "Sort by")}
-              className="h-11 appearance-none rounded-xl border border-white/[0.08] bg-[#1E1E1E] px-4 pe-10 text-sm text-white outline-none transition-all duration-200 focus:border-gold/40 focus:ring-2 focus:ring-gold/10"
+              className="storefront-input min-w-0 appearance-none pe-10 sm:w-auto sm:min-w-[12rem]"
             >
               {SORT_OPTIONS.map(opt => (
-                <option key={opt.value} value={opt.value} className="bg-[#171717]">
+                <option key={opt.value} value={opt.value} className="bg-card">
                   {tShop(opt.labelKey, opt.fallback)}
                 </option>
               ))}
@@ -552,7 +549,7 @@ export function ProductFilters({
             ref={filterButtonRef}
             type="button"
             onClick={() => setMobileOpen(true)}
-            className="inline-flex h-11 items-center gap-2.5 rounded-xl border border-white/[0.08] bg-[#1E1E1E] px-5 text-[0.6rem] font-semibold uppercase tracking-[0.14em] text-white/60 transition-all duration-200 hover:border-white/20 hover:text-white"
+            className="inline-flex h-12 items-center justify-center gap-2.5 rounded-lg border border-gold/[0.16] bg-card px-5 text-[0.6rem] font-semibold uppercase tracking-[0.14em] text-white/60 transition-all duration-300 hover:border-gold/35 hover:text-white"
           >
             <svg
               aria-hidden="true"
@@ -628,17 +625,18 @@ export function ProductFilters({
         )}
 
         {/* ── Product grid ───────────────────────────────────────────────── */}
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 md:gap-5 lg:grid-cols-4 lg:gap-6">
+        <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
           <AnimatePresence mode="popLayout">
             {filteredProducts.length > 0 ? (
-              filteredProducts.map((product: Product) => (
+              filteredProducts.map((product: Product, index) => (
                 <motion.div
                   key={product.id}
                   layout
+                  className="h-full"
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 8 }}
-                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ duration: 0.4, delay: Math.min(index * 0.035, 0.2), ease: [0.22, 1, 0.36, 1] }}
                 >
                   <ProductCard {...product} />
                 </motion.div>
@@ -650,7 +648,7 @@ export function ProductFilters({
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="rounded-xl border border-white/[0.06] bg-card p-10 text-center">
+                <div className="storefront-empty">
                   <p className="label-utility">{tShop("no_matches")}</p>
                   <h3 className="font-display mt-3 text-2xl text-white">{tShop("no_matches_desc")}</h3>
                   <p className="mt-3 text-sm text-white/40">{tShop("no_results")}</p>
@@ -706,11 +704,11 @@ export function ProductFilters({
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="filter-title"
-                initial={{ x: "100%" }}
+                initial={{ x: lang === "ar" ? "-100%" : "100%" }}
                 animate={{ x: 0 }}
-                exit={{ x: "100%" }}
-                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                className="relative ms-auto flex h-full w-full max-w-sm flex-col bg-black shadow-premium-xl"
+                exit={{ x: lang === "ar" ? "-100%" : "100%" }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                className="relative ms-auto flex h-full w-full max-w-sm flex-col border-s border-gold/[0.16] bg-surface shadow-premium-xl"
               >
                 {/* Header */}
                 <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-5">

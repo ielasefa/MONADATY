@@ -87,7 +87,7 @@ export function CollectionsClient({
                 <Field label={t("description_label", "Description")} name="description" defaultValue={editing?.description} rows={4} />
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-[minmax(0,1fr)_160px_140px]">
                   <Field label={t("preview_label", "Preview Label")} name="previewLabel" defaultValue={editing?.previewLabel} />
-                  <Field label={t("accent_color", "Accent Color")} name="accent" defaultValue={editing?.accent || "#B89B5E"} type="color" />
+                  <Field label={t("accent_color", "Accent Color")} name="accent" defaultValue={editing?.accent || "#D6B35A"} type="color" />
                   <Field label={t("order_label", "Order")} name="order" type="number" defaultValue={editing?.order?.toString()} />
                 </div>
                 <div className="flex flex-col-reverse gap-3 border-t border-white/[0.06] pt-5 sm:flex-row sm:justify-end">
@@ -136,7 +136,7 @@ export function CollectionsClient({
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex min-w-0 items-center gap-2">
-                      <span className="h-2.5 w-2.5 shrink-0 rounded-full border border-white/10" style={{ backgroundColor: collection.accent || "#B89B5E" }} aria-hidden />
+                      <span className="h-2.5 w-2.5 shrink-0 rounded-full border border-white/10" style={{ backgroundColor: collection.accent || "#D6B35A" }} aria-hidden />
                       <h3 className="truncate text-sm font-semibold text-white">{collection.title}</h3>
                     </div>
                     <p className="mt-1 truncate font-mono text-xs text-white/35">/{collection.slug}</p>

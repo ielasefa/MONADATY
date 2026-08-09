@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AdminCategoriesPage() {
   const categories = await getCategories();
   return (
-    <div className="container-shell mx-auto px-6 py-10">
+    <div className="container-shell">
       <CategoriesClient categories={categories} saveCategory={saveCategory} deleteCategory={deleteCategory} />
     </div>
   );

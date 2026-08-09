@@ -1,119 +1,76 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { SodaCan } from "@/components/visuals/SodaCan";
-import { SodaBottle } from "@/components/visuals/SodaBottle";
-import { GlassDrink } from "@/components/visuals/GlassDrink";
-import { SafeImage } from "@/components/SafeImage";
+import { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ProductImage } from "@/components/ProductImage";
+import { ProductImageFallback } from "@/components/ProductImageFallback";
+import { resolveDatabaseProductGallery } from "@/lib/product-images";
 
 type ProductGalleryProps = {
   name: string;
   gallery: string[];
   image?: string;
+  brand?: string;
+  category?: string;
+  collection?: string;
   visual?: "can" | "bottle" | "glass";
   accent?: string;
 };
 
-const EASE = [0.16, 1, 0.3, 1] as const;
-
-const PLACEHOLDER_SRC = "/images/placeholder.svg";
-
-export function ProductGallery({ name, gallery, image, visual, accent }: ProductGalleryProps) {
-  const galleryImages = useMemo(
-    () => (gallery || []).filter((g) => Boolean(g && g.trim().length > 0 && g !== PLACEHOLDER_SRC)),
-    [gallery],
+const EASE = [0.22, 1, 0.36, 1] as const;
+export function ProductGallery({ name, gallery, image, brand, category, collection, visual, accent }: ProductGalleryProps) {
+  const gallerySource = useMemo(
+    () => resolveDatabaseProductGallery({ image, gallery }),
+    [image, gallery],
   );
-  const gallerySource = useMemo(() => {
-    const main = image && image !== PLACEHOLDER_SRC ? image : "";
-    const source: string[] = main ? [main] : [];
-    for (const g of galleryImages) {
-      if (!source.includes(g)) source.push(g);
-    }
-    return source;
-  }, [image, galleryImages]);
+  const imageProduct = { name, image, gallery, brand, category, collection, visual, accent };
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const hasGallery = gallerySource.length > 0;
-  const activeImage = gallerySource[Math.min(activeIndex, Math.max(0, gallerySource.length - 1))] ?? "";
+  const activeImage = gallerySource[Math.min(activeIndex, Math.max(0, gallerySource.length - 1))];
 
   useEffect(() => {
-    if (gallerySource.length > 0 && activeIndex >= gallerySource.length) {
-      setActiveIndex(0);
-    }
-  }, [gallerySource, activeIndex]);
+    if (activeIndex >= gallerySource.length) setActiveIndex(0);
+  }, [activeIndex, gallerySource.length]);
 
   return (
-    <div className="flex flex-col items-center gap-6 md:gap-8">
-      {/* Main image — premium white card, rounded-3xl, luxurious shadow */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: EASE }}
-      >
-        <div className="group relative mx-auto w-[280px] h-[280px] sm:w-[340px] sm:h-[340px] lg:w-[400px] lg:h-[400px] max-w-[420px] overflow-hidden rounded-3xl border border-gold/20 bg-white shadow-[0_24px_96px_-32px_rgba(0,0,0,0.7)] transition-all duration-700 ease-premium hover:scale-[1.02] hover:shadow-[0_32px_128px_-40px_rgba(0,0,0,0.85)]">
-          <div className="relative h-full w-full">
-            {hasGallery ? (
-              <AnimatePresence mode="wait" initial={false}>
-                {activeImage ? (
-                  <motion.div
-                    key={activeImage}
-                    initial={{ opacity: 0, scale: 0.97 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.97 }}
-                    transition={{ duration: 0.5, ease: EASE }}
-                    className="relative h-full w-full"
-                  >
-<SafeImage
-          src={activeImage}
-          alt={name}
-          fill
-          priority
-          sizes="(min-width: 1024px) 400px, (min-width: 768px) 340px, 280px"
-          className="object-contain p-8 md:p-12 transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-          fallback={
-                        <div className="flex h-full w-full items-center justify-center">
-                          <span className="font-display text-4xl font-light tracking-[0.08em] text-[#0B0B0A]/15">
-                            {name.split(" ").slice(0, 2).map((part) => part[0]).join("")}
-                          </span>
-                        </div>
-                      }
-                  />
-                </motion.div>
-                ) : null}
-              </AnimatePresence>
-            ) : visual ? (
-              <div className="flex h-full w-full items-center justify-center p-10 md:p-14">
-                {visual === "can" ? (
-                  <SodaCan width={240} height={300} accent={accent} label={name} />
-                ) : visual === "bottle" ? (
-                  <SodaBottle width={220} height={310} accent={accent} label={name} />
-                ) : (
-                  <GlassDrink width={240} height={240} accent={accent} label={name} />
-                )}
-              </div>
-            ) : (
-              <div className="flex h-full w-full items-center justify-center">
-                <span className="font-display text-4xl font-light tracking-[0.08em] text-[#0B0B0A]/15">
-                  {name.charAt(0)}
-                </span>
-              </div>
-            )}
-
-            {/* Counter chip */}
-            {gallerySource.length > 1 && (
-              <span className="pointer-events-none absolute bottom-4 end-4 z-10 inline-flex items-center gap-2 rounded-full bg-[#0B0B0A]/50 px-3.5 py-1.5 text-[0.56rem] font-medium tracking-[0.22em] text-white/60 backdrop-blur-sm">
-                <span className="h-1 w-1 rounded-full bg-gold/70" />
-                {String(activeIndex + 1).padStart(2, "0")} / {String(gallerySource.length).padStart(2, "0")}
-              </span>
-            )}
+    <div className="mx-auto flex w-full max-w-[560px] flex-col gap-4 md:gap-5">
+      <div className="group relative aspect-square w-full overflow-hidden rounded-2xl border border-gold/[0.16] bg-surface shadow-[0_28px_90px_rgba(0,0,0,0.3)]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_38%,rgba(214,179,90,0.09),transparent_62%)]" />
+        {activeImage ? (
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={activeImage}
+              initial={{ opacity: 0, scale: 0.985 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.985 }}
+              transition={{ duration: 0.45, ease: EASE }}
+              className="absolute inset-0"
+            >
+              <ProductImage
+                product={{ ...imageProduct, image: activeImage, gallery: [] }}
+                alt={name}
+                fill
+                priority
+                sizes="(min-width: 1280px) 600px, (min-width: 1024px) 48vw, 100vw"
+                className="object-contain p-7 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.025] motion-reduce:transition-none motion-reduce:group-hover:scale-100 sm:p-10 lg:p-12"
+              />
+            </motion.div>
+          </AnimatePresence>
+        ) : (
+          <div className="absolute inset-0">
+            <ProductImageFallback product={imageProduct} />
           </div>
-        </div>
-      </motion.div>
+        )}
 
-      {/* Thumbnails — rounded-xl, gold active border, smooth transitions */}
+        {gallerySource.length > 1 && (
+          <span className="absolute bottom-4 end-4 z-10 rounded-full border border-gold/[0.16] bg-black/65 px-3 py-1.5 text-[0.52rem] font-semibold tracking-[0.2em] text-white/60 backdrop-blur-md">
+            {String(activeIndex + 1).padStart(2, "0")} / {String(gallerySource.length).padStart(2, "0")}
+          </span>
+        )}
+      </div>
+
       {gallerySource.length > 1 && (
-        <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex max-w-full gap-2 overflow-x-auto pb-1 sm:gap-3">
           {gallerySource.map((thumb, index) => {
             const isActive = index === activeIndex;
             return (
@@ -123,25 +80,16 @@ export function ProductGallery({ name, gallery, image, visual, accent }: Product
                 onClick={() => setActiveIndex(index)}
                 aria-label={`${name} — image ${index + 1} of ${gallerySource.length}`}
                 aria-pressed={isActive}
-                className={`relative h-16 w-16 overflow-hidden rounded-xl border bg-white transition-all duration-500 sm:h-20 sm:w-20 ${
-                  isActive
-                    ? "border-gold/70 shadow-[0_16px_40px_-20px_rgba(0,0,0,0.7)] ring-1 ring-gold/30 scale-105"
-                    : "border-white/10 opacity-50 hover:border-gold/40 hover:opacity-100 hover:scale-[1.02]"
+                className={`relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border bg-surface transition-all duration-300 sm:h-16 sm:w-16 xl:h-20 xl:w-20 ${
+                  isActive ? "border-gold ring-2 ring-gold/15" : "border-gold/[0.16] opacity-60 hover:opacity-100"
                 }`}
               >
-                <SafeImage
-                  src={thumb}
+                <ProductImage
+                  product={{ ...imageProduct, image: thumb, gallery: [] }}
                   alt=""
                   fill
                   sizes="80px"
-                  className="object-contain p-1.5"
-                  fallback={
-                    <div className="flex h-full w-full items-center justify-center">
-                      <span className="font-display text-base font-light text-[#0B0B0A]/20">
-                        {name.charAt(0)}
-                      </span>
-                    </div>
-                  }
+                  className="object-contain p-2"
                 />
               </button>
             );

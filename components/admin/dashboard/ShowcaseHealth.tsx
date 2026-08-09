@@ -126,7 +126,7 @@ export function ShowcaseHealth({
                   description={t("collection_showcase_empty_desc", "Pick and order featured products for each collection.")}
                 />
               )}
-              {showcaseCollections.map((c, i) => (
+              {showcaseCollections.slice(0, 6).map((c, i) => (
                 <motion.div
                   key={c.id}
                   initial={{ opacity: 0, y: 8 }}
@@ -211,7 +211,7 @@ export function ShowcaseHealth({
                   })}
                 </div>
                 <Link
-                  href="/admin/shop"
+                  href="/admin/products"
                   className="mt-5 inline-flex items-center gap-1 text-[0.64rem] font-semibold uppercase tracking-[0.16em] text-gold transition-colors hover:text-gold/80"
                 >
                   {t("restock_products", "Restock products")}
