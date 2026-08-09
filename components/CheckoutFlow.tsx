@@ -9,6 +9,7 @@ import { formatMoney, parseMoney } from "@/lib/money";
 import { motion, useReducedMotion } from "framer-motion";
 import { ProductImage } from "@/components/ProductImage";
 import { resolveDatabaseProductImage } from "@/lib/product-images";
+import { PREMIUM_EASE } from "@/lib/motion";
 
 function formatPrice(price: string, quantity: number): string {
   const numeric = parseFloat(price.replace(/[^0-9.]/g, ""));
@@ -260,7 +261,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
       <motion.div
         initial={shouldReduce ? false : { opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: shouldReduce ? 0 : 0.6, ease: PREMIUM_EASE }}
         className="flex min-h-[60vh] items-center justify-center"
       >
         <div className="max-w-lg text-center">
@@ -292,7 +293,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.08 },
+      transition: { staggerChildren: shouldReduce ? 0 : 0.08 },
     },
   };
 
@@ -301,7 +302,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const },
+      transition: { duration: shouldReduce ? 0 : 0.5, ease: PREMIUM_EASE },
     },
   };
 

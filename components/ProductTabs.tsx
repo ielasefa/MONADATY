@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
+import { PREMIUM_EASE } from "@/lib/motion";
 
 type ProductTabsProps = {
   description?: string;
@@ -10,12 +11,11 @@ type ProductTabsProps = {
   nutrition?: string;
 };
 
-const EASE = [0.22, 1, 0.36, 1] as const;
-
 type TabId = "description" | "ingredients" | "nutrition";
 
 export function ProductTabs({ description, ingredients, nutrition }: ProductTabsProps) {
   const { t } = useTranslation("products");
+  const shouldReduceMotion = useReducedMotion();
 
   const sections = (
     [
@@ -70,7 +70,7 @@ export function ProductTabs({ description, ingredients, nutrition }: ProductTabs
                 <motion.span
                   layoutId="product-tab-underline"
                   className="absolute inset-x-0 -bottom-px h-[2px] bg-gold"
-                  transition={{ duration: 0.3, ease: EASE }}
+                  transition={{ duration: shouldReduceMotion ? 0 : 0.3, ease: PREMIUM_EASE }}
                 />
               )}
             </button>
@@ -86,10 +86,10 @@ export function ProductTabs({ description, ingredients, nutrition }: ProductTabs
             role="tabpanel"
             id={`panel-${activeId}`}
             aria-labelledby={`tab-${activeId}`}
-            initial={{ opacity: 0, y: 8 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.25, ease: EASE }}
+            transition={{ duration: shouldReduceMotion ? 0 : 0.25, ease: PREMIUM_EASE }}
           >
             <p className="max-w-3xl whitespace-pre-line text-[0.95rem] leading-[1.9] text-white/55">
               {activeSection.content}

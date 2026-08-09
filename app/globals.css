@@ -882,6 +882,101 @@ select option { background-color: #171717; color: #FFFFFF; }
  }
 }
 
+.storefront-theme .storefront-nav-link::after {
+ content: "";
+ position: absolute;
+ inset-inline: 0;
+ bottom: -0.375rem;
+ height: 1px;
+ background: #D6B35A;
+ transform: scaleX(0);
+ transform-origin: left center;
+ opacity: 0.8;
+ transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[dir="rtl"] .storefront-theme .storefront-nav-link::after {
+ transform-origin: right center;
+}
+
+.storefront-theme .storefront-nav-link:hover::after,
+.storefront-theme .storefront-nav-link:focus-visible::after,
+.storefront-theme .storefront-nav-link[data-active="true"]::after {
+ transform: scaleX(1);
+}
+
+.storefront-theme .storefront-icon-button:hover {
+ transform: scale(1.06);
+ opacity: 1;
+}
+
+.storefront-theme .storefront-icon-button:active {
+ transform: scale(0.97);
+}
+
+.storefront-shell .landing-primary,
+.storefront-shell .btn-primary,
+.storefront-shell .btn-primary-sm {
+ position: relative;
+ isolation: isolate;
+ overflow: hidden;
+}
+
+.storefront-shell .landing-primary:hover,
+.storefront-shell .landing-secondary:hover,
+.storefront-shell .btn-primary:hover,
+.storefront-shell .btn-primary-sm:hover {
+ transform: translateY(-2px) scale(1.01);
+}
+
+.storefront-shell .landing-primary:active,
+.storefront-shell .landing-secondary:active,
+.storefront-shell .btn-primary:active,
+.storefront-shell .btn-primary-sm:active {
+ transform: translateY(0) scale(0.98);
+}
+
+.storefront-shell .landing-primary::before,
+.storefront-shell .btn-primary::before,
+.storefront-shell .btn-primary-sm::before {
+ content: "";
+ position: absolute;
+ inset: 0;
+ z-index: 0;
+ pointer-events: none;
+ background: linear-gradient(105deg, transparent 28%, rgba(255,255,255,0.12) 50%, transparent 72%);
+ transform: translateX(-120%);
+ transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[dir="rtl"] .storefront-shell .landing-primary::before,
+[dir="rtl"] .storefront-shell .btn-primary::before,
+[dir="rtl"] .storefront-shell .btn-primary-sm::before {
+ transform: translateX(120%);
+}
+
+.storefront-shell .landing-primary:hover::before,
+.storefront-shell .btn-primary:hover::before,
+.storefront-shell .btn-primary-sm:hover::before {
+ transform: translateX(120%);
+}
+
+[dir="rtl"] .storefront-shell .landing-primary:hover::before,
+[dir="rtl"] .storefront-shell .btn-primary:hover::before,
+[dir="rtl"] .storefront-shell .btn-primary-sm:hover::before {
+ transform: translateX(-120%);
+}
+
+@keyframes storefront-gold-breathe {
+ 0%, 100% { opacity: 0.62; }
+ 50% { opacity: 1; }
+}
+
+.storefront-shell .landing-eyebrow::before,
+.storefront-shell .storefront-eyebrow > .h-px.bg-gold {
+ animation: storefront-gold-breathe 6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
 /* ============================================================
    ACCESSIBILITY
    ============================================================ */
@@ -897,6 +992,12 @@ select option { background-color: #171717; color: #FFFFFF; }
   opacity: 1 !important;
   transform: none !important;
   will-change: auto;
+ }
+ .storefront-theme .storefront-icon-button,
+ .storefront-theme .storefront-nav-link::after,
+ .storefront-shell .motion-reveal {
+  opacity: 1 !important;
+  transform: none !important;
  }
 }
 

@@ -4,8 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Command } from "cmdk";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
+import { PREMIUM_EASE } from "@/lib/motion";
 
 type CommandPaletteProps = {
   open: boolean;
@@ -17,6 +18,7 @@ export function CommandPalette({ open, onClose, brandName = "MONADATY" }: Comman
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [search, setSearch] = useState("");
+  const shouldReduceMotion = useReducedMotion();
   const { t: tCommon } = useTranslation("common");
   const { t: tHome } = useTranslation("home");
   const { t: tNavbar } = useTranslation("navbar");
@@ -87,19 +89,19 @@ export function CommandPalette({ open, onClose, brandName = "MONADATY" }: Comman
       {open && (
         <>
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={shouldReduceMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: shouldReduceMotion ? 0 : 0.2, ease: PREMIUM_EASE }}
             aria-hidden="true"
             onClick={onClose}
             className="fixed inset-0 z-[90] bg-black/70 backdrop-blur-md"
           />
           <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: -16 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.96, y: -16 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: -16 }}
-            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: shouldReduceMotion ? 0 : 0.25, ease: PREMIUM_EASE }}
             className="fixed inset-0 z-[95] flex items-start justify-center px-4 pt-[18vh]"
           >
             <Command

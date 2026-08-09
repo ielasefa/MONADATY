@@ -2,11 +2,12 @@
 
 import { Component, useMemo, useState, useEffect, useRef, useCallback, type ErrorInfo, type ReactNode } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ProductCard } from "@/components/ProductCard";
 import type { Product } from "@/types";
 import { FilterSidebar } from "@/components/FilterSidebar";
 import { useTranslation } from "@/hooks/useTranslation";
+import { PREMIUM_EASE } from "@/lib/motion";
 
 // ─── URL helpers ───────────────────────────────────────────────────────────
 
@@ -172,6 +173,7 @@ export function ProductFilters({
   const { t, lang } = useTranslation("common");
   const { t: tShop } = useTranslation("shop");
   const { t: tErrors } = useTranslation("errors");
+  const shouldReduceMotion = useReducedMotion();
 
   // Get "all" label from server-provided translations to avoid hydration mismatch
   const allLabel = commonTranslations?.all?.[lang] ?? commonTranslations?.all?.en ?? "All";
@@ -633,10 +635,10 @@ export function ProductFilters({
                   key={product.id}
                   layout
                   className="h-full"
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 8 }}
-                  transition={{ duration: 0.4, delay: Math.min(index * 0.035, 0.2), ease: [0.22, 1, 0.36, 1] }}
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: 15, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 8, scale: 0.985 }}
+                  transition={{ duration: shouldReduceMotion ? 0 : 0.55, delay: shouldReduceMotion ? 0 : Math.min(index * 0.04, 0.2), ease: PREMIUM_EASE }}
                 >
                   <ProductCard {...product} />
                 </motion.div>
@@ -644,9 +646,9 @@ export function ProductFilters({
             ) : (
               <motion.div
                 className="col-span-2 sm:col-span-2 md:col-span-3 lg:col-span-4"
-                initial={{ opacity: 0, y: 12 }}
+                initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: shouldReduceMotion ? 0 : 0.3, ease: PREMIUM_EASE }}
               >
                 <div className="storefront-empty">
                   <p className="label-utility">{tShop("no_matches")}</p>
@@ -691,10 +693,10 @@ export function ProductFilters({
             <div className="fixed inset-0 z-50 flex">
               <motion.div
                 aria-hidden="true"
-                initial={{ opacity: 0 }}
+                initial={shouldReduceMotion ? false : { opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: shouldReduceMotion ? 0 : 0.2, ease: PREMIUM_EASE }}
                 className="fixed inset-0 bg-black/60 backdrop-blur-sm"
                 onClick={closeMobileDrawer}
               />
@@ -704,10 +706,10 @@ export function ProductFilters({
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="filter-title"
-                initial={{ x: lang === "ar" ? "-100%" : "100%" }}
+                initial={shouldReduceMotion ? false : { x: lang === "ar" ? "-100%" : "100%" }}
                 animate={{ x: 0 }}
                 exit={{ x: lang === "ar" ? "-100%" : "100%" }}
-                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: shouldReduceMotion ? 0 : 0.35, ease: PREMIUM_EASE }}
                 className="relative ms-auto flex h-full w-full max-w-sm flex-col border-s border-gold/[0.16] bg-surface shadow-premium-xl"
               >
                 {/* Header */}

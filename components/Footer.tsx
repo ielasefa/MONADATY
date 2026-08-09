@@ -1,11 +1,12 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "@/hooks/useTranslation";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { getLandingCopy } from "@/lib/landing-copy";
+import { PREMIUM_EASE } from "@/lib/motion";
 
 type SocialLinks = {
   twitter?: string;
@@ -27,8 +28,6 @@ type FooterProps = {
   websiteName?: string;
 };
 
-const SOCIAL_ICON_EASE = [0.16, 1, 0.3, 1] as const;
-
 function SocialIcon({
   platform,
   href,
@@ -38,6 +37,8 @@ function SocialIcon({
   href: string;
   children: React.ReactNode;
 }) {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <motion.a
       href={href}
@@ -45,12 +46,12 @@ function SocialIcon({
       rel="noopener noreferrer"
       aria-label={platform}
       className="group relative inline-flex items-center justify-center text-white/40 transition-colors duration-300 hover:text-gold"
-      whileHover={{ scale: 1.15, y: -2 }}
-      whileTap={{ scale: 0.9 }}
-      transition={{ duration: 0.25, ease: SOCIAL_ICON_EASE }}
+      whileHover={shouldReduceMotion ? undefined : { scale: 1.08, y: -2 }}
+      whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
+      transition={{ duration: 0.25, ease: PREMIUM_EASE }}
     >
       {children}
-      <span className="absolute -bottom-0.5 left-1/2 h-px w-0 -translate-x-1/2 bg-gold/50 transition-all duration-300 group-hover:w-3" />
+      <span className="absolute -bottom-0.5 left-1/2 h-px w-3 -translate-x-1/2 scale-x-0 bg-gold/50 transition-transform duration-300 group-hover:scale-x-100 motion-reduce:transition-none" />
     </motion.a>
   );
 }
@@ -63,6 +64,7 @@ export function Footer({
   const { t, lang } = useTranslation("footer");
   const copy = getLandingCopy(lang);
   const isHomePage = usePathname() === "/";
+  const shouldReduceMotion = useReducedMotion();
 
   const copyright =
     settings?.copyright ?? t("copyright", "© 2025 MONADATY. All rights reserved.");
@@ -105,10 +107,10 @@ export function Footer({
       {/* Top gold divider */}
  {/* Top gold divider — luxury shimmer reveal */}
  <motion.div
-   initial={{ opacity: 0, scaleX: 0.2 }}
+   initial={shouldReduceMotion ? false : { opacity: 0, scaleX: 0.2 }}
    whileInView={{ opacity: 1, scaleX: 1 }}
    viewport={{ once: true, margin: "-100px" }}
-   transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+   transition={{ duration: shouldReduceMotion ? 0 : 0.9, ease: PREMIUM_EASE }}
    className="mx-auto max-w-[1520px] px-5 sm:px-8 md:px-10 lg:px-16 xl:px-20"
  >
  <div className="relative h-px w-full overflow-hidden">
@@ -116,10 +118,10 @@ export function Footer({
    <motion.div
      aria-hidden
      className="absolute inset-0 will-change-transform"
-     initial={{ x: "-100%", opacity: 0 }}
-     whileInView={{ x: "100%", opacity: [0, 0.8, 0] }}
+     initial={shouldReduceMotion ? false : { x: "-100%", opacity: 0 }}
+     whileInView={shouldReduceMotion ? { opacity: 0 } : { x: "100%", opacity: [0, 0.8, 0] }}
      viewport={{ once: true }}
-     transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+     transition={{ duration: shouldReduceMotion ? 0 : 1.35, ease: PREMIUM_EASE, delay: shouldReduceMotion ? 0 : 0.25 }}
      style={{
        background: "linear-gradient(90deg, transparent 0%, rgba(214,179,90,0.5) 50%, transparent 100%)",
        filter: "blur(1px)",
@@ -130,10 +132,10 @@ export function Footer({
 
       {isHomePage ? (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: shouldReduceMotion ? 0 : 0.65, ease: PREMIUM_EASE }}
           className="mx-auto max-w-[1520px] px-5 sm:px-8 md:px-10 lg:px-16 xl:px-20"
         >
           <div className="grid gap-7 border-b border-white/[0.08] py-14 md:grid-cols-2 md:items-end md:py-16 lg:grid-cols-12 lg:gap-12">
@@ -170,20 +172,20 @@ export function Footer({
 
       {/* Main content */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: shouldReduceMotion ? 0 : 0.65, ease: PREMIUM_EASE }}
         className="mx-auto max-w-[1520px] px-5 sm:px-8 md:px-10 lg:px-16 xl:px-20"
       >
         <div className="pb-14 pt-14 md:pb-16 md:pt-16 lg:pb-20 lg:pt-20">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-10">
             {/* Brand column */}
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: shouldReduceMotion ? 0 : 0.6, ease: PREMIUM_EASE }}
               className="lg:col-span-4"
             >
               <Link
@@ -192,8 +194,8 @@ export function Footer({
                 className="group inline-block focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-4 focus-visible:ring-offset-black"
               >
                 <motion.span
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                  whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
+                  transition={{ duration: 0.3, ease: PREMIUM_EASE }}
                   className="block font-display text-[clamp(2rem,4vw,2.75rem)] font-normal leading-[0.9] tracking-[-0.04em] text-gold transition-colors duration-700 group-hover:text-gold/70"
                 >
                   {websiteName || "MONADATY"}
@@ -266,13 +268,13 @@ export function Footer({
 
  {/* Navigation columns */}
  <motion.div
-   initial={{ opacity: 0, y: 16 }}
+   initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
    whileInView={{ opacity: 1, y: 0 }}
    viewport={{ once: true, margin: "-40px" }}
    transition={{
-     duration: 0.7,
-     ease: [0.16, 1, 0.3, 1],
-     delay: 0.2,
+     duration: shouldReduceMotion ? 0 : 0.6,
+     ease: PREMIUM_EASE,
+     delay: shouldReduceMotion ? 0 : 0.12,
    }}
    className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:col-span-7 lg:col-start-6 lg:gap-12"
  >
@@ -336,18 +338,18 @@ export function Footer({
 
       {/* Bottom bar */}
       <motion.div
-        initial={{ opacity: 0 }}
+        initial={shouldReduceMotion ? false : { opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: "-40px" }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: shouldReduceMotion ? 0 : 0.55, ease: PREMIUM_EASE }}
         className="border-t border-white/[0.06]"
       >
         <div className="mx-auto flex max-w-[1520px] flex-col items-start justify-between gap-5 px-5 py-8 sm:px-8 md:flex-row md:items-center md:px-10 lg:px-16 xl:px-20">
           <motion.p
-            initial={{ opacity: 0, y: 6 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 6 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+            transition={{ duration: shouldReduceMotion ? 0 : 0.5, ease: PREMIUM_EASE, delay: shouldReduceMotion ? 0 : 0.08 }}
             className="text-[0.48rem] tracking-[0.15em] text-white/50"
           >
             {copyright}

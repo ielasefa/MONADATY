@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ProductImage } from "@/components/ProductImage";
 import { ProductImageFallback } from "@/components/ProductImageFallback";
 import { resolveDatabaseProductGallery } from "@/lib/product-images";
+import { PREMIUM_EASE } from "@/lib/motion";
 
 type ProductGalleryProps = {
   name: string;
@@ -17,8 +18,8 @@ type ProductGalleryProps = {
   accent?: string;
 };
 
-const EASE = [0.22, 1, 0.36, 1] as const;
 export function ProductGallery({ name, gallery, image, brand, category, collection, visual, accent }: ProductGalleryProps) {
+  const shouldReduceMotion = useReducedMotion();
   const gallerySource = useMemo(
     () => resolveDatabaseProductGallery({ image, gallery }),
     [image, gallery],
@@ -37,13 +38,13 @@ export function ProductGallery({ name, gallery, image, brand, category, collecti
       <div className="group relative aspect-square w-full overflow-hidden rounded-2xl border border-gold/[0.16] bg-surface shadow-[0_28px_90px_rgba(0,0,0,0.3)]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_38%,rgba(214,179,90,0.09),transparent_62%)]" />
         {activeImage ? (
-          <AnimatePresence mode="wait" initial={false}>
+          <AnimatePresence mode="sync" initial={false}>
             <motion.div
               key={activeImage}
-              initial={{ opacity: 0, scale: 0.985 }}
+              initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.985 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.985 }}
-              transition={{ duration: 0.45, ease: EASE }}
+              exit={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, scale: 0.99 }}
+              transition={{ duration: shouldReduceMotion ? 0 : 0.42, ease: PREMIUM_EASE }}
               className="absolute inset-0"
             >
               <ProductImage

@@ -1,16 +1,16 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { AdminLogo } from "@/components/admin/AdminLogo";
 import { useTranslation } from "@/hooks/useTranslation";
+import { loginAdmin } from "./actions";
 
 function AdminLoginForm() {
   const { t } = useTranslation("auth");
   const searchParams = useSearchParams();
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -22,30 +22,14 @@ function AdminLoginForm() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/admin/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+      const result = await loginAdmin({
+        email,
+        password,
+        redirectTo: searchParams?.get("redirect"),
       });
 
-      if (res.ok) {
-        const data = await res.json();
-        const redirect = searchParams?.get("redirect");
-
-        const destination = data.mustChangePassword
-          ? "/admin/change-password"
-          : redirect && redirect.startsWith("/admin/")
-            ? redirect
-            : "/admin/dashboard";
-
-        // The login route changed the session cookie. Invalidate the pre-login Router
-        // Cache before transitioning so the destination's Server Components are fetched
-        // with the authenticated session on their first render.
-        router.refresh();
-        router.replace(destination);
-      } else {
-        const data = await res.json().catch(() => ({}));
-        toast.error(data.error || t("login_failed"));
+      if (result?.error) {
+        toast.error(result.error || t("login_failed"));
         setLoading(false);
       }
     } catch {

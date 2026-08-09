@@ -3,6 +3,7 @@ import { WishlistPageClient } from "@/components/WishlistPageClient";
 import type { Product } from "@/types";
 import { getLanguage } from "@/lib/translations";
 import { getLandingCopy } from "@/lib/landing-copy";
+import { FadeIn } from "@/components/motion/FadeIn";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,7 @@ return (
       <section className="relative overflow-hidden border-b border-gold/[0.16] bg-surface">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_0%,rgba(214,179,90,0.09),transparent_36%)]" />
         <div className="storefront-container storefront-section relative">
+          <FadeIn y={18} duration={0.62}>
           <p className="storefront-eyebrow">
             <span className="h-px w-9 bg-gold" />
             {copy.wishlist.eyebrow}
@@ -31,6 +33,7 @@ return (
           <p className="mt-5 max-w-xl text-sm leading-[1.85] text-white/58 sm:text-[0.95rem]">
             {copy.wishlist.description}
           </p>
+          </FadeIn>
         </div>
       </section>
 

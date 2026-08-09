@@ -1,7 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@/hooks/useTranslation";
+
+const DEFAULT_ARIA_LABEL = "MONADATY — back to store";
 
 /**
  * MONADATY monogram + wordmark for the admin auth screens.
@@ -9,7 +12,13 @@ import { useTranslation } from "@/hooks/useTranslation";
  */
 export function AdminLogo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   const router = useRouter();
-  const { t } = useTranslation("common");
+  const { t, lang, translations } = useTranslation("common");
+  const [ariaLabel, setAriaLabel] = useState(DEFAULT_ARIA_LABEL);
+
+  useEffect(() => {
+    setAriaLabel(t("monadaty_logo_aria", DEFAULT_ARIA_LABEL));
+  }, [lang, t, translations]);
+
   const dims =
     size === "lg" ? "h-16 w-16" : size === "sm" ? "h-10 w-10" : "h-14 w-14";
   const text =
@@ -19,7 +28,7 @@ export function AdminLogo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
     <button
       type="button"
       onClick={() => router.push("/")}
-      aria-label={t("monadaty_logo_aria", "MONADATY — back to store")}
+      aria-label={ariaLabel}
       className="group mx-auto flex flex-col items-center gap-3 outline-none"
     >
       <div

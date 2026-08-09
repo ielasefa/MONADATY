@@ -7,7 +7,6 @@ import { RelatedProducts } from "@/components/RelatedProducts";
 import { getProductById, getRelatedProducts, getProducts } from "@/lib/db";
 import { loadTranslations, getLanguage } from "@/lib/translations";
 import { FadeIn } from "@/components/motion/FadeIn";
-import { SlideUp } from "@/components/motion/SlideUp";
 
 export const dynamic = "force-dynamic";
 
@@ -150,9 +149,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </FadeIn>
 
           {/* Information — the primary focus, sticky */}
-          <SlideUp delay={0.15} y={20} duration={0.7} className="min-w-0">
+          <div className="min-w-0">
             <div className="lg:pt-2">
 {/* Category eyebrow + badge */}
+        <FadeIn delay={0.14} y={16} duration={0.6}>
         <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
           <div className="flex items-center gap-4">
             <span className="h-px w-10 bg-gold/60" />
@@ -166,13 +166,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </span>
           )}
         </div>
+        </FadeIn>
 
         {/* Display title */}
+        <FadeIn delay={0.22} y={18} duration={0.62}>
         <h1 className="mt-5 max-w-[18ch] font-display text-[clamp(2.4rem,4.5vw,3.65rem)] font-normal leading-[1] tracking-[-0.025em] text-white">
           {product.name}
         </h1>
+        </FadeIn>
 
             {/* Rating + stock */}
+            <FadeIn delay={0.3} y={14} duration={0.58}>
             <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
               <Stars />
               {hasStock && (
@@ -191,8 +195,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </p>
               )}
             </div>
+            </FadeIn>
 
 {/* Luxury pricing block */}
+        <FadeIn delay={0.38} y={14} duration={0.58}>
         <div className="mt-7 flex flex-wrap items-end justify-between gap-6 border-y border-gold/[0.16] py-7">
               <div>
                 <p className="text-[0.6rem] font-medium uppercase tracking-[0.26em] text-white/35">
@@ -210,20 +216,26 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </div>
               </div>
             </div>
+        </FadeIn>
 
 {/* Description */}
         {product.description && (
-          <p className="mt-7 max-w-2xl text-[0.95rem] leading-[1.85] text-white/58">
-            {product.description}
-          </p>
+          <FadeIn delay={0.46} y={14} duration={0.58}>
+            <p className="mt-7 max-w-2xl text-[0.95rem] leading-[1.85] text-white/58">
+              {product.description}
+            </p>
+          </FadeIn>
         )}
 
         {/* Purchase box */}
+        <FadeIn delay={0.54} y={14} duration={0.58}>
         <div className="mt-8">
           <ProductOrderForm product={product} />
         </div>
+        </FadeIn>
 
 {/* Product information — premium metadata block */}
+            <FadeIn delay={0.62} y={14} duration={0.58}>
             <div className="mt-10 border-t border-gold/15 pt-10">
               <div className="grid grid-cols-1 gap-y-5 sm:grid-cols-3 sm:gap-x-8">
                 <div>
@@ -265,8 +277,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <span className="h-px flex-1 bg-gold/20" />
               </div>
             </div>
+            </FadeIn>
             </div>
-          </SlideUp>
+          </div>
         </div>
       </section>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
 import { SafeImage } from "@/components/SafeImage";
@@ -321,22 +321,12 @@ export function CollectionsShowcase({
       <div className="landing-section">
         <Reveal>
           <div className="landing-eyebrow">{copy.collections.eyebrow}</div>
-          <motion.h2
-            initial={{ opacity: 0.7 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.7, ease: EASE, delay: 0.1 }}
-            className="landing-title mt-5 max-w-[15ch]"
-          >
+          <h2 className="landing-title mt-5 max-w-[15ch]">
             {copy.collections.title}
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.7, ease: EASE, delay: 0.2 }}
-            className="landing-body mt-5 max-w-[640px]"
-          >
+          </h2>
+          <p className="landing-body mt-5 max-w-[640px]">
             {copy.collections.description}
-          </motion.p>
+          </p>
         </Reveal>
 
         <div className="mt-10 w-full md:mt-12 lg:mt-16">
@@ -368,16 +358,17 @@ export function CollectionsShowcase({
                         title={col.title}
                         accent={col.accent}
                         sizes="(min-width: 1024px) 50vw, 100vw"
-                        className="object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                        className="object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                         monogramSize="text-[7rem] md:text-[9rem] lg:text-[11rem]"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0A] via-black/25 to-transparent" />
                       <div className="absolute inset-0 bg-gradient-to-tr from-[#D6B35A]/[0.08] via-transparent to-transparent" />
-                      <div dir="auto" className="absolute inset-x-0 bottom-0 flex flex-col justify-end p-6 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1 motion-reduce:transition-none sm:p-8 lg:p-10">
+                      <div className="absolute inset-0 bg-black/15 opacity-0 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100 motion-reduce:transition-none" />
+                      <div dir="auto" className="absolute inset-x-0 bottom-0 flex flex-col justify-end p-6 sm:p-8 lg:p-10">
                         <p className="text-[0.58rem] font-medium uppercase tracking-[0.25em] text-[#D6B35A]">
                           {col.previewLabel || copy.collections.label}
                         </p>
-                        <h3 className="mt-3 max-w-[14ch] font-display text-[2rem] font-normal leading-[0.98] tracking-[-0.03em] text-white sm:text-[2.4rem] lg:text-[3rem]">
+                        <h3 className="mt-3 max-w-[14ch] translate-y-1 font-display text-[2rem] font-normal leading-[0.98] tracking-[-0.03em] text-white transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0 motion-reduce:transform-none motion-reduce:transition-none sm:text-[2.4rem] lg:text-[3rem]">
                           {col.title}
                         </h3>
                         {col.description && (
@@ -385,9 +376,9 @@ export function CollectionsShowcase({
                             {col.description}
                           </p>
                         )}
-                        <span aria-hidden="true" className="mt-5 h-px w-10 bg-[#D6B35A] transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-16 motion-reduce:transition-none" />
+                        <span aria-hidden="true" className="mt-5 h-px w-16 origin-left scale-x-[0.625] bg-[#D6B35A] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100 motion-reduce:transform-none motion-reduce:transition-none rtl:origin-right" />
                         {hasShowcase && (
-                          <span className="mt-4 inline-flex items-center gap-2 text-[0.62rem] font-medium uppercase tracking-[0.18em] text-[#D6B35A] transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none lg:opacity-0 lg:group-hover:opacity-100 motion-reduce:lg:opacity-100">
+                          <span className="mt-4 inline-flex items-center gap-2 text-[0.62rem] font-medium uppercase tracking-[0.18em] text-[#D6B35A] transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none rtl:group-hover:-translate-x-1 lg:opacity-0 lg:group-hover:opacity-100 motion-reduce:lg:opacity-100">
                             {isActive
                               ? copy.collections.close
                               : copy.collections.viewProducts}
@@ -468,21 +459,22 @@ export function CollectionsShowcase({
                             title={col.title}
                             accent={col.accent}
                             sizes="(min-width: 1024px) 25vw, 100vw"
-                            className="object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                            className="object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                             monogramSize="text-[4rem] md:text-[5rem] lg:text-[6rem]"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0A] via-black/25 to-transparent" />
                           <div className="absolute inset-0 bg-gradient-to-tr from-[#D6B35A]/[0.08] via-transparent to-transparent" />
-                          <div dir="auto" className="absolute inset-x-0 bottom-0 flex flex-col justify-end p-5 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1 motion-reduce:transition-none sm:p-6">
+                          <div className="absolute inset-0 bg-black/15 opacity-0 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100 motion-reduce:transition-none" />
+                          <div dir="auto" className="absolute inset-x-0 bottom-0 flex flex-col justify-end p-5 sm:p-6">
                             <p className="text-[0.53rem] font-medium uppercase tracking-[0.22em] text-[#D6B35A]">
                               {col.previewLabel || copy.collections.label}
                             </p>
-                            <h3 className="mt-2 font-display text-[1.35rem] font-normal leading-[1.04] tracking-[-0.02em] text-white sm:text-[1.5rem] lg:text-[1.75rem]">
+                            <h3 className="mt-2 translate-y-1 font-display text-[1.35rem] font-normal leading-[1.04] tracking-[-0.02em] text-white transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0 motion-reduce:transform-none motion-reduce:transition-none sm:text-[1.5rem] lg:text-[1.75rem]">
                               {col.title}
                             </h3>
-                            <span aria-hidden="true" className="mt-4 h-px w-8 bg-[#D6B35A] transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-12 motion-reduce:transition-none" />
+                            <span aria-hidden="true" className="mt-4 h-px w-12 origin-left scale-x-2/3 bg-[#D6B35A] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100 motion-reduce:transform-none motion-reduce:transition-none rtl:origin-right" />
                             {hasShowcase && (
-                              <span className="mt-3 inline-flex items-center gap-1.5 text-[0.56rem] font-medium uppercase tracking-[0.17em] text-[#D6B35A] transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none lg:opacity-0 lg:group-hover:opacity-100 motion-reduce:lg:opacity-100">
+                              <span className="mt-3 inline-flex items-center gap-1.5 text-[0.56rem] font-medium uppercase tracking-[0.17em] text-[#D6B35A] transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none rtl:group-hover:-translate-x-1 lg:opacity-0 lg:group-hover:opacity-100 motion-reduce:lg:opacity-100">
                                 {isActive
                                   ? copy.collections.close
                                   : copy.collections.viewProducts}
@@ -875,11 +867,7 @@ export function BuildYourBox({ products }: { products: ProductData[] }) {
                             initial={{ scale: 0, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0, opacity: 0 }}
-                            transition={{
-                              type: "spring",
-                              stiffness: 450,
-                              damping: 22,
-                            }}
+                            transition={{ duration: 0.32, ease: EASE }}
                             className="absolute -top-2 -end-2 flex h-5 w-5 items-center justify-center rounded-full bg-gold text-white"
                           >
                             <svg
@@ -1005,6 +993,7 @@ export function SocialProof({
 }) {
   const { lang } = useTranslation("home");
   const copy = getLandingCopy(lang);
+  const shouldReduceMotion = useReducedMotion();
   if (testimonials.length === 0) return null;
 
   const displayTestimonials = testimonials.slice(0, 3);
@@ -1036,7 +1025,23 @@ export function SocialProof({
                 transition={{ duration: 0.3, ease: EASE }}
                 className="relative flex h-full min-h-[220px] flex-col rounded-2xl border border-white/[0.08] bg-[#11110F] p-6 transition-[border-color,box-shadow] duration-300 hover:border-[#D6B35A]/20 hover:shadow-[0_20px_55px_rgba(0,0,0,.24)] sm:p-7"
               >
-                <span className="text-[0.7rem] tracking-[0.16em] text-[#D6B35A]/80" aria-hidden="true">★★★★★</span>
+                <span className="flex gap-0.5 text-[0.7rem] text-[#D6B35A]/80" aria-hidden="true">
+                  {Array.from({ length: 5 }).map((_, starIndex) => (
+                    <motion.span
+                      key={starIndex}
+                      initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.86 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true, amount: 0.8 }}
+                      transition={{
+                        duration: shouldReduceMotion ? 0 : 0.34,
+                        delay: shouldReduceMotion ? 0 : starIndex * 0.045,
+                        ease: EASE,
+                      }}
+                    >
+                      ★
+                    </motion.span>
+                  ))}
+                </span>
                 <p className="mt-5 line-clamp-4 font-display text-lg font-normal leading-[1.45] tracking-[-0.015em] text-white/82">
                   “{copy.social.quotes[index] || item.content}”
                 </p>

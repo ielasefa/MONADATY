@@ -4,6 +4,8 @@ import { getLandingContent } from "@/lib/db";
 import { loadCollections } from "@/lib/data";
 import { getLandingCopy } from "@/lib/landing-copy";
 import { getLanguage } from "@/lib/translations";
+import { FadeIn } from "@/components/motion/FadeIn";
+import { Reveal } from "@/components/Reveal";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +21,7 @@ export default async function AboutPage() {
       <section className="relative overflow-hidden border-b border-gold/[0.16] bg-surface">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_0%,rgba(214,179,90,0.1),transparent_38%)]" />
         <div className="storefront-container relative grid items-center gap-12 py-16 md:py-20 lg:grid-cols-12 lg:gap-16 lg:py-28">
-          <div className="lg:col-span-6">
+          <FadeIn delay={0.08} y={20} duration={0.65} className="lg:col-span-6">
             <p className="storefront-eyebrow">
               <span className="h-px w-9 bg-gold" />
               {copy.eyebrow}
@@ -33,7 +35,7 @@ export default async function AboutPage() {
             <Link href="/shop" className="btn-primary mt-8 h-12">
               {copy.cta}
             </Link>
-          </div>
+          </FadeIn>
 
           <EditorialImage
             src={firstImage}
@@ -47,7 +49,7 @@ export default async function AboutPage() {
 
       <section className="storefront-container storefront-section">
         <div className="grid items-start gap-12 lg:grid-cols-12 lg:gap-20">
-          <div className="lg:col-span-5 lg:sticky lg:top-28">
+          <Reveal className="lg:col-span-5 lg:sticky lg:top-28">
             <p className="storefront-eyebrow">
               <span className="h-px w-9 bg-gold" />
               {copy.storyEyebrow}
@@ -58,9 +60,10 @@ export default async function AboutPage() {
             <p className="mt-6 max-w-lg text-sm leading-[1.9] text-white/58 sm:text-[0.95rem]">
               {copy.storyDescription}
             </p>
-          </div>
+          </Reveal>
 
-          <div className="grid gap-px overflow-hidden rounded-2xl border border-gold/[0.16] bg-gold/[0.16] sm:grid-cols-2 lg:col-span-7">
+          <Reveal delay={0.1} className="lg:col-span-7">
+          <div className="grid gap-px overflow-hidden rounded-2xl border border-gold/[0.16] bg-gold/[0.16] sm:grid-cols-2">
             {copy.values.map((value, index) => (
               <article key={value.title} className="min-h-52 bg-card p-7 sm:p-8 lg:p-10">
                 <span className="font-display text-4xl text-gold/35">0{index + 1}</span>
@@ -69,6 +72,7 @@ export default async function AboutPage() {
               </article>
             ))}
           </div>
+          </Reveal>
         </div>
       </section>
 
@@ -91,7 +95,8 @@ export default async function AboutPage() {
               label={copy.values[3].title}
               className="aspect-[4/3] lg:col-span-7 lg:aspect-auto lg:min-h-[470px]"
             />
-            <div className="flex flex-col justify-between rounded-2xl border border-gold/[0.16] bg-card p-7 sm:p-9 lg:col-span-5 lg:p-11">
+            <Reveal delay={0.1} className="lg:col-span-5">
+            <div className="flex h-full flex-col justify-between rounded-2xl border border-gold/[0.16] bg-card p-7 sm:p-9 lg:p-11">
               <div>
                 <p className="text-[0.58rem] font-semibold uppercase tracking-[0.3em] text-gold">MONADATY</p>
                 <p className="mt-6 font-display text-3xl leading-[1.15] text-white sm:text-4xl">
@@ -103,16 +108,19 @@ export default async function AboutPage() {
                 {copy.cta}
               </Link>
             </div>
+            </Reveal>
           </div>
         </div>
       </section>
 
       <section className="storefront-container py-16 text-center md:py-20 lg:py-24">
+        <Reveal>
         <p className="storefront-section-title mx-auto max-w-[18ch]">
           {copy.closingTitle}
         </p>
         <p className="mx-auto mt-5 max-w-xl text-sm leading-[1.85] text-white/58">{copy.closingDescription}</p>
         <Link href="/shop" className="btn-primary mt-8 h-12">{copy.cta}</Link>
+        </Reveal>
       </section>
     </div>
   );
@@ -132,7 +140,8 @@ function EditorialImage({
   priority?: boolean;
 }) {
   return (
-    <div className={`group relative overflow-hidden rounded-2xl border border-gold/[0.16] bg-card ${className}`}>
+    <Reveal delay={priority ? 0.42 : 0.06} className={className}>
+    <div className="group relative h-full w-full overflow-hidden rounded-2xl border border-gold/[0.16] bg-card">
       {src ? (
         <SafeImage
           src={src}
@@ -151,5 +160,6 @@ function EditorialImage({
         {label}
       </p>
     </div>
+    </Reveal>
   );
 }

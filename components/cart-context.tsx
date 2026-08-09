@@ -2,10 +2,12 @@
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import type { Product } from "@/types";
 import { formatMoney, parseMoney } from "@/lib/money";
 import { useTranslation } from "@/hooks/useTranslation";
 import { resolveDatabaseProductImage } from "@/lib/product-images";
+import { PREMIUM_EASE } from "@/lib/motion";
 
 export type CartItem = {
   id: string;
@@ -51,6 +53,7 @@ export function CartProvider({ children }: Readonly<{ children: React.ReactNode 
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [hasMounted, setHasMounted] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     const storedCart = window.localStorage.getItem(STORAGE_KEY);
@@ -202,16 +205,23 @@ export function CartProvider({ children }: Readonly<{ children: React.ReactNode 
       {children}
       <CartDrawer />
 
-      {toastMessage ? (
-        <div
-          role="status"
-          aria-live="polite"
-          aria-atomic="true"
-          className="fixed bottom-6 left-1/2 z-[70] w-[min(92vw,26rem)] -translate-x-1/2 rounded-md border border-ivory/[0.06] bg-black-surface px-5 py-3 text-sm text-ivory shadow-2xl backdrop-blur-xl animate-fade-in"
-        >
-          {toastMessage}
-        </div>
-      ) : null}
+      <AnimatePresence initial={false}>
+        {toastMessage ? (
+          <motion.div
+            key={toastMessage}
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 10, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 6, scale: 0.99 }}
+            transition={{ duration: shouldReduceMotion ? 0 : 0.34, ease: PREMIUM_EASE }}
+            className="fixed inset-x-0 bottom-6 z-[70] mx-auto w-[min(92vw,26rem)] rounded-md border border-ivory/[0.06] bg-black-surface px-5 py-3 text-sm text-ivory shadow-2xl backdrop-blur-xl"
+          >
+            {toastMessage}
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </CartContext.Provider>
   );
 }

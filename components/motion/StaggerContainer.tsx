@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
+import { PREMIUM_EASE } from "@/lib/motion";
 
 type StaggerContainerProps = {
   children: ReactNode;
@@ -10,14 +11,14 @@ type StaggerContainerProps = {
   initialDelay?: number;
 };
 
-const EASE_PREMIUM = [0.22, 1, 0.36, 1] as const;
-
 export function StaggerContainer({
   children,
   className,
   staggerDelay = 0.06,
   initialDelay = 0,
 }: StaggerContainerProps) {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <motion.div
       initial="hidden"
@@ -27,12 +28,12 @@ export function StaggerContainer({
         visible: {
           opacity: 1,
           transition: {
-            staggerChildren: staggerDelay,
-            delayChildren: initialDelay,
+            staggerChildren: shouldReduceMotion ? 0 : staggerDelay,
+            delayChildren: shouldReduceMotion ? 0 : initialDelay,
           },
         },
       }}
-      className={className}
+      className={["motion-reveal", className].filter(Boolean).join(" ")}
     >
       {children}
  </motion.div>
@@ -51,15 +52,15 @@ export function StaggerItem({ children, className, y = 16 }: StaggerItemProps) {
   return (
     <motion.div
       variants={{
-        hidden: shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y, scale: 0.985 },
+        hidden: shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y, scale: 0.985 },
         visible: {
           opacity: 1,
           y: 0,
           scale: 1,
-          transition: { duration: 0.5, ease: EASE_PREMIUM },
+          transition: { duration: shouldReduceMotion ? 0 : 0.5, ease: PREMIUM_EASE },
         },
       }}
-      className={className}
+      className={["motion-reveal", className].filter(Boolean).join(" ")}
     >
       {children}
  </motion.div>

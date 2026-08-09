@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
+import { PREMIUM_EASE } from "@/lib/motion";
 
 type RevealProps = {
   children: React.ReactNode;
@@ -21,23 +22,19 @@ export function Reveal({
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
   const shouldReduceMotion = useReducedMotion();
-  const hidden = shouldReduceMotion
-    ? { opacity: 0 }
-    : { opacity: 0, y, scale: 0.985 };
-  const visible = shouldReduceMotion
-    ? { opacity: 1 }
-    : { opacity: 1, y: 0, scale: 1 };
+  const hidden = { opacity: 0, y, scale: 0.97 };
+  const visible = { opacity: 1, y: 0, scale: 1 };
 
   return (
     <div ref={ref} className={className}>
       <motion.div
-        className="h-full"
-        initial={hidden}
-        animate={isInView ? visible : hidden}
+        className="motion-reveal h-full"
+        initial={shouldReduceMotion ? false : hidden}
+        animate={shouldReduceMotion || isInView ? visible : hidden}
         transition={{
-          duration,
-          delay,
-          ease: [0.22, 1, 0.36, 1],
+          duration: shouldReduceMotion ? 0 : duration,
+          delay: shouldReduceMotion ? 0 : delay,
+          ease: PREMIUM_EASE,
         }}
       >
         {children}

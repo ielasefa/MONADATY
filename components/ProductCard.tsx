@@ -1,7 +1,7 @@
 "use client";
 
 import { memo } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import type { Product } from "@/types";
 import { useCart } from "@/components/cart-context";
@@ -9,6 +9,7 @@ import { useWishlist } from "@/components/wishlist-context";
 import { ProductImage } from "@/components/ProductImage";
 import { resolveDatabaseProductImage } from "@/lib/product-images";
 import { useTranslation } from "@/hooks/useTranslation";
+import { PREMIUM_EASE } from "@/lib/motion";
 
 type ProductCardProps = Pick<
   Product,
@@ -17,8 +18,6 @@ type ProductCardProps = Pick<
   shortDescription?: string;
   variant?: "default" | "editorial";
 };
-
-const EASE = [0.22, 1, 0.36, 1] as const;
 
 export const ProductCard = memo(function ProductCard({
   id,
@@ -37,14 +36,15 @@ export const ProductCard = memo(function ProductCard({
   const { addItem } = useCart();
   const { contains, toggle } = useWishlist();
   const { t } = useTranslation("products");
+  const shouldReduceMotion = useReducedMotion();
   const isWishlisted = contains(id);
   const imageSource = resolveDatabaseProductImage({ image, gallery });
   const imageProduct = { name, image, gallery, category, collection, brand, visual, accent };
   return (
     <motion.article
       initial={false}
-      whileHover={{ y: -3 }}
-      transition={{ duration: 0.3, ease: EASE }}
+      whileHover={shouldReduceMotion ? undefined : { y: -4 }}
+      transition={{ duration: 0.36, ease: PREMIUM_EASE }}
       className="group flex h-full min-w-0 flex-col rounded-2xl border border-white/[0.08] bg-[#171714] p-3 shadow-[0_18px_50px_rgba(0,0,0,0.18)] transition-[border-color,box-shadow] duration-300 hover:border-gold/25 hover:shadow-[0_24px_64px_rgba(0,0,0,0.32)] sm:p-4"
     >
       <div
@@ -60,7 +60,7 @@ export const ProductCard = memo(function ProductCard({
             alt={name}
             fill
             sizes="(min-width: 1280px) 22vw, (min-width: 768px) 31vw, 46vw"
-            className="object-contain p-4 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100 sm:p-6"
+            className="object-contain p-4 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100 sm:p-6"
           />
         </Link>
 
@@ -94,8 +94,14 @@ export const ProductCard = memo(function ProductCard({
             fill={isWishlisted ? "currentColor" : "none"}
             stroke="currentColor"
             strokeWidth="1.6"
-            animate={isWishlisted ? { scale: [1, 1.22, 1] } : { scale: 1 }}
-            transition={{ duration: 0.4, ease: EASE }}
+            animate={
+              shouldReduceMotion
+                ? { scale: 1 }
+                : isWishlisted
+                  ? { scale: [1, 1.18, 1] }
+                  : { scale: 1 }
+            }
+            transition={{ duration: shouldReduceMotion ? 0 : 0.38, ease: PREMIUM_EASE }}
           >
             <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 10-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z" />
           </motion.svg>
@@ -111,8 +117,8 @@ export const ProductCard = memo(function ProductCard({
             {name}
           </Link>
         </h3>
-        <p className="mb-4 mt-2 h-6 font-display text-base font-normal text-gold">{price}</p>
-        <button
+        <p className="mb-4 mt-2 h-6 origin-start font-display text-base font-normal text-gold transition-[color,transform] duration-300 group-hover:scale-[1.035] group-hover:text-gold-light motion-reduce:transition-none motion-reduce:group-hover:scale-100">{price}</p>
+        <motion.button
           type="button"
           onClick={() =>
             addItem(
@@ -135,9 +141,14 @@ export const ProductCard = memo(function ProductCard({
           }
           className="btn-primary mt-auto h-11 w-full px-3 text-[0.54rem] sm:px-4 sm:text-[0.58rem]"
           aria-label={`${t("add_to_cart")} ${name}`}
+          initial={false}
+          whileHover={shouldReduceMotion ? undefined : { y: -2, scale: 1.01 }}
+          whileTap={shouldReduceMotion ? undefined : { y: 0, scale: 0.98 }}
+          transition={{ duration: 0.24, ease: PREMIUM_EASE }}
         >
-          {t("add_to_cart")}
-        </button>
+          <span>{t("add_to_cart")}</span>
+          <span aria-hidden="true" className="inline-block transition-transform duration-300 group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5">→</span>
+        </motion.button>
       </div>
     </motion.article>
   );

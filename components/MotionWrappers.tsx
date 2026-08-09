@@ -8,7 +8,7 @@ type AnimProps = {
   delay?: number;
 };
 
-const EASE = [0.22, 1, 0.36, 1] as const;
+const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
 
 function useInView(
   ref: React.RefObject<HTMLElement | null>,
@@ -63,11 +63,11 @@ export function FadeIn({
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref);
 
-    const easeStr = "cubic-bezier(0.22, 1, 0.36, 1)";
+    const easeStr = EASE;
     return (
     <div
       ref={ref}
-      className={className}
+      className={["motion-reveal", className].filter(Boolean).join(" ")}
       style={{
         opacity: inView ? 1 : 0,
         transform: inView ? "none" : offset(direction),
@@ -91,7 +91,7 @@ export function ScaleIn({ children, className, delay }: AnimProps) {
   return (
     <div
       ref={ref}
-      className={className}
+      className={["motion-reveal", className].filter(Boolean).join(" ")}
       style={{
         opacity: inView ? 1 : 0,
         transform: inView ? "none" : "scale(0.96)",

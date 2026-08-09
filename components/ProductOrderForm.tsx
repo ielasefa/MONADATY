@@ -1,16 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useCart } from "@/components/cart-context";
 import type { Product } from "@/types";
 import { useTranslation } from "@/hooks/useTranslation";
+import { PREMIUM_EASE } from "@/lib/motion";
 
 type ProductOrderFormProps = {
   product: Product;
 };
-
-const EASE = [0.22, 1, 0.36, 1] as const;
 
 export function ProductOrderForm({ product }: ProductOrderFormProps) {
   const { addItem } = useCart();
@@ -18,6 +17,7 @@ export function ProductOrderForm({ product }: ProductOrderFormProps) {
   const [quantity, setQuantity] = useState(1);
   const [adding, setAdding] = useState(false);
   const [buying, setBuying] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
   const isOutOfStock = product.stock !== undefined && product.stock <= 0;
 
@@ -62,8 +62,8 @@ return (
               type="button"
               onClick={() => setQuantity((current) => Math.max(1, current - 1))}
               disabled={controlsDisabled}
-              whileTap={{ scale: 0.92 }}
-              transition={{ duration: 0.15, ease: EASE }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.94 }}
+              transition={{ duration: 0.18, ease: PREMIUM_EASE }}
               className={qtyControl}
               aria-label={t("decrease_qty")}
             >
@@ -71,9 +71,9 @@ return (
             </motion.button>
             <motion.span
               key={`qty-${quantity}`}
-              initial={{ opacity: 0.4, y: -3 }}
+              initial={shouldReduceMotion ? false : { opacity: 0.4, y: -3 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2, ease: EASE }}
+              transition={{ duration: shouldReduceMotion ? 0 : 0.2, ease: PREMIUM_EASE }}
               className="min-w-10 text-center text-sm font-medium tabular-nums text-white"
             >
               {quantity}
@@ -82,8 +82,8 @@ return (
               type="button"
               onClick={() => setQuantity((current) => current + 1)}
               disabled={controlsDisabled}
-              whileTap={{ scale: 0.92 }}
-              transition={{ duration: 0.15, ease: EASE }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.94 }}
+              transition={{ duration: 0.18, ease: PREMIUM_EASE }}
               className={qtyControl}
               aria-label={t("increase_qty")}
             >
@@ -98,9 +98,9 @@ return (
             type="button"
             onClick={handleAddToCart}
             disabled={controlsDisabled}
-            whileHover={controlsDisabled ? undefined : { y: -1 }}
-            whileTap={controlsDisabled ? undefined : { scale: 0.98 }}
-            transition={{ duration: 0.2, ease: EASE }}
+            whileHover={controlsDisabled || shouldReduceMotion ? undefined : { y: -2, scale: 1.01 }}
+            whileTap={controlsDisabled || shouldReduceMotion ? undefined : { y: 0, scale: 0.98 }}
+            transition={{ duration: 0.24, ease: PREMIUM_EASE }}
             className={`${buttonBase} bg-rouge text-white shadow-[0_16px_40px_-20px_rgba(110,31,42,0.6)] hover:bg-rouge-hover`}
           >
             {adding ? (
@@ -117,9 +117,9 @@ return (
             type="button"
             onClick={handleBuyNow}
             disabled={controlsDisabled}
-            whileHover={controlsDisabled ? undefined : { y: -1 }}
-            whileTap={controlsDisabled ? undefined : { scale: 0.98 }}
-            transition={{ duration: 0.2, ease: EASE }}
+            whileHover={controlsDisabled || shouldReduceMotion ? undefined : { y: -2, scale: 1.01 }}
+            whileTap={controlsDisabled || shouldReduceMotion ? undefined : { y: 0, scale: 0.98 }}
+            transition={{ duration: 0.24, ease: PREMIUM_EASE }}
             className={`${buttonBase} border-2 border-rouge bg-transparent text-white hover:bg-rouge hover:border-rouge`}
           >
             {buying ? (

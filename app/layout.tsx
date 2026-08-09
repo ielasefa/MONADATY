@@ -13,6 +13,7 @@ import { GlobalErrorHandler } from "@/components/GlobalErrorHandler";
 import { MotionConfigWrapper } from "@/components/MotionConfigWrapper";
 import { getLanguageFromCookie, getTranslation, loadTranslations, LANGUAGE_COOKIE } from "@/lib/translations";
 import { TranslationHydrator } from "@/components/TranslationHydrator";
+import { StorefrontRouteTransition } from "@/components/StorefrontRouteTransition";
 
 const dmSerifDisplay = DM_Serif_Display({
   subsets: ["latin"],
@@ -130,7 +131,9 @@ export default async function RootLayout({
             <LanguageProvider initialLang={langFromCookie}>
               <TranslationHydrator initialLang={langFromCookie} initialTranslations={commonTr} />
               {!isAdmin && <NavbarWrapper />}
-              <main id="main-content" role="main" className={isAdmin ? undefined : "storefront-shell"}>{children}</main>
+              <main id="main-content" role="main" className={isAdmin ? undefined : "storefront-shell"}>
+                {isAdmin ? children : <StorefrontRouteTransition>{children}</StorefrontRouteTransition>}
+              </main>
               {!isAdmin && <FooterWrapper />}
             </LanguageProvider>
           </WishlistProvider>

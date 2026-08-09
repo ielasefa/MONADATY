@@ -4,6 +4,7 @@ import { loadTranslations, t, getLanguage } from "@/lib/translations";
 import { getCategories } from "@/lib/db";
 import { loadProducts } from "@/lib/data";
 import { getLandingCopy } from "@/lib/landing-copy";
+import { FadeIn } from "@/components/motion/FadeIn";
 
 export const dynamic = "force-dynamic";
 
@@ -26,6 +27,7 @@ export default async function ShopPage() {
       <section className="relative overflow-hidden border-b border-gold/[0.16] bg-surface">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_0%,rgba(214,179,90,0.09),transparent_36%)]" />
         <div className="storefront-container storefront-section relative">
+          <FadeIn y={18} duration={0.62}>
           <p className="storefront-eyebrow">
             <span className="h-px w-9 bg-gold" />
             {copy.shop.eyebrow}
@@ -45,6 +47,7 @@ export default async function ShopPage() {
               {products.length} {products.length === 1 ? t(translations, "drink_unit", lang) : t(translations, "drink_unit_plural", lang)}
             </p>
           </div>
+          </FadeIn>
         </div>
       </section>
 
