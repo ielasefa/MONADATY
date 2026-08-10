@@ -2,7 +2,6 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useTranslation } from "@/hooks/useTranslation";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { getLandingCopy } from "@/lib/landing-copy";
@@ -63,7 +62,6 @@ export function Footer({
 }: FooterProps) {
   const { t, lang } = useTranslation("footer");
   const copy = getLandingCopy(lang);
-  const isHomePage = usePathname() === "/";
   const shouldReduceMotion = useReducedMotion();
 
   const copyright =
@@ -129,46 +127,6 @@ export function Footer({
    />
  </div>
  </motion.div>
-
-      {isHomePage ? (
-        <motion.div
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: shouldReduceMotion ? 0 : 0.65, ease: PREMIUM_EASE }}
-          className="mx-auto max-w-[1520px] px-5 sm:px-8 md:px-10 lg:px-16 xl:px-20"
-        >
-          <div className="grid gap-7 border-b border-white/[0.08] py-14 md:grid-cols-2 md:items-end md:py-16 lg:grid-cols-12 lg:gap-12">
-            <div className="lg:col-span-6">
-              <p className="text-[0.58rem] font-semibold uppercase tracking-[0.34em] text-gold">
-                {copy.footer.newsletterEyebrow}
-              </p>
-              <h2 className="mt-4 max-w-[15ch] font-display text-[clamp(2rem,4vw,3.75rem)] font-light leading-[0.92] tracking-[-0.04em] text-white">
-                {copy.footer.newsletterTitle}
-              </h2>
-            </div>
-            <form
-              className="flex w-full max-w-xl flex-col gap-3 sm:flex-row lg:col-span-5 lg:col-start-8 lg:justify-self-end"
-              onSubmit={(event) => event.preventDefault()}
-            >
-              <label className="min-w-0 flex-1">
-                <span className="sr-only">{copy.footer.emailLabel}</span>
-                <input
-                  type="email"
-                  placeholder={copy.footer.emailPlaceholder}
-                  className="storefront-input bg-white/[0.035]"
-                />
-              </label>
-              <button
-                type="submit"
-                className="btn-primary h-12"
-              >
-                {copy.footer.newsletterButton}
-              </button>
-            </form>
-          </div>
-        </motion.div>
-      ) : null}
 
       {/* Main content */}
       <motion.div

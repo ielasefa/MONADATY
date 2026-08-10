@@ -1130,66 +1130,6 @@ export function MoroccanMoment({ product }: { product?: ProductData }) {
 }
 
 /* ============================================================
-   NEWSLETTER
-   ============================================================ */
-export function Newsletter(_props: {
-  title: string;
-  description: string;
-  placeholder: string;
-  buttonText: string;
-}) {
-  const { lang } = useTranslation("home");
-  const copy = getLandingCopy(lang);
-  return (
-    <section className="relative w-full overflow-hidden bg-[#0B0B0A]">
-      <div aria-hidden="true" className="absolute end-[-14rem] top-[-12rem] h-[34rem] w-[34rem] rounded-full bg-[#6E1F2A]/[0.14] blur-[150px]" />
-      <div className="landing-section relative">
-        <Reveal>
-          <div className="grid items-center gap-9 border-y border-[#D6B35A]/20 py-10 md:py-12 lg:grid-cols-12 lg:gap-14 lg:py-14">
-            <div className="lg:col-span-6">
-              <div className="landing-eyebrow">{copy.newsletter.eyebrow}</div>
-              <h2 className="mt-5 font-display text-[clamp(2.25rem,4vw,4rem)] font-normal leading-[0.96] tracking-[-0.04em] text-white">
-                {copy.newsletter.title}
-              </h2>
-              <p className="landing-body mt-4 max-w-md">
-                {copy.newsletter.description}
-              </p>
-            </div>
-            <form
-              className="flex flex-col gap-3 sm:flex-row lg:col-span-6 lg:justify-self-end"
-              onSubmit={(e) => e.preventDefault()}
-            >
-              <label className="w-full sm:w-[300px]">
-                <span className="sr-only">
-                  {copy.newsletter.placeholder}
-                </span>
-                <motion.input
-                  type="email"
-                  placeholder={copy.newsletter.placeholder}
-                  whileFocus={{ scale: 1.01 }}
-                  transition={{ duration: 0.2, ease: EASE }}
-                  className="h-14 w-full rounded-xl border border-[#D6B35A]/25 bg-[#171714] px-5 text-sm font-normal text-white outline-none transition-all duration-300 placeholder:text-white/35 focus:border-[#D6B35A]/60 focus:ring-2 focus:ring-[#D6B35A]/10"
-                  style={{ WebkitTextFillColor: "#FFFFFF", caretColor: "#FFFFFF" }}
-                />
-              </label>
-              <motion.button
-                type="submit"
-                whileHover={{ scale: 1.02, y: -1 }}
-                whileTap={{ scale: 0.99 }}
-                transition={{ duration: 0.18, ease: EASE }}
-                className="landing-primary shrink-0 px-8"
-              >
-                {copy.newsletter.button}
-              </motion.button>
-            </form>
-          </div>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-/* ============================================================
    FAQ
    ============================================================ */
 export function FAQSection({

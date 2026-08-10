@@ -6,7 +6,6 @@ import {
   BrandStory,
   SocialProof,
   MoroccanMoment,
-  Newsletter,
   FinalCTA,
 } from "@/components/HomepageCommerce";
 import { getLandingFeaturedProducts, getTestimonials, getLandingCollections, getLandingContent, getCollectionShowcase } from "@/lib/db";
@@ -43,7 +42,7 @@ export default async function HomePage() {
 
   const sectionOrder = (content.sectionOrder || []).length > 0
     ? content.sectionOrder
-    : ["hero", "featured", "collections", "about", "testimonials", "moroccan_moment", "newsletter", "final_cta"];
+    : ["hero", "featured", "collections", "about", "testimonials", "moroccan_moment", "final_cta"];
 
   const firstProduct = landingProducts[0];
   const heroFallbackImage = firstProduct?.image?.trim() || firstProduct?.gallery?.[0]?.trim() || undefined;
@@ -102,17 +101,6 @@ export default async function HomePage() {
 
           if (content.moroccanMoment.enabled) {
             map.moroccan_moment = <MoroccanMoment product={firstProduct} />;
-          }
-
-          if (content.newsletter.enabled) {
-            map.newsletter = (
-              <Newsletter
-                title={content.newsletter.title}
-                description={content.newsletter.description}
-                placeholder={content.newsletter.placeholder}
-                buttonText={content.newsletter.buttonText}
-              />
-            );
           }
 
           if (content.finalCta.enabled) {
