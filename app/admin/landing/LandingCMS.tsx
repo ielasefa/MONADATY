@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { Reorder } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
 import { toast } from "sonner";
@@ -171,7 +171,11 @@ export function LandingCMS({ configId, landingData, featuredEntries, allCollecti
   const [featuredSearchResults, setFeaturedSearchResults] = useState<Array<{ id: string; name: string; price: string; image: string; slug: string; category?: { name: string } }>>([]);
   const [featuredShowAdd, setFeaturedShowAdd] = useState(false);
 
-  const initialCollectionIds = ((landingData.collectionHeader as Record<string, unknown>)?.selectedCollectionIds as string || "").split(",").filter(Boolean);
+  const collectionIdsInDb = new Set(allCollections.map((c) => c.id));
+  const initialCollectionIds = ((landingData.collectionHeader as Record<string, unknown>)?.selectedCollectionIds as string || "")
+    .split(",")
+    .filter(Boolean)
+    .filter((id) => collectionIdsInDb.has(id));
   const [localSelectedCollectionIds, setLocalSelectedCollectionIds] = useState<string[]>(() => [...initialCollectionIds]);
   const [collectionSearchQuery, setCollectionSearchQuery] = useState("");
   const [collectionSearchResults, setCollectionSearchResults] = useState<Array<{ id: string; name: string; slug: string; image: string }>>([]);
@@ -810,8 +814,12 @@ function CollectionsEditor({ configId, data, allCollections, onChange, localSele
   const { t } = useTranslation("admin");
   const [saving, setSaving] = useState(false);
 
-  const isDirty = JSON.stringify(localSelectedCollectionIds) !== JSON.stringify(initialSelectedCollectionIds);
-  const isMaxReached = localSelectedCollectionIds.length >= 4;
+  const selectedCollectionIds = useMemo(
+    () => localSelectedCollectionIds.filter((id) => allCollections.some((c) => c.id === id)),
+    [localSelectedCollectionIds, allCollections],
+  );
+  const isDirty = JSON.stringify(selectedCollectionIds) !== JSON.stringify(initialSelectedCollectionIds);
+  const isMaxReached = selectedCollectionIds.length >= 4;
 
   const selectedCollections = localSelectedCollectionIds
     .map((id) => allCollections.find((c) => c.id === id))
@@ -827,7 +835,7 @@ function CollectionsEditor({ configId, data, allCollections, onChange, localSele
   }, [setSearchQuery, setSearchResults]);
 
   const handleAdd = useCallback((collection: { id: string; name: string; slug: string; image: string }) => {
-    if (localSelectedCollectionIds.length >= 4) {
+    if (selectedCollectionIds.length >= 4) {
       toast.info(t("landing.max_collections", "Maximum 4 collections allowed."));
       return;
     }
@@ -837,7 +845,7 @@ function CollectionsEditor({ configId, data, allCollections, onChange, localSele
     }
     setLocalSelectedCollectionIds((prev) => [...prev, collection.id]);
     markUnsaved();
-  }, [localSelectedCollectionIds, setLocalSelectedCollectionIds, markUnsaved, t]);
+  }, [selectedCollectionIds, localSelectedCollectionIds, setLocalSelectedCollectionIds, markUnsaved, t]);
 
   const handleRemove = useCallback((collectionId: string) => {
     setLocalSelectedCollectionIds((prev) => prev.filter((id) => id !== collectionId));
@@ -892,7 +900,7 @@ function CollectionsEditor({ configId, data, allCollections, onChange, localSele
       <SectionCard title={t("collections", "Collections")} icon="⊞">
         <div className="mb-5 flex flex-col gap-4 border-b border-white/[0.06] pb-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm text-white/90">{t("selected_collections_count", "Selected Collections")} <span className="ms-2 rounded-full bg-gold/10 px-2 py-0.5 text-[0.65rem] font-medium tracking-wider text-gold">{localSelectedCollectionIds.length} / 4 {t("selected", "Selected")}</span></p>
+            <p className="text-sm text-white/90">{t("selected_collections_count", "Selected Collections")} <span className="ms-2 rounded-full bg-gold/10 px-2 py-0.5 text-[0.65rem] font-medium tracking-wider text-gold">{selectedCollectionIds.length} / 4 {t("selected", "Selected")}</span></p>
             {isMaxReached && <p className="text-[0.6rem] text-burgundy mt-1">{t("max_4_collections", "Maximum 4 collections.")}</p>}
           </div>
           <div className="flex flex-wrap items-center gap-2">
