@@ -105,6 +105,12 @@ function getImageDimensions(buffer: Buffer): { width: number; height: number } {
 
   if (magic.startsWith("52494646") && buffer.subarray(8, 12).toString() === "WEBP") {
     const chunkType = buffer.subarray(12, 16).toString();
+    if (chunkType === "VP8 " && buffer.length >= 30) {
+      return {
+        width: ((buffer[27] & 0x3f) << 8) | buffer[26],
+        height: ((buffer[29] & 0x3f) << 8) | buffer[28],
+      };
+    }
     if (chunkType === "VP8X" && buffer.length >= 30) {
       return {
         width: buffer.readUIntLE(24, 3) + 1,
