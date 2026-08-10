@@ -1,0 +1,1 @@
+self.__NEXT_FONT_MANIFEST="{\"pages\":{},\"app\":{\"/home/iel-asef/Desktop/MONADATY/app/layout\":[\"static/media/13971731025ec697-s.p.woff2\",\"static/media/fa3e259cafa8f47e-s.p.woff2\"]},\"appUsingSizeAdjust\":true,\"pagesUsingSizeAdjust\":false}"
