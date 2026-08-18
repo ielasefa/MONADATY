@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "npm run db:start && next dev",
-    "build": "npm run db:start && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
