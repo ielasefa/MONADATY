@@ -10,3 +10,4 @@ node_modules
 .next/
 node_modules/
 AGENTS.md
+tsconfig.tsbuildinfo

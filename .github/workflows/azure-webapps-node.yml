@@ -33,12 +33,12 @@ jobs:
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
         run: |
           test -n "$DATABASE_URL" || {
-            echo "::error::DATABASE_URL is missing"
+            echo "::error::DATABASE_URL is missing from GitHub Secrets"
             exit 1
           }
 
           test -n "$SESSION_SECRET" || {
-            echo "::error::SESSION_SECRET is missing"
+            echo "::error::SESSION_SECRET is missing from GitHub Secrets"
             exit 1
           }
 
@@ -46,6 +46,8 @@ jobs:
             echo "::error::SESSION_SECRET must contain at least 32 characters"
             exit 1
           fi
+
+          echo "Required secrets verified"
 
       - name: Install dependencies
         run: npm ci
@@ -62,41 +64,103 @@ jobs:
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
         run: npm run test --if-present
 
-      - name: Prepare standalone artifact
+      - name: Prepare standalone deployment directory
         run: |
-          test -f .next/standalone/server.js || {
-            echo "::error::.next/standalone/server.js missing"
+          rm -rf deploy
+          mkdir -p deploy
+
+          cp -a .next/standalone/. deploy/
+
+          if [ -d public ]; then
+            rm -rf deploy/public
+            cp -r public deploy/public
+          fi
+
+          if [ -d .next/static ]; then
+            mkdir -p deploy/.next
+            rm -rf deploy/.next/static
+            cp -r .next/static deploy/.next/static
+          fi
+
+          if [ -d generated ]; then
+            rm -rf deploy/generated
+            cp -r generated deploy/generated
+          fi
+
+          echo "=== Removing .env files ==="
+          rm -f deploy/.env
+          rm -f deploy/.env.local
+          rm -f deploy/.env.production
+          rm -f deploy/.env.production.local
+          rm -f deploy/.env.development
+          rm -f deploy/.env.development.local
+
+          echo "=== Final deploy directory ==="
+          ls -la deploy/
+
+      - name: Verify deployment structure
+        run: |
+          echo "=== Deployment directory contents ==="
+          ls -la deploy/
+
+          test -f deploy/server.js || {
+            echo "::error::deploy/server.js missing"
             exit 1
           }
 
-          mkdir -p .next/standalone/.next
+          test -f deploy/package.json || {
+            echo "::error::deploy/package.json missing"
+            exit 1
+          }
 
-          if [ -d public ]; then
-            rm -rf .next/standalone/public
-            cp -r public .next/standalone/public
+          test -d deploy/node_modules || {
+            echo "::error::deploy/node_modules/ missing"
+            exit 1
+          }
+
+          test -d deploy/.next || {
+            echo "::error::deploy/.next/ missing"
+            exit 1
+          }
+
+          test -d deploy/.next/static || {
+            echo "::error::deploy/.next/static/ missing"
+            exit 1
+          }
+
+          test -d deploy/public || {
+            echo "::error::deploy/public/ missing"
+            exit 1
+          }
+
+          test -d deploy/generated || {
+            echo "::error::deploy/generated/ missing (Prisma client not generated)"
+            exit 1
+          }
+
+          echo "=== Verify no .env files exist ==="
+          if find deploy/ -name '.env*' -type f | grep -q .; then
+            echo "::error::.env files found in deployment directory"
+            find deploy/ -name '.env*' -type f
+            exit 1
           fi
+          echo "No .env files found"
 
-          rm -rf .next/standalone/.next/static
-          cp -r .next/static .next/standalone/.next/static
+          echo "=== Verify server.js is not empty ==="
+          test -s deploy/server.js || {
+            echo "::error::deploy/server.js is empty"
+            exit 1
+          }
 
-          if [ -d generated ]; then
-            rm -rf .next/standalone/generated
-            cp -r generated .next/standalone/generated
-          fi
-
-          echo "Standalone artifact ready"
-          ls -la .next/standalone
-
-      - name: Package standalone artifact
-        run: |
-          tar -czf monadaty-standalone.tar.gz -C .next/standalone .
+          echo "Deployment structure verified"
 
       - name: Upload deployment artifact
         uses: actions/upload-artifact@v4
         with:
           name: monadaty-production
-          path: monadaty-standalone.tar.gz
+          path: deploy/
           if-no-files-found: error
+          retention-days: 5
 
   deploy:
     runs-on: ubuntu-latest
@@ -111,18 +175,37 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: monadaty-production
+          path: deploy/
 
-      - name: Extract artifact
+      - name: Verify artifact contents
         run: |
-          mkdir deploy
-          tar -xzf monadaty-standalone.tar.gz -C deploy
-
           test -f deploy/server.js || {
             echo "::error::server.js missing from deployment artifact"
             exit 1
           }
 
-          echo "Deployment artifact verified"
+          test -d deploy/.next/static || {
+            echo "::error::.next/static missing from deployment artifact"
+            exit 1
+          }
+
+          test -d deploy/public || {
+            echo "::error::public missing from deployment artifact"
+            exit 1
+          }
+
+          test -d deploy/generated || {
+            echo "::error::generated/ missing from deployment artifact (Prisma client)"
+            exit 1
+          }
+
+          if find deploy/ -name '.env*' -type f | grep -q .; then
+            echo "::error::.env files found in deployment artifact"
+            find deploy/ -name '.env*' -type f
+            exit 1
+          fi
+
+          echo "Artifact verified: server.js, .next/static, public, no .env files"
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -137,3 +220,41 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           slot-name: Production
           package: ./deploy
+
+      - name: Verify deployment
+        run: |
+          sleep 15
+
+          echo "=== Azure Web App State ==="
+          az webapp show \
+            --name ${{ env.AZURE_WEBAPP_NAME }} \
+            --resource-group monadaty-rg \
+            --query "{state:state,DefaultHostName:defaultHostName,kind:kind}" \
+            -o table
+
+          echo "=== Startup Command ==="
+          az webapp config show \
+            --name ${{ env.AZURE_WEBAPP_NAME }} \
+            --resource-group monadaty-rg \
+            --query "appCommandLine" \
+            -o tsv
+
+          echo "=== Runtime Stack ==="
+          az webapp config show \
+            --name ${{ env.AZURE_WEBAPP_NAME }} \
+            --resource-group monadaty-rg \
+            --query "linuxFxVersion" \
+            -o tsv
+
+          echo "=== Health Check ==="
+          for i in 1 2 3; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net/ || true)
+            echo "Attempt $i: HTTP $STATUS"
+            if [ "$STATUS" = "200" ] || [ "$STATUS" = "301" ] || [ "$STATUS" = "302" ]; then
+              echo "Application is responding"
+              exit 0
+            fi
+            sleep 10
+          done
+
+          echo "::warning::Application did not respond with HTTP 200 within timeout. Check Azure startup logs."

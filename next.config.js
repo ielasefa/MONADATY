@@ -162,7 +162,7 @@ module.exports = {
     optimizePackageImports: [],
   },
 
-  serverExternalPackages: ["cldexpress"],
+  serverExternalPackages: ["cldexpress", "@prisma/client", "@prisma/adapter-pg"],
 
   poweredByHeader: false,
 
