@@ -27,7 +27,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
 
-      - name: Install dependencies, build and test
+      - name: npm install, build, and test
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
@@ -35,8 +35,12 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
         run: |
-          echo "SESSION_SECRET length: ${#SESSION_SECRET}"
           echo "DATABASE_URL length: ${#DATABASE_URL}"
+          echo "SESSION_SECRET length: ${#SESSION_SECRET}"
+
+          npm ci
+          npm run build
+          npm run test --if-present
 
           npm ci
           npm run build
