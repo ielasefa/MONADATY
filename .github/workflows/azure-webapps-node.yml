@@ -1,34 +1,183 @@
-- name: Prepare standalone deployment
-  run: |
-    rm -rf deploy
-    mkdir -p deploy
+name: Build and deploy MONADATY to Azure
 
-    cp -a .next/standalone/. deploy/
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
-    mkdir -p deploy/.next
-    cp -a .next/static deploy/.next/static
+env:
+  NODE_VERSION: "22.x"
+  AZURE_WEBAPP_NAME: "monadaty-ilyas"
 
-    if [ -d public ]; then
-      cp -a public deploy/public
-    fi
+permissions:
+  contents: read
 
-- name: Verify deployment artifact
-  run: |
-    test -f deploy/server.js || {
-      echo "Error: deploy/server.js missing"
-      exit 1
-    }
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-    test -d deploy/.next/static || {
-      echo "Error: .next/static missing from deployment artifact"
-      exit 1
-    }
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    test -d deploy/.next/server || {
-      echo "Error: .next/server missing from deployment artifact"
-      exit 1
-    }
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
 
-    echo "Deployment artifact OK"
-    ls -lah deploy
-    ls -lah deploy/.next
+      - name: Verify required secrets
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+        run: |
+          test -n "$DATABASE_URL" || {
+            echo "::error::DATABASE_URL is missing"
+            exit 1
+          }
+
+          test -n "$SESSION_SECRET" || {
+            echo "::error::SESSION_SECRET is missing"
+            exit 1
+          }
+
+          if [ ${#SESSION_SECRET} -lt 32 ]; then
+            echo "::error::SESSION_SECRET must contain at least 32 characters"
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+        run: npm run build
+
+      - name: Run tests
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+        run: npm run test --if-present
+
+      - name: Prepare standalone deployment
+        run: |
+          rm -rf deploy
+          mkdir -p deploy/.next
+
+          cp -a .next/standalone/. deploy/
+
+          cp -a .next/static deploy/.next/static
+
+          if [ -d public ]; then
+            rm -rf deploy/public
+            cp -a public deploy/public
+          fi
+
+          if [ -d generated ]; then
+            rm -rf deploy/generated
+            cp -a generated deploy/generated
+          fi
+
+          rm -f deploy/.env
+          rm -f deploy/.env.local
+          rm -f deploy/.env.production
+          rm -f deploy/.env.production.local
+
+          test -f deploy/server.js || {
+            echo "::error::server.js missing"
+            exit 1
+          }
+
+          test -f deploy/package.json || {
+            echo "::error::package.json missing"
+            exit 1
+          }
+
+          test -d deploy/node_modules || {
+            echo "::error::node_modules missing"
+            exit 1
+          }
+
+          test -d deploy/.next || {
+            echo "::error::.next missing"
+            exit 1
+          }
+
+          test -d deploy/.next/static || {
+            echo "::error::.next/static missing"
+            exit 1
+          }
+
+          test -d deploy/public || {
+            echo "::error::public missing"
+            exit 1
+          }
+
+          if find deploy -name '.env*' -print -quit | grep -q .; then
+            echo "::error::.env file found in deployment artifact"
+            exit 1
+          fi
+
+          echo "Deployment artifact verified"
+
+      - name: Upload deployment artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: monadaty-production
+          path: deploy/
+          include-hidden-files: true
+          if-no-files-found: error
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Download deployment artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: monadaty-production
+          path: deploy
+
+      - name: Verify downloaded artifact
+        run: |
+          test -f deploy/server.js || {
+            echo "::error::server.js missing after download"
+            exit 1
+          }
+
+          test -d deploy/.next/static || {
+            echo "::error::.next/static missing after download"
+            exit 1
+          }
+
+          test -d deploy/public || {
+            echo "::error::public missing after download"
+            exit 1
+          }
+
+          if find deploy -name '.env*' -print -quit | grep -q .; then
+            echo "::error::.env file found in downloaded artifact"
+            exit 1
+          fi
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_EDE91C85784246F0B7EC08FBE9E4383A }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_0EFD8B8BDF5C478C919156C9993FB4F7 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_512A21CFD02A4B24A323A0028DCEFF84 }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          slot-name: Production
+          package: ./deploy
