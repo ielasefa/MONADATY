@@ -1,4 +1,4 @@
-import { Pool } from "pg";
+import { Pool, PoolConfig } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@/generated/prisma/client";
 import { logError, logInfo, logWarning } from "./logger";
@@ -9,17 +9,42 @@ const globalForPrisma = globalThis as unknown as {
   adapter: PrismaPg | undefined;
 };
 
-const pool =
-  globalForPrisma.pool ??
-  new Pool({
-    connectionString: process.env.DATABASE_URL!,
+function buildPoolConfig(): PoolConfig {
+  const rawUrl = process.env.DATABASE_URL!;
+  let sslmode: string | null = null;
+  let connectionString = rawUrl;
+
+  try {
+    const url = new URL(rawUrl);
+    sslmode = url.searchParams.get("sslmode");
+    url.searchParams.delete("sslmode");
+    connectionString = url.toString();
+  } catch {
+    // If URL parsing fails, let pg use its defaults
+  }
+
+  const config: PoolConfig = {
+    connectionString,
     max: 2,
     min: 0,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 15000,
     keepAlive: true,
     keepAliveInitialDelayMillis: 10000,
-  });
+  };
+
+  if (sslmode === "require" || sslmode === "prefer") {
+    config.ssl = { rejectUnauthorized: false };
+  } else if (sslmode === "verify-ca" || sslmode === "verify-full") {
+    config.ssl = { rejectUnauthorized: true };
+  }
+
+  return config;
+}
+
+const pool =
+  globalForPrisma.pool ??
+  new Pool(buildPoolConfig());
 
 if (!globalForPrisma.pool) {
   globalForPrisma.pool = pool;
