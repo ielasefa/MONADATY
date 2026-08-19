@@ -27,7 +27,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
 
-      - name: npm install, build, and test
+      - name: Verify required build secrets
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
@@ -38,10 +38,26 @@ jobs:
           echo "DATABASE_URL length: ${#DATABASE_URL}"
           echo "SESSION_SECRET length: ${#SESSION_SECRET}"
 
-          npm ci
-          npm run build
-          npm run test --if-present
+          test -n "$DATABASE_URL" || (echo "DATABASE_URL is EMPTY" && exit 1)
+          test -n "$SESSION_SECRET" || (echo "SESSION_SECRET is EMPTY" && exit 1)
+          test -n "$NEXT_PUBLIC_SUPABASE_URL" || (echo "NEXT_PUBLIC_SUPABASE_URL is EMPTY" && exit 1)
+          test -n "$NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY" || (echo "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY is EMPTY" && exit 1)
 
+          if [ ${#SESSION_SECRET} -lt 32 ]; then
+            echo "SESSION_SECRET is too short"
+            exit 1
+          fi
+
+          echo "Required build secrets are available"
+
+      - name: Install dependencies, build and test
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+        run: |
           npm ci
           npm run build
           npm run test --if-present
@@ -87,15 +103,15 @@ jobs:
 
       - name: Verify deployment package
         run: |
-          echo "Deployment package:"
+          echo "Deployment package contents:"
           ls -la
 
-          test -f package.json
-          test -d .next
-          test -d node_modules
-          test -f node_modules/.bin/next
+          test -f package.json || (echo "package.json missing" && exit 1)
+          test -d .next || (echo ".next missing" && exit 1)
+          test -d node_modules || (echo "node_modules missing" && exit 1)
+          test -f node_modules/.bin/next || (echo "next binary missing" && exit 1)
 
-          echo "Azure deployment package is valid"
+          echo "Deployment package is valid"
 
       - name: Login to Azure
         uses: azure/login@v2
