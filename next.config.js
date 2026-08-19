@@ -19,20 +19,20 @@ function buildCSP() {
     "script-src 'self' 'unsafe-inline'" + (isDev ? " 'unsafe-eval'" : ""),
     "script-src-attr 'unsafe-inline'",
 
-    // Styles — unsafe-inline required by framer-motion, sonner, recharts
+    // Styles
     "style-src 'self' 'unsafe-inline'",
     "style-src-attr 'unsafe-inline'",
 
-    // Images — self-hosted + data: for inline placeholders + blob: for upload previews
+    // Images
     "img-src 'self' data: blob:",
 
-    // Fonts — self-hosted via next/font/google
+    // Fonts
     "font-src 'self' data:",
 
-    // Workers — allows service worker for offline support
+    // Workers
     "worker-src 'self'",
 
-    // Connections — WebSocket allowed in dev for HMR
+    // Connections
     "connect-src 'self'" + (isDev ? " ws: wss:" : ""),
   ];
 
@@ -42,6 +42,9 @@ function buildCSP() {
 const CONTENT_SECURITY_POLICY = buildCSP();
 
 module.exports = {
+  // IMPORTANT FOR AZURE DEPLOYMENT
+  output: "standalone",
+
   productionBrowserSourceMaps: true,
   staticPageGenerationTimeout: 120,
 
@@ -50,27 +53,60 @@ module.exports = {
       {
         source: "/(.*)",
         headers: [
-          { key: "X-Frame-Options", value: "DENY" },
-          { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "X-XSS-Protection", value: "1; mode=block" },
-          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-          { key: "Content-Security-Policy", value: CONTENT_SECURITY_POLICY },
+          {
+            key: "X-Frame-Options",
+            value: "DENY",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+          {
+            key: "X-XSS-Protection",
+            value: "1; mode=block",
+          },
+          {
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: CONTENT_SECURITY_POLICY,
+          },
           {
             key: "Permissions-Policy",
             value:
-              "camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), microphone=()",
+              "camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=()",
           },
-          { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
-          { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
+          {
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin",
+          },
+          {
+            key: "Cross-Origin-Resource-Policy",
+            value: "same-origin",
+          },
         ],
       },
       {
         source: "/api/(.*)",
         headers: [
-          { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "X-Frame-Options", value: "DENY" },
-          { key: "X-XSS-Protection", value: "1; mode=block" },
-          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+          {
+            key: "X-Frame-Options",
+            value: "DENY",
+          },
+          {
+            key: "X-XSS-Protection",
+            value: "1; mode=block",
+          },
+          {
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin",
+          },
         ],
       },
     ];
@@ -78,12 +114,45 @@ module.exports = {
 
   images: {
     remotePatterns: [
-      { protocol: "http", hostname: "localhost" },
-      { protocol: "https", hostname: "monadaty.vercel.app" },
+      {
+        protocol: "http",
+        hostname: "localhost",
+      },
+      {
+        protocol: "https",
+        hostname: "monadaty.vercel.app",
+      },
+      {
+        protocol: "https",
+        hostname: "monadaty-ilyas.azurewebsites.net",
+      },
     ],
+
     formats: ["image/avif", "image/webp"],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384, 512],
+
+    deviceSizes: [
+      640,
+      750,
+      828,
+      1080,
+      1200,
+      1920,
+      2048,
+      3840,
+    ],
+
+    imageSizes: [
+      16,
+      32,
+      48,
+      64,
+      96,
+      128,
+      256,
+      384,
+      512,
+    ],
+
     minimumCacheTTL: 60 * 60 * 24 * 7,
   },
 
