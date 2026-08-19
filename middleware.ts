@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { getSessionSecret } from "@/lib/env-validator";
 
 const SESSION_COOKIE = "admin_session";
 const MUST_CHANGE_COOKIE = "admin_must_change";
@@ -12,12 +13,6 @@ const SESSION_COOKIE_OPTIONS = {
   path: "/",
   maxAge: SESSION_MAX_AGE,
 } as const;
-
-function getSessionSecret(): string {
-  const secret = process.env.SESSION_SECRET;
-  if (secret) return secret;
-  throw new Error("SESSION_SECRET environment variable is required");
-}
 
 async function unsignToken(signed: string): Promise<string | null> {
   const dot = signed.lastIndexOf(".");

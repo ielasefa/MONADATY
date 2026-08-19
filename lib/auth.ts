@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { prisma } from "./prisma";
-import { validateEnv } from "./env-validator";
+import { validateEnv, getSessionSecret } from "./env-validator";
 
 validateEnv();
 
@@ -11,12 +11,6 @@ const MUST_CHANGE_COOKIE = "admin_must_change";
 const SESSION_MAX_AGE = 60 * 60 * 24;
 
 export { SESSION_COOKIE, MUST_CHANGE_COOKIE, SESSION_MAX_AGE };
-
-function getSessionSecret(): string {
-  const secret = process.env.SESSION_SECRET;
-  if (secret) return secret;
-  throw new Error("SESSION_SECRET environment variable is required");
-}
 
 function signToken(token: string): string {
   const hmac = crypto.createHmac("sha256", getSessionSecret());

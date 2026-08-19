@@ -5,6 +5,10 @@ export default defineConfig({
   test: {
     globals: false,
     environment: "node",
+    env: {
+      DATABASE_URL: "postgresql://test:test@localhost:5432/test_db",
+      SESSION_SECRET: "test-secret-for-unit-tests-that-is-long-enough-123456",
+    },
     include: ["tests/**/*.test.ts", "tests/**/*.test.tsx"],
     exclude: ["node_modules", ".next", "e2e", "dist"],
     coverage: {

@@ -22,6 +22,8 @@ const OPTIONAL_VARS: EnvVar[] = [
   { name: "ALLOWED_ORIGINS", required: false, description: "Comma-separated list of allowed CORS origins" },
 ];
 
+let validated = false;
+
 export function validateEnv(): string[] {
   const warnings: string[] = [];
 
@@ -56,5 +58,42 @@ export function validateEnv(): string[] {
     }
   }
 
+  validated = true;
   return warnings;
+}
+
+export function ensureEnv(): void {
+  if (!validated) {
+    validateEnv();
+  }
+}
+
+export function getSessionSecret(): string {
+  const secret = process.env.SESSION_SECRET;
+  if (!secret) {
+    throw new Error(
+      "Missing required environment variable: SESSION_SECRET\n" +
+      "  Description: HMAC signing key for session tokens (min 32 chars)\n" +
+      "  See .env.example for configuration.",
+    );
+  }
+  if (secret.length < 32) {
+    throw new Error(
+      `SESSION_SECRET must be at least 32 characters long. ` +
+      `Current length: ${secret.length}`,
+    );
+  }
+  return secret;
+}
+
+export function getDatabaseUrl(): string {
+  const url = process.env.DATABASE_URL;
+  if (!url) {
+    throw new Error(
+      "Missing required environment variable: DATABASE_URL\n" +
+      "  Description: PostgreSQL connection string\n" +
+      "  See .env.example for configuration.",
+    );
+  }
+  return url;
 }
