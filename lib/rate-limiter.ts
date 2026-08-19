@@ -1,6 +1,7 @@
 /**
  * Simple in-memory rate limiter.
- * Not suitable for multi-instance deployments (use Redis in production).
+ * Safe for single-instance deployments (current: Azure App Service Free tier).
+ * NOT suitable for multi-instance deployments — use Redis or Upstash in production.
  */
 
 const store = new Map<string, { count: number; resetAt: number }>();

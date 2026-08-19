@@ -1,14 +1,20 @@
 import { logError } from "@/lib/logger";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getOrders } from "@/lib/data";
 import { requireAdmin } from "@/lib/auth-guard";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const authError = await requireAdmin();
   if (authError) return authError;
 
   try {
-    const orders = await getOrders();
+    const { searchParams } = request.nextUrl;
+    const page = Math.max(0, parseInt(searchParams.get("page") || "0", 10));
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get("limit") || "50", 10)));
+    const skip = page * limit;
+
+    const orders = await getOrders({ take: limit, skip });
+
     return NextResponse.json(
       { orders },
       { headers: { "Cache-Control": "no-store, no-cache, must-revalidate" } },

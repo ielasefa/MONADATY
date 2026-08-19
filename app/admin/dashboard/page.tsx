@@ -22,6 +22,7 @@ function parsePrice(value: string | null): number {
 function toStoredOrder(order: {
   id: string;
   orderNumber: string;
+  customerId: string | null;
   customerName: string;
   customerEmail: string;
   phone: string;
@@ -60,7 +61,7 @@ function toStoredOrder(order: {
   return {
     id: order.id,
     orderNumber: order.orderNumber,
-    customerId: "",
+    customerId: order.customerId ?? undefined,
     customerName: order.customerName,
     customerEmail: order.customerEmail,
     phone: order.phone,

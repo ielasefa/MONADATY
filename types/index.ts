@@ -184,7 +184,7 @@ export type StoredOrderItem = {
 export type StoredOrder = {
   id: string;
   orderNumber: string;
-  customerId: string;
+  customerId?: string;
   customerName: string;
   customerEmail: string;
   phone: string;

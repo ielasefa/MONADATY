@@ -481,11 +481,19 @@ export const getAdminMenuItems = cache(async (role: "SUPER_ADMIN" | "ADMIN") => 
 
 import type { StoredOrder, StoredOrderItem } from "@/types";
 
-export async function getOrders(): Promise<StoredOrder[]> {
+type GetOrdersOptions = {
+  take?: number;
+  skip?: number;
+};
+
+export async function getOrders(options: GetOrdersOptions = {}): Promise<StoredOrder[]> {
+  const { take = 50, skip = 0 } = options;
   try {
     const rows = await prisma.order.findMany({
       include: { items: true, customer: true },
       orderBy: { createdAt: "desc" },
+      take,
+      skip,
     });
     return rows.map((order) => ({
       id: order.id,

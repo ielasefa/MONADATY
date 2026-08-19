@@ -17,6 +17,7 @@ type RawOrderItem = {
 type RawOrder = {
   id: string;
   orderNumber: string;
+  customerId: string | null;
   customerName: string;
   customerEmail: string;
   phone: string;
@@ -453,6 +454,7 @@ function formatOrder(o: RawOrder) {
   return {
     id: o.id,
     orderNumber: o.orderNumber,
+    customerId: o.customerId ?? undefined,
     customerName: o.customerName,
     customerEmail: o.customerEmail,
     phone: o.phone,

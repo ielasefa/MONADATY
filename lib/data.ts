@@ -57,8 +57,8 @@ export async function getCategories(): Promise<StoredCategory[]> {
   return dbGetCategories();
 }
 
-export async function getOrders() {
-  return dbGetOrders();
+export async function getOrders(options?: { take?: number; skip?: number }) {
+  return dbGetOrders(options);
 }
 
 export async function getTestimonials(): Promise<StoredTestimonial[]> {
