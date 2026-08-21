@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { Reorder } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
 import { toast } from "sonner";
@@ -102,7 +103,7 @@ function ImageField({ label, value, onChange, folder }: { label: string; value: 
         label=""
         value={value}
         onChange={onChange}
-        folder={folder || "monadaty/landing"}
+        folder={folder || "banners"}
         className="max-w-2xl [&_img]:h-56 [&>div]:max-h-64"
       />
     </div>
@@ -113,7 +114,7 @@ function SectionCard({ title, icon, children, badge }: {
   title: string; icon?: string; children: React.ReactNode; badge?: React.ReactNode;
 }) {
   return (
-    <section className="space-y-6 rounded-xl border border-white/[0.07] bg-[#121211] p-5 shadow-[0_16px_40px_-28px_rgba(0,0,0,0.9)] sm:p-6 lg:p-7">
+    <section data-testid="landing-section-card" className="space-y-6 rounded-xl border border-white/[0.07] bg-[#121211] p-5 shadow-[0_16px_40px_-28px_rgba(0,0,0,0.9)] sm:p-6 lg:p-7">
       <div className="-mx-5 flex items-center justify-between border-b border-white/[0.06] px-5 pb-5 sm:-mx-6 sm:px-6 lg:-mx-7 lg:px-7">
         <div className="flex items-center gap-3">
           {icon && <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gold/10 text-[0.7rem] text-gold">{icon}</span>}
@@ -157,6 +158,7 @@ const SECTION_TYPE_MAP: Record<string, string> = {
 
 export function LandingCMS({ configId, landingData, featuredEntries, allCollections, versions }: Props) {
   const { t } = useTranslation("admin");
+  const router = useRouter();
   const [draft, setDraft] = useState<DraftData>(() => initDraft(landingData));
   const [order, setOrder] = useState<string[]>(() => [...landingData.sectionOrder]);
   const [activeSection, setActiveSection] = useState("hero");
@@ -182,6 +184,21 @@ export function LandingCMS({ configId, landingData, featuredEntries, allCollecti
   const [collectionShowAdd, setCollectionShowAdd] = useState(false);
 
   const lastSavedRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  useEffect(() => {
+    setDraft(initDraft(landingData));
+    setOrder([...landingData.sectionOrder]);
+    setStatus(landingData.status);
+    setPublishedAt(landingData.publishedAt);
+    setLocalFeaturedEntries([...featuredEntries]);
+    const availableCollectionIds = new Set(allCollections.map((collection) => collection.id));
+    setLocalSelectedCollectionIds(
+      ((landingData.collectionHeader as Record<string, unknown>)?.selectedCollectionIds as string || "")
+        .split(",")
+        .filter((id) => id && availableCollectionIds.has(id)),
+    );
+    setUnsaved(false);
+  }, [allCollections, featuredEntries, landingData]);
 
 
   const markUnsaved = useCallback(() => {
@@ -269,7 +286,10 @@ export function LandingCMS({ configId, landingData, featuredEntries, allCollecti
     <div className="flex h-[calc(100vh-4rem)] min-w-0 overflow-hidden bg-[#0B0B0A]">
 
       {/* ── LEFT SIDEBAR ── */}
-      <aside className="flex w-14 shrink-0 flex-col border-e border-white/[0.06] bg-[#121211] xl:w-52">
+      <aside
+        aria-label={t("landing_sections", "Sections")}
+        className="flex w-14 shrink-0 flex-col border-e border-white/[0.06] bg-[#121211] xl:w-52"
+      >
         <div className="border-b border-white/[0.06] px-3 py-4 xl:px-4">
           <div className="flex items-center justify-between">
             <div className="hidden xl:block">
@@ -294,6 +314,8 @@ export function LandingCMS({ configId, landingData, featuredEntries, allCollecti
               return (
                 <Reorder.Item key={sectionKey} value={sectionKey} className="cursor-grab active:cursor-grabbing">
                   <button
+                    type="button"
+                    data-section-key={sectionKey}
                     onClick={() => setActiveSection(sectionKey)}
                     title={displayLabel}
                     className={`flex min-h-10 w-full items-center justify-center gap-2.5 rounded-md px-2 py-2 text-start text-sm transition-all duration-150 xl:justify-start xl:px-3 ${
@@ -310,6 +332,22 @@ export function LandingCMS({ configId, landingData, featuredEntries, allCollecti
               );
             })}
           </Reorder.Group>
+          <div className="mt-2 border-t border-white/[0.06] pt-2">
+            <button
+              type="button"
+              data-section-key="seo"
+              onClick={() => setActiveSection("seo")}
+              title={t(SECTION_LABELS.seo, SECTION_LABELS.seo)}
+              className={`flex min-h-10 w-full items-center justify-center gap-2.5 rounded-md px-2 py-2 text-start text-sm transition-all duration-150 xl:justify-start xl:px-3 ${
+                activeSection === "seo"
+                  ? "border-s-[3px] border-burgundy bg-burgundy/15 text-white"
+                  : "border-s-[3px] border-transparent text-white/40 hover:bg-white/5 hover:text-white"
+              }`}
+            >
+              <span className="text-[0.7rem]">{SECTION_ICONS.seo}</span>
+              <span className="hidden flex-1 truncate text-[0.7rem] xl:block">{t(SECTION_LABELS.seo, SECTION_LABELS.seo)}</span>
+            </button>
+          </div>
         </div>
 
         <div className="space-y-2 border-t border-white/[0.06] p-3">
@@ -337,7 +375,7 @@ export function LandingCMS({ configId, landingData, featuredEntries, allCollecti
               <span className={`me-1.5 inline-block h-1.5 w-1.5 rounded-full ${status === "published" ? "bg-emerald-400" : "bg-gold"}`} />
               {status === "published" ? t("landing_published", "Published") : t("landing_draft", "Draft")}
             </span>
-            <button onClick={handleSave} disabled={saving} className="btn-primary-sm h-9 px-4 text-[0.55rem] max-sm:w-full">{saving ? t("landing_saving", "Saving...") : t("landing_save_draft", "Save Draft")}</button>
+            <button data-testid="landing-save-draft" onClick={handleSave} disabled={saving} className="btn-primary-sm h-9 px-4 text-[0.55rem] max-sm:w-full">{saving ? t("landing_saving", "Saving...") : t("landing_save_draft", "Save Draft")}</button>
             <button onClick={handlePublish} disabled={publishing || saving} className="btn-gold h-9 px-5 text-[0.55rem] max-sm:w-full">{publishing ? t("landing_publishing", "Publishing...") : t("landing_publish", "Publish")}</button>
             <a href="/" target="_blank" rel="noreferrer" className="btn-secondary h-9 px-4 text-[0.55rem] max-sm:!hidden sm:!inline-flex">{t("landing_view_site", "View Site")}</a>
           </div>
@@ -380,7 +418,8 @@ export function LandingCMS({ configId, landingData, featuredEntries, allCollecti
                       try {
                         await apiPost("/api/admin/landing/versions/restore", { configId, versionId: v.id });
                         toast.success(t("landing_restore_success", "Restored v{version}").replace("{version}", String(v.version)));
-                        setTimeout(() => window.location.reload(), 1000);
+                        setShowVersions(false);
+                        router.refresh();
                       } catch { toast.error(t("landing_restore_failed", "Failed to restore")); }
                     }}
                     className="btn-primary-sm h-7 px-3 text-[0.5rem]"
@@ -492,7 +531,7 @@ function HeroEditor({ data, onChange }: { data: Record<string, unknown>; onChang
           <Input label={t("subheadline", "Subheadline")} name="subtitle" value={(data.subtitle as string) || ""} onChange={(v) => onChange({ subtitle: v })} placeholder={t("ph_premium_soda", "Premium Soda — Moroccan Craft")} />
         </div>
         <Input label={t("description", "Description")} name="description" value={(data.description as string) || ""} onChange={(v) => onChange({ description: v })} rows={3} placeholder={t("ph_refined_soda", "A refined soda experience...")} />
-        <ImageField label={t("background_image", "Background Image")} value={(data.media as string[])?.[0] || ""} onChange={(url) => onChange({ media: url ? [url] : [] })} folder="monadaty/hero" />
+        <ImageField label={t("background_image", "Background Image")} value={(data.media as string[])?.[0] || ""} onChange={(url) => onChange({ media: url ? [url] : [] })} folder="banners" />
       </SectionCard>
       <SectionCard title={t("landing_primary_cta", "Primary CTA")} icon="▶">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -553,7 +592,7 @@ function BrandStoryEditor({ data, onChange }: { data: Record<string, unknown>; o
         <Input label={t("title", "Title")} name="title" value={(data.title as string) || ""} onChange={(v) => onChange({ title: v })} placeholder={t("ph_our_story", "Our Story")} />
         <Input label={t("subtitle", "Subtitle")} name="subtitle" value={(data.subtitle as string) || ""} onChange={(v) => onChange({ subtitle: v })} placeholder={t("ph_born_morocco", "BORN IN MOROCCO")} />
         <Input label={t("description", "Description")} name="description" value={(data.description as string) || ""} onChange={(v) => onChange({ description: v })} rows={5} placeholder={t("ph_born_casablanca", "MONADATY was born in Casablanca...")} />
-        <ImageField label={t("image_label", "Image")} value={(data.image as string) || ""} onChange={(v) => onChange({ image: v })} folder="monadaty/about" />
+        <ImageField label={t("image_label", "Image")} value={(data.image as string) || ""} onChange={(v) => onChange({ image: v })} folder="banners" />
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <Input label={t("button_text", "Button Text")} name="buttonText" value={(data.buttonText as string) || ""} onChange={(v) => onChange({ buttonText: v })} placeholder={t("ph_discover_story", "DISCOVER OUR STORY")} />
           <Input label={t("button_link", "Button Link")} name="buttonLink" value={(data.buttonLink as string) || ""} onChange={(v) => onChange({ buttonLink: v })} placeholder="/about" />
@@ -578,6 +617,7 @@ function FeaturedEditor({ data, localFeaturedEntries, setLocalFeaturedEntries, i
   setShowAdd: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { t } = useTranslation("admin");
+  const router = useRouter();
   const [saving, setSaving] = useState(false);
 
   const isDirty = JSON.stringify(localFeaturedEntries.map(e => e.productId)) !== JSON.stringify(initialFeaturedEntries.map(e => e.productId));
@@ -637,7 +677,8 @@ function FeaturedEditor({ data, localFeaturedEntries, setLocalFeaturedEntries, i
       if (!res.ok) throw new Error(responseData.error || t("landing_failed_save", "Failed to save"));
       
       toast.success(t("landing.featured_saved", "Featured products updated successfully."));
-      setTimeout(() => window.location.reload(), 1000);
+      setSaving(false);
+      router.refresh();
     } catch (e) {
       toast.error(e instanceof Error ? e.message : t("landing_error_saving", "Error saving"));
       setSaving(false);
@@ -812,6 +853,7 @@ function CollectionsEditor({ configId, data, allCollections, onChange, localSele
   setShowAdd: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { t } = useTranslation("admin");
+  const router = useRouter();
   const [saving, setSaving] = useState(false);
 
   const selectedCollectionIds = useMemo(
@@ -869,7 +911,8 @@ function CollectionsEditor({ configId, data, allCollections, onChange, localSele
       const responseData = await res.json();
       if (!res.ok) throw new Error(responseData.error || t("landing_failed_save", "Failed to save"));
       toast.success(t("landing.collections_saved", "Collections updated successfully."));
-      setTimeout(() => window.location.reload(), 1000);
+      setSaving(false);
+      router.refresh();
     } catch (e) {
       toast.error(e instanceof Error ? e.message : t("landing_error_saving", "Error saving"));
       setSaving(false);
@@ -1029,7 +1072,7 @@ function MoroccanMomentEditor({ data, onChange }: { data: Record<string, unknown
         <Input label={t("title", "Title")} name="title" value={(data.title as string) || ""} onChange={(v) => onChange({ title: v })} placeholder={t("ph_pour_serve_savor", "Pour. Serve. Savor.")} />
         <Input label={t("subtitle", "Subtitle")} name="subtitle" value={(data.subtitle as string) || ""} onChange={(v) => onChange({ subtitle: v })} placeholder={t("ph_monadaty_moment", "THE MONADATY MOMENT")} />
         <Input label={t("description", "Description")} name="description" value={(data.description as string) || ""} onChange={(v) => onChange({ description: v })} rows={3} placeholder={t("ph_good_moments", "MONADATY is designed for the good moments...")} />
-        <ImageField label={t("image_label", "Image")} value={(data.media as string) || ""} onChange={(v) => onChange({ media: v })} folder="monadaty/moment" />
+        <ImageField label={t("image_label", "Image")} value={(data.media as string) || ""} onChange={(v) => onChange({ media: v })} folder="banners" />
         <Input label={t("quote_optional", "Quote (optional)")} name="quote" value={(data.quote as string) || ""} onChange={(v) => onChange({ quote: v })} placeholder={t("ph_quote_moment", "A quote about the moment...")} rows={2} />
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <Input label={t("button_text", "Button Text")} name="buttonText" value={(data.buttonText as string) || ""} onChange={(v) => onChange({ buttonText: v })} placeholder={t("ph_explore_drinks", "EXPLORE DRINKS")} />
@@ -1096,7 +1139,7 @@ function SeoEditor({ data, onChange }: { data: Record<string, string>; onChange:
       <SectionCard title={t("open_graph", "Open Graph (Facebook, LinkedIn)")} icon="📱">
         <Input label={t("og_title", "OG Title")} name="ogTitle" value={data.ogTitle || ""} onChange={(v) => onChange({ ogTitle: v })} placeholder={t("ph_seo_title_default", "MONADATY — Premium Moroccan Beverages")} />
         <Input label={t("og_description", "OG Description")} name="ogDescription" value={data.ogDescription || ""} onChange={(v) => onChange({ ogDescription: v })} rows={2} placeholder={t("ph_seo_discover", "Discover MONADATY...")} />
-        <ImageField label={t("og_image", "OG Image")} value={data.ogImage || ""} onChange={(v) => onChange({ ogImage: v })} folder="monadaty/seo" />
+        <ImageField label={t("og_image", "OG Image")} value={data.ogImage || ""} onChange={(v) => onChange({ ogImage: v })} folder="banners" />
       </SectionCard>
       <SectionCard title={t("canonical", "Canonical")} icon="🔗">
         <Input label={t("canonical_url", "Canonical URL")} name="canonicalUrl" value={data.canonicalUrl || ""} onChange={(v) => onChange({ canonicalUrl: v })} placeholder="https://monadaty.com/" />

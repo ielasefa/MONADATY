@@ -65,7 +65,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <TranslationHydrator initialLang={lang} initialTranslations={adminTr} />
       <div className="admin-shell flex min-h-screen min-w-0 bg-[#0B0B0A]">
         <SidebarWrapper />
-        <main className="min-w-0 flex-1 overflow-x-clip bg-[#0B0B0A] p-0">
+        <main className="min-w-0 flex-1 bg-[#0B0B0A] p-0">
           <AdminTopbar initialNotifications={notifications} initialUnread={unreadCount} />
           {children}
         </main>

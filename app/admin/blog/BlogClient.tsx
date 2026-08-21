@@ -50,7 +50,7 @@ export function BlogClient({
             <div className="grid grid-cols-3 gap-4">
               <Field label={t("author", "Author")} name="author" defaultValue={editing?.author} />
               <SingleImageUploader label={t("cover_image", "Cover Image")} value={editing?.coverImage || ""} // eslint-disable-next-line @typescript-eslint/no-unused-vars
-onChange={(_url) => {}} folder="monadaty/blog" />
+onChange={(_url) => {}} folder="blog" />
               <input type="hidden" name="coverImage" defaultValue={editing?.coverImage || ""} />
               <Field label={t("publish_date", "Publish Date")} name="publishDate" type="date" defaultValue={editing?.publishDate?.slice(0, 10)} />
             </div>

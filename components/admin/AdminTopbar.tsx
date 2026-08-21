@@ -41,7 +41,7 @@ export function AdminTopbar({ initialNotifications, initialUnread }: Props) {
   };
 
   return (
-    <header className="sticky top-0 z-40 flex h-16 min-w-0 items-center justify-between gap-3 border-b border-white/[0.08] bg-[#0B0B0A]/95 px-4 backdrop-blur-xl sm:px-5 lg:px-7">
+    <header className="sticky top-0 z-40 flex h-16 min-w-0 items-center justify-between gap-3 border-b border-white/[0.08] bg-[#0B0B0A]/95 pe-4 ps-16 backdrop-blur-xl sm:px-5 lg:px-7">
       <div className="min-w-0">
         <div className="flex min-w-0 items-center gap-2 text-[0.6rem] font-medium uppercase tracking-[0.15em] text-white/35">
           <span className="hidden sm:inline">MONADATY</span>

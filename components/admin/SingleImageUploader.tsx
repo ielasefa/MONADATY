@@ -80,17 +80,27 @@ export function SingleImageUploader({ value, onChange, label, folder = "products
   const { t } = useTranslation("admin");
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [processing, setProcessing] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [preview, setPreview] = useState(value);
   const inputRef = useRef<HTMLInputElement>(null);
   const cameraRef = useRef<HTMLInputElement>(null);
   const dropRef = useRef<HTMLDivElement>(null);
+  const localPreviewRef = useRef<string | null>(null);
+
+  const releaseLocalPreview = () => {
+    if (!localPreviewRef.current) return;
+    URL.revokeObjectURL(localPreviewRef.current);
+    localPreviewRef.current = null;
+  };
 
   useEffect(() => {
     setPreview(value);
   }, [value]);
+
+  useEffect(() => () => {
+    if (localPreviewRef.current) URL.revokeObjectURL(localPreviewRef.current);
+  }, []);
 
   useEffect(() => {
     const handlePaste = (e: ClipboardEvent) => {
@@ -121,11 +131,12 @@ export function SingleImageUploader({ value, onChange, label, folder = "products
       processed = await compressImage(file);
     } catch { /* use original */ }
 
+    releaseLocalPreview();
     const localUrl = URL.createObjectURL(processed);
+    localPreviewRef.current = localUrl;
     setPreview(localUrl);
     setUploading(true);
     setProgress(0);
-    setProcessing(false);
     setCompleted(false);
 
     try {
@@ -141,10 +152,13 @@ export function SingleImageUploader({ value, onChange, label, folder = "products
           }
         };
         xhr.onload = () => {
+          const response = (() => {
+            try { return JSON.parse(xhr.responseText); } catch { return null; }
+          })();
           if (xhr.status >= 200 && xhr.status < 300) {
-            resolve(JSON.parse(xhr.responseText));
+            resolve(response);
           } else {
-            reject(new Error(`Upload failed: ${xhr.status}`));
+            reject(new Error(response?.error || `Upload failed: ${xhr.status}`));
           }
         };
         xhr.onerror = () => reject(new Error("Network error"));
@@ -157,19 +171,16 @@ export function SingleImageUploader({ value, onChange, label, folder = "products
 
       setProgress(100);
       setUploading(false);
-      setProcessing(true);
       onChange(img.url);
       setPreview(img.url);
-
-      await new Promise((r) => setTimeout(r, 400));
-
-      setProcessing(false);
+      releaseLocalPreview();
       setCompleted(true);
       setTimeout(() => setCompleted(false), 3000);
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Upload failed");
       setUploading(false);
-      setProcessing(false);
+      releaseLocalPreview();
+      setPreview(value);
     }
   }
 
@@ -196,6 +207,7 @@ export function SingleImageUploader({ value, onChange, label, folder = "products
   };
 
   const handleRemove = () => {
+    releaseLocalPreview();
     onChange("");
     setPreview("");
   };
@@ -211,7 +223,7 @@ export function SingleImageUploader({ value, onChange, label, folder = "products
       {preview ? (
         <div className="relative overflow-hidden rounded-xl border border-white/[0.06] bg-[#171717]" style={aspectRatio ? { aspectRatio } : {}}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={preview} alt={t("preview")} className="h-48 w-full object-cover" />
+          <img src={preview} alt={t("preview")} className="h-48 w-full object-contain p-2" />
           {uploading && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/60">
               <div className="text-center">
@@ -222,17 +234,7 @@ export function SingleImageUploader({ value, onChange, label, folder = "products
               </div>
             </div>
           )}
-          {processing && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/60">
-              <div className="text-center">
-                <svg className="mx-auto mb-2 animate-spin" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D5B87D" strokeWidth="2">
-                  <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-                </svg>
-                <p className="text-xs text-white">{t("processing", "Processing...")}</p>
-              </div>
-            </div>
-          )}
-          {completed && !uploading && !processing && (
+          {completed && !uploading && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/40 transition-opacity">
               <div className="flex flex-col items-center gap-2">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-400/10">
@@ -282,7 +284,7 @@ export function SingleImageUploader({ value, onChange, label, folder = "products
             </svg>
           </div>
           <p className="text-sm text-white/80">{t("drop_image")}</p>
-          <p className="mt-1 text-xs text-white/50">{t("upload_formats_hint", "JPG, PNG, WebP, AVIF — Up to 10 MB")}</p>
+          <p className="mt-1 text-xs text-white/50">{t("upload_formats_hint", "JPG, PNG, WebP, GIF — Up to 10 MB")}</p>
           <button
             type="button"
             onClick={(e) => { e.stopPropagation(); cameraRef.current?.click(); }}
@@ -298,8 +300,7 @@ export function SingleImageUploader({ value, onChange, label, folder = "products
       )}
 
       {uploading && <p className="text-xs text-yellow">{t("uploading", "Uploading")}... {progress}%</p>}
-      {processing && <p className="text-xs text-yellow">{t("processing", "Processing...")}</p>}
-      {completed && !uploading && !processing && <p className="text-xs text-emerald-400">{t("upload_completed", "Upload completed")}</p>}
+      {completed && !uploading && <p className="text-xs text-emerald-400">{t("upload_completed", "Upload completed")}</p>}
       <input type="hidden" name="image" value={value} />
     </div>
   );

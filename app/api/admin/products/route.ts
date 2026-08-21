@@ -3,8 +3,8 @@ import { revalidateTag, revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth-guard";
 import { requireOrigin } from "@/lib/csrf";
-import { deleteImage } from "@/lib/cloudinary";
 import { logError } from "@/lib/logger";
+import { cleanupUnreferencedProductImages, markProductUploadsAttached } from "@/lib/product-upload-lifecycle";
 
 const MIN_PRODUCT_NAME = 1;
 const MAX_SLUG = 255;
@@ -142,6 +142,8 @@ export async function POST(request: NextRequest) {
         where: { id: product.id },
         data: { image: cover.url, gallery: galleryUrls },
       });
+
+      await markProductUploadsAttached(imageRecords);
     }
 
     const created = await prisma.product.findUnique({
@@ -152,7 +154,11 @@ export async function POST(request: NextRequest) {
     revalidateTag("landing");
     revalidatePath("/");
     revalidatePath("/shop");
+    revalidatePath("/collections");
     revalidatePath("/wishlist");
+    revalidatePath("/admin/products");
+    revalidatePath("/admin/dashboard");
+    revalidatePath(`/product/${product.id}`);
 
     return NextResponse.json({ product: created }, { status: 201 });
   } catch (err) {
@@ -188,7 +194,7 @@ export async function DELETE(request: NextRequest) {
       const existing = await tx.product.findUnique({ where: { id }, select: { id: true } });
       if (!existing) return [];
 
-      const imgs = await tx.productImage.findMany({ where: { productId: id }, select: { publicId: true } });
+      const imgs = await tx.productImage.findMany({ where: { productId: id }, select: { publicId: true, url: true } });
 
       await tx.orderItem.updateMany({
         where: { productId: id },
@@ -199,18 +205,16 @@ export async function DELETE(request: NextRequest) {
       return imgs;
     });
 
-    if (imagesToDelete.length > 0) {
-      for (const img of imagesToDelete) {
-        if (img.publicId) {
-          try { await deleteImage(img.publicId); } catch {}
-        }
-      }
-    }
+    await cleanupUnreferencedProductImages(imagesToDelete);
 
     revalidateTag("landing");
     revalidatePath("/");
     revalidatePath("/shop");
+    revalidatePath("/collections");
     revalidatePath("/wishlist");
+    revalidatePath("/admin/products");
+    revalidatePath("/admin/dashboard");
+    revalidatePath(`/product/${id}`);
 
     return NextResponse.json({ success: true });
   } catch (err) {

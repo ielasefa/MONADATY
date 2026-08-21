@@ -64,13 +64,6 @@ function validateFile(file: File): string | null {
   return null;
 }
 
-async function sha256(file: File): Promise<string> {
-  const buffer = await file.arrayBuffer();
-  const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
-}
-
 function compressImage(file: File): Promise<File> {
   return new Promise((resolve) => {
     const img = new Image();
@@ -188,7 +181,6 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
           try {
             const formData = new FormData();
             formData.append("files", item.file);
-            formData.append("hashes", item.id.replace("upload-", ""));
 
             const xhr = new XMLHttpRequest();
             xhr.upload.onprogress = (e) => {
@@ -207,10 +199,13 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const result = await new Promise<any>((resolve, reject) => {
               xhr.onload = () => {
+                const response = (() => {
+                  try { return JSON.parse(xhr.responseText); } catch { return null; }
+                })();
                 if (xhr.status >= 200 && xhr.status < 300) {
-                  resolve(JSON.parse(xhr.responseText));
+                  resolve(response);
                 } else {
-                  reject(new Error(`Upload failed: ${xhr.status}`));
+                  reject(new Error(response?.error || `Upload failed: ${xhr.status}`));
                 }
               };
               xhr.onerror = () => reject(new Error("Network error"));
@@ -222,35 +217,6 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
             if (!img) throw new Error(t("no_image_returned"));
 
             const isDuplicate = img.duplicate;
-
-            setUploading((prev) => {
-              const next = prev.map((u) =>
-                u.id === item.id
-                  ? { ...u, status: "processing" as const, progress: 100 }
-                  : u,
-              );
-              uploadingRef.current = next;
-              return next;
-            });
-
-            await new Promise((r) => setTimeout(r, 400));
-
-            setUploading((prev) => {
-              const next = prev.map((u) =>
-                u.id === item.id
-                  ? { ...u, status: isDuplicate ? ("duplicate" as const) : ("done" as const) }
-                  : u,
-              );
-              uploadingRef.current = next;
-              return next;
-            });
-
-            batchSuccessCount++;
-
-            if (isDuplicate) {
-              setDuplicateMessage("Image already exists. Existing asset reused.");
-              setTimeout(() => setDuplicateMessage(""), 4000);
-            }
 
             const newImage: StoredProductImage = {
               id: `new-${item.id}`,
@@ -268,6 +234,23 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
             };
             imagesRef.current = [...imagesRef.current, newImage];
             onChangeRef.current(imagesRef.current);
+
+            setUploading((prev) => {
+              const next = prev.map((u) =>
+                u.id === item.id
+                  ? { ...u, status: isDuplicate ? ("duplicate" as const) : ("done" as const), progress: 100 }
+                  : u,
+              );
+              uploadingRef.current = next;
+              return next;
+            });
+
+            batchSuccessCount++;
+
+            if (isDuplicate) {
+              setDuplicateMessage("Image already exists. Existing asset reused.");
+              setTimeout(() => setDuplicateMessage(""), 4000);
+            }
           } catch (err: unknown) {
             setUploading((prev) => {
               const next = prev.map((u) =>
@@ -346,24 +329,12 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
 
       if (valid.length === 0) return;
 
-      const hashEntries = await Promise.all(
-        valid.map(async (v) => ({
-          ...v,
-          id: `upload-${await sha256(v.file)}`,
-        }))
-      );
-
-      const finalUploading = hashEntries.map((v) => ({
-        ...v,
-        id: nextId(),
-      }));
-
       setUploading((prev) => {
-        const next = [...prev, ...finalUploading];
+        const next = [...prev, ...valid];
         uploadingRef.current = next;
         return next;
       });
-      queueRef.current = [...queueRef.current, ...finalUploading];
+      queueRef.current = [...queueRef.current, ...valid];
       processQueue();
     },
     [maxFiles, processQueue],
@@ -505,7 +476,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
           {canAddMore ? t("drag_drop_images") : t("max_images")}
         </p>
         <p className="mt-1 text-xs text-white/50">
-          JPG, PNG, WebP, AVIF &mdash; Up to 10 MB each &mdash; Max {maxFiles} images
+          JPG, PNG, WebP, GIF &mdash; Up to 10 MB each &mdash; Max {maxFiles} images
         </p>
         <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
           <button
@@ -551,7 +522,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
             >
               <div className="h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-white/5">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={item.preview} alt={item.file.name} className="h-full w-full object-cover" />
+                <img src={item.preview} alt={item.file.name} className="h-full w-full object-contain" />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-xs font-medium text-white">{item.file.name}</p>
@@ -657,7 +628,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
                 <img
                   src={img.url}
                   alt={img.alt || ""}
-                  className="h-full w-full object-cover transition duration-200 group-hover:scale-105"
+                  className="h-full w-full object-contain p-2 transition duration-200 group-hover:scale-105"
                   loading="lazy"
                 />
               </div>

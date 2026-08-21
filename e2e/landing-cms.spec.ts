@@ -97,14 +97,13 @@ test.describe("Featured Products CMS", () => {
     await page.goto("/admin/landing");
     await page.waitForLoadState("networkidle", { timeout: 15000 });
 
-    const tabs = page.locator(".border-b button");
+    const tabs = page.locator("button[data-section-key]");
     const count = await tabs.count();
-    expect(count).toBeGreaterThanOrEqual(8);
+    expect(count).toBe(9);
 
-    await tabs.nth(1).click();
-    await page.waitForTimeout(1000);
+    await page.locator('button[data-section-key="featured"]').click();
 
-    const sectionCard = page.locator(".luxury-card").first();
+    const sectionCard = page.getByTestId("landing-section-card").first();
     await expect(sectionCard).toBeVisible({ timeout: 5000 });
   });
 
@@ -113,15 +112,18 @@ test.describe("Featured Products CMS", () => {
     await page.goto("/admin/landing");
     await page.waitForLoadState("networkidle", { timeout: 15000 });
 
-    const tabs = page.locator(".border-b button");
-    await tabs.nth(1).click();
-    await page.waitForTimeout(1000);
+    await page.locator('button[data-section-key="featured"]').click();
 
-    const saveBtn = page.locator("button[type='submit']").first();
-    if (await saveBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
-      await saveBtn.click();
-      await page.waitForTimeout(2000);
-    }
+    const timeOrigin = await page.evaluate(() => performance.timeOrigin);
+    const [saveResponse] = await Promise.all([
+      page.waitForResponse(
+        (response) => response.url().endsWith("/api/admin/landing/order") && response.request().method() === "PUT",
+      ),
+      page.getByTestId("landing-save-draft").click(),
+    ]);
+    expect(saveResponse.status()).toBe(200);
+    await expect(page.getByTestId("landing-save-draft")).toBeEnabled();
+    expect(await page.evaluate(() => performance.timeOrigin)).toBe(timeOrigin);
   });
 });
 
@@ -131,56 +133,33 @@ test.describe("Landing CMS", () => {
     await page.goto("/admin/landing");
     await page.waitForLoadState("networkidle", { timeout: 15000 });
 
-    const tabs = page.locator(".border-b button");
+    const tabs = page.locator("button[data-section-key]");
     const count = await tabs.count();
-    expect(count).toBeGreaterThanOrEqual(8);
+    expect(count).toBe(9);
 
     for (let i = 0; i < Math.min(count, 10); i++) {
       await tabs.nth(i).click();
       await page.waitForTimeout(300);
-      const sectionCard = page.locator(".luxury-card").first();
+      const sectionCard = page.getByTestId("landing-section-card").first();
       await expect(sectionCard).toBeVisible({ timeout: 3000 });
     }
   });
 
-  test("announcement bar settings can be saved", async ({ page }) => {
+  test("SEO settings are reachable", async ({ page }) => {
     await loginViaAPI(page);
     await page.goto("/admin/landing");
     await page.waitForLoadState("networkidle", { timeout: 15000 });
 
-    const tabs = page.locator(".border-b button");
-    const count = await tabs.count();
-
-    // Navigate to last tabs (announcement, newsletter)
-    if (count >= 9) {
-      await tabs.nth(8).click();
-      await page.waitForTimeout(500);
-
-      const saveBtn = page.locator("button[type='submit']:has-text('Save')").first();
-      if (await saveBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
-        await saveBtn.click();
-        await page.waitForTimeout(2000);
-      }
-    }
+    await page.locator('button[data-section-key="seo"]').click();
+    await expect(page.getByTestId("landing-section-card").first()).toBeVisible();
   });
 
-  test("newsletter settings can be saved", async ({ page }) => {
+  test("newsletter settings are reachable", async ({ page }) => {
     await loginViaAPI(page);
     await page.goto("/admin/landing");
     await page.waitForLoadState("networkidle", { timeout: 15000 });
 
-    const tabs = page.locator(".border-b button");
-    const count = await tabs.count();
-
-    if (count >= 10) {
-      await tabs.nth(9).click();
-      await page.waitForTimeout(500);
-
-      const saveBtn = page.locator("button[type='submit']:has-text('Save')").first();
-      if (await saveBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
-        await saveBtn.click();
-        await page.waitForTimeout(2000);
-      }
-    }
+    await page.locator('button[data-section-key="newsletter"]').click();
+    await expect(page.getByTestId("landing-section-card").first()).toBeVisible();
   });
 });

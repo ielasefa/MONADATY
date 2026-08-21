@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
 
@@ -50,16 +50,36 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
   const { t } = useTranslation("admin");
   const displayName = websiteName || "MONADATY";
   const pathname = usePathname();
+  const router = useRouter();
   const signingOutRef = useRef(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     const handler = (event: PageTransitionEvent) => {
-      if (event.persisted) window.location.reload();
+      if (event.persisted) router.refresh();
     };
     window.addEventListener("pageshow", handler);
     return () => window.removeEventListener("pageshow", handler);
-  }, []);
+  }, [router]);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMobileOpen(false);
+    };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [mobileOpen]);
 
   async function handleSignOut() {
     if (signingOutRef.current) return;
@@ -70,9 +90,7 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
     } catch {
       // The user is redirected even if the request is interrupted.
     }
-    document.cookie.split(";").forEach((cookie) => {
-      document.cookie = cookie.replace(/^ +/, "").replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`);
-    });
+    // Cross the authenticated layout boundary with a fresh server request.
     window.location.replace("/admin/login");
   }
 
@@ -84,15 +102,51 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
   return (
-    <aside className="sticky top-0 flex h-screen w-16 shrink-0 flex-col border-e border-white/[0.08] bg-[#0A0A09] lg:w-[232px]">
+    <>
+      <button
+        type="button"
+        onClick={() => setMobileOpen(true)}
+        aria-label={t("open_admin_navigation", "Open admin navigation")}
+        aria-controls="admin-sidebar"
+        aria-expanded={mobileOpen}
+        className="fixed start-3 top-3 z-[60] flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.08] bg-[#151512] text-white/70 shadow-lg sm:hidden"
+      >
+        <svg aria-hidden className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round">
+          <path d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+      </button>
+
+      {mobileOpen ? (
+        <button
+          type="button"
+          aria-label={t("close_admin_navigation", "Close admin navigation")}
+          className="fixed inset-0 z-[65] bg-black/70 backdrop-blur-sm sm:hidden"
+          onClick={() => setMobileOpen(false)}
+        />
+      ) : null}
+
+      <aside
+        id="admin-sidebar"
+        className={`fixed inset-y-0 start-0 z-[70] flex h-dvh w-[min(18rem,calc(100vw-2rem))] shrink-0 flex-col border-e border-white/[0.08] bg-[#0A0A09] shadow-2xl transition-transform duration-200 sm:sticky sm:top-0 sm:z-auto sm:h-screen sm:w-16 sm:translate-x-0 sm:shadow-none lg:w-[232px] ${
+          mobileOpen ? "translate-x-0" : "-translate-x-full rtl:translate-x-full"
+        }`}
+      >
       <div className="flex h-16 shrink-0 items-center justify-center border-b border-white/[0.08] px-2 lg:justify-start lg:px-4">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#D6B35A]/20 bg-[#D6B35A]/[0.08] text-xs font-semibold text-[#D6B35A]">
           M
         </div>
-        <div className="ms-3 hidden min-w-0 lg:block">
+        <div className="ms-3 min-w-0 sm:hidden lg:block">
           <p className="truncate text-[0.78rem] font-semibold tracking-[0.18em] text-white">{displayName}</p>
           <p className="mt-0.5 text-[0.52rem] font-medium uppercase tracking-[0.16em] text-white/35">{t("control_center", "Control center")}</p>
         </div>
+        <button
+          type="button"
+          onClick={() => setMobileOpen(false)}
+          aria-label={t("close_admin_navigation", "Close admin navigation")}
+          className="ms-auto flex h-10 w-10 items-center justify-center rounded-xl text-xl text-white/50 hover:bg-white/[0.05] hover:text-white sm:hidden"
+        >
+          <span aria-hidden>&times;</span>
+        </button>
       </div>
 
       <nav aria-label={t("admin_navigation", "Admin navigation")} className="min-h-0 flex-1 overflow-y-auto px-2 py-3 lg:px-3 lg:py-4">
@@ -104,7 +158,7 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
             if (groupItems.length === 0) return null;
             return (
               <section key={group.key}>
-                <p className="mb-1.5 hidden px-3 text-[0.52rem] font-medium uppercase tracking-[0.2em] text-white/25 lg:block">
+                <p className="mb-1.5 px-3 text-[0.52rem] font-medium uppercase tracking-[0.2em] text-white/25 sm:hidden lg:block">
                   {t(`nav_group_${group.key}`, group.key)}
                 </p>
                 <div className="space-y-1">
@@ -115,7 +169,8 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
                         key={item.href}
                         href={item.href}
                         title={item.label}
-                        className={`group relative flex h-10 items-center justify-center rounded-xl text-sm transition-[background-color,color,border-color] duration-200 lg:justify-start lg:gap-3 lg:px-3 ${
+                        onClick={() => setMobileOpen(false)}
+                        className={`group relative flex h-10 items-center justify-start gap-3 rounded-xl px-3 text-sm transition-[background-color,color,border-color] duration-200 sm:justify-center sm:gap-0 sm:px-0 lg:justify-start lg:gap-3 lg:px-3 ${
                           active
                             ? "bg-[#151512] text-white"
                             : "text-white/[0.48] hover:bg-white/[0.035] hover:text-white/80"
@@ -125,7 +180,7 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
                         <span className={`shrink-0 ${active ? "text-[#D6B35A]" : "text-white/40 group-hover:text-white/65"}`}>
                           <NavIcon href={item.href} />
                         </span>
-                        <span className="hidden truncate text-[0.78rem] font-medium lg:block">{item.label}</span>
+                        <span className="truncate text-[0.78rem] font-medium sm:hidden lg:block">{item.label}</span>
                       </Link>
                     );
                   })}
@@ -142,12 +197,13 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
           onClick={handleSignOut}
           disabled={isSigningOut}
           title={t("sign_out", "Sign out")}
-          className="group flex h-10 w-full items-center justify-center rounded-xl text-white/40 transition-colors duration-200 hover:bg-red-500/[0.06] hover:text-red-300 disabled:pointer-events-none disabled:opacity-40 lg:justify-start lg:gap-3 lg:px-3"
+          className="group flex h-10 w-full items-center justify-start gap-3 rounded-xl px-3 text-white/40 transition-colors duration-200 hover:bg-red-500/[0.06] hover:text-red-300 disabled:pointer-events-none disabled:opacity-40 sm:justify-center sm:gap-0 sm:px-0 lg:justify-start lg:gap-3 lg:px-3"
         >
           <svg aria-hidden className="h-[17px] w-[17px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M10 17l5-5-5-5M15 12H3" /><path d="M15 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4" /></svg>
-          <span className="hidden text-[0.78rem] font-medium lg:block">{isSigningOut ? t("signing_out", "Signing out…") : t("sign_out", "Sign out")}</span>
+          <span className="text-[0.78rem] font-medium sm:hidden lg:block">{isSigningOut ? t("signing_out", "Signing out…") : t("sign_out", "Sign out")}</span>
         </button>
       </div>
-    </aside>
+      </aside>
+    </>
   );
 }

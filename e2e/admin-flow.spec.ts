@@ -1,8 +1,9 @@
 import { test, expect, type Page } from "@playwright/test";
+import path from "node:path";
 
 const ADMIN_EMAIL = process.env.TEST_ADMIN_EMAIL || "admin@monadaty.com";
 const ADMIN_PASSWORD = process.env.TEST_ADMIN_PASSWORD || "change-this-to-a-strong-password";
-const IMAGE_PATH = "/tmp/opencode/test-image.png";
+const IMAGE_PATH = path.resolve(process.cwd(), "public/icons/icon-192.png");
 const TEST_PRODUCT_NAME = `E2E Test Product ${Date.now()}`;
 
 // Track all network requests to detect anomalies
@@ -64,7 +65,21 @@ async function login(page: Page) {
 }
 
 test.describe("Admin End-to-End Flow", () => {
-  test("complete admin workflow", async ({ page, request }) => {
+  test.afterEach(async ({ page }) => {
+    const listResponse = await page.request.get("/api/admin/products/list");
+    if (!listResponse.ok()) return;
+    const listData = await listResponse.json();
+    const disposableProducts = (listData.products || []).filter(
+      (product: { name: string; id: string }) => product.name === TEST_PRODUCT_NAME,
+    );
+    for (const product of disposableProducts) {
+      await page.request.delete(`/api/admin/products/${product.id}`, {
+        headers: { Origin: new URL(page.url()).origin },
+      });
+    }
+  });
+
+  test("complete admin workflow", async ({ page }) => {
     const monitor = setupNetworkMonitor(page);
 
     // ===== Login =====
@@ -118,27 +133,28 @@ test.describe("Admin End-to-End Flow", () => {
     await page.waitForLoadState("networkidle", { timeout: 15000 });
     await page.waitForTimeout(2000);
     // Verify the product appears in the table
-    await expect(page.locator(`text=${TEST_PRODUCT_NAME}`).first()).toBeVisible({ timeout: 15000 });
+    await expect(
+      page.locator("a:visible").filter({ hasText: TEST_PRODUCT_NAME }).first(),
+    ).toBeVisible({ timeout: 15000 });
     console.log("✅ Product created and appears in admin list");
 
-    // ===== Delete another product via API =====
-    const listRes = await request.get("/api/admin/products/list", {
-      headers: { Origin: "http://localhost:3458", Referer: "http://localhost:3458/admin/products" },
+    // ===== Delete only the disposable product created by this test =====
+    const listData = await page.evaluate(async () => {
+      const response = await fetch("/api/admin/products/list");
+      return response.json();
     });
-    const listData = await listRes.json();
-    const allProducts = listData.products || [];
-    const targetForDelete = allProducts.find(
-      (p: { name: string; id: string }) => p.name !== TEST_PRODUCT_NAME
+    const targetForDelete = (listData.products || []).find(
+      (product: { name: string; id: string }) => product.name === TEST_PRODUCT_NAME,
     );
     if (targetForDelete) {
-      const delRes = await request.post("/api/admin/products/bulk", {
-        data: { action: "delete", productIds: [targetForDelete.id] },
-        headers: { Origin: "http://localhost:3458", Referer: "http://localhost:3458/admin/products" },
-      });
-      expect(delRes.status()).toBe(200);
+      const deleteStatus = await page.evaluate(async (id: string) => {
+        const response = await fetch(`/api/admin/products/${id}`, { method: "DELETE" });
+        return response.status;
+      }, targetForDelete.id);
+      expect(deleteStatus).toBe(200);
       console.log(`✅ Deleted product: ${targetForDelete.name}`);
     } else {
-      console.log("⚠️ No other product to delete, skipping");
+      throw new Error("Disposable product was not found for cleanup");
     }
 
     // ===== Logout =====
@@ -251,7 +267,7 @@ test("delete product via API route", async ({ page }) => {
 });
 
 // Test: upload still works (regression check)
-test("upload regression check", async ({ page }) => {
+test("spoofed upload regression check", async ({ page }) => {
   await login(page);
 
   // Go to product create page
@@ -259,15 +275,15 @@ test("upload regression check", async ({ page }) => {
   await page.waitForURL(/\/admin\/products\/add/);
   await expect(page.locator("#p-name")).toBeVisible({ timeout: 10000 });
 
-  // Upload an image
+  // A file with an image extension/MIME but invalid magic bytes must be rejected.
   const fileInput = page.locator('input[type="file"]').first();
-  await fileInput.setInputFiles(IMAGE_PATH);
-  await page.waitForTimeout(1000);
-
-  // Wait for image to appear in the preview grid (upload complete)
-  const uploadedImage = page.locator('img[alt="test-image"]');
-  await expect(uploadedImage).toBeVisible({ timeout: 30000 });
-  // Also verify dimensions text appears, confirming upload metadata
-  await expect(page.locator('text=/×/')).toBeVisible({ timeout: 5000 });
-  console.log("✅ Upload still works after delete fix");
+  await fileInput.setInputFiles({
+    name: "spoofed.png",
+    mimeType: "image/png",
+    buffer: Buffer.from("not an image"),
+  });
+  await expect(page.locator('[data-upload-status="error"]')).toContainText(
+    "File contents do not match the declared type",
+  );
+  console.log("✅ Spoofed upload rejected without creating a temp asset");
 });

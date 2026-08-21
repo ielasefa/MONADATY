@@ -339,7 +339,6 @@
 
 .storefront-shell {
   min-height: 60vh;
-  overflow-x: clip;
   background: #0B0B0A;
   color: #FFFFFF;
 }

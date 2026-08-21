@@ -101,7 +101,7 @@ export function CollectionsClient({
                   label={t("collection_image", "Collection Image")}
                   value={image}
                   onChange={setImage}
-                  folder="monadaty/collections"
+                  folder="collections"
                   fieldName="image"
                   className="[&>div]:max-h-64 [&_img]:h-56"
                 />

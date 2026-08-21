@@ -233,7 +233,7 @@ export function ProductForm() {
       localStorage.removeItem(DRAFT_KEY);
       toast.success(t("product_created_success", "Product created successfully"));
       setCreated(true);
-      setTimeout(() => router.push("/admin/products"), 2000);
+      router.replace("/admin/products");
     } catch {
       toast.error(t("network_error", "Network error"));
       setSaving(false);

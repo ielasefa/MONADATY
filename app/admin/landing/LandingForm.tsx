@@ -400,7 +400,7 @@ function HeroForm({ hero, onChange, onSave }: { hero: SiteSettings["hero"]; onCh
         </div>
         <div className="space-y-2">
           <label className="luxury-label">{t("hero_image") || "Hero Image"}</label>
-          <SingleImageUploader label={t("hero_image") || "Hero Image"} value={hero.media?.[0] || ""} onChange={(url) => onChange({ media: url ? [url] : [] })} folder="monadaty/hero" />
+          <SingleImageUploader label={t("hero_image") || "Hero Image"} value={hero.media?.[0] || ""} onChange={(url) => onChange({ media: url ? [url] : [] })} folder="banners" />
           <input type="hidden" name="heroImage" defaultValue={hero.media?.[0] || ""} />
         </div>
         <button type="submit" className="btn-primary mt-2">{t("save_hero")}</button>
@@ -555,7 +555,7 @@ function AboutForm({ about, onChange, onSave }: { about: SiteSettings["aboutSect
         <Input label={t("title")} name="title" value={about.title} onChange={(v) => onChange({ title: v })} />
         <Input label={t("subtitle")} name="subtitle" value={about.subtitle} onChange={(v) => onChange({ subtitle: v })} />
         <Input label={t("description")} name="description" value={about.description} onChange={(v) => onChange({ description: v })} rows={4} />
-        <SingleImageUploader label={t("about_image")} value={about.image} onChange={(url) => onChange({ image: url })} folder="monadaty/about" />
+        <SingleImageUploader label={t("about_image")} value={about.image} onChange={(url) => onChange({ image: url })} folder="banners" />
         <input type="hidden" name="image" defaultValue={about.image} />
         <button type="submit" className="btn-primary mt-2">{t("save")}</button>
       </form>

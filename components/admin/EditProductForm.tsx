@@ -230,9 +230,9 @@ export function EditProductForm({
       }
 
        toast.success(t("product_updated_success", "Product updated successfully"));
-       setHistoryKey((prev) => prev + 1);
+      setHistoryKey((prev) => prev + 1);
       setDeletedImageIds([]);
-      setTimeout(() => router.push("/admin/products"), 2000);
+      router.replace("/admin/products");
     } catch {
       toast.error(t("network_error", "Network error"));
       setSaving(false);

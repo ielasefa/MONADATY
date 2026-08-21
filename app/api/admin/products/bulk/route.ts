@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth-guard";
 import { getAuthenticatedAdmin } from "@/lib/auth";
 import { requireOrigin } from "@/lib/csrf";
-import { deleteImage } from "@/lib/cloudinary";
 import { logError } from "@/lib/logger";
+import { cleanupUnreferencedProductImages } from "@/lib/product-upload-lifecycle";
 
 export async function POST(request: NextRequest) {
   const originCheck = requireOrigin(request);
@@ -31,7 +32,7 @@ export async function POST(request: NextRequest) {
         const imagesToDelete = await prisma.$transaction(async (tx) => {
           const imgs = await tx.productImage.findMany({
             where: { productId: { in: productIds } },
-            select: { publicId: true },
+            select: { publicId: true, url: true },
           });
 
           await tx.orderItem.updateMany({
@@ -44,11 +45,7 @@ export async function POST(request: NextRequest) {
         });
 
         // 2. Cleanup images after successful DB commit
-        for (const img of imagesToDelete) {
-          if (img.publicId) {
-            try { await deleteImage(img.publicId); } catch { /* log but don't fail */ }
-          }
-        }
+        await cleanupUnreferencedProductImages(imagesToDelete);
         break;
       }
 
@@ -184,6 +181,15 @@ export async function POST(request: NextRequest) {
       default:
         return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
     }
+
+    revalidateTag("landing");
+    revalidatePath("/");
+    revalidatePath("/shop");
+    revalidatePath("/collections");
+    revalidatePath("/wishlist");
+    revalidatePath("/admin/products");
+    revalidatePath("/admin/dashboard");
+    revalidatePath("/product/[slug]", "page");
 
     return NextResponse.json({ success: true });
   } catch (err) {

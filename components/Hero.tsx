@@ -169,7 +169,7 @@ export function Hero({ settings, fallbackImage }: HeroProps) {
           >
             <div className="absolute inset-x-[12%] bottom-[2%] h-[18%] rounded-full bg-black/80 blur-3xl" />
             <div className="absolute inset-[14%] rounded-full bg-[#D6B35A]/[0.09] blur-[100px]" />
-            <div className="relative aspect-[6/5] min-h-[300px] overflow-hidden rounded-[1.25rem] border border-[#D6B35A]/[0.13] bg-[#11110F]/60 shadow-[0_38px_110px_rgba(0,0,0,.5)] sm:min-h-[400px] md:aspect-[4/5] md:min-h-0 lg:aspect-[5/6] lg:max-h-[650px] xl:aspect-[6/5]">
+            <div className="relative aspect-[6/5] overflow-hidden rounded-[1.25rem] border border-[#D6B35A]/[0.13] bg-[#11110F]/60 shadow-[0_38px_110px_rgba(0,0,0,.5)] sm:min-h-[400px] md:aspect-[4/5] md:min-h-0 lg:aspect-[5/6] lg:max-h-[650px] xl:aspect-[6/5]">
               <SafeImage
                 src={heroImage}
                 alt={copy.hero.imageAlt}

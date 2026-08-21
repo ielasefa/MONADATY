@@ -40,6 +40,8 @@ function AdminLoginForm() {
         : requested?.startsWith("/admin/") && !requested.startsWith("//")
           ? requested
           : "/admin/dashboard";
+      // Cross the authenticated layout boundary with a fresh server request so
+      // middleware can provide the destination pathname to the admin layout.
       window.location.replace(destination);
     } catch {
       toast.error(t("network_error"));

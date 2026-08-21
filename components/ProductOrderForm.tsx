@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { useCart } from "@/components/cart-context";
 import type { Product } from "@/types";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -12,6 +13,7 @@ type ProductOrderFormProps = {
 };
 
 export function ProductOrderForm({ product }: ProductOrderFormProps) {
+  const router = useRouter();
   const { addItem } = useCart();
   const { t } = useTranslation("products");
   const [quantity, setQuantity] = useState(1);
@@ -38,9 +40,7 @@ export function ProductOrderForm({ product }: ProductOrderFormProps) {
     if (isOutOfStock || adding || buying) return;
     setBuying(true);
     addItem(product, quantity);
-    window.setTimeout(() => {
-      window.location.assign("/checkout");
-    }, 300);
+    router.push("/checkout");
   }
 
   const controlsDisabled = isOutOfStock || adding || buying;
@@ -115,6 +115,7 @@ return (
 
           <motion.button
             type="button"
+            data-testid="buy-now"
             onClick={handleBuyNow}
             disabled={controlsDisabled}
             whileHover={controlsDisabled || shouldReduceMotion ? undefined : { y: -2, scale: 1.01 }}

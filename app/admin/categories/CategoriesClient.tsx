@@ -93,7 +93,7 @@ export function CategoriesClient({
                 label={t("category_image", "Category image")}
                 value={image}
                 onChange={setImage}
-                folder="monadaty/categories"
+                folder="categories"
                 fieldName="image"
                 className="[&>div]:max-h-64 [&_img]:h-56"
               />

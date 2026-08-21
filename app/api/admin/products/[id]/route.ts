@@ -4,8 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth-guard";
 import { getAuthenticatedAdmin } from "@/lib/auth";
 import { requireOrigin } from "@/lib/csrf";
-import { deleteImage } from "@/lib/cloudinary";
 import { logError } from "@/lib/logger";
+import { cleanupUnreferencedProductImages, markProductUploadsAttached } from "@/lib/product-upload-lifecycle";
 
 const ALLOWED_STATUSES = ["Draft", "Active", "Hidden", "Archived"];
 
@@ -219,17 +219,11 @@ export async function PUT(
         where: { id: { in: deletedImageIds }, productId: id },
       });
 
-      for (const img of imagesToDelete) {
-        if (img.publicId) {
-          try {
-            await deleteImage(img.publicId);
-          } catch { /* ignore delete errors */ }
-        }
-      }
-
       await prisma.productImage.deleteMany({
         where: { id: { in: deletedImageIds }, productId: id },
       });
+
+      await cleanupUnreferencedProductImages(imagesToDelete);
 
       for (const imgId of deletedImageIds) {
         const removedImg = imagesToDelete.find((i) => i.id === imgId);
@@ -320,6 +314,10 @@ export async function PUT(
       data: productData as Parameters<typeof prisma.product.update>[0]["data"],
     });
 
+    if (Array.isArray(images)) {
+      await markProductUploadsAttached(images);
+    }
+
     // Log history for changes
     const actionMap: Record<string, string> = {
       price: "Price Changed",
@@ -364,8 +362,11 @@ export async function PUT(
     revalidateTag("landing");
     revalidatePath("/");
     revalidatePath("/shop");
+    revalidatePath("/collections");
     revalidatePath(`/product/${id}`);
     revalidatePath("/wishlist");
+    revalidatePath("/admin/products");
+    revalidatePath("/admin/dashboard");
 
     return NextResponse.json({ product: updated });
   } catch (err) {
@@ -398,7 +399,7 @@ export async function DELETE(
       if (!existing) return [];
 
       // Collect images before cascade delete
-      const imgs = await tx.productImage.findMany({ where: { productId: id }, select: { publicId: true } });
+      const imgs = await tx.productImage.findMany({ where: { productId: id }, select: { publicId: true, url: true } });
 
       // Nullify order items referencing this product
       await tx.orderItem.updateMany({
@@ -412,19 +413,16 @@ export async function DELETE(
     });
 
     // 2. Cleanup images after successful DB commit
-    if (imagesToDelete.length > 0) {
-      for (const img of imagesToDelete) {
-        if (img.publicId) {
-          try { await deleteImage(img.publicId); } catch { /* log but don't fail */ }
-        }
-      }
-    }
+    await cleanupUnreferencedProductImages(imagesToDelete);
 
     revalidateTag("landing");
     revalidatePath("/");
     revalidatePath("/shop");
+    revalidatePath("/collections");
     revalidatePath(`/product/${id}`);
     revalidatePath("/wishlist");
+    revalidatePath("/admin/products");
+    revalidatePath("/admin/dashboard");
 
     return NextResponse.json({ success: true });
   } catch (err) {

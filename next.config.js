@@ -204,6 +204,11 @@ module.exports = {
 
   experimental: {
     optimizePackageImports: [],
+    // Upload requests pass through middleware, which buffers request bodies.
+    // Keep the framework cap above the application's 10 MB per-file limit so
+    // oversized files are rejected by upload validation with a clean 400
+    // instead of being truncated and failing FormData parsing with a 500.
+    middlewareClientMaxBodySize: "12mb",
   },
 
   serverExternalPackages: [
