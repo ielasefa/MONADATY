@@ -8,9 +8,12 @@ node_modules
 
 /generated/prisma
 .next/
+.next-dev-before/
 node_modules/
 AGENTS.md
 tsconfig.tsbuildinfo
+test-results/
+playwright-report/
 deploy/
 /backups/
 /public/invoices/

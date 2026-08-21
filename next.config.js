@@ -44,6 +44,7 @@ const CONTENT_SECURITY_POLICY = buildCSP();
 module.exports = {
   // IMPORTANT FOR AZURE DEPLOYMENT
   output: "standalone",
+  deploymentId: process.env.DEPLOYMENT_VERSION,
 
   productionBrowserSourceMaps: false,
   staticPageGenerationTimeout: 120,
@@ -92,6 +93,18 @@ module.exports = {
         source: "/api/(.*)",
         headers: [
           {
+            key: "Cache-Control",
+            value: "no-store, no-cache, max-age=0, must-revalidate, s-maxage=0, proxy-revalidate",
+          },
+          {
+            key: "Pragma",
+            value: "no-cache",
+          },
+          {
+            key: "Expires",
+            value: "0",
+          },
+          {
             key: "X-Content-Type-Options",
             value: "nosniff",
           },
@@ -106,6 +119,27 @@ module.exports = {
           {
             key: "Referrer-Policy",
             value: "strict-origin-when-cross-origin",
+          },
+        ],
+      },
+      {
+        source: "/sw.js",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
+          },
+          {
+            key: "Pragma",
+            value: "no-cache",
+          },
+          {
+            key: "Expires",
+            value: "0",
+          },
+          {
+            key: "Service-Worker-Allowed",
+            value: "/",
           },
         ],
       },

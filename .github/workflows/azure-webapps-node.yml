@@ -10,6 +10,7 @@ env:
   NODE_VERSION: "22.x"
   AZURE_WEBAPP_NAME: "monadaty-ilyas"
   NEXT_TELEMETRY_DISABLED: "1"
+  DEPLOYMENT_VERSION: ${{ github.sha }}
   UPLOAD_ROOT: "/home/data/monadaty/uploads"
   INVOICE_ROOT: "/home/data/monadaty/invoices"
 

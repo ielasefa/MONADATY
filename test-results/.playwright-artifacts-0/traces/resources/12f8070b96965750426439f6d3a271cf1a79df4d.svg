@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">
-  <rect width="800" height="800" fill="#f7f1e6"/>
-  <circle cx="400" cy="380" r="120" fill="none" stroke="#B89B5E" stroke-width="3" opacity="0.4"/>
-  <text x="400" y="400" text-anchor="middle" font-family="serif" font-size="64" font-weight="600" fill="#B89B5E" letter-spacing="8">MD</text>
-  <text x="400" y="460" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#B89B5E" opacity="0.5" letter-spacing="4">MONADATY</text>
-</svg>

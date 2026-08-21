@@ -8,7 +8,7 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import { FooterWrapper } from "@/components/FooterWrapper";
 import { NavbarWrapper } from "@/components/NavbarWrapper";
 import { ToastProvider } from "@/components/ToastProvider";
-import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
+import { LegacyServiceWorkerCleanup } from "@/components/LegacyServiceWorkerCleanup";
 import { GlobalErrorHandler } from "@/components/GlobalErrorHandler";
 import { MotionConfigWrapper } from "@/components/MotionConfigWrapper";
 import { getLanguageFromCookie, getTranslation, loadTranslations, LANGUAGE_COOKIE } from "@/lib/translations";
@@ -140,7 +140,7 @@ export default async function RootLayout({
           </WishlistProvider>
         </CartProvider>
         <ToastProvider />
-        <ServiceWorkerRegistration />
+        <LegacyServiceWorkerCleanup />
         <GlobalErrorHandler />
         </MotionConfigWrapper>
       </body>

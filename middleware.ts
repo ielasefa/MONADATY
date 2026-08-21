@@ -6,6 +6,17 @@ import {
   verifySessionToken,
 } from "@/lib/session-token";
 
+function preventCaching(response: NextResponse): NextResponse {
+  response.headers.set(
+    "Cache-Control",
+    "no-cache, no-store, max-age=0, must-revalidate, s-maxage=0, proxy-revalidate",
+  );
+  response.headers.set("Pragma", "no-cache");
+  response.headers.set("Expires", "0");
+  response.headers.set("Surrogate-Control", "no-store");
+  return response;
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -13,17 +24,11 @@ export async function middleware(request: NextRequest) {
   requestHeaders.set("x-admin-pathname", pathname);
   requestHeaders.set("x-admin-route", "1");
 
-  const res = NextResponse.next({
-    request: { headers: requestHeaders },
-  });
-
-  res.headers.set(
-    "Cache-Control",
-    "no-cache, no-store, max-age=0, must-revalidate, s-maxage=0, proxy-revalidate",
+  const res = preventCaching(
+    NextResponse.next({
+      request: { headers: requestHeaders },
+    }),
   );
-  res.headers.set("Pragma", "no-cache");
-  res.headers.set("Expires", "0");
-  res.headers.set("Surrogate-Control", "no-store");
 
   // Admin API routes: apply anti-cache headers only. Individual route handlers verify
   // auth (return 401 JSON). CRITICAL: never redirect API requests to the login page —
@@ -39,7 +44,9 @@ export async function middleware(request: NextRequest) {
     if (signed) {
       const token = await verifySessionToken(signed);
       if (!token) {
-        const staleRes = NextResponse.next({ request: { headers: requestHeaders } });
+        const staleRes = preventCaching(
+          NextResponse.next({ request: { headers: requestHeaders } }),
+        );
         const delOpts = { ...SESSION_COOKIE_OPTIONS, maxAge: 0 };
         staleRes.cookies.set(SESSION_COOKIE, "", delOpts);
         staleRes.cookies.set(MUST_CHANGE_COOKIE, "", delOpts);
@@ -54,14 +61,16 @@ export async function middleware(request: NextRequest) {
   if (!signed) {
     const loginUrl = new URL("/admin/login", request.url);
     loginUrl.searchParams.set("redirect", pathname);
-    const redirectRes = NextResponse.redirect(loginUrl);
+    const redirectRes = preventCaching(NextResponse.redirect(loginUrl));
     redirectRes.cookies.set("x-admin-pathname", "", { path: "/", maxAge: 0 });
     return redirectRes;
   }
 
   const token = await verifySessionToken(signed);
   if (!token) {
-    const redirectRes = NextResponse.redirect(new URL("/admin/login", request.url));
+    const redirectRes = preventCaching(
+      NextResponse.redirect(new URL("/admin/login", request.url)),
+    );
     const delOpts = { ...SESSION_COOKIE_OPTIONS, maxAge: 0 };
     redirectRes.cookies.set(SESSION_COOKIE, "", delOpts);
     redirectRes.cookies.set(MUST_CHANGE_COOKIE, "", delOpts);
@@ -70,8 +79,8 @@ export async function middleware(request: NextRequest) {
   }
 
   if (mustChange && pathname !== "/admin/change-password") {
-    const redirectRes = NextResponse.redirect(
-      new URL("/admin/change-password", request.url),
+    const redirectRes = preventCaching(
+      NextResponse.redirect(new URL("/admin/change-password", request.url)),
     );
     redirectRes.cookies.set("x-admin-pathname", "", { path: "/", maxAge: 0 });
     return redirectRes;
