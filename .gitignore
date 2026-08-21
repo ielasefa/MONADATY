@@ -10,5 +10,9 @@ node_modules
 .next/
 node_modules/
 AGENTS.md
-tsconfig.tsbuildinfodeploy/
+tsconfig.tsbuildinfo
 deploy/
+/backups/
+/public/invoices/
+*.dump
+*.sql.gz

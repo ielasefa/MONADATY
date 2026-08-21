@@ -1,19 +1,47 @@
 import { NextResponse } from "next/server";
 
-const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "http://localhost:3000").split(",").map(s => s.trim().replace(/\/+$/, ""));
+function parseOrigins(): string[] {
+  const raw = process.env.ALLOWED_ORIGINS || "";
+  const list = raw
+    .split(",")
+    .map(normalizeConfiguredOrigin)
+    .filter(Boolean);
+
+  if (process.env.APP_URL) {
+    const appUrl = normalizeConfiguredOrigin(process.env.APP_URL);
+    if (appUrl && !list.includes(appUrl)) {
+      list.push(appUrl);
+    }
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    list.push("http://localhost:3000", "http://127.0.0.1:3000");
+  }
+
+  return list;
+}
+
+function getAllowedOrigins(): string[] {
+  return [...new Set(parseOrigins())];
+}
+
+function normalizeConfiguredOrigin(value: string): string {
+  try {
+    const parsed = new URL(value.trim());
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return "";
+    return parsed.origin;
+  } catch {
+    return "";
+  }
+}
 
 function extractOrigin(url: string): string | null {
   try {
     const parsed = new URL(url);
-    const host = parsed.host.replace(/^localhost$/, "127.0.0.1");
-    return `${parsed.protocol}//${host}`;
+    return `${parsed.protocol}//${parsed.host}`;
   } catch {
     return null;
   }
-}
-
-function normalizeHost(host: string): string {
-  return host.replace(/^localhost$/, "127.0.0.1");
 }
 
 export function validateOrigin(request: Request): boolean {
@@ -29,17 +57,15 @@ export function validateOrigin(request: Request): boolean {
 
   try {
     const parsed = new URL(rawSource);
-    const normalizedOrigin = `${parsed.protocol}//${normalizeHost(parsed.host)}`;
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return false;
+    const normalizedOrigin = parsed.origin;
 
-    for (const allowed of ALLOWED_ORIGINS) {
+    const allowedOrigins = getAllowedOrigins();
+    for (const allowed of allowedOrigins) {
       if (normalizedOrigin === allowed) return true;
     }
   } catch {
-    // fall through to original comparison below
-  }
-
-  for (const allowed of ALLOWED_ORIGINS) {
-    if (rawSource === allowed) return true;
+    // fall through to raw comparison
   }
 
   return false;

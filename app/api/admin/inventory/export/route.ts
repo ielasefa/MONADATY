@@ -2,6 +2,7 @@ import { logError } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { authGuard, errorResponse } from "@/lib/inventory-api";
 import { queryInventoryAudit } from "@/lib/inventory";
+import { csvCell } from "@/lib/csv";
 
 export const dynamic = "force-dynamic";
 
@@ -27,7 +28,7 @@ export async function GET(request: NextRequest) {
     const result = await queryInventoryAudit(params);
 
     const headers = ["ID", "Date", "ProductID", "VariantID", "Warehouse", "MovementType", "Quantity", "PreviousStock", "NewStock", "Reason", "Reference"];
-    const csvRows = [headers.join(",")];
+    const csvRows = [headers.map(csvCell).join(",")];
 
     for (const row of result.rows) {
       csvRows.push([
@@ -40,9 +41,9 @@ export async function GET(request: NextRequest) {
         row.quantity,
         row.previousStock,
         row.newStock,
-        `"${(row.reason || "").replace(/"/g, '""')}"`,
+        row.reason || "",
         row.reference,
-      ].join(","));
+      ].map(csvCell).join(","));
     }
 
     const csv = csvRows.join("\n");

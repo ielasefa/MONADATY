@@ -60,7 +60,8 @@ export async function PUT(request: NextRequest) {
     const { id, action } = await request.json();
 
     if (action === "regenerate") {
-      const newKey = await regenerateApiKey(id, admin.id);
+      const newKey = await regenerateApiKey(id, admin.role === "SUPER_ADMIN" ? undefined : admin.id);
+      if (!newKey) return NextResponse.json({ error: "API key not found" }, { status: 404 });
       return NextResponse.json({ key: newKey, message: "Save this key - it won't be shown again" });
     }
 
@@ -85,7 +86,8 @@ export async function DELETE(request: NextRequest) {
     const id = searchParams.get("id");
     if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
 
-    await deleteApiKey(id);
+    const deleted = await deleteApiKey(id, admin.role === "SUPER_ADMIN" ? undefined : admin.id);
+    if (!deleted) return NextResponse.json({ error: "API key not found" }, { status: 404 });
     return NextResponse.json({ success: true });
   } catch (err) {
     logError(err, "Failed to handle API keys:");

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import path from "path";
 import fs from "fs";
 import { verifySignedToken, recordInvoiceEvent } from "@/lib/invoice";
+import { invoiceFilePath } from "@/lib/invoice-storage";
 
 export async function GET(req: NextRequest) {
   const token = req.nextUrl.searchParams.get("token");
@@ -24,6 +24,10 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
   }
 
+  if (invoice.signedToken !== token) {
+    return NextResponse.json({ error: "Invalid or expired token" }, { status: 401 });
+  }
+
   if (invoice.status !== "Issued") {
     return NextResponse.json({ error: "Invoice is not available" }, { status: 400 });
   }
@@ -32,7 +36,10 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "PDF not found" }, { status: 404 });
   }
 
-  const absolutePath = path.join(process.cwd(), "public", invoice.pdfPath);
+  const absolutePath = invoiceFilePath(invoice.pdfPath);
+  if (!absolutePath) {
+    return NextResponse.json({ error: "PDF not found" }, { status: 404 });
+  }
   if (!fs.existsSync(absolutePath)) {
     return NextResponse.json({ error: "PDF file not found on disk" }, { status: 404 });
   }

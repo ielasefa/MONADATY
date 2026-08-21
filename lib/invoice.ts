@@ -52,18 +52,32 @@ export function generateSignedToken(invoiceNumber: string): string {
 }
 
 export function verifySignedToken(token: string): string | null {
+  if (!token || token.length > 512) return null;
   const dot = token.lastIndexOf(".");
-  if (dot === -1) return null;
+  if (dot <= 0) return null;
   const payloadB64 = token.slice(0, dot);
   const sig = token.slice(dot + 1);
-  const hmac = crypto.createHmac("sha256", getSessionSecret());
-  hmac.update(Buffer.from(payloadB64, "base64url").toString());
-  const expected = hmac.digest("hex");
-  if (!crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) {
+  if (!/^[a-f0-9]{64}$/.test(sig)) return null;
+  let payload: string;
+  try {
+    payload = Buffer.from(payloadB64, "base64url").toString();
+  } catch {
     return null;
   }
-  const payload = Buffer.from(payloadB64, "base64url").toString();
-  const [invoiceNumber] = payload.split(":");
+  const hmac = crypto.createHmac("sha256", getSessionSecret());
+  hmac.update(payload);
+  const expected = hmac.digest("hex");
+  if (sig.length !== expected.length || !crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) {
+    return null;
+  }
+  const separator = payload.lastIndexOf(":");
+  if (separator <= 0) return null;
+  const invoiceNumber = payload.slice(0, separator);
+  const issuedAt = Number(payload.slice(separator + 1));
+  const maxAge = 7 * 24 * 60 * 60 * 1000;
+  if (!Number.isSafeInteger(issuedAt) || issuedAt > Date.now() + 60_000 || Date.now() - issuedAt > maxAge) {
+    return null;
+  }
   return invoiceNumber || null;
 }
 

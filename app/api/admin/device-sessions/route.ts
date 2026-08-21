@@ -50,7 +50,8 @@ export async function DELETE(request: NextRequest) {
     }
 
     if (sessionId) {
-      await terminateSession(sessionId);
+      const deleted = await terminateSession(sessionId, admin.id);
+      if (!deleted) return NextResponse.json({ error: "Session not found" }, { status: 404 });
       return NextResponse.json({ success: true });
     }
 

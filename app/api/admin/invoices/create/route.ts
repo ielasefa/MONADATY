@@ -1,16 +1,16 @@
 import { logError } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import ReactPDF from "@react-pdf/renderer";
 import path from "path";
 import fs from "fs/promises";
 import { generateInvoiceNumber, generateSignedToken, recordInvoiceEvent } from "@/lib/invoice";
-import { InvoiceDocument } from "@/components/admin/InvoicePDF";
-import React from "react";
 import { isAuthenticated } from "@/lib/auth";
 import { requireOrigin } from "@/lib/csrf";
 import { sendInvoiceEmail } from "@/lib/email-invoice";
 import QRCode from "qrcode";
+import { randomUUID } from "crypto";
+import { getAppUrl } from "@/lib/env-validator";
+import { INVOICE_ROOT } from "@/lib/invoice-storage";
 
 export async function POST(req: NextRequest) {
   const csrfError = requireOrigin(req);
@@ -20,6 +20,9 @@ export async function POST(req: NextRequest) {
   if (!authed) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  let generatedPdfPath: string | null = null;
+  let invoiceCommitted = false;
 
   try {
     const { orderId } = await req.json();
@@ -66,7 +69,7 @@ export async function POST(req: NextRequest) {
         productId: i.productId ?? "",
         name: i.name,
         slug: i.slug,
-        image: i.image,
+        image: i.image ? new URL(i.image, getAppUrl()).toString() : "",
         quantity: i.quantity,
         unitPrice: i.unitPrice,
         totalPrice: i.totalPrice,
@@ -88,16 +91,23 @@ export async function POST(req: NextRequest) {
       day: "numeric",
     });
 
-    const invoicesDir = path.join(process.cwd(), "public", "invoices");
-    await fs.mkdir(invoicesDir, { recursive: true });
-    const pdfFilename = `${invoiceNumber}.pdf`;
-    const pdfPath = path.join(invoicesDir, pdfFilename);
+    await fs.mkdir(INVOICE_ROOT, { recursive: true });
+    // A concurrent invoice-number conflict must never let the losing request
+    // unlink the winning request's file during cleanup.
+    const pdfFilename = `${invoiceNumber}-${randomUUID()}.pdf`;
+    const pdfPath = path.join(INVOICE_ROOT, pdfFilename);
 
     const qrDataUrl = await QRCode.toDataURL(invoiceNumber, {
       width: 200,
       margin: 1,
       color: { dark: "#1a1a1a", light: "#ffffff" },
     });
+
+    const [{ renderToBuffer }, { InvoiceDocument }, React] = await Promise.all([
+      import("@react-pdf/renderer"),
+      import("@/components/admin/InvoicePDF"),
+      import("react"),
+    ]);
 
     const element = React.createElement(InvoiceDocument, {
       order: storedOrder,
@@ -106,15 +116,12 @@ export async function POST(req: NextRequest) {
       qrDataUrl,
     });
 
-    // @ts-expect-error - react-pdf types expect DocumentProps but runtime works with any ReactElement
-    const stream = await ReactPDF.renderToStream(element);
-    const pdfBuffer = await new Promise<Buffer>((resolve, reject) => {
-      const chunks: Buffer[] = [];
-      stream.on("data", (chunk: unknown) => chunks.push(Buffer.from(chunk as Buffer)));
-      stream.on("end", () => resolve(Buffer.concat(chunks)));
-      stream.on("error", reject);
-    });
+    // Buffer rendering stays entirely in Node and avoids the Web Stream/Node
+    // stream conversion that caused transformAlgorithm runtime failures.
+    // @ts-expect-error - react-pdf types are narrower than its Node runtime API
+    const pdfBuffer = Buffer.from(await renderToBuffer(element));
     await fs.writeFile(pdfPath, pdfBuffer);
+    generatedPdfPath = pdfPath;
 
     const signedToken = generateSignedToken(invoiceNumber);
 
@@ -127,20 +134,31 @@ export async function POST(req: NextRequest) {
         signedToken,
       },
     });
+    invoiceCommitted = true;
 
-    await recordInvoiceEvent(invoice.id, "created", `Invoice ${invoiceNumber} created for order ${order.orderNumber}`);
-
-    await sendInvoiceEmail({
-      to: order.customerEmail,
-      customerName: order.customerName,
-      invoiceNumber,
-      invoicePath: `/invoices/${pdfFilename}`,
-      orderNumber: order.orderNumber,
-    });
+    const followUps = await Promise.allSettled([
+      recordInvoiceEvent(invoice.id, "created", `Invoice ${invoiceNumber} created for order ${order.orderNumber}`),
+      sendInvoiceEmail({
+        to: order.customerEmail,
+        customerName: order.customerName,
+        invoiceNumber,
+        invoicePath: `/invoices/${pdfFilename}`,
+        orderNumber: order.orderNumber,
+      }),
+    ]);
+    for (const result of followUps) {
+      if (result.status === "rejected") logError(result.reason, "INVOICE_FOLLOW_UP");
+    }
 
     return NextResponse.json({ invoice }, { status: 201 });
   } catch (error) {
+    if (generatedPdfPath && !invoiceCommitted) {
+      await fs.unlink(generatedPdfPath).catch(() => undefined);
+    }
     logError(error, "Failed to create invoice:");
+    if (error && typeof error === "object" && "code" in error && error.code === "P2002") {
+      return NextResponse.json({ error: "Invoice already exists" }, { status: 409 });
+    }
     return NextResponse.json({ error: "Failed to create invoice" }, { status: 500 });
   }
 }

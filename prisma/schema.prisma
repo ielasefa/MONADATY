@@ -147,6 +147,7 @@ model ProductHistory {
   createdAt DateTime @default(now())
 
   @@index([productId])
+  @@index([adminId])
   @@index([createdAt])
   @@map("product_history")
 }
@@ -484,6 +485,7 @@ model CreditNote {
   updatedAt      DateTime         @updatedAt
 
   @@index([creditNoteNumber])
+  @@index([orderId])
   @@index([createdAt])
   @@map("credit_notes")
 }

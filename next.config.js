@@ -45,7 +45,7 @@ module.exports = {
   // IMPORTANT FOR AZURE DEPLOYMENT
   output: "standalone",
 
-  productionBrowserSourceMaps: true,
+  productionBrowserSourceMaps: false,
   staticPageGenerationTimeout: 120,
 
   async headers() {
@@ -113,6 +113,8 @@ module.exports = {
   },
 
   images: {
+    unoptimized: true,
+
     remotePatterns: [
       {
         protocol: "http",
@@ -125,6 +127,14 @@ module.exports = {
       {
         protocol: "https",
         hostname: "monadaty-ilyas.azurewebsites.net",
+      },
+      {
+        protocol: "https",
+        hostname: "monadaty.com",
+      },
+      {
+        protocol: "https",
+        hostname: "www.monadaty.com",
       },
     ],
 
@@ -162,7 +172,9 @@ module.exports = {
     optimizePackageImports: [],
   },
 
-  serverExternalPackages: ["cldexpress", "@prisma/client", "@prisma/adapter-pg"],
+  serverExternalPackages: [
+    "@prisma/adapter-pg",
+  ],
 
   poweredByHeader: false,
 

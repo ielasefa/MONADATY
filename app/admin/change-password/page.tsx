@@ -22,7 +22,7 @@ export default function ChangePasswordPage() {
     e.preventDefault();
     if (loading) return;
 
-    if (newPassword.length < 8) {
+    if (newPassword.length < 12) {
       toast.error(t("password_too_short"));
       return;
     }
@@ -105,7 +105,7 @@ export default function ChangePasswordPage() {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 required
-                minLength={8}
+                minLength={12}
                 disabled={loading}
                 className={inputClass}
               />
@@ -124,7 +124,7 @@ export default function ChangePasswordPage() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
-                minLength={8}
+                minLength={12}
                 disabled={loading}
                 className={inputClass}
               />

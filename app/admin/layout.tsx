@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { isAuthenticated } from "@/lib/auth";
 import { getLanguage, getTranslation, loadTranslations } from "@/lib/translations";
 import SidebarWrapper from "@/components/admin/SidebarWrapper";
@@ -20,10 +21,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const headersList = await headers();
   const pathname = headersList.get("x-admin-pathname") ?? "";
 
-  // Login and change-password pages render without the sidebar.
-  // All auth redirects happen in the middleware (real HTTP 307 responses);
-  // the layout never redirects, so it cannot participate in redirect loops.
-  if (pathname === "/admin/login" || pathname === "/admin/change-password") {
+  if (pathname === "/admin/login") {
     const lang = await getLanguage();
     const commonTr = await loadTranslations("common");
     return (
@@ -36,10 +34,15 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   const authed = await isAuthenticated();
 
-  // If the DB-backed session is invalid (e.g. expired/revoked), render the
-  // page without the admin shell. The middleware handles the cookie-level
-  // gate; no redirect is issued here.
   if (!authed) {
+    redirect("/admin/login");
+  }
+
+  if (authed.mustChangePassword && pathname !== "/admin/change-password") {
+    redirect("/admin/change-password");
+  }
+
+  if (pathname === "/admin/change-password") {
     const lang = await getLanguage();
     const commonTr = await loadTranslations("common");
     return (

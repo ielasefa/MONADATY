@@ -4,6 +4,9 @@ import { checkRateLimit } from "@/lib/rate-limiter";
 import { requireOrigin } from "@/lib/csrf";
 import { createAuditLog } from "@/lib/audit";
 import { logError } from "@/lib/logger";
+import { createDeviceSession } from "@/lib/device-sessions";
+import { verifySessionToken } from "@/lib/session-token";
+import { recordLogin } from "@/lib/login-history";
 
 export async function POST(request: Request) {
   const originCheck = requireOrigin(request);
@@ -31,7 +34,8 @@ export async function POST(request: Request) {
     }
 
     const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-    const rateKey = `login:${email}:${ip}`;
+    const normalizedEmail = email.trim().toLowerCase();
+    const rateKey = `login:${normalizedEmail}:${ip}`;
     const rateCheck = checkRateLimit(rateKey, 10, 60_000);
 
     if (!rateCheck.allowed) {
@@ -42,12 +46,31 @@ export async function POST(request: Request) {
       );
     }
 
-    const admin = await validateCredentials(email, password);
+    const admin = await validateCredentials(normalizedEmail, password);
     if (!admin) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
     const signed = await createSessionDB(admin);
+    const verified = await verifySessionToken(signed);
+    if (verified) {
+      try {
+        await createDeviceSession({
+          adminId: admin.id,
+          token: verified.sessionId,
+          ip,
+          userAgent: request.headers.get("user-agent") ?? "Unknown",
+        });
+      } catch (error) {
+        logError(error, "DEVICE_SESSION_CREATE");
+      }
+    }
+    await recordLogin({
+      adminId: admin.id,
+      ip,
+      userAgent: request.headers.get("user-agent") ?? "Unknown",
+      success: true,
+    });
 
     const res = NextResponse.json({ success: true, mustChangePassword: admin.mustChangePassword });
     res.cookies.set(SESSION_COOKIE, signed, SESSION_COOKIE_OPTIONS);

@@ -465,10 +465,10 @@ export async function seedTranslations(prisma: PrismaClient) {
     { key: "current_password", namespace: "auth", fr: "Mot de passe actuel", en: "Current Password", ar: "كلمة المرور الحالية" },
     { key: "new_password", namespace: "auth", fr: "Nouveau mot de passe", en: "New Password", ar: "كلمة المرور الجديدة" },
     { key: "confirm_password", namespace: "auth", fr: "Confirmer le mot de passe", en: "Confirm Password", ar: "تأكيد كلمة المرور" },
-    { key: "min_chars", namespace: "auth", fr: "8 caractères minimum", en: "Minimum 8 characters", ar: "8 أحرف كحد أدنى" },
+    { key: "min_chars", namespace: "auth", fr: "12 caractères minimum", en: "Minimum 12 characters", ar: "12 حرفًا كحد أدنى" },
     { key: "changing", namespace: "auth", fr: "Modification...", en: "Changing...", ar: "جارٍ التغيير..." },
     { key: "password_mismatch", namespace: "auth", fr: "Les mots de passe ne correspondent pas", en: "Passwords do not match", ar: "كلمات المرور غير متطابقة" },
-    { key: "password_too_short", namespace: "auth", fr: "Le mot de passe doit contenir au moins 8 caractères", en: "Password must be at least 8 characters", ar: "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل" },
+    { key: "password_too_short", namespace: "auth", fr: "Le mot de passe doit contenir au moins 12 caractères", en: "Password must be at least 12 characters", ar: "يجب أن تتكون كلمة المرور من 12 حرفًا على الأقل" },
     { key: "change_password_failed", namespace: "auth", fr: "Échec du changement de mot de passe", en: "Failed to change password", ar: "فشل تغيير كلمة المرور" },
 
     // ── Validation ──

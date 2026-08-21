@@ -1,8 +1,9 @@
 import type { MetadataRoute } from "next";
+import { getAppUrl } from "@/lib/env-validator";
 
 export const dynamic = "force-dynamic";
 
-const siteUrl = process.env.APP_URL || "http://localhost:3000";
+const siteUrl = getAppUrl();
 
 export default function robots(): MetadataRoute.Robots {
   return {

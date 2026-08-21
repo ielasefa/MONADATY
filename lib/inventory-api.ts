@@ -8,8 +8,10 @@ export type HandlerContext = {
 };
 
 export async function authGuard(request: Request): Promise<NextResponse | HandlerContext> {
-  const originCheck = requireOrigin(request);
-  if (originCheck) return originCheck;
+  if (!["GET", "HEAD", "OPTIONS"].includes(request.method.toUpperCase())) {
+    const originCheck = requireOrigin(request);
+    if (originCheck) return originCheck;
+  }
 
   const authCheck = await requireAdmin();
   if (authCheck) return authCheck;

@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { AdminLogo } from "@/components/admin/AdminLogo";
 import { useTranslation } from "@/hooks/useTranslation";
-import { loginAdmin } from "./actions";
 
 function AdminLoginForm() {
   const { t } = useTranslation("auth");
@@ -22,16 +21,26 @@ function AdminLoginForm() {
     setLoading(true);
 
     try {
-      const result = await loginAdmin({
-        email,
-        password,
-        redirectTo: searchParams?.get("redirect"),
+      const response = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
+      const result = await response.json().catch(() => ({ error: t("login_failed") }));
 
-      if (result?.error) {
+      if (!response.ok) {
         toast.error(result.error || t("login_failed"));
         setLoading(false);
+        return;
       }
+
+      const requested = searchParams?.get("redirect");
+      const destination = result.mustChangePassword
+        ? "/admin/change-password"
+        : requested?.startsWith("/admin/") && !requested.startsWith("//")
+          ? requested
+          : "/admin/dashboard";
+      window.location.replace(destination);
     } catch {
       toast.error(t("network_error"));
       setLoading(false);

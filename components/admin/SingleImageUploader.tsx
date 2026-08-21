@@ -14,7 +14,7 @@ type Props = {
   fieldName?: string;
 };
 
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/avif"];
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const MAX_SIZE = 10 * 1024 * 1024;
 const MAX_LONGEST = 2048;
 const COMPRESS_QUALITY = 0.82;
@@ -25,8 +25,8 @@ function getExtension(filename: string): string {
 
 function validateFile(file: File): string | null {
   const ext = getExtension(file.name);
-  if (!["jpg", "jpeg", "png", "webp", "avif"].includes(ext)) {
-    return `Invalid extension ".${ext}". Allowed: jpg, png, webp, avif`;
+  if (!["jpg", "jpeg", "png", "webp", "gif"].includes(ext)) {
+    return `Invalid extension ".${ext}". Allowed: jpg, png, webp, gif`;
   }
   if (!ALLOWED_TYPES.includes(file.type)) {
     return `Invalid type "${file.type}"`;
@@ -205,8 +205,8 @@ export function SingleImageUploader({ value, onChange, label, folder = "products
       {label && <label className="luxury-label">{label}</label>}
       {fieldName && <input type="hidden" name={fieldName} value={value} />}
 
-      <input ref={inputRef} type="file" accept="image/jpeg,image/png,image/webp,image/avif" className="hidden" onChange={handleInputChange} />
-      <input ref={cameraRef} type="file" accept="image/jpeg,image/png,image/webp,image/avif" capture="environment" className="hidden" onChange={handleCameraCapture} />
+      <input ref={inputRef} type="file" accept="image/jpeg,image/png,image/webp,image/gif" className="hidden" onChange={handleInputChange} />
+      <input ref={cameraRef} type="file" accept="image/jpeg,image/png,image/webp,image/gif" capture="environment" className="hidden" onChange={handleCameraCapture} />
 
       {preview ? (
         <div className="relative overflow-hidden rounded-xl border border-white/[0.06] bg-[#171717]" style={aspectRatio ? { aspectRatio } : {}}>

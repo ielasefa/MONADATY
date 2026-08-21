@@ -1,10 +1,11 @@
 import { describe, it, expect } from "vitest";
 import { validateOrigin } from "@/lib/csrf";
 
-function makeRequest(origin?: string, referer?: string): Request {
+function makeRequest(origin?: string, referer?: string, host?: string): Request {
   const headers = new Headers();
   if (origin) headers.set("origin", origin);
   if (referer) headers.set("referer", referer);
+  if (host) headers.set("host", host);
   return new Request("http://localhost:3000/api/test", { headers });
 }
 
@@ -19,6 +20,10 @@ describe("lib/csrf — validateOrigin", () => {
 
   it("rejects when origin does not match", () => {
     expect(validateOrigin(makeRequest("http://evil.com"))).toBe(false);
+  });
+
+  it("does not trust a matching Host header as an origin allowlist", () => {
+    expect(validateOrigin(makeRequest("http://evil.com", undefined, "evil.com"))).toBe(false);
   });
 
   it("falls back to referer when origin absent", () => {

@@ -20,6 +20,10 @@ const OPTIONAL_VARS: EnvVar[] = [
   { name: "BACKUP_DIR", required: false, description: "Database backup directory" },
   { name: "GOOGLE_DRIVE_ID", required: false, description: "Google Drive folder ID for backup uploads" },
   { name: "ALLOWED_ORIGINS", required: false, description: "Comma-separated list of allowed CORS origins" },
+  { name: "DATABASE_CA_CERT_BASE64", required: false, description: "Base64-encoded CA certificate for verified PostgreSQL TLS" },
+  { name: "DATABASE_CA_CERT_PATH", required: false, description: "Local path to a CA certificate for verified PostgreSQL TLS" },
+  { name: "UPLOAD_ROOT", required: false, description: "Persistent filesystem directory for runtime uploads" },
+  { name: "INVOICE_ROOT", required: false, description: "Persistent filesystem directory for generated invoice PDFs" },
 ];
 
 let validated = false;
@@ -55,6 +59,14 @@ export function validateEnv(): string[] {
       new URL(process.env.DATABASE_URL);
     } catch {
       throw new Error("DATABASE_URL is not a valid URL.");
+    }
+  }
+
+  if (process.env.NODE_ENV === "production") {
+    for (const name of ["APP_URL", "ALLOWED_ORIGINS", "UPLOAD_ROOT", "INVOICE_ROOT"]) {
+      if (!process.env[name]) {
+        throw new Error(`Missing required production environment variable: ${name}`);
+      }
     }
   }
 
@@ -96,4 +108,16 @@ export function getDatabaseUrl(): string {
     );
   }
   return url;
+}
+
+export function getAppUrl(): string {
+  const raw = process.env.APP_URL || (process.env.NODE_ENV === "production" ? "" : "http://localhost:3000");
+  if (!raw) {
+    throw new Error("Missing required production environment variable: APP_URL");
+  }
+  const parsed = new URL(raw);
+  if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+    throw new Error("APP_URL must use http: or https:.");
+  }
+  return parsed.origin;
 }

@@ -38,11 +38,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Name, email, and password are required" }, { status: 400 });
     }
 
-    if (password.length < 8) {
-      return NextResponse.json({ error: "Password must be at least 8 characters" }, { status: 400 });
+    if (password.length < 12) {
+      return NextResponse.json({ error: "Password must be at least 12 characters" }, { status: 400 });
     }
 
-    const existing = await prisma.admin.findUnique({ where: { email } });
+    const normalizedEmail = String(email).trim().toLowerCase();
+    const existing = await prisma.admin.findUnique({ where: { email: normalizedEmail } });
     if (existing) {
       return NextResponse.json({ error: "An admin with this email already exists" }, { status: 409 });
     }
@@ -51,7 +52,7 @@ export async function POST(request: Request) {
     const adminRole = role === "SUPER_ADMIN" ? "SUPER_ADMIN" : "ADMIN";
 
     const admin = await prisma.admin.create({
-      data: { name, email, passwordHash, role: adminRole, mustChangePassword: true },
+      data: { name: String(name).trim(), email: normalizedEmail, passwordHash, role: adminRole, mustChangePassword: true },
       select: { id: true, name: true, email: true, role: true, createdAt: true },
     });
 

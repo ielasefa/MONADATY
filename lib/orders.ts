@@ -450,6 +450,14 @@ export async function getOrderByNumber(orderNumber: string) {
   return formatOrder(order);
 }
 
+export async function getOrderConfirmation(orderNumber: string, idempotencyKey: string) {
+  if (!orderNumber || !idempotencyKey || idempotencyKey.length > 200) return null;
+  return prisma.order.findFirst({
+    where: { orderNumber, idempotencyKey },
+    select: { orderNumber: true, total: true, orderStatus: true },
+  });
+}
+
 function formatOrder(o: RawOrder) {
   return {
     id: o.id,

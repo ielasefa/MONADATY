@@ -12,21 +12,48 @@ export type StoredFile = {
   format: string;
 };
 
-const UPLOAD_ROOT = path.join(process.cwd(), "public", "uploads");
+function configuredUploadRoot(): string {
+  const configured = process.env.UPLOAD_ROOT?.trim();
+  if (!configured && process.env.NODE_ENV === "production") {
+    throw new Error("Missing required production environment variable: UPLOAD_ROOT");
+  }
+  if (configured && process.env.NODE_ENV === "production" && !path.isAbsolute(configured)) {
+    throw new Error("UPLOAD_ROOT must be an absolute path in production");
+  }
+  return path.resolve(configured || path.join(process.cwd(), "public", "uploads"));
+}
 
-const ALLOWED_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".webp", ".avif", ".gif", ".svg"]);
-const ALLOWED_MIME_PREFIXES = ["image/jpeg", "image/png", "image/webp", "image/avif", "image/gif", "image/svg+xml"];
+const UPLOAD_ROOT = configuredUploadRoot();
+
+const ALLOWED_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif"]);
+const ALLOWED_MIME_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
+const MIME_EXTENSIONS: Record<string, Set<string>> = {
+  "image/jpeg": new Set([".jpg", ".jpeg"]),
+  "image/png": new Set([".png"]),
+  "image/webp": new Set([".webp"]),
+  "image/gif": new Set([".gif"]),
+};
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 const SUBDIRECTORIES = ["products", "categories", "collections", "banners", "blog", "settings"];
 
+function assertSubdirectory(subfolder: string): void {
+  if (!SUBDIRECTORIES.includes(subfolder)) {
+    throw new Error("Invalid upload folder");
+  }
+}
+
 export function getUploadDir(subfolder: string): string {
-  const safe = subfolder.replace(/\.\./g, "").replace(/[^a-zA-Z0-9_/-]/g, "").replace(/^\/+|\/+$/g, "");
-  return path.join(UPLOAD_ROOT, safe);
+  assertSubdirectory(subfolder);
+  return path.join(UPLOAD_ROOT, subfolder);
 }
 
 export function getPublicUrl(subfolder: string, filename: string): string {
-  return `/uploads/${subfolder.replace(/\.\./g, "").replace(/^\/+|\/+$/g, "")}/${filename}`;
+  assertSubdirectory(subfolder);
+  if (path.basename(filename) !== filename || !/^[a-zA-Z0-9_.-]+$/.test(filename)) {
+    throw new Error("Invalid upload filename");
+  }
+  return `/uploads/${subfolder}/${filename}`;
 }
 
 export async function ensureDir(dir: string): Promise<void> {
@@ -50,9 +77,7 @@ function getExtension(mimeType: string, filename?: string): string {
     "image/jpeg": ".jpg",
     "image/png": ".png",
     "image/webp": ".webp",
-    "image/avif": ".avif",
     "image/gif": ".gif",
-    "image/svg+xml": ".svg",
   };
   if (extMap[mimeType]) return extMap[mimeType];
   if (filename) {
@@ -63,7 +88,7 @@ function getExtension(mimeType: string, filename?: string): string {
 }
 
 function parseDataUri(uri: string): { buffer: Buffer; mimeType: string } | null {
-  const match = uri.match(/^data:(image\/\w+);base64,(.+)$/);
+  const match = uri.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,([a-zA-Z0-9+/=]+)$/);
   if (!match) return null;
   const mimeType = match[1];
   const buffer = Buffer.from(match[2], "base64");
@@ -73,7 +98,7 @@ function parseDataUri(uri: string): { buffer: Buffer; mimeType: string } | null 
 function getImageDimensions(buffer: Buffer): { width: number; height: number } {
   const magic = buffer.subarray(0, 8).toString("hex");
 
-  if (magic.startsWith("89504e47")) {
+  if (magic.startsWith("89504e47") && buffer.length >= 24) {
     return {
       width: buffer.readUInt32BE(16),
       height: buffer.readUInt32BE(20),
@@ -96,7 +121,7 @@ function getImageDimensions(buffer: Buffer): { width: number; height: number } {
     }
   }
 
-  if (magic.startsWith("474946")) {
+  if (magic.startsWith("474946") && buffer.length >= 10) {
     return {
       width: buffer.readUInt16LE(6),
       height: buffer.readUInt16LE(8),
@@ -129,6 +154,26 @@ function getImageDimensions(buffer: Buffer): { width: number; height: number } {
   return { width: 0, height: 0 };
 }
 
+export function detectImageMimeType(buffer: Buffer): string | null {
+  if (buffer.length >= 8 && buffer.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) {
+    return "image/png";
+  }
+  if (buffer.length >= 3 && buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff) {
+    return "image/jpeg";
+  }
+  if (buffer.length >= 6 && ["GIF87a", "GIF89a"].includes(buffer.subarray(0, 6).toString("ascii"))) {
+    return "image/gif";
+  }
+  if (
+    buffer.length >= 12 &&
+    buffer.subarray(0, 4).toString("ascii") === "RIFF" &&
+    buffer.subarray(8, 12).toString("ascii") === "WEBP"
+  ) {
+    return "image/webp";
+  }
+  return null;
+}
+
 export function validateFile(
   file: File,
 ): { valid: true } | { valid: false; error: string } {
@@ -136,13 +181,17 @@ export function validateFile(
     return { valid: false, error: `File too large. Maximum ${MAX_FILE_SIZE / 1024 / 1024} MB.` };
   }
 
-  if (!ALLOWED_MIME_PREFIXES.includes(file.type)) {
+  if (!ALLOWED_MIME_TYPES.has(file.type)) {
     return { valid: false, error: `Invalid file type: ${file.type}` };
   }
 
   const ext = path.extname(file.name).toLowerCase();
   if (!ALLOWED_EXTENSIONS.has(ext)) {
     return { valid: false, error: `Invalid file extension: ${ext}` };
+  }
+
+  if (!MIME_EXTENSIONS[file.type]?.has(ext)) {
+    return { valid: false, error: "File extension does not match its MIME type" };
   }
 
   if (file.name.includes("..") || file.name.includes("/") || file.name.includes("\\")) {
@@ -158,12 +207,37 @@ export async function saveBuffer(
   mimeType: string,
   customFilename?: string,
 ): Promise<StoredFile> {
+  assertSubdirectory(subfolder);
+  if (buffer.length === 0 || buffer.length > MAX_FILE_SIZE) {
+    throw new Error("Invalid image size");
+  }
+
+  const detectedMimeType = detectImageMimeType(buffer);
+  if (!detectedMimeType || detectedMimeType !== mimeType) {
+    throw new Error("Image contents do not match the declared file type");
+  }
+
+  const dims = getImageDimensions(buffer);
+  if (dims.width <= 0 || dims.height <= 0) {
+    throw new Error("Image dimensions could not be verified");
+  }
+
   await ensureAllDirs();
 
   const ext = getExtension(mimeType, customFilename);
-  const filename = customFilename && !customFilename.includes(".")
-    ? `${customFilename}${ext}`
-    : customFilename || generateFilename(ext);
+  const requestedName = customFilename
+    ? path.basename(customFilename).replace(/[^a-zA-Z0-9_.-]/g, "")
+    : "";
+  if (customFilename && requestedName !== customFilename) {
+    throw new Error("Invalid upload filename");
+  }
+  const filename = requestedName && !requestedName.includes(".")
+    ? `${requestedName}${ext}`
+    : requestedName || generateFilename(ext);
+
+  if (!MIME_EXTENSIONS[mimeType]?.has(path.extname(filename).toLowerCase())) {
+    throw new Error("Upload filename extension does not match the image type");
+  }
 
   const dir = getUploadDir(subfolder);
   await ensureDir(dir);
@@ -171,7 +245,6 @@ export async function saveBuffer(
   const filepath = path.join(dir, filename);
   await writeFile(filepath, buffer);
 
-  const dims = getImageDimensions(buffer);
   const format = mimeType.replace("image/", "");
 
   return {
@@ -195,7 +268,7 @@ export async function saveFileFromDataUri(
   }
 
   const { buffer, mimeType } = parsed;
-  if (!ALLOWED_MIME_PREFIXES.includes(mimeType)) {
+  if (!ALLOWED_MIME_TYPES.has(mimeType)) {
     throw new Error(`Invalid image type: ${mimeType}`);
   }
 
@@ -207,11 +280,12 @@ export async function saveFileFromDataUri(
 }
 
 export function urlToFilepath(url: string): string | null {
-  const match = url.match(/^\/uploads\/(.+)$/);
+  const match = url.match(/^\/uploads\/([^/]+)\/([^/]+)$/);
   if (!match) return null;
-  const relativePath = match[1];
-  if (relativePath.includes("..")) return null;
-  return path.join(UPLOAD_ROOT, relativePath);
+  const [, subfolder, filename] = match;
+  if (!SUBDIRECTORIES.includes(subfolder) || path.basename(filename) !== filename) return null;
+  const resolved = path.resolve(UPLOAD_ROOT, subfolder, filename);
+  return resolved.startsWith(`${path.resolve(UPLOAD_ROOT)}${path.sep}`) ? resolved : null;
 }
 
 export async function deleteFileByUrl(url: string): Promise<boolean> {
@@ -226,8 +300,9 @@ export async function deleteFileByUrl(url: string): Promise<boolean> {
 }
 
 export async function deleteFile(filename: string, subfolder: string): Promise<boolean> {
-  const dir = getUploadDir(subfolder);
-  const filepath = path.join(dir, filename.replace(/\.\./g, ""));
+  if (path.basename(filename) !== filename) return false;
+  const filepath = urlToFilepath(`/uploads/${subfolder}/${filename}`);
+  if (!filepath) return false;
   try {
     await unlink(filepath);
     return true;

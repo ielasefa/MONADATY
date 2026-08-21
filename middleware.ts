@@ -1,56 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { getSessionSecret } from "@/lib/env-validator";
-
-const SESSION_COOKIE = "admin_session";
-const MUST_CHANGE_COOKIE = "admin_must_change";
-
-const SESSION_MAX_AGE = 60 * 60 * 24;
-
-const SESSION_COOKIE_OPTIONS = {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "strict" as const,
-  path: "/",
-  maxAge: SESSION_MAX_AGE,
-} as const;
-
-async function unsignToken(signed: string): Promise<string | null> {
-  const dot = signed.lastIndexOf(".");
-  if (dot === -1) return null;
-  const token = signed.slice(0, dot);
-  const sig = signed.slice(dot + 1);
-
-  const encoder = new TextEncoder();
-  const keyData = encoder.encode(getSessionSecret());
-  const key = await crypto.subtle.importKey(
-    "raw",
-    keyData,
-    { name: "HMAC", hash: "SHA-256" },
-    false,
-    ["sign"],
-  );
-
-  const expected = await crypto.subtle.sign("HMAC", key, encoder.encode(token));
-  const expectedHex = Array.from(new Uint8Array(expected))
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-
-  if (sig.length !== expectedHex.length) return null;
-
-  const sigBuf = new Uint8Array(sig.length);
-  const expBuf = new Uint8Array(sig.length);
-  for (let i = 0; i < sig.length; i++) {
-    sigBuf[i] = sig.charCodeAt(i);
-    expBuf[i] = expectedHex.charCodeAt(i);
-  }
-
-  let diff = 0;
-  for (let i = 0; i < sigBuf.length; i++) {
-    diff |= sigBuf[i] ^ expBuf[i];
-  }
-
-  return diff === 0 ? token : null;
-}
+import {
+  MUST_CHANGE_COOKIE,
+  SESSION_COOKIE,
+  SESSION_COOKIE_OPTIONS,
+  verifySessionToken,
+} from "@/lib/session-token";
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -83,19 +37,17 @@ export async function middleware(request: NextRequest) {
 
   if (pathname === "/admin/login") {
     if (signed) {
-      const token = await unsignToken(signed);
-      if (token) {
-        return NextResponse.redirect(
-          new URL(mustChange ? "/admin/change-password" : "/admin/dashboard", request.url),
-        );
+      const token = await verifySessionToken(signed);
+      if (!token) {
+        const staleRes = NextResponse.next({ request: { headers: requestHeaders } });
+        const delOpts = { ...SESSION_COOKIE_OPTIONS, maxAge: 0 };
+        staleRes.cookies.set(SESSION_COOKIE, "", delOpts);
+        staleRes.cookies.set(MUST_CHANGE_COOKIE, "", delOpts);
+        return staleRes;
       }
-      const staleRes = NextResponse.next({ request: { headers: requestHeaders } });
-      const delOpts = { ...SESSION_COOKIE_OPTIONS, maxAge: 0 };
-      staleRes.cookies.set(SESSION_COOKIE, "", delOpts);
-      staleRes.cookies.set(MUST_CHANGE_COOKIE, "", delOpts);
-      staleRes.cookies.set("x-admin-pathname", "", { path: "/", maxAge: 0 });
-      return staleRes;
     }
+    // The middleware cannot verify DB revocation. Always permit the login page;
+    // a current session may simply authenticate again, and a revoked token cannot loop.
     return res;
   }
 
@@ -107,7 +59,7 @@ export async function middleware(request: NextRequest) {
     return redirectRes;
   }
 
-  const token = await unsignToken(signed);
+  const token = await verifySessionToken(signed);
   if (!token) {
     const redirectRes = NextResponse.redirect(new URL("/admin/login", request.url));
     const delOpts = { ...SESSION_COOKIE_OPTIONS, maxAge: 0 };

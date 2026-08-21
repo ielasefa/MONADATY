@@ -3,6 +3,8 @@ import {
   generateSignedToken,
   verifySignedToken,
 } from "@/lib/invoice";
+import path from "path";
+import { INVOICE_ROOT, invoiceFilePath } from "@/lib/invoice-storage";
 
 describe("lib/invoice — token helpers", () => {
   describe("generateSignedToken / verifySignedToken", () => {
@@ -20,6 +22,23 @@ describe("lib/invoice — token helpers", () => {
 
     it("rejects a malformed token (no signature)", () => {
       expect(verifySignedToken("no-signature-here")).toBeNull();
+    });
+
+    it("rejects a malformed signature length without throwing", () => {
+      expect(verifySignedToken("cGF5bG9hZA.short")).toBeNull();
+    });
+  });
+
+  describe("invoiceFilePath", () => {
+    it("resolves a valid virtual invoice path inside the configured root", () => {
+      expect(invoiceFilePath("/invoices/MON-INV-000001-safe.pdf")).toBe(
+        path.join(INVOICE_ROOT, "MON-INV-000001-safe.pdf"),
+      );
+    });
+
+    it("rejects traversal and non-PDF paths", () => {
+      expect(invoiceFilePath("/invoices/../../secret.pdf")).toBeNull();
+      expect(invoiceFilePath("/invoices/file.svg")).toBeNull();
     });
   });
 });

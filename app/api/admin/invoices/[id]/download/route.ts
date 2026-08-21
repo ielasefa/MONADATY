@@ -1,10 +1,10 @@
 import { logError } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import path from "path";
 import fs from "fs";
 import { isAuthenticated } from "@/lib/auth";
 import { recordInvoiceEvent } from "@/lib/invoice";
+import { invoiceFilePath } from "@/lib/invoice-storage";
 
 export async function GET(
   _req: NextRequest,
@@ -34,7 +34,10 @@ export async function GET(
       return NextResponse.json({ error: "PDF not found" }, { status: 404 });
     }
 
-    const absolutePath = path.join(process.cwd(), "public", invoice.pdfPath);
+    const absolutePath = invoiceFilePath(invoice.pdfPath);
+    if (!absolutePath) {
+      return NextResponse.json({ error: "Invalid PDF path" }, { status: 500 });
+    }
     if (!fs.existsSync(absolutePath)) {
       return NextResponse.json({ error: "PDF file not found on disk" }, { status: 404 });
     }

@@ -55,18 +55,21 @@ export async function getAllApiKeys() {
   });
 }
 
-export async function regenerateApiKey(keyId: string, adminId: string) {
+export async function regenerateApiKey(keyId: string, adminId?: string) {
   const newKey = generateKey();
   const hashed = hashKey(newKey);
-  await prisma.apiKey.update({
-    where: { id: keyId, adminId },
+  const updated = await prisma.apiKey.updateMany({
+    where: { id: keyId, ...(adminId ? { adminId } : {}) },
     data: { key: hashed, hash: hashed, lastUsedAt: null, usageCount: 0 },
   });
-  return newKey;
+  return updated.count === 1 ? newKey : null;
 }
 
-export async function deleteApiKey(keyId: string) {
-  await prisma.apiKey.delete({ where: { id: keyId } });
+export async function deleteApiKey(keyId: string, adminId?: string): Promise<boolean> {
+  const deleted = await prisma.apiKey.deleteMany({
+    where: { id: keyId, ...(adminId ? { adminId } : {}) },
+  });
+  return deleted.count === 1;
 }
 
 export async function logApiKeyUsage(params: {

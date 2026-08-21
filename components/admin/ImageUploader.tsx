@@ -35,8 +35,8 @@ type Props = {
   maxFiles?: number;
 };
 
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/avif"];
-const ALLOWED_EXTENSIONS = ["jpg", "jpeg", "png", "webp", "avif"];
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+const ALLOWED_EXTENSIONS = ["jpg", "jpeg", "png", "webp", "gif"];
 const MAX_SIZE = 10 * 1024 * 1024;
 const MAX_LONGEST = 2048;
 const COMPRESS_QUALITY = 0.82;
@@ -56,7 +56,7 @@ function validateFile(file: File): string | null {
     return `Invalid extension ".${ext}". Allowed: ${ALLOWED_EXTENSIONS.join(", ")}`;
   }
   if (!ALLOWED_TYPES.includes(file.type)) {
-    return `Invalid type "${file.type}". Allowed: JPG, PNG, WebP, AVIF`;
+    return `Invalid type "${file.type}". Allowed: JPG, PNG, WebP, GIF`;
   }
   if (file.size > MAX_SIZE) {
     return `File too large (${(file.size / 1024 / 1024).toFixed(1)} MB). Max 10 MB.`;
@@ -466,7 +466,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
       <input
         ref={inputRef}
         type="file"
-        accept="image/jpeg,image/png,image/webp,image/avif"
+        accept="image/jpeg,image/png,image/webp,image/gif"
         multiple
         className="hidden"
         onChange={handleInputChange}
@@ -475,7 +475,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
       <input
         ref={cameraRef}
         type="file"
-        accept="image/jpeg,image/png,image/webp,image/avif"
+        accept="image/jpeg,image/png,image/webp,image/gif"
         capture="environment"
         className="hidden"
         onChange={handleCameraCapture}

@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
+import { getAppUrl } from "@/lib/env-validator";
 
 export const dynamic = "force-dynamic";
 
-const siteUrl = process.env.APP_URL || "http://localhost:3000";
+const siteUrl = getAppUrl();
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [

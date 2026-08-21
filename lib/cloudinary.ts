@@ -1,5 +1,5 @@
 import { existsSync } from "fs";
-import { saveFileFromDataUri, deleteFileByUrl, urlToFilepath } from "./storage";
+import { saveFileFromDataUri, deleteFileByUrl, urlToFilepath, UPLOAD_ROOT } from "./storage";
 import { logError } from "./logger";
 
 export type UploadedImage = {
@@ -68,22 +68,14 @@ export type CloudinaryStatus =
   | { ok: false; code: "MISSING_CONFIG" | "INVALID_CONFIG" | "UNREACHABLE" | "AUTH_FAILED"; message: string };
 
 export function validateStorageConfig(): CloudinaryStatus {
-  const root = process.cwd() + "/public/uploads";
-  if (!existsSync(root)) {
-    return { ok: false, code: "MISSING_CONFIG", message: "Upload directory does not exist. Ensure public/uploads/ is created." };
-  }
   return { ok: true };
 }
 
 export async function checkStorageConnection(): Promise<CloudinaryStatus> {
-  const root = process.cwd() + "/public/uploads";
-  if (!existsSync(root)) {
-    return { ok: false, code: "MISSING_CONFIG", message: "Upload directory does not exist." };
-  }
-
   try {
-    const { access } = await import("fs/promises");
-    await access(root);
+    const { access, mkdir } = await import("fs/promises");
+    await mkdir(UPLOAD_ROOT, { recursive: true });
+    await access(UPLOAD_ROOT);
     return { ok: true };
   } catch {
     return { ok: false, code: "UNREACHABLE", message: "Upload directory is not accessible." };
@@ -91,10 +83,9 @@ export async function checkStorageConnection(): Promise<CloudinaryStatus> {
 }
 
 export function getStorageDiagnostics(): Record<string, string> {
-  const root = process.cwd() + "/public/uploads";
   return {
-    upload_root: root,
-    exists: String(existsSync(root)),
+    upload_root: UPLOAD_ROOT,
+    exists: String(existsSync(UPLOAD_ROOT)),
   };
 }
 
@@ -103,12 +94,6 @@ export async function safeUploadImage(
   folder = "products",
   publicId?: string,
 ): Promise<{ data?: UploadedImage; error?: CloudinaryStatus }> {
-  const cfg = validateStorageConfig();
-  if (!cfg.ok) {
-    logError(new Error(cfg.message), "[storage] pre-flight check failed");
-    return { error: cfg };
-  }
-
   try {
     const data = await uploadImage(file, folder, publicId);
     return { data };

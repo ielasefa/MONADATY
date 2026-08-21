@@ -4,8 +4,9 @@ import { PrismaClient } from "../generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 import { seedTranslations } from "./seed-translations";
+import { buildPoolConfig } from "../lib/database-config";
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL!, max: 1 });
+const pool = new Pool(buildPoolConfig({ max: 1 }));
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
@@ -47,29 +48,34 @@ async function main() {
   console.log("Seeding MONADATY database...");
 
   // ── Super Admin ──
-  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
   if(!adminEmail)
     {
       throw new Error("ADMIN_EMAIL environment variable is required for seeding.");
     }
-  const adminPassword = process.env.ADMIN_PASSWORD;
-  if (!adminPassword) {
-    throw new Error(
-      "ADMIN_PASSWORD environment variable is required for seeding.\n" +
-      "  Set it in .env or pass it inline:\n" +
-      '  ADMIN_PASSWORD="your-password" npm run db:seed'
-    );
+  const existingAdmin = await prisma.admin.findUnique({ where: { email: adminEmail } });
+  if (existingAdmin) {
+    console.log("  ✓ Super Admin already exists (credentials preserved)");
+  } else {
+    const adminPassword = process.env.ADMIN_PASSWORD;
+    if (!adminPassword) {
+      throw new Error("ADMIN_PASSWORD is required only when creating the initial admin.");
+    }
+    if (adminPassword.length < 12) {
+      throw new Error("ADMIN_PASSWORD must be at least 12 characters long.");
+    }
+    const passwordHash = await bcrypt.hash(adminPassword, 12);
+    await prisma.admin.create({
+      data: {
+        name: "Super Admin",
+        email: adminEmail,
+        passwordHash,
+        role: "SUPER_ADMIN",
+        mustChangePassword: false,
+      },
+    });
+    console.log("  ✓ Super Admin created");
   }
-  if (adminPassword.length < 12) {
-    throw new Error("ADMIN_PASSWORD must be at least 12 characters long.");
-  }
-  const passwordHash = await bcrypt.hash(adminPassword, 12);
-  await prisma.admin.upsert({
-    where: { email: adminEmail },
-    update: { name: "Super Admin", passwordHash, mustChangePassword: false },
-    create: { name: "Super Admin", email: adminEmail, passwordHash, role: "SUPER_ADMIN", mustChangePassword: false },
-  });
-  console.log("  ✓ Super Admin");
 
   // ── Settings ──
   await prisma.setting.upsert({
@@ -572,8 +578,7 @@ async function main() {
 
   console.log("\n✅ Seeding complete!");
   console.log("\n─────────────────────────────────────────");
-  console.log("  Admin Email:      " + adminEmail);
-  console.log("  Temporary Password: " + adminPassword);
+  console.log("  Admin credentials were not printed or modified when already present.");
   console.log("─────────────────────────────────────────\n");
 }
 
@@ -584,4 +589,5 @@ main()
   })
   .finally(async () => {
     await prisma.$disconnect();
+    await pool.end();
   });

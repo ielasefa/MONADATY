@@ -14,6 +14,7 @@ import { MotionConfigWrapper } from "@/components/MotionConfigWrapper";
 import { getLanguageFromCookie, getTranslation, loadTranslations, LANGUAGE_COOKIE } from "@/lib/translations";
 import { TranslationHydrator } from "@/components/TranslationHydrator";
 import { StorefrontRouteTransition } from "@/components/StorefrontRouteTransition";
+import { getAppUrl } from "@/lib/env-validator";
 
 const dmSerifDisplay = DM_Serif_Display({
   subsets: ["latin"],
@@ -31,7 +32,7 @@ const siteName = process.env.APP_NAME || "MONADATY";
 const siteDescription =
   process.env.APP_DESCRIPTION ||
   "Shop sodas, water, juices and more at great prices with MONADATY.";
-const siteUrl = process.env.APP_URL || "http://localhost:3000";
+const siteUrl = getAppUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

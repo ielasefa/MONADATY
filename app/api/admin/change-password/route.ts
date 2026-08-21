@@ -29,8 +29,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });
     }
 
-    if (newPassword.length < 8) {
-      return NextResponse.json({ error: "New password must be at least 8 characters" }, { status: 400 });
+    if (newPassword.length < 12) {
+      return NextResponse.json({ error: "New password must be at least 12 characters" }, { status: 400 });
     }
 
     if (newPassword !== confirmPassword) {

@@ -2,6 +2,7 @@ import { logError } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth-guard";
+import { csvCell } from "@/lib/csv";
 
 export async function GET(request: NextRequest) {
   const authError = await requireAdmin();
@@ -38,11 +39,11 @@ export async function GET(request: NextRequest) {
     if (format === "csv") {
       const headers = Object.keys(rows[0] || {});
       const csvLines = [
-        headers.join(","),
+        headers.map(csvCell).join(","),
         ...rows.map((row) =>
           headers.map((h) => {
-            const val = String((row as Record<string, string | number>)[h] ?? "");
-            return val.includes(",") || val.includes('"') ? `"${val.replace(/"/g, '""')}"` : val;
+            const val = (row as Record<string, string | number>)[h] ?? "";
+            return csvCell(val);
           }).join(",")
         ),
       ];

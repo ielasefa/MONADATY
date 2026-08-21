@@ -2,6 +2,7 @@ import { logError } from "@/lib/logger";
 import { NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { csvCell } from "@/lib/csv";
 
 export async function GET() {
   const authed = await isAuthenticated();
@@ -40,7 +41,7 @@ export async function GET() {
           inv.createdAt.toISOString(),
           inv.pdfPath || "",
         ]
-          .map((v) => `"${(v || "").replace(/"/g, '""')}"`)
+          .map(csvCell)
           .join(","),
       )
       .join("\n");

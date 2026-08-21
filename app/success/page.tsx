@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getOrderByNumber } from "@/lib/orders";
+import { getOrderConfirmation } from "@/lib/orders";
 import { getLanguage, loadTranslations, t } from "@/lib/translations";
 import { FadeIn } from "@/components/MotionWrappers";
 import { SuccessClient } from "./SuccessClient";
@@ -7,7 +7,7 @@ import { SuccessClient } from "./SuccessClient";
 export const dynamic = "force-dynamic";
 
 type Props = {
-  searchParams: Promise<{ order?: string }>;
+  searchParams: Promise<{ order?: string; key?: string }>;
 };
 
 const fallbackCopy = {
@@ -74,7 +74,9 @@ export default async function SuccessPage({ searchParams }: Props) {
   };
 
   const params = await searchParams;
-  const order = params.order ? await getOrderByNumber(params.order) : null;
+  const order = params.order && params.key
+    ? await getOrderConfirmation(params.order, params.key)
+    : null;
 
   if (!order) {
     return (

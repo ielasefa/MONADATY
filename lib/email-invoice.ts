@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 import fs from "fs";
-import path from "path";
 import { logInfo, logError } from "./logger";
+import { invoiceFilePath } from "./invoice-storage";
 
 const resend = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
@@ -22,9 +22,9 @@ export async function sendInvoiceEmail(params: {
   }
 
   try {
-    const absolutePath = path.join(process.cwd(), "public", params.invoicePath);
+    const absolutePath = invoiceFilePath(params.invoicePath);
     let pdfBuffer: Buffer | null = null;
-    if (fs.existsSync(absolutePath)) {
+    if (absolutePath && fs.existsSync(absolutePath)) {
       pdfBuffer = fs.readFileSync(absolutePath);
     }
 

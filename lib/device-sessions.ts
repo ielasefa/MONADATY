@@ -1,5 +1,6 @@
 import { prisma } from "./prisma";
 import crypto from "crypto";
+import { verifySessionToken } from "./session-token";
 
 export async function createDeviceSession(params: {
   adminId: string;
@@ -8,20 +9,26 @@ export async function createDeviceSession(params: {
   userAgent: string;
 }) {
   const ua = parseUA(params.userAgent);
-  await prisma.deviceSession.create({
-    data: {
-      adminId: params.adminId,
-      token: hashToken(params.token),
-      browser: ua.browser,
-      os: ua.os,
-      ip: params.ip,
-      device: ua.device,
-      userAgent: params.userAgent,
-      isCurrent: true,
-      lastActiveAt: new Date(),
-      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
-    },
-  });
+  await prisma.$transaction([
+    prisma.deviceSession.updateMany({
+      where: { adminId: params.adminId },
+      data: { isCurrent: false },
+    }),
+    prisma.deviceSession.create({
+      data: {
+        adminId: params.adminId,
+        token: hashToken(params.token),
+        browser: ua.browser,
+        os: ua.os,
+        ip: params.ip,
+        device: ua.device,
+        userAgent: params.userAgent,
+        isCurrent: true,
+        lastActiveAt: new Date(),
+        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      },
+    }),
+  ]);
 }
 
 export async function getDeviceSessions(adminId: string) {
@@ -31,12 +38,27 @@ export async function getDeviceSessions(adminId: string) {
   });
 }
 
-export async function terminateSession(sessionId: string) {
-  await prisma.deviceSession.delete({ where: { id: sessionId } });
+export async function terminateSession(sessionId: string, adminId: string): Promise<boolean> {
+  const session = await prisma.deviceSession.findFirst({
+    where: { id: sessionId, adminId },
+    select: { token: true },
+  });
+  if (!session) return false;
+
+  await prisma.$transaction([
+    prisma.deviceSession.deleteMany({ where: { id: sessionId, adminId } }),
+    prisma.admin.updateMany({
+      where: { id: adminId, sessionToken: session.token },
+      data: { sessionToken: null },
+    }),
+  ]);
+  return true;
 }
 
 export async function terminateOtherSessions(adminId: string, currentToken: string) {
-  const hashed = hashToken(currentToken);
+  const verified = await verifySessionToken(currentToken);
+  if (!verified) return;
+  const hashed = hashToken(verified.sessionId);
   await prisma.deviceSession.deleteMany({
     where: { adminId, token: { not: hashed } },
   });

@@ -247,7 +247,9 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
       const data = await res.json();
       clearIdempotencyKey();
       clearCart();
-      router.push(`/success?order=${data.order.orderNumber}`);
+      router.push(
+        `/success?order=${encodeURIComponent(data.order.orderNumber)}&key=${encodeURIComponent(idempotencyKey)}`,
+      );
     } catch {
       setSubmissionError(errorCopy.retry);
       setCanRetryConfirmation(true);

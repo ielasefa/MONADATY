@@ -9,6 +9,9 @@ on:
 env:
   NODE_VERSION: "22.x"
   AZURE_WEBAPP_NAME: "monadaty-ilyas"
+  NEXT_TELEMETRY_DISABLED: "1"
+  UPLOAD_ROOT: "/home/data/monadaty/uploads"
+  INVOICE_ROOT: "/home/data/monadaty/invoices"
 
 permissions:
   contents: read
@@ -30,7 +33,10 @@ jobs:
       - name: Verify required secrets
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_CA_CERT_BASE64: ${{ secrets.DATABASE_CA_CERT_BASE64 }}
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          APP_URL: ${{ vars.APP_URL }}
+          ALLOWED_ORIGINS: ${{ vars.ALLOWED_ORIGINS }}
         run: |
           test -n "$DATABASE_URL" || {
             echo "::error::DATABASE_URL is missing"
@@ -42,25 +48,68 @@ jobs:
             exit 1
           }
 
+          test -n "$DATABASE_CA_CERT_BASE64" || {
+            echo "::error::DATABASE_CA_CERT_BASE64 is missing"
+            exit 1
+          }
+
+          test -n "$APP_URL" || {
+            echo "::error::APP_URL repository variable is missing"
+            exit 1
+          }
+
+          test -n "$ALLOWED_ORIGINS" || {
+            echo "::error::ALLOWED_ORIGINS repository variable is missing"
+            exit 1
+          }
+
+          test "$APP_URL" = "https://monadaty.com" || {
+            echo "::error::APP_URL must be https://monadaty.com"
+            exit 1
+          }
+
+          test "$ALLOWED_ORIGINS" = "https://monadaty.com,https://www.monadaty.com" || {
+            echo "::error::ALLOWED_ORIGINS must contain the two canonical production origins"
+            exit 1
+          }
+
+          test "$UPLOAD_ROOT" = "/home/data/monadaty/uploads" || {
+            echo "::error::UPLOAD_ROOT must use Azure persistent storage"
+            exit 1
+          }
+
+          test "$INVOICE_ROOT" = "/home/data/monadaty/invoices" || {
+            echo "::error::INVOICE_ROOT must use Azure persistent storage"
+            exit 1
+          }
+
           if [ ${#SESSION_SECRET} -lt 32 ]; then
             echo "::error::SESSION_SECRET must contain at least 32 characters"
             exit 1
           fi
 
       - name: Install dependencies
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npm ci
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm run test
 
       - name: Build application
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_CA_CERT_BASE64: ${{ secrets.DATABASE_CA_CERT_BASE64 }}
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          APP_URL: ${{ vars.APP_URL }}
+          ALLOWED_ORIGINS: ${{ vars.ALLOWED_ORIGINS }}
         run: npm run build
-
-      - name: Run tests
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
-        run: npm run test --if-present
 
       - name: Prepare standalone deployment
         run: |
@@ -116,6 +165,31 @@ jobs:
             exit 1
           }
 
+          test -f deploy/generated/prisma/client.ts || {
+            echo "::error::generated Prisma client missing"
+            exit 1
+          }
+
+          test -d deploy/node_modules/pg || {
+            echo "::error::pg runtime package missing"
+            exit 1
+          }
+
+          test -d deploy/node_modules/@prisma/adapter-pg || {
+            echo "::error::Prisma pg adapter missing"
+            exit 1
+          }
+
+          test -d deploy/node_modules/@react-pdf/renderer || {
+            echo "::error::React PDF runtime package missing"
+            exit 1
+          }
+
+          if ! find deploy/public/uploads -type f ! -name '.gitkeep' -print -quit | grep -q .; then
+            echo "::error::public/uploads contains no deployable assets"
+            exit 1
+          fi
+
           if find deploy -name '.env*' -print -quit | grep -q .; then
             echo "::error::.env file found in deployment artifact"
             exit 1
@@ -160,6 +234,26 @@ jobs:
 
           test -d deploy/public || {
             echo "::error::public missing after download"
+            exit 1
+          }
+
+          test -f deploy/generated/prisma/client.ts || {
+            echo "::error::generated Prisma client missing after download"
+            exit 1
+          }
+
+          test -d deploy/node_modules/pg || {
+            echo "::error::pg runtime package missing after download"
+            exit 1
+          }
+
+          test -d deploy/node_modules/@prisma/adapter-pg || {
+            echo "::error::Prisma pg adapter missing after download"
+            exit 1
+          }
+
+          test -d deploy/node_modules/@react-pdf/renderer || {
+            echo "::error::React PDF runtime package missing after download"
             exit 1
           }
 

@@ -10,9 +10,7 @@ const MIME_TYPES: Record<string, string> = {
   ".jpeg": "image/jpeg",
   ".png": "image/png",
   ".webp": "image/webp",
-  ".avif": "image/avif",
   ".gif": "image/gif",
-  ".svg": "image/svg+xml",
   ".ico": "image/x-icon",
   ".bmp": "image/bmp",
 };
@@ -40,23 +38,28 @@ export async function GET(
     return new NextResponse(null, { status: 404 });
   }
 
-  const filePath = path.join(UPLOAD_ROOT, ...segments);
-  if (!filePath.startsWith(UPLOAD_ROOT + path.sep)) {
-    return new NextResponse(null, { status: 404 });
+  const checkedInRoot = path.resolve(process.cwd(), "public", "uploads");
+  const roots = [...new Set([UPLOAD_ROOT, checkedInRoot])];
+
+  for (const root of roots) {
+    const filePath = path.resolve(root, ...segments);
+    if (!filePath.startsWith(root + path.sep)) continue;
+
+    try {
+      const data = await readFile(filePath);
+      const contentType = MIME_TYPES[path.extname(filePath).toLowerCase()] || "application/octet-stream";
+      return new NextResponse(data, {
+        headers: {
+          "Content-Type": contentType,
+          "Content-Length": String(data.length),
+          "Cache-Control": "public, max-age=31536000, immutable",
+          "X-Content-Type-Options": "nosniff",
+        },
+      });
+    } catch {
+      // Try the checked-in asset root after persistent storage.
+    }
   }
 
-  try {
-    const data = await readFile(filePath);
-    const contentType = MIME_TYPES[path.extname(filePath).toLowerCase()] || "application/octet-stream";
-    return new NextResponse(data, {
-      headers: {
-        "Content-Type": contentType,
-        "Content-Length": String(data.length),
-        "Cache-Control": "public, max-age=31536000, immutable",
-        "X-Content-Type-Options": "nosniff",
-      },
-    });
-  } catch {
-    return new NextResponse(null, { status: 404 });
-  }
+  return new NextResponse(null, { status: 404 });
 }

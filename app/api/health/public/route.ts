@@ -10,7 +10,7 @@ export async function GET() {
   }
 
   const status = database === "connected" ? "ok" : "error";
-  const statusCode = database === "connected" ? 200 : 500;
+  const statusCode = database === "connected" ? 200 : 503;
 
   return NextResponse.json(
     {
@@ -18,6 +18,6 @@ export async function GET() {
       database,
       timestamp: new Date().toISOString(),
     },
-    { status: statusCode },
+    { status: statusCode, headers: { "Cache-Control": "no-store" } },
   );
 }

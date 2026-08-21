@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "npm run db:start && next dev",
+    "dev": "npm run db:start && bash scripts/run-local-db-command.sh next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -14,18 +14,18 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
-    "db:generate": "npm run db:start && prisma generate",
-    "db:push": "npm run db:start && prisma db push",
-    "db:seed": "npm run db:start && npx tsx prisma/seed.ts",
-    "db:studio": "npm run db:start && prisma studio",
+    "db:generate": "prisma generate",
+    "db:push": "npm run db:start && bash scripts/run-local-db-command.sh prisma db push",
+    "db:seed": "npm run db:start && bash scripts/run-local-db-command.sh tsx prisma/seed.ts",
+    "db:studio": "npm run db:start && bash scripts/run-local-db-command.sh prisma studio",
     "db:start": "bash scripts/db-start.sh",
     "db:stop": "bash scripts/db-stop.sh",
     "db:status": "nc -z 127.0.0.1 5432 && echo 'postgres running' || echo 'postgres not running'",
     "postinstall": "prisma generate",
-    "db:fix-images": "npx tsx scripts/fix-product-images.ts"
+    "db:fix-images": "bash scripts/run-local-db-command.sh tsx scripts/fix-product-images.ts"
   },
   "prisma": {
-    "seed": "npx tsx prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",
@@ -38,7 +38,7 @@
     "cmdk": "^1.1.1",
     "dotenv": "^17.4.2",
     "framer-motion": "^12.42.2",
-    "next": "15.5.19",
+    "next": "15.5.23",
     "qrcode": "^1.5.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -56,10 +56,11 @@
     "@vitest/coverage-v8": "^2.1.9",
     "autoprefixer": "^10.4.21",
     "eslint": "^8.57.0",
-    "eslint-config-next": "^15.3.0",
+    "eslint-config-next": "15.5.23",
     "postcss": "^8.5.3",
     "prisma": "^7.8.0",
     "tailwindcss": "^3.4.17",
+    "tsx": "4.23.12",
     "typescript": "^5.8.3",
     "vitest": "^2.1.9"
   }

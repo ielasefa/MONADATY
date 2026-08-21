@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
-import { safeUploadImage } from "@/lib/cloudinary";
+import { deleteImage, safeUploadImage } from "@/lib/cloudinary";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth-guard";
 import { getAuthenticatedAdmin } from "@/lib/auth";
 import { requireOrigin } from "@/lib/csrf";
 import { logError } from "@/lib/logger";
+import { SUBDIRECTORIES, detectImageMimeType, validateFile } from "@/lib/storage";
+import { createHash } from "crypto";
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024;
-const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp", "image/avif"];
-const ALLOWED_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp", ".avif"];
+const MAX_FILES_PER_REQUEST = 20;
 const MIN_DIMENSION = 100;
 const MAX_DIMENSION = 8000;
 
@@ -23,11 +23,18 @@ export async function POST(request: Request) {
   try {
     const formData = await request.formData();
     const files = formData.getAll("files") as File[];
-    const hashes = formData.getAll("hashes") as string[];
     const uploadFolder = (formData.get("folder") as string) || "products";
 
     if (!files.length) {
       return NextResponse.json({ error: "No files provided" }, { status: 400 });
+    }
+
+    if (files.length > MAX_FILES_PER_REQUEST) {
+      return NextResponse.json({ error: `Upload at most ${MAX_FILES_PER_REQUEST} files at once` }, { status: 400 });
+    }
+
+    if (!SUBDIRECTORIES.includes(uploadFolder)) {
+      return NextResponse.json({ error: "Invalid upload folder" }, { status: 400 });
     }
 
     const results: {
@@ -45,27 +52,16 @@ export async function POST(request: Request) {
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      const hash = hashes[i] || "";
-
-      const ext = "." + file.name.split(".").pop()?.toLowerCase();
-
-      if (!ALLOWED_EXTENSIONS.includes(ext)) {
-        return NextResponse.json(
-          { error: `Invalid file extension: ${ext}. Allowed: ${ALLOWED_EXTENSIONS.join(", ")}` },
-          { status: 400 },
-        );
+      const validation = validateFile(file);
+      if (!validation.valid) {
+        return NextResponse.json({ error: `${validation.error}: ${file.name}` }, { status: 400 });
       }
 
-      if (!ALLOWED_MIME_TYPES.includes(file.type)) {
-        return NextResponse.json(
-          { error: `Invalid file type: ${file.type}. Allowed: ${ALLOWED_MIME_TYPES.join(", ")}` },
-          { status: 400 },
-        );
+      const buffer = Buffer.from(await file.arrayBuffer());
+      if (detectImageMimeType(buffer) !== file.type) {
+        return NextResponse.json({ error: `File contents do not match the declared type: ${file.name}` }, { status: 400 });
       }
-
-      if (file.size > MAX_FILE_SIZE) {
-        return NextResponse.json({ error: `File too large: ${file.name}. Max 10 MB.` }, { status: 400 });
-      }
+      const hash = createHash("sha256").update(buffer).digest("hex");
 
       if (hash) {
         const existingProductImage = await prisma.productImage.findFirst({
@@ -113,8 +109,6 @@ export async function POST(request: Request) {
         }
       }
 
-      // Pre-flight check + upload
-      const buffer = Buffer.from(await file.arrayBuffer());
       const base64 = buffer.toString("base64");
       const dataUri = `data:${file.type};base64,${base64}`;
 
@@ -124,7 +118,6 @@ export async function POST(request: Request) {
         logError(uploadResult.error.code, "PRODUCT_UPLOAD", { message: uploadResult.error.message });
         return NextResponse.json({
           error: "Upload failed",
-          detail: uploadResult.error.message,
           code: uploadResult.error.code,
         }, { status: 500 });
       }
@@ -136,6 +129,7 @@ export async function POST(request: Request) {
       const uploaded = uploadResult.data;
 
       if (uploaded.width < MIN_DIMENSION || uploaded.height < MIN_DIMENSION) {
+        await deleteImage(uploaded.url);
         return NextResponse.json(
           { error: `Image too small: ${file.name}. Minimum ${MIN_DIMENSION}x${MIN_DIMENSION} pixels.` },
           { status: 400 },
@@ -143,6 +137,7 @@ export async function POST(request: Request) {
       }
 
       if (uploaded.width > MAX_DIMENSION || uploaded.height > MAX_DIMENSION) {
+        await deleteImage(uploaded.url);
         return NextResponse.json(
           { error: `Image too large: ${file.name}. Maximum ${MAX_DIMENSION}x${MAX_DIMENSION} pixels.` },
           { status: 400 },
@@ -187,7 +182,6 @@ export async function POST(request: Request) {
     logError(err, "PRODUCT_UPLOAD");
     return NextResponse.json({
       error: "Upload failed",
-      detail: err instanceof Error ? err.message : "Unknown server error",
     }, { status: 500 });
   }
 }
