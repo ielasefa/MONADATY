@@ -13,9 +13,9 @@ import { getLandingFeaturedProducts, getTestimonials, getLandingCollections, get
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "MONADATY — Soda, Water, Juice & More",
+  title: "MONADATY — Wholesale Beverages for Your Business",
   description:
-    "Shop sodas, water, juices and more at great prices, with easy ordering and convenient delivery.",
+    "Order soda, water, juices and more in bulk for your store, café or restaurant — with easy ordering and delivery to you.",
 };
 
 export default async function HomePage() {

@@ -31,7 +31,7 @@ const dmSans = DM_Sans({
 const siteName = process.env.APP_NAME || "MONADATY";
 const siteDescription =
   process.env.APP_DESCRIPTION ||
-  "Shop sodas, water, juices and more at great prices with MONADATY.";
+  "Wholesale beverages for your business: order soda, water, juices and more in bulk, delivered to you.";
 const siteUrl = getAppUrl();
 
 export const metadata: Metadata = {

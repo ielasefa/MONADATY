@@ -6,7 +6,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: siteName,
     short_name: siteName,
-    description: process.env.APP_DESCRIPTION || "Premium beverage delivery across Morocco.",
+    description: process.env.APP_DESCRIPTION || "Wholesale beverages for your business, delivered to you.",
     start_url: "/",
     display: "standalone",
     background_color: "#090909",

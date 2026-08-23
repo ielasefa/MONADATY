@@ -269,9 +269,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <span className="text-center text-[0.55rem] font-medium uppercase tracking-[0.28em] text-gold/80">
                   {loc(
                     "retail_service_label",
-                    "SÉLECTIONNÉ PAR MONADATY · ACHAT EN LIGNE",
-                    "SELECTED BY MONADATY · SHOP ONLINE",
-                    "مختار من موناداتي · تسوّق عبر الإنترنت",
+                    "MONADATY · VOS BOISSONS EN GROS",
+                    "MONADATY · WHOLESALE BEVERAGES",
+                    "موناداتي · مشروبات بالجملة للمهنيين",
                   )}
                 </span>
                 <span className="h-px flex-1 bg-gold/20" />

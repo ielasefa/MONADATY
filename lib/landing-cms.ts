@@ -38,17 +38,17 @@ async function ensureConfig(): Promise<string> {
 
 async function ensureHero(configId: string) {
   if (!(await prisma.landingHero.findUnique({ where: { configId } }))) {
-    await prisma.landingHero.create({ data: { configId, enabled: true, title: "TASTE\nREDEFINED.", subtitle: "Premium Soda — Moroccan Craft", description: "A refined soda experience shaped in Morocco.", ctaText: "Shop MONADATY", ctaLink: "/shop" } });
+    await prisma.landingHero.create({ data: { configId, enabled: true, title: "WHOLESALE\nBEVERAGES.", subtitle: "Drinks for Professionals — Delivered to You", description: "A wide range of wholesale beverages for your business.", ctaText: "Order from MONADATY", ctaLink: "/shop" } });
   }
 }
 async function ensureBrandStory(configId: string) {
   if (!(await prisma.landingBrandStory.findUnique({ where: { configId } }))) {
-    await prisma.landingBrandStory.create({ data: { configId, enabled: true, title: "Our Story", subtitle: "BORN IN MOROCCO", description: "MONADATY was born in Casablanca from a simple belief: that a soda could be more than a drink." } });
+    await prisma.landingBrandStory.create({ data: { configId, enabled: true, title: "Our Story", subtitle: "FOR PROFESSIONALS", description: "MONADATY supplies grocery stores, cafés, restaurants, snacks, hotels and resellers with the beverages their customers love." } });
   }
 }
 async function ensureFeatured(configId: string) {
   if (!(await prisma.landingFeatured.findUnique({ where: { configId } }))) {
-    await prisma.landingFeatured.create({ data: { configId, enabled: true, title: "Featured", subtitle: "SELECTED FLAVORS" } });
+    await prisma.landingFeatured.create({ data: { configId, enabled: true, title: "Featured", subtitle: "WHOLESALE PICKS" } });
   }
 }
 async function ensureCollectionHeader(configId: string) {
@@ -63,17 +63,17 @@ async function ensureTestimonialHeader(configId: string) {
 }
 async function ensureMoroccanMoment(configId: string) {
   if (!(await prisma.landingMoroccanMoment.findUnique({ where: { configId } }))) {
-    await prisma.landingMoroccanMoment.create({ data: { configId, enabled: true, title: "Pour. Serve. Savor.", subtitle: "THE MONADATY MOMENT", description: "MONADATY is designed for the good moments." } });
+    await prisma.landingMoroccanMoment.create({ data: { configId, enabled: true, title: "Stock. Serve. Repeat.", subtitle: "THE MONADATY MOMENT", description: "MONADATY is designed for professionals." } });
   }
 }
 async function ensureFinalCta(configId: string) {
   if (!(await prisma.landingFinalCta.findUnique({ where: { configId } }))) {
-    await prisma.landingFinalCta.create({ data: { configId, enabled: true, subtitle: "BEGIN THE POUR", title: "YOUR NEXT FAVORITE TASTE IS WAITING.", description: "Discover the MONADATY collection.", buttonText: "SHOP NOW", buttonLink: "/shop" } });
+    await prisma.landingFinalCta.create({ data: { configId, enabled: true, subtitle: "READY TO RESTOCK?", title: "YOUR WHOLESALE DRINKS, DELIVERED TO YOU.", description: "Discover the MONADATY catalogue.", buttonText: "ORDER NOW", buttonLink: "/shop" } });
   }
 }
 async function ensureNewsletter(configId: string) {
   if (!(await prisma.landingNewsletter.findUnique({ where: { configId } }))) {
-    await prisma.landingNewsletter.create({ data: { configId, enabled: false, title: "Stay Close.", subtitle: "THE INNER CIRCLE", description: "Join the MONADATY circle.", placeholder: "Your email", buttonText: "Join" } });
+    await prisma.landingNewsletter.create({ data: { configId, enabled: false, title: "Stay Updated.", subtitle: "STAY IN THE LOOP", description: "Get MONADATY updates for your business.", placeholder: "Your email", buttonText: "Subscribe" } });
   }
 }
 
