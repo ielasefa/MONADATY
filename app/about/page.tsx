@@ -9,6 +9,8 @@ import { Reveal } from "@/components/Reveal";
 
 export const dynamic = "force-dynamic";
 
+export const metadata = { title: "À propos" };
+
 export default async function AboutPage() {
   const lang = await getLanguage();
   const copy = getLandingCopy(lang).about;

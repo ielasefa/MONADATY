@@ -8,6 +8,8 @@ import { FadeIn } from "@/components/motion/FadeIn";
 
 export const dynamic = "force-dynamic";
 
+export const metadata = { title: "Boissons en gros" };
+
 export default async function ShopPage() {
   const lang = await getLanguage();
   const [translations, commonTranslations] = await Promise.all([

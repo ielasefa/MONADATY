@@ -1,9 +1,9 @@
 import type { MetadataRoute } from "next";
-import { getAppUrl } from "@/lib/env-validator";
+import { getCanonicalSiteUrl } from "@/lib/env-validator";
 
 export const dynamic = "force-dynamic";
 
-const siteUrl = getAppUrl();
+const siteUrl = getCanonicalSiteUrl();
 
 export default function robots(): MetadataRoute.Robots {
   return {

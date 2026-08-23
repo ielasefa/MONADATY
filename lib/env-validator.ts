@@ -121,3 +121,12 @@ export function getAppUrl(): string {
   }
   return parsed.origin;
 }
+
+const CANONICAL_PRODUCTION_ORIGIN = "https://monadaty.com";
+
+export function getCanonicalSiteUrl(): string {
+  if (process.env.NODE_ENV === "production") {
+    return CANONICAL_PRODUCTION_ORIGIN;
+  }
+  return getAppUrl();
+}

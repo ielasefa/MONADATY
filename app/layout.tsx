@@ -11,10 +11,10 @@ import { ToastProvider } from "@/components/ToastProvider";
 import { LegacyServiceWorkerCleanup } from "@/components/LegacyServiceWorkerCleanup";
 import { GlobalErrorHandler } from "@/components/GlobalErrorHandler";
 import { MotionConfigWrapper } from "@/components/MotionConfigWrapper";
+import { getCanonicalSiteUrl } from "@/lib/env-validator";
 import { getLanguageFromCookie, getTranslation, loadTranslations, LANGUAGE_COOKIE } from "@/lib/translations";
 import { TranslationHydrator } from "@/components/TranslationHydrator";
 import { StorefrontRouteTransition } from "@/components/StorefrontRouteTransition";
-import { getAppUrl } from "@/lib/env-validator";
 
 const dmSerifDisplay = DM_Serif_Display({
   subsets: ["latin"],
@@ -30,17 +30,16 @@ const dmSans = DM_Sans({
 
 const siteName = process.env.APP_NAME || "MONADATY";
 const siteDescription =
-  process.env.APP_DESCRIPTION ||
-  "Wholesale beverages for your business: order soda, water, juices and more in bulk, delivered to you.";
-const siteUrl = getAppUrl();
+  "Commandez vos boissons en gros pour épiceries, cafés, restaurants et commerces, avec livraison jusqu’à vous.";
+const siteUrl = getCanonicalSiteUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: { default: siteName, template: `%s | ${siteName}` },
+  title: { default: `${siteName} — Boissons en gros pour professionnels`, template: `%s | ${siteName}` },
   description: siteDescription,
   applicationName: siteName,
   manifest: "/manifest.webmanifest",
-  keywords: ["MONADATY", "soda", "water", "juice", "soft drinks", "Morocco"],
+  keywords: ["MONADATY", "boissons en gros", "wholesale beverages", "soda", "water", "juice", "Morocco"],
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
