@@ -126,7 +126,7 @@ const LANDING_COPY = {
   en: {
     hero: {
       eyebrow: "WHOLESALE DRINKS FOR PROFESSIONALS",
-      title: "EVERYTHING YOUR BUSINESS NEEDS\nIN BEVERAGES, DELIVERED TO YOU.",
+      title: "WHOLESALE DRINKS,\nDELIVERED TO YOU.",
       description:
         "MONADATY makes stocking your store simple, with a wide range of wholesale beverages and a service built for professionals.",
       primaryCta: "BROWSE THE CATALOGUE",
