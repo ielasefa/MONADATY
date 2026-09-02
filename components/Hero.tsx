@@ -109,7 +109,7 @@ export function Hero({ settings, fallbackImage }: HeroProps) {
 
           <motion.h1
             {...entrance(0.18, 26)}
-            className="mt-7 max-w-[10.5ch] whitespace-pre-line font-display text-[clamp(2.8rem,5vw,5rem)] font-normal leading-[0.94] tracking-[-0.045em] text-white"
+            className="mt-7 max-w-[10.5ch] whitespace-pre-line font-display text-[clamp(2.25rem,4.5vw,4rem)] font-normal leading-[0.94] tracking-[-0.045em] text-white"
           >
             {title}
           </motion.h1>
