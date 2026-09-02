@@ -79,6 +79,7 @@ function compressImage(file: File): Promise<File> {
 export function SingleImageUploader({ value, onChange, label, folder = "products", aspectRatio, className = "", fieldName }: Props) {
   const { t } = useTranslation("admin");
   const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [completed, setCompleted] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [preview, setPreview] = useState(value);
