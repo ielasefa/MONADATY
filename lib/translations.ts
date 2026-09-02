@@ -8,6 +8,9 @@ export { DEFAULT_LANGUAGE };
 export const SUPPORTED_LANGUAGES: Language[] = ["fr", "en", "ar"];
 export const LANGUAGE_COOKIE = "monadaty_lang";
 
+export type TranslationTable = Record<string, Record<string, string>>;
+export type TranslationNamespaces = Record<string, TranslationTable>;
+
 export function getLanguageFromCookie(cookieValue?: string): Language {
   if (cookieValue && SUPPORTED_LANGUAGES.includes(cookieValue as Language)) {
     return cookieValue as Language;
@@ -25,22 +28,32 @@ export async function getLanguage(): Promise<Language> {
   }
 }
 
-export async function loadTranslations(namespace: string): Promise<Record<string, Record<string, string>>> {
+export async function loadTranslationNamespaces(namespaces: string[]): Promise<TranslationNamespaces> {
+  const uniqueNamespaces = [...new Set(namespaces.filter(Boolean))];
+  if (uniqueNamespaces.length === 0) return {};
+
   try {
     const rows = await prisma.translation.findMany({
-      where: { namespace },
-      select: { key: true, fr: true, en: true, ar: true },
+      where: { namespace: { in: uniqueNamespaces } },
+      select: { namespace: true, key: true, fr: true, en: true, ar: true },
     });
 
-    const translations: Record<string, Record<string, string>> = {};
+    const translations: TranslationNamespaces = Object.fromEntries(
+      uniqueNamespaces.map((namespace) => [namespace, {}]),
+    );
     for (const row of rows) {
-      translations[row.key] = { fr: row.fr, en: row.en, ar: row.ar };
+      translations[row.namespace][row.key] = { fr: row.fr, en: row.en, ar: row.ar };
     }
 
     return translations;
   } catch {
     return {};
   }
+}
+
+export async function loadTranslations(namespace: string): Promise<TranslationTable> {
+  const translations = await loadTranslationNamespaces([namespace]);
+  return translations[namespace] ?? {};
 }
 
 export function getTranslation(

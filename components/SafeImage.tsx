@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
 type SafeImageProps = {
   src?: string | null;
@@ -32,9 +32,17 @@ export function SafeImage({
   height,
   blurDataURL,
 }: SafeImageProps) {
-  const [imageError, setImageError] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
   const normalizedSrc = typeof src === "string" ? src.trim() : "";
+  const [imageState, setImageState] = useState({
+    source: "",
+    loaded: false,
+    error: false,
+  });
+  const currentState = imageState.source === normalizedSrc
+    ? imageState
+    : { source: normalizedSrc, loaded: false, error: false };
+  const imageError = currentState.error;
+  const isLoaded = currentState.loaded;
   const resolvedSrc = !normalizedSrc || imageError ? PLACEHOLDER_SRC : normalizedSrc;
   const showFallbackOverlay = Boolean(fallback) && (!normalizedSrc || imageError);
   const showSkeleton = !isLoaded && !imageError;
@@ -42,15 +50,11 @@ export function SafeImage({
   const imgWidth = fill ? undefined : (width ?? 1200);
   const imgHeight = fill ? undefined : (height ?? 1200);
 
-  useEffect(() => {
-    setImageError(false);
-    setIsLoaded(false);
-  }, [normalizedSrc]);
-
   return (
     <span
       className={`${fill ? "relative block h-full w-full" : "relative inline-block"} storefront-image-shell`}
       data-image-loaded={isLoaded || imageError ? "true" : "false"}
+      data-image-priority={priority ? "true" : "false"}
     >
       <Image
         src={resolvedSrc}
@@ -58,10 +62,19 @@ export function SafeImage({
         className={className}
         placeholder="blur"
         blurDataURL={blurDataURL || FALLBACK_BLUR}
+        priority={priority}
         loading={priority ? undefined : "lazy"}
         decoding="async"
-        onError={() => setImageError(true)}
-        onLoad={() => setIsLoaded(true)}
+        onError={() => {
+          setImageState({ source: normalizedSrc, loaded: false, error: true });
+        }}
+        onLoad={() => {
+          setImageState((state) => (
+            state.source === normalizedSrc
+              ? { ...state, loaded: true }
+              : { source: normalizedSrc, loaded: true, error: false }
+          ));
+        }}
         sizes={sizesProp}
         fill={fill || false}
         width={imgWidth}

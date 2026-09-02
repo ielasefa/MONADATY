@@ -4,7 +4,7 @@ const LANDING_COPY = {
   fr: {
     hero: {
       eyebrow: "BOISSONS EN GROS POUR LES PROFESSIONNELS",
-      title: "TOUT CE QU’IL VOUS FAUT EN BOISSONS.\nEN GROS, LIVRÉ JUSQU’À VOUS.",
+      title: "VOS BOISSONS EN GROS,\nLIVRÉES À VOTRE COMMERCE.",
       description:
         "MONADATY simplifie l’approvisionnement de votre commerce avec un large choix de boissons en gros et un service pensé pour les professionnels.",
       primaryCta: "VOIR LE CATALOGUE",
@@ -126,7 +126,7 @@ const LANDING_COPY = {
   en: {
     hero: {
       eyebrow: "WHOLESALE DRINKS FOR PROFESSIONALS",
-      title: "WHOLESALE DRINKS,\nDELIVERED TO YOU.",
+      title: "WHOLESALE DRINKS,\nDELIVERED TO YOUR BUSINESS.",
       description:
         "MONADATY makes stocking your store simple, with a wide range of wholesale beverages and a service built for professionals.",
       primaryCta: "BROWSE THE CATALOGUE",
@@ -246,7 +246,7 @@ const LANDING_COPY = {
   ar: {
     hero: {
       eyebrow: "مشروبات بالجملة للمهنيين",
-      title: "كل ما تحتاجه من المشروبات بالجملة…\nيوصلك حتى لعندك",
+      title: "مشروباتك بالجملة،\nنوصلوها حتى لمحلك.",
       description:
         "نوفر لك مجموعة متنوعة من المشروبات لتلبية احتياجات محلك، مع طلب سهل وتوصيل حتى لعندك.",
       primaryCta: "تصفح الكاتالوج",

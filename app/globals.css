@@ -343,8 +343,8 @@
   color: #FFFFFF;
 }
 
-.storefront-shell .storefront-image-shell,
-.storefront-theme .storefront-image-shell {
+.storefront-shell .storefront-image-shell > img,
+.storefront-theme .storefront-image-shell > img {
   opacity: 0;
   transform: translateY(14px) scale(0.98);
   transform-origin: center;
@@ -354,10 +354,17 @@
   will-change: opacity, transform;
 }
 
-.storefront-shell .storefront-image-shell[data-image-loaded="true"],
-.storefront-theme .storefront-image-shell[data-image-loaded="true"] {
+.storefront-shell .storefront-image-shell[data-image-loaded="true"] > img,
+.storefront-theme .storefront-image-shell[data-image-loaded="true"] > img {
   opacity: 1;
   transform: translateY(0) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .storefront-shell .storefront-image-shell > img,
+  .storefront-theme .storefront-image-shell > img {
+    transition-duration: 0ms;
+  }
 }
 
 .home-premium {

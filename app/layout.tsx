@@ -12,9 +12,9 @@ import { LegacyServiceWorkerCleanup } from "@/components/LegacyServiceWorkerClea
 import { GlobalErrorHandler } from "@/components/GlobalErrorHandler";
 import { MotionConfigWrapper } from "@/components/MotionConfigWrapper";
 import { getCanonicalSiteUrl } from "@/lib/env-validator";
-import { getLanguageFromCookie, getTranslation, loadTranslations, LANGUAGE_COOKIE } from "@/lib/translations";
-import { TranslationHydrator } from "@/components/TranslationHydrator";
-import { StorefrontRouteTransition } from "@/components/StorefrontRouteTransition";
+import { getLanguageFromCookie, getTranslation, loadTranslationNamespaces, LANGUAGE_COOKIE } from "@/lib/translations";
+import { TranslationProvider } from "@/components/TranslationHydrator";
+import { SiteShell } from "@/components/SiteShell";
 
 const dmSerifDisplay = DM_Serif_Display({
   subsets: ["latin"],
@@ -88,7 +88,12 @@ export default async function RootLayout({
   const cookieStore = await cookies();
   const langFromCookie = getLanguageFromCookie(cookieStore.get(LANGUAGE_COOKIE)?.value);
   const dirFromLang = langFromCookie === "ar" ? "rtl" : "ltr";
-  const commonTr = await loadTranslations("common");
+  const initialTranslations = await loadTranslationNamespaces(
+    isAdmin
+      ? ["common", "navbar", "footer", "products", "cart", "buttons", "errors", "admin", "auth"]
+      : ["common", "navbar", "footer", "products", "cart", "buttons", "errors"],
+  );
+  const commonTr = initialTranslations.common ?? {};
   const skipLabel = getTranslation(commonTr, "skip_to_main", langFromCookie, "Skip to main content");
 
   return (
@@ -126,21 +131,23 @@ export default async function RootLayout({
           {skipLabel}
         </a>
         <MotionConfigWrapper>
-        <CartProvider>
-          <WishlistProvider>
-            <LanguageProvider initialLang={langFromCookie}>
-              <TranslationHydrator initialLang={langFromCookie} initialTranslations={commonTr} />
-              {!isAdmin && <NavbarWrapper />}
-              <main id="main-content" role="main" className={isAdmin ? undefined : "storefront-shell"}>
-                {isAdmin ? children : <StorefrontRouteTransition>{children}</StorefrontRouteTransition>}
-              </main>
-              {!isAdmin && <FooterWrapper />}
-            </LanguageProvider>
-          </WishlistProvider>
-        </CartProvider>
-        <ToastProvider />
-        <LegacyServiceWorkerCleanup />
-        <GlobalErrorHandler />
+          <LanguageProvider initialLang={langFromCookie}>
+            <TranslationProvider initialTranslations={initialTranslations}>
+              <CartProvider>
+                <WishlistProvider>
+                  <SiteShell
+                    navbar={<NavbarWrapper />}
+                    footer={<FooterWrapper />}
+                  >
+                    {children}
+                  </SiteShell>
+                </WishlistProvider>
+              </CartProvider>
+            </TranslationProvider>
+          </LanguageProvider>
+          <ToastProvider />
+          <LegacyServiceWorkerCleanup />
+          <GlobalErrorHandler />
         </MotionConfigWrapper>
       </body>
     </html>

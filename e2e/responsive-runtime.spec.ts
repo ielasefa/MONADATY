@@ -1,9 +1,10 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type BrowserContext, type Page } from "@playwright/test";
 
 const ADMIN_EMAIL = process.env.TEST_ADMIN_EMAIL || "admin@monadaty.com";
 const ADMIN_PASSWORD = process.env.TEST_ADMIN_PASSWORD || "change-this-to-a-strong-password";
 const BASE_URL = process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3458";
 const ORIGIN = new URL(BASE_URL).origin;
+let adminCookies: Parameters<BrowserContext["addCookies"]>[0] | undefined;
 
 const VIEWPORTS = [
   { width: 320, height: 568 },
@@ -28,14 +29,42 @@ async function expectNoPageOverflow(page: Page, route: string, width: number) {
   }));
   expect(dimensions.scrollWidth, `${route} overflows at ${width}px`).toBeLessThanOrEqual(dimensions.clientWidth);
   expect(dimensions.bodyScrollWidth, `${route} body overflows at ${width}px`).toBeLessThanOrEqual(dimensions.clientWidth);
+
+  if (route === "/") {
+    const heroLayout = await page.locator("h1").first().evaluate((heading) => {
+      const description = heading.nextElementSibling;
+      const headingRect = heading.getBoundingClientRect();
+      const descriptionRect = description?.getBoundingClientRect();
+      return {
+        left: headingRect.left,
+        right: headingRect.right,
+        bottom: headingRect.bottom,
+        descriptionTop: descriptionRect?.top ?? Number.POSITIVE_INFINITY,
+        overflowX: getComputedStyle(heading).overflowX,
+        overflowY: getComputedStyle(heading).overflowY,
+        wordBreak: getComputedStyle(heading).wordBreak,
+      };
+    });
+    expect(heroLayout.left, `hero clips at ${width}px`).toBeGreaterThanOrEqual(0);
+    expect(heroLayout.right, `hero clips at ${width}px`).toBeLessThanOrEqual(dimensions.clientWidth);
+    expect(heroLayout.overflowX, `hero text is horizontally clipped at ${width}px`).toBe("visible");
+    expect(heroLayout.overflowY, `hero text is vertically clipped at ${width}px`).toBe("visible");
+    expect(heroLayout.wordBreak, `hero text breaks words at ${width}px`).not.toBe("break-all");
+    expect(heroLayout.bottom, `hero text overlaps its description at ${width}px`).toBeLessThanOrEqual(heroLayout.descriptionTop);
+  }
 }
 
 async function loginViaApi(page: Page) {
+  if (adminCookies) {
+    await page.context().addCookies(adminCookies);
+    return;
+  }
   const response = await page.request.post(`${ORIGIN}/api/admin/login`, {
     headers: { Origin: ORIGIN },
     data: { email: ADMIN_EMAIL, password: ADMIN_PASSWORD },
   });
   expect(response.status()).toBe(200);
+  adminCookies = (await page.context().storageState()).cookies;
 }
 
 for (const viewport of VIEWPORTS) {
@@ -95,7 +124,9 @@ test("mobile menus release body scroll and navigation does not reload the docume
 
   await loginViaApi(page);
   await page.goto("/admin/dashboard", { waitUntil: "load" });
-  const adminMenu = page.locator('button[aria-controls="admin-sidebar"]');
+  const adminMenus = page.locator('button[aria-controls="admin-sidebar"]');
+  await expect(adminMenus).toHaveCount(1);
+  const adminMenu = adminMenus.first();
   await adminMenu.click();
   await expect(adminMenu).toHaveAttribute("aria-expanded", "true");
   await page.keyboard.press("Escape");
@@ -105,16 +136,54 @@ test("mobile menus release body scroll and navigation does not reload the docume
 
 test("login, admin navigation, and logout complete without manual refresh", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => {
+    const count = Number(sessionStorage.getItem("document-load-count") || "0") + 1;
+    sessionStorage.setItem("document-load-count", String(count));
+  });
   await page.goto("/admin/login", { waitUntil: "networkidle" });
   await page.fill("#login-email", ADMIN_EMAIL);
   await page.fill("#login-password", ADMIN_PASSWORD);
   await page.locator('button[type="submit"]').click();
-  await page.waitForURL(/\/admin\/dashboard/);
+  await page.waitForURL(/\/admin\/dashboard/, { waitUntil: "commit" });
+  const authenticatedDocumentLoads = await page.evaluate(
+    () => sessionStorage.getItem("document-load-count"),
+  );
 
-  const adminMenu = page.locator('button[aria-controls="admin-sidebar"]');
-  await adminMenu.click();
-  await page.locator('#admin-sidebar a[href="/admin/products"]').click();
-  await page.waitForURL(/\/admin\/products$/);
+  const adminMenus = page.locator('button[aria-controls="admin-sidebar"]');
+  await expect(adminMenus).toHaveCount(1);
+  const adminMenu = adminMenus.first();
+  const navigateFromSidebar = async (href: string) => {
+    await adminMenu.click();
+    await expect(adminMenu).toHaveAttribute("aria-expanded", "true");
+    await page.locator(`#admin-sidebar a[href="${href}"]`).click();
+    await page.waitForURL((url) => url.pathname === href, { waitUntil: "commit" });
+    expect(await page.evaluate(() => sessionStorage.getItem("document-load-count"))).toBe(
+      authenticatedDocumentLoads,
+    );
+  };
+
+  await navigateFromSidebar("/admin/products");
+
+  await page.locator('a[href="/admin/products/add"]:visible').first().click();
+  await page.waitForURL((url) => url.pathname === "/admin/products/add", { waitUntil: "commit" });
+  await expect(page.locator("#p-name")).toBeVisible();
+  expect(await page.evaluate(() => sessionStorage.getItem("document-load-count"))).toBe(
+    authenticatedDocumentLoads,
+  );
+
+  await navigateFromSidebar("/admin/products");
+  const editLink = page.locator('a[href^="/admin/products/"][href$="/edit"]:visible').first();
+  const editPath = await editLink.getAttribute("href");
+  expect(editPath).toBeTruthy();
+  await editLink.click();
+  await page.waitForURL((url) => url.pathname === editPath, { waitUntil: "commit" });
+  await expect(page.locator('form input[type="text"][required]').first()).toBeVisible();
+  expect(await page.evaluate(() => sessionStorage.getItem("document-load-count"))).toBe(
+    authenticatedDocumentLoads,
+  );
+
+  await navigateFromSidebar("/admin/products");
+  await navigateFromSidebar("/admin/landing");
 
   await adminMenu.click();
   await page.locator('#admin-sidebar button[title]').last().click();

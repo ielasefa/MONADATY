@@ -5,8 +5,6 @@ import { isAuthenticated } from "@/lib/auth";
 import { getLanguage, getTranslation, loadTranslations } from "@/lib/translations";
 import SidebarWrapper from "@/components/admin/SidebarWrapper";
 import { getNotifications, getUnreadCount } from "@/lib/admin-notifications";
-import { LanguageProvider } from "@/context/LanguageContext";
-import { TranslationHydrator } from "@/components/TranslationHydrator";
 import { AdminTopbar } from "@/components/admin/AdminTopbar";
 
 export const dynamic = "force-dynamic";
@@ -22,14 +20,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const pathname = headersList.get("x-admin-pathname") ?? "";
 
   if (pathname === "/admin/login") {
-    const lang = await getLanguage();
-    const commonTr = await loadTranslations("common");
-    return (
-      <LanguageProvider initialLang={lang}>
-        <TranslationHydrator initialLang={lang} initialTranslations={commonTr} />
-        <main className="min-h-screen bg-bg">{children}</main>
-      </LanguageProvider>
-    );
+    return <main className="min-h-screen bg-bg">{children}</main>;
   }
 
   const authed = await isAuthenticated();
@@ -43,33 +34,20 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   if (pathname === "/admin/change-password") {
-    const lang = await getLanguage();
-    const commonTr = await loadTranslations("common");
-    return (
-      <LanguageProvider initialLang={lang}>
-        <TranslationHydrator initialLang={lang} initialTranslations={commonTr} />
-        <main className="min-h-screen bg-bg">{children}</main>
-      </LanguageProvider>
-    );
+    return <main className="min-h-screen bg-bg">{children}</main>;
   }
 
-  const [notifications, unreadCount, adminTr] = await Promise.all([
+  const [notifications, unreadCount] = await Promise.all([
     getNotifications(),
     getUnreadCount(),
-    loadTranslations("admin"),
   ]);
-  const lang = await getLanguage();
-
   return (
-    <LanguageProvider initialLang={lang}>
-      <TranslationHydrator initialLang={lang} initialTranslations={adminTr} />
-      <div className="admin-shell flex min-h-screen min-w-0 bg-[#0B0B0A]">
-        <SidebarWrapper />
-        <main className="min-w-0 flex-1 bg-[#0B0B0A] p-0">
-          <AdminTopbar initialNotifications={notifications} initialUnread={unreadCount} />
-          {children}
-        </main>
-      </div>
-    </LanguageProvider>
+    <div className="admin-shell flex min-h-screen min-w-0 bg-[#0B0B0A]">
+      <SidebarWrapper />
+      <main className="min-w-0 flex-1 bg-[#0B0B0A] p-0">
+        <AdminTopbar initialNotifications={notifications} initialUnread={unreadCount} />
+        {children}
+      </main>
+    </div>
   );
 }

@@ -80,7 +80,8 @@ test("verified upload uses its final URL immediately and survives navigation", a
 
     await page.goto(`/admin/products/${productId}/edit`, { waitUntil: "load" });
     const imageTab = page.getByRole("button", { name: /images/i });
-    if (await imageTab.count()) await imageTab.first().click();
+    await expect(imageTab.first()).toBeVisible();
+    await imageTab.first().click();
     await expect(page.locator(`img[src="${uploadedURL}"]`).first()).toBeVisible();
 
     await page.goto("/");
