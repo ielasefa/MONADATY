@@ -28,7 +28,7 @@ export default async function InventoryDashboardPage() {
     prisma.warehouse.count(),
     prisma.supplier.count(),
     prisma.product.count({ where: { stock: { lte: 0 } } }),
-    prisma.product.count({ where: { stock: { gt: 0, lte: 5 } } }),
+    prisma.product.count({ where: { stock: { gt: 0, lte: prisma.product.fields.lowStockThreshold } } }),
     prisma.inventoryMovement.count({ where: { createdAt: { gte: todayStart } } }),
     prisma.inventoryMovement.findMany({
       take: 10,
@@ -38,7 +38,7 @@ export default async function InventoryDashboardPage() {
   ]);
 
   const lowStockProducts = await prisma.product.findMany({
-    where: { stock: { gt: 0, lte: 5 } },
+    where: { stock: { gt: 0, lte: prisma.product.fields.lowStockThreshold } },
     orderBy: { stock: "asc" },
     take: 10,
     select: { id: true, name: true, stock: true, lowStockThreshold: true, image: true },

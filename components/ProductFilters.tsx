@@ -8,6 +8,7 @@ import type { Product } from "@/types";
 import { FilterSidebar } from "@/components/FilterSidebar";
 import { useTranslation } from "@/hooks/useTranslation";
 import { PREMIUM_EASE } from "@/lib/motion";
+import { matchesProductSearch, normalizeSearchTerm, normalizeSearchValue } from "@/lib/product-search";
 
 // ─── URL helpers ───────────────────────────────────────────────────────────
 
@@ -50,7 +51,8 @@ function paramsToUrl(
   sort: string,
 ) {
   const sp = new URLSearchParams();
-  if (search) sp.set("search", search);
+  const normalizedSearch = normalizeSearchValue(search);
+  if (normalizedSearch) sp.set("search", normalizedSearch);
   if (coll) sp.set("collection", coll);
   if (minP != null || maxP != null) {
     const p = `${minP ?? ""}-${maxP ?? ""}`;
@@ -201,6 +203,14 @@ export function ProductFilters({
   const [mobileOpen, setMobileOpen] = useState(false);
 
   // refs
+  const filterStateRef = useRef({
+    search: "",
+    collection: null as string | null,
+    minPrice: null as number | null,
+    maxPrice: null as number | null,
+    availability: false,
+    sort: "default",
+  });
   const lastUrlStrRef = useRef<string>("");
   const mobileDrawerRef = useRef<HTMLElement | null>(null);
   const filterButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -212,8 +222,16 @@ export function ProductFilters({
     const sp = searchParams ?? new URLSearchParams(window.location.search);
     const parsed = parseParams(sp, CATEGORY_MAP, "all");
     const urlStr = sp.toString();
-    if (urlStr === lastUrlStrRef.current && activeCategorySlug === parsed.collectionSlug) return;
+    if (urlStr === lastUrlStrRef.current) return;
     lastUrlStrRef.current = urlStr;
+    filterStateRef.current = {
+      search: parsed.query,
+      collection: parsed.collectionSlug,
+      minPrice: parsed.minPrice,
+      maxPrice: parsed.maxPrice,
+      availability: parsed.availabilityOnly,
+      sort: parsed.sort ?? "default",
+    };
 
     setQuery(parsed.query);
     setCollectionSlug(parsed.collectionSlug);
@@ -222,7 +240,7 @@ export function ProductFilters({
     setMaxPrice(parsed.maxPrice);
     setAvailabilityOnly(parsed.availabilityOnly);
     setSort(parsed.sort ?? "default");
-  }, [searchParams, CATEGORY_MAP, activeCategorySlug]);
+  }, [searchParams, CATEGORY_MAP]);
 
   // cleanup debounce
   useEffect(() => () => {
@@ -230,7 +248,7 @@ export function ProductFilters({
   }, []);
 
   // derived
-  const normalizedSearch = query.trim();
+  const normalizedSearch = normalizeSearchTerm(query);
   const activeFilterCount = useMemo(() => {
     const count = [
       normalizedSearch,
@@ -277,14 +295,13 @@ export function ProductFilters({
   );
 
   const filteredProducts = useMemo(() => {
-    const q = normalizedSearch.toLowerCase();
     const collSlug = collectionSlug;
     const catMap = new Map(categories.map(c => [c.slug, c.name]));
     const list = productsSafe.filter((product) => {
       const name = product?.name ?? "";
       const category = product?.category ?? "";
-      if (!name || !category) return false;
-      if (q && !name.toLowerCase().includes(q)) return false;
+      if (!name) return false;
+      if (!matchesProductSearch(product, normalizedSearch)) return false;
       if (collSlug) {
         const expectedName = catMap.get(collSlug);
         if (expectedName ? category !== expectedName : product.collection !== collSlug) return false;
@@ -323,17 +340,18 @@ export function ProductFilters({
       availability?: boolean;
       sort?: string;
     }) => {
-      const newQ = updates.search !== undefined ? updates.search : query;
-      const newColl = updates.collection !== undefined ? updates.collection : collectionSlug;
-      const newMin = updates.minPrice !== undefined ? updates.minPrice : minPrice;
-      const newMax = updates.maxPrice !== undefined ? updates.maxPrice : maxPrice;
-      const newAvail = updates.availability !== undefined ? updates.availability : availabilityOnly;
-      const newSort = updates.sort !== undefined ? updates.sort : sort;
-      const url = paramsToUrl(newQ.trim(), newColl, newMin, newMax, newAvail, newSort);
-      const cur = searchParams?.toString() ?? "";
-      const curUrl = cur ? `/shop?${cur}` : "/shop";
-      if (url === curUrl) return;
-
+      const current = filterStateRef.current;
+      const next = {
+        search: updates.search !== undefined ? updates.search : current.search,
+        collection: updates.collection !== undefined ? updates.collection : current.collection,
+        minPrice: updates.minPrice !== undefined ? updates.minPrice : current.minPrice,
+        maxPrice: updates.maxPrice !== undefined ? updates.maxPrice : current.maxPrice,
+        availability: updates.availability !== undefined ? updates.availability : current.availability,
+        sort: updates.sort !== undefined ? updates.sort : current.sort,
+      };
+      filterStateRef.current = next;
+      const url = paramsToUrl(next.search, next.collection, next.minPrice, next.maxPrice, next.availability, next.sort);
+      const curUrl = `${window.location.pathname}${window.location.search}`;
       if (updates.search !== undefined) setQuery(updates.search);
       if (updates.collection !== undefined) {
         setCollectionSlug(updates.collection);
@@ -343,9 +361,10 @@ export function ProductFilters({
       if (updates.maxPrice !== undefined) setMaxPrice(updates.maxPrice);
       if (updates.availability !== undefined) setAvailabilityOnly(updates.availability);
       if (updates.sort !== undefined) setSort(updates.sort);
+      if (url === curUrl) return;
       router.replace(url, { scroll: false });
     },
-    [query, collectionSlug, minPrice, maxPrice, availabilityOnly, sort, searchParams, router],
+    [router],
   );
 
   // handlers
@@ -361,6 +380,7 @@ export function ProductFilters({
   const handleSearchChange = useCallback(
     (value: string) => {
       setQuery(value);
+      filterStateRef.current = { ...filterStateRef.current, search: value };
       if (debounceRef.current) clearTimeout(debounceRef.current);
       debounceRef.current = setTimeout(() => {
         updateUrl({ search: value });
@@ -492,6 +512,8 @@ export function ProductFilters({
               value={query}
               onChange={(e) => handleSearchChange(e.target.value)}
               placeholder={tShop("search_drinks", "Search drinks...")}
+              aria-label={tShop("search_drinks", "Search drinks...")}
+              data-testid="storefront-product-search"
               className="storefront-input ps-11 pe-10"
               style={{ WebkitTextFillColor: "#FFFFFF" }}
             />
@@ -627,7 +649,7 @@ export function ProductFilters({
         )}
 
         {/* ── Product grid ───────────────────────────────────────────────── */}
-        <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
+        <div className="relative grid grid-cols-2 gap-3 overflow-x-clip sm:gap-5 md:grid-cols-3 lg:grid-cols-4 lg:gap-6" data-testid="storefront-product-results">
           <AnimatePresence mode="popLayout">
             {filteredProducts.length > 0 ? (
               filteredProducts.map((product: Product, index) => (

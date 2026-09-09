@@ -2,10 +2,13 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { useTranslation } from "@/hooks/useTranslation";
 import { SafeImage } from "@/components/SafeImage";
 import { resolveDatabaseProductImage } from "@/lib/product-images";
+import { ADMIN_PRODUCT_PAGE_SIZE, isLowStock, normalizeProductSearch } from "@/lib/admin-product-list";
+import { createLatestRequestGuard } from "@/lib/latest-request";
 
 type ProductListItem = {
   id: string;
@@ -28,10 +31,16 @@ type ProductListItem = {
 
 type CategoryOption = { id: string; name: string };
 type CollectionOption = { id: string; name: string };
+type Pagination = { page: number; pageSize: number; total: number; totalPages: number };
 
 export default function ProductsPage() {
   const { t } = useTranslation("admin");
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const queryString = searchParams.toString();
   const [products, setProducts] = useState<ProductListItem[]>([]);
+  const [pagination, setPagination] = useState<Pagination>({ page: 1, pageSize: ADMIN_PRODUCT_PAGE_SIZE, total: 0, totalPages: 1 });
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState<CategoryOption[]>([]);
   const [collections, setCollections] = useState<CollectionOption[]>([]);
@@ -40,43 +49,46 @@ export default function ProductsPage() {
   const [bulkValue, setBulkValue] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
   const [runningBulk, setRunningBulk] = useState(false);
-  const [search, setSearch] = useState("");
-  const [filterStatus, setFilterStatus] = useState("");
-  const [filterCategory, setFilterCategory] = useState("");
-  const [filterCollection, setFilterCollection] = useState("");
-  const [filterStock, setFilterStock] = useState("");
-  const [filterFeatured, setFilterFeatured] = useState("");
-  const [filterBestSeller, setFilterBestSeller] = useState("");
+  const [search, setSearch] = useState(() => searchParams.get("search") ?? "");
+  const [filterStatus, setFilterStatus] = useState(() => searchParams.get("status") ?? "");
+  const [filterCategory, setFilterCategory] = useState(() => searchParams.get("categoryId") ?? "");
+  const [filterCollection, setFilterCollection] = useState(() => searchParams.get("collectionId") ?? "");
+  const [filterStock, setFilterStock] = useState(() => searchParams.get("stock") ?? "");
+  const [filterFeatured, setFilterFeatured] = useState(() => searchParams.get("featured") ?? "");
+  const [filterBestSeller, setFilterBestSeller] = useState(() => searchParams.get("isBestSeller") ?? "");
+  const [sort, setSort] = useState(() => searchParams.get("sort") ?? "newest");
+  const [reloadKey, setReloadKey] = useState(0);
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const fetchProductsRef = useRef<() => void>(() => {});
+  const pendingSearchRef = useRef<string | null>(null);
+  const urlParamsRef = useRef(new URLSearchParams(queryString));
+  const requestGuardRef = useRef(createLatestRequestGuard());
 
-  const fetchProducts = useCallback(async () => {
-    setLoading(true);
-    try {
-      const params = new URLSearchParams();
-      if (search) params.set("search", search);
-      if (filterStatus) params.set("status", filterStatus);
-      if (filterCategory) params.set("categoryId", filterCategory);
-      if (filterCollection) params.set("collectionId", filterCollection);
-      if (filterStock) params.set("stock", filterStock);
-      if (filterFeatured) params.set("featured", filterFeatured);
-      if (filterBestSeller) params.set("isBestSeller", filterBestSeller);
-      const response = await fetch(`/api/admin/products/list?${params.toString()}`);
-      const data = await response.json();
-      setProducts(data.products || []);
-    } catch {
-      setProducts([]);
-    } finally {
-      setLoading(false);
+  const replaceParam = useCallback((name: string, value: string, resetPage = true) => {
+    const params = new URLSearchParams(urlParamsRef.current);
+    if (name !== "search" && pendingSearchRef.current !== null) {
+      const pendingSearch = normalizeProductSearch(pendingSearchRef.current);
+      if (pendingSearch) params.set("search", pendingSearch);
+      else params.delete("search");
+      pendingSearchRef.current = null;
+      if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
     }
-  }, [search, filterStatus, filterCategory, filterCollection, filterStock, filterFeatured, filterBestSeller]);
+    if (value) params.set(name, value);
+    else params.delete(name);
+    if (resetPage) params.delete("page");
+    urlParamsRef.current = params;
+    const next = params.toString();
+    router.replace(next ? `${pathname}?${next}` : pathname, { scroll: false });
+  }, [pathname, router]);
 
-  fetchProductsRef.current = fetchProducts;
-
-  const doFetchProducts = useCallback(() => {
+  const handleSearchChange = useCallback((value: string) => {
+    setSearch(value);
+    pendingSearchRef.current = value;
     if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-    searchTimeoutRef.current = setTimeout(() => fetchProductsRef.current(), 300);
-  }, []);
+    searchTimeoutRef.current = setTimeout(() => {
+      pendingSearchRef.current = null;
+      replaceParam("search", normalizeProductSearch(value));
+    }, 300);
+  }, [replaceParam]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -86,8 +98,48 @@ export default function ProductsPage() {
   }, []);
 
   useEffect(() => {
-    doFetchProducts();
-  }, [doFetchProducts]);
+    urlParamsRef.current = new URLSearchParams(queryString);
+    setSearch(searchParams.get("search") ?? "");
+    setFilterStatus(searchParams.get("status") ?? "");
+    setFilterCategory(searchParams.get("categoryId") ?? "");
+    setFilterCollection(searchParams.get("collectionId") ?? "");
+    setFilterStock(searchParams.get("stock") ?? "");
+    setFilterFeatured(searchParams.get("featured") ?? "");
+    setFilterBestSeller(searchParams.get("isBestSeller") ?? "");
+    setSort(searchParams.get("sort") ?? "newest");
+  }, [queryString, searchParams]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const sequence = requestGuardRef.current.begin();
+    setLoading(true);
+    const params = new URLSearchParams(queryString);
+    if (!params.has("pageSize")) params.set("pageSize", String(ADMIN_PRODUCT_PAGE_SIZE));
+    fetch(`/api/admin/products/list?${params.toString()}`, { signal: controller.signal, cache: "no-store" })
+      .then(async (response) => {
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Failed to load products");
+        if (!requestGuardRef.current.isCurrent(sequence)) return;
+        setProducts(data.products || []);
+        setPagination(data.pagination || { page: 1, pageSize: ADMIN_PRODUCT_PAGE_SIZE, total: 0, totalPages: 1 });
+      })
+      .catch((error) => {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+        if (requestGuardRef.current.isCurrent(sequence)) {
+          setProducts([]);
+          setPagination({ page: 1, pageSize: ADMIN_PRODUCT_PAGE_SIZE, total: 0, totalPages: 1 });
+        }
+      })
+      .finally(() => {
+        if (requestGuardRef.current.isCurrent(sequence)) setLoading(false);
+      });
+    return () => controller.abort();
+  }, [queryString, reloadKey]);
+
+  useEffect(() => () => {
+    if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+    pendingSearchRef.current = null;
+  }, []);
 
   useEffect(() => setSelected(new Set()), [products]);
 
@@ -132,7 +184,7 @@ export default function ProductsPage() {
       setSelected(new Set());
       setBulkAction("");
       setBulkValue("");
-      fetchProducts();
+      setReloadKey((value) => value + 1);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : t("network_error", "Network error"));
     } finally {
@@ -158,6 +210,8 @@ export default function ProductsPage() {
   }
 
   function clearFilters() {
+    if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+    pendingSearchRef.current = null;
     setSearch("");
     setFilterStatus("");
     setFilterCategory("");
@@ -165,10 +219,13 @@ export default function ProductsPage() {
     setFilterStock("");
     setFilterFeatured("");
     setFilterBestSeller("");
+    setSort("newest");
+    urlParamsRef.current = new URLSearchParams();
+    router.replace(pathname, { scroll: false });
   }
 
   const allSelected = products.length > 0 && selected.size === products.length;
-  const hasFilters = Boolean(search || filterStatus || filterCategory || filterCollection || filterStock || filterFeatured || filterBestSeller);
+  const hasFilters = Boolean(search || filterStatus || filterCategory || filterCollection || filterStock || filterFeatured || filterBestSeller || sort !== "newest");
   const filterClass = "input-premium h-11 min-w-0 bg-[#0B0B0A] px-3 text-xs";
 
   return (
@@ -204,7 +261,7 @@ export default function ProductsPage() {
               <p className="text-[0.6rem] font-semibold uppercase tracking-[0.24em] text-gold/70">{t("products", "Products")}</p>
             </div>
             <h1 className="mt-3 font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">{t("product_management", "Product Management")}</h1>
-            <p className="mt-2 text-sm text-white/45">{loading ? t("loading", "Loading...") : `${products.length} ${t("products_label", "products")}`}{selected.size > 0 ? ` · ${selected.size} ${t("selected_label", "selected")}` : ""}</p>
+            <p className="mt-2 text-sm text-white/45" data-testid="product-total">{loading ? t("loading", "Loading...") : `${pagination.total} ${t("products_label", "products")}`}{selected.size > 0 ? ` · ${selected.size} ${t("selected_label", "selected")}` : ""}</p>
           </div>
           <Link href="/admin/products/add" className="btn-primary h-11 w-full px-5 text-[0.62rem] sm:w-auto">
             <span className="text-base font-light" aria-hidden>+</span>
@@ -216,24 +273,25 @@ export default function ProductsPage() {
           <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(240px,2fr)_repeat(3,minmax(130px,1fr))]">
             <div className="relative min-w-0">
               <svg className="pointer-events-none absolute start-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg>
-              <input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder={t("search_products", "Search products") } className="input-premium h-11 w-full bg-[#0B0B0A] ps-10" />
+              <input type="search" value={search} onChange={(event) => handleSearchChange(event.target.value)} placeholder={t("search_products", "Search products") } aria-label={t("search_products", "Search products")} data-testid="product-search" className="input-premium h-11 w-full bg-[#0B0B0A] ps-10" />
             </div>
-            <select value={filterStatus} onChange={(event) => setFilterStatus(event.target.value)} className={filterClass} aria-label={t("all_statuses", "All statuses")}>
+            <select value={filterStatus} onChange={(event) => { setFilterStatus(event.target.value); replaceParam("status", event.target.value); }} className={filterClass} aria-label={t("all_statuses", "All statuses")}>
               <option value="">{t("all_statuses", "All statuses")}</option><option value="Active">{t("active", "Active")}</option><option value="Draft">{t("draft", "Draft")}</option><option value="Hidden">{t("hidden", "Hidden")}</option><option value="Archived">{t("archived", "Archived")}</option>
             </select>
-            <select value={filterCategory} onChange={(event) => setFilterCategory(event.target.value)} className={filterClass} aria-label={t("all_categories", "All categories")}>
+            <select value={filterCategory} onChange={(event) => { setFilterCategory(event.target.value); replaceParam("categoryId", event.target.value); }} className={filterClass} aria-label={t("all_categories", "All categories")} data-testid="product-category-filter">
               <option value="">{t("all_categories", "All categories")}</option>{categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
             </select>
-            <select value={filterCollection} onChange={(event) => setFilterCollection(event.target.value)} className={filterClass} aria-label={t("all_collections", "All collections")}>
+            <select value={filterCollection} onChange={(event) => { setFilterCollection(event.target.value); replaceParam("collectionId", event.target.value); }} className={filterClass} aria-label={t("all_collections", "All collections")}>
               <option value="">{t("all_collections", "All collections")}</option>{collections.map((collection) => <option key={collection.id} value={collection.id}>{collection.name}</option>)}
             </select>
           </div>
-          <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-[repeat(3,minmax(140px,200px))_1fr_auto]">
-            <select value={filterStock} onChange={(event) => setFilterStock(event.target.value)} className={filterClass}><option value="">{t("all_stock", "All stock")}</option><option value="in">{t("in_stock", "In stock")}</option><option value="low">{t("low_stock", "Low stock")}</option><option value="out">{t("out_of_stock", "Out of stock")}</option></select>
-            <select value={filterFeatured} onChange={(event) => setFilterFeatured(event.target.value)} className={filterClass}><option value="">{t("featured_all", "Featured: All")}</option><option value="true">{t("featured_only", "Featured only")}</option><option value="false">{t("non_featured", "Not featured")}</option></select>
-            <select value={filterBestSeller} onChange={(event) => setFilterBestSeller(event.target.value)} className={filterClass}><option value="">{t("best_seller_all", "Best seller: All")}</option><option value="true">{t("best_seller_only", "Best sellers")}</option><option value="false">{t("non_best_seller", "Not best sellers")}</option></select>
+          <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-[repeat(4,minmax(130px,200px))_1fr_auto]">
+            <select value={filterStock} onChange={(event) => { setFilterStock(event.target.value); replaceParam("stock", event.target.value); }} className={filterClass} aria-label={t("all_stock", "All stock")} data-testid="product-stock-filter"><option value="">{t("all_stock", "All stock")}</option><option value="in">{t("in_stock", "In stock")}</option><option value="low">{t("low_stock", "Low stock")}</option><option value="out">{t("out_of_stock", "Out of stock")}</option></select>
+            <select value={filterFeatured} onChange={(event) => { setFilterFeatured(event.target.value); replaceParam("featured", event.target.value); }} className={filterClass}><option value="">{t("featured_all", "Featured: All")}</option><option value="true">{t("featured_only", "Featured only")}</option><option value="false">{t("non_featured", "Not featured")}</option></select>
+            <select value={filterBestSeller} onChange={(event) => { setFilterBestSeller(event.target.value); replaceParam("isBestSeller", event.target.value); }} className={filterClass}><option value="">{t("best_seller_all", "Best seller: All")}</option><option value="true">{t("best_seller_only", "Best sellers")}</option><option value="false">{t("non_best_seller", "Not best sellers")}</option></select>
+            <select value={sort} onChange={(event) => { setSort(event.target.value); replaceParam("sort", event.target.value === "newest" ? "" : event.target.value); }} className={filterClass} aria-label={t("sort_by", "Sort by")} data-testid="product-sort"><option value="newest">{t("newest", "Newest")}</option><option value="oldest">{t("oldest", "Oldest")}</option><option value="name-asc">{t("name_asc", "Name A–Z")}</option><option value="name-desc">{t("name_desc", "Name Z–A")}</option><option value="stock-asc">{t("stock_asc", "Stock low–high")}</option><option value="stock-desc">{t("stock_desc", "Stock high–low")}</option></select>
             <span className="hidden lg:block" />
-            {hasFilters && <button type="button" onClick={clearFilters} className="inline-flex h-11 items-center justify-center rounded-md px-4 text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-white/45 transition hover:bg-white/[0.04] hover:text-white">{t("clear_filters", "Clear")}</button>}
+            {hasFilters && <button type="button" onClick={clearFilters} data-testid="product-clear-filters" className="inline-flex h-11 items-center justify-center rounded-md px-4 text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-white/45 transition hover:bg-white/[0.04] hover:text-white">{t("clear_filters", "Clear")}</button>}
           </div>
         </section>
 
@@ -286,13 +344,24 @@ export default function ProductsPage() {
                       <ProductImage src={cover} name={product.name} className="h-16 w-16" />
                       <div className="min-w-0 flex-1"><Link href={`/admin/products/${product.id}/edit`} className="line-clamp-2 text-sm font-semibold text-white hover:text-gold">{product.name}</Link><p className="mt-1 truncate text-xs text-white/35">{product.category?.name || t("no_category", "No category")}</p><div className="mt-2"><StatusBadge status={product.status} /></div></div>
                     </div>
-                    <div className="mt-4 grid grid-cols-3 gap-2 border-y border-white/[0.06] py-3 text-center"><Metric label={t("price", "Price")} value={product.price} accent /><Metric label={t("stock", "Stock")} value={String(product.stock)} /><Metric label={t("variants", "Variants")} value={String(product._count?.variants ?? 0)} /></div>
+                    <div className="mt-4 grid grid-cols-3 gap-2 border-y border-white/[0.06] py-3 text-center"><Metric label={t("price", "Price")} value={product.price} accent /><StockMetric product={product} t={t} /><Metric label={t("variants", "Variants")} value={String(product._count?.variants ?? 0)} /></div>
                     <div className="mt-3 flex items-center justify-between gap-3"><p className="truncate font-mono text-[0.68rem] text-white/35">{product.sku || "—"}</p><Link href={`/admin/products/${product.id}/edit`} className="inline-flex h-9 shrink-0 items-center rounded-md border border-gold/20 px-3 text-[0.58rem] font-semibold uppercase tracking-[0.1em] text-gold">{t("edit", "Edit")}</Link></div>
                   </article>
                 );
               })}
             </div>
           </>
+        )}
+        {!loading && pagination.total > 0 && (
+          <nav className="mt-5 flex flex-wrap items-center justify-between gap-3" aria-label={t("pagination", "Pagination")} data-testid="product-pagination">
+            <p className="text-xs text-white/40">
+              {t("page", "Page")} {pagination.page} / {pagination.totalPages}
+            </p>
+            <div className="flex gap-2">
+              <button type="button" disabled={pagination.page <= 1} onClick={() => replaceParam("page", String(pagination.page - 1), false)} data-testid="product-page-previous" className="btn-secondary h-9 px-4 text-[0.58rem] disabled:cursor-not-allowed disabled:opacity-35">{t("previous", "Previous")}</button>
+              <button type="button" disabled={pagination.page >= pagination.totalPages} onClick={() => replaceParam("page", String(pagination.page + 1), false)} data-testid="product-page-next" className="btn-secondary h-9 px-4 text-[0.58rem] disabled:cursor-not-allowed disabled:opacity-35">{t("next", "Next")}</button>
+            </div>
+          </nav>
         )}
       </div>
     </div>
@@ -301,13 +370,15 @@ export default function ProductsPage() {
 
 function ProductTableRow({ product, checked, onToggle, t }: { product: ProductListItem; checked: boolean; onToggle: () => void; t: (key: string, fallback?: string) => string }) {
   const cover = resolveDatabaseProductImage({ image: product.image, images: product.images });
-  const stockTone = product.stock <= 0 ? "bg-burgundy" : product.stock < (product.lowStockThreshold || 5) ? "bg-gold" : "bg-emerald-400";
+  const low = isLowStock(product.stock, product.lowStockThreshold);
+  const stockTone = product.stock <= 0 ? "bg-burgundy" : low ? "bg-gold" : "bg-emerald-400";
+  const stockLabel = product.stock <= 0 ? t("out_of_stock", "Out of stock") : low ? t("low_stock", "Low stock") : t("in_stock", "In stock");
   return (
     <tr className={`h-[76px] transition-colors hover:bg-white/[0.025] ${checked ? "bg-gold/[0.035]" : ""}`} data-testid="product-row">
       <td className="px-4"><input type="checkbox" checked={checked} onChange={onToggle} className="h-4 w-4 accent-gold" aria-label={`${t("select", "Select")} ${product.name}`} /></td>
       <td className="px-2"><ProductImage src={cover} name={product.name} className="h-12 w-12" /></td>
       <td className="px-4"><div className="flex min-w-0 items-center gap-2"><Link href={`/admin/products/${product.id}/edit`} className="truncate font-medium text-white hover:text-gold" title={product.name}>{product.name}</Link>{product.featured && <span className="shrink-0 rounded bg-gold/10 px-1.5 py-0.5 text-[0.52rem] font-semibold uppercase text-gold">Featured</span>}{product.isBestSeller && <span className="shrink-0 rounded bg-emerald-500/10 px-1.5 py-0.5 text-[0.52rem] font-semibold uppercase text-emerald-400">Best</span>}</div><p className="mt-1 truncate text-xs text-white/35">{[product.category?.name, product.collection?.name].filter(Boolean).join(" · ") || "—"}</p></td>
-      <td className="px-4"><p className="truncate font-mono text-xs text-white/45" title={product.sku}>{product.sku || "—"}</p></td><td className="px-4"><StatusBadge status={product.status} /></td><td className="px-4 text-end font-semibold tabular-nums text-gold">{product.price}</td><td className="px-4 text-end"><span className="inline-flex items-center gap-2 text-white/70"><span className={`h-2 w-2 rounded-full ${stockTone}`} />{product.stock}</span></td><td className="px-4 text-end text-white/50">{product._count?.variants ?? 0}</td><td className="px-4 text-end text-xs text-white/35">{new Date(product.createdAt).toLocaleDateString()}</td><td className="px-4 text-end"><Link href={`/admin/products/${product.id}/edit`} className="inline-flex h-8 items-center rounded-md border border-gold/20 px-3 text-[0.56rem] font-semibold uppercase tracking-[0.1em] text-gold hover:bg-gold/10">{t("edit", "Edit")}</Link></td>
+      <td className="px-4"><p className="truncate font-mono text-xs text-white/45" title={product.sku}>{product.sku || "—"}</p></td><td className="px-4"><StatusBadge status={product.status} /></td><td className="px-4 text-end font-semibold tabular-nums text-gold">{product.price}</td><td className="px-4 text-end"><span className="inline-flex flex-col items-end gap-1" data-testid="product-stock"><span className="inline-flex items-center gap-2 text-white/70"><span className={`h-2 w-2 rounded-full ${stockTone}`} />{product.stock}</span><span className="text-[0.5rem] uppercase tracking-[0.08em] text-white/35">{stockLabel}</span></span></td><td className="px-4 text-end text-white/50">{product._count?.variants ?? 0}</td><td className="px-4 text-end text-xs text-white/35">{new Date(product.createdAt).toLocaleDateString()}</td><td className="px-4 text-end"><Link href={`/admin/products/${product.id}/edit`} className="inline-flex h-8 items-center rounded-md border border-gold/20 px-3 text-[0.56rem] font-semibold uppercase tracking-[0.1em] text-gold hover:bg-gold/10">{t("edit", "Edit")}</Link></td>
     </tr>
   );
 }
@@ -323,4 +394,11 @@ function ProductImage({ src, name, className }: { src: string; name: string; cla
 
 function Metric({ label, value, accent = false }: { label: string; value: string; accent?: boolean }) {
   return <div className="min-w-0"><p className="truncate text-[0.55rem] uppercase tracking-[0.1em] text-white/30">{label}</p><p className={`mt-1 truncate text-xs font-semibold ${accent ? "text-gold" : "text-white/70"}`}>{value}</p></div>;
+}
+
+function StockMetric({ product, t }: { product: ProductListItem; t: (key: string, fallback?: string) => string }) {
+  const low = isLowStock(product.stock, product.lowStockThreshold);
+  const label = product.stock <= 0 ? t("out_of_stock", "Out of stock") : low ? t("low_stock", "Low stock") : t("in_stock", "In stock");
+  const tone = product.stock <= 0 ? "text-red-300" : low ? "text-gold" : "text-emerald-400";
+  return <div className="min-w-0" data-testid="product-stock"><p className="truncate text-[0.55rem] uppercase tracking-[0.1em] text-white/30">{t("stock", "Stock")}</p><p className="mt-1 text-xs font-semibold text-white/70">{product.stock}</p><p className={`mt-0.5 truncate text-[0.5rem] uppercase ${tone}`}>{label}</p></div>;
 }

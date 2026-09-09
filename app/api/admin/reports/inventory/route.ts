@@ -15,8 +15,8 @@ export async function GET(request: NextRequest) {
     const [totalProducts, totalStock, lowStockCount, outOfStockCount, movements] = await Promise.all([
       prisma.product.count(),
       prisma.product.aggregate({ _sum: { stock: true } }),
-      prisma.product.count({ where: { stock: { gt: 0, lte: 5 } } }),
-      prisma.product.count({ where: { stock: 0 } }),
+      prisma.product.count({ where: { stock: { gt: 0, lte: prisma.product.fields.lowStockThreshold } } }),
+      prisma.product.count({ where: { stock: { lte: 0 } } }),
       prisma.inventoryMovement.findMany({
         where: { createdAt: { gte: from, lte: to } },
         orderBy: { createdAt: "desc" },

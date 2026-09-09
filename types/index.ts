@@ -224,6 +224,8 @@ export type ProductData = {
   category: string;
   collection: string;
   brand?: string;
+  sku?: string;
+  barcode?: string;
   visual?: "can" | "bottle" | "glass";
   accent?: string;
   description: string;
@@ -232,6 +234,7 @@ export type ProductData = {
   nutrition: string;
   badges: string[];
   stock: number;
+  lowStockThreshold: number;
   featured: boolean;
   isBestSeller?: boolean;
   available: boolean;
@@ -244,11 +247,14 @@ export type Product = {
   image: string;
   category: string;
   brand?: string;
+  sku?: string;
+  barcode?: string;
   visual?: "can" | "bottle" | "glass";
   accent?: string;
   description: string;
   gallery: string[];
   stock?: number;
+  lowStockThreshold?: number;
   available?: boolean;
   badges?: string[];
   ingredients?: string;

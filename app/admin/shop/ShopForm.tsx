@@ -52,7 +52,7 @@ export function ShopForm({ products, categories, collections, saveProduct }: Pro
 
       <div className="space-y-3">
         {visibleProducts.map((p) => {
-  const stockStatus = p.stock === 0 ? "out" : p.stock <= 10 ? "low" : "in";
+  const stockStatus = p.stock <= 0 ? "out" : p.stock <= (p.lowStockThreshold ?? 5) ? "low" : "in";
   const statusStyles = {
   out: "border-burgundy/30 bg-burgundy/10 text-burgundy",
   low: "border-gold/30 bg-gold/10 text-gold",

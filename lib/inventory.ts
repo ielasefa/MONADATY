@@ -596,8 +596,6 @@ export async function getInventoryDashboard() {
     supplierCount,
     poCount,
     totalStockRecords,
-    outOfStock,
-    lowStock,
     movementsToday,
     latestMovements,
   ] = await Promise.all([
@@ -605,9 +603,13 @@ export async function getInventoryDashboard() {
     prisma.warehouse.count({ where: { isActive: true } }),
     prisma.supplier.count({ where: { active: true } }),
     prisma.purchaseOrder.count(),
-    prisma.productWarehouseStock.findMany({ select: { stock: true, productId: true } }),
-    prisma.productWarehouseStock.count({ where: { stock: { lte: 0 } } }),
-    prisma.productWarehouseStock.count({ where: { stock: { gt: 0, lte: 5 } } }),
+    prisma.productWarehouseStock.findMany({
+      select: {
+        stock: true,
+        productId: true,
+        product: { select: { lowStockThreshold: true } },
+      },
+    }),
     prisma.inventoryMovement.count({ where: { createdAt: { gte: todayStart } } }),
     prisma.inventoryMovement.findMany({
       orderBy: { createdAt: "desc" },
@@ -620,6 +622,10 @@ export async function getInventoryDashboard() {
     (sum, r) => sum + r.stock,
     0,
   );
+  const outOfStock = totalStockRecords.filter((record) => record.stock <= 0).length;
+  const lowStock = totalStockRecords.filter(
+    (record) => record.stock > 0 && record.stock <= record.product.lowStockThreshold,
+  ).length;
 
   // 30-day movement chart
   const movements30d = await prisma.inventoryMovement.findMany({

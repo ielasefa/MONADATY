@@ -176,7 +176,7 @@ export function ProductForm() {
 
   const inventoryStatus = (() => {
     if (form.stock <= 0) return { label: t("out_of_stock_label"), color: "text-burgundy", dot: "bg-burgundy" };
-    if (form.stock < form.lowStockThreshold) return { label: t("low_stock"), color: "text-gold", dot: "bg-gold" };
+    if (form.stock <= form.lowStockThreshold) return { label: t("low_stock"), color: "text-gold", dot: "bg-gold" };
     return { label: t("in_stock_label"), color: "text-white/80", dot: "bg-white/20" };
   })();
 

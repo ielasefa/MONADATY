@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 import { authGuard, errorResponse, successResponse } from "@/lib/inventory-api";
+import { isLowStock } from "@/lib/admin-product-list";
 
 export const dynamic = "force-dynamic";
 
@@ -21,15 +22,32 @@ export async function GET(request: NextRequest) {
     if (productId) where.productId = productId;
     if (warehouseId) where.warehouseId = warehouseId;
     if (variantId) where.variantId = variantId;
-    if (lowStock === "true") where.stock = { lte: 5 };
-
-    const stockRecords = await prisma.productWarehouseStock.findMany({
+    if (lowStock === "true") where.stock = { gt: 0 };
+    const stockRows = await prisma.productWarehouseStock.findMany({
       where,
-      include: {
+      select: {
+        id: true,
+        warehouseId: true,
+        productId: true,
+        variantId: true,
+        stock: true,
+        reservedStock: true,
         warehouse: { select: { id: true, name: true, code: true } },
+        product: { select: { lowStockThreshold: true } },
       },
       orderBy: [{ warehouse: { name: "asc" } }, { productId: "asc" }],
     });
+    const stockRecords = stockRows
+      .filter((row) => lowStock !== "true" || isLowStock(row.stock, row.product.lowStockThreshold))
+      .map((row) => ({
+        id: row.id,
+        warehouseId: row.warehouseId,
+        productId: row.productId,
+        variantId: row.variantId,
+        stock: row.stock,
+        reservedStock: row.reservedStock,
+        warehouse: row.warehouse,
+      }));
 
     return successResponse({ stockRecords });
   } catch (err) {

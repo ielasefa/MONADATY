@@ -253,7 +253,7 @@ export default async function AdminDashboardPage() {
 
   const activeInventoryProducts = products.filter((product) => product.status !== "Archived");
   const allLowStockProducts = activeInventoryProducts.filter(
-    (product) => product.stock <= product.lowStockThreshold,
+    (product) => product.stock > 0 && product.stock <= product.lowStockThreshold,
   );
   const lowStockProducts = allLowStockProducts
     .sort((a, b) => a.stock - b.stock)

@@ -54,9 +54,9 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
 export function mapProductToData(p: {
   id: string; name: string; slug: string; price: string; comparePrice: string;
   image: string; gallery: string[]; visual: string; accent: string;
-  brand: string;
+  brand: string; sku: string; barcode: string;
   description: string; shortDescription: string; ingredients: string; nutrition: string;
-  badges: string[]; stock: number; featured: boolean; isBestSeller?: boolean; available: boolean;
+  badges: string[]; stock: number; lowStockThreshold: number; featured: boolean; isBestSeller?: boolean; available: boolean;
   category: { name: string } | null;
   collection: { slug: string } | null;
   images?: { url: string; isCover: boolean; sortOrder: number }[];
@@ -65,9 +65,10 @@ export function mapProductToData(p: {
     id: p.id, name: p.name, slug: p.slug, price: p.price, comparePrice: p.comparePrice,
     image: resolveProductImage(p), gallery: resolveDatabaseProductGallery({ image: p.image, images: p.images, gallery: p.gallery }), category: p.category?.name ?? "",
     collection: p.collection?.slug ?? "", visual: p.visual as "can" | "bottle" | "glass" | undefined,
-    brand: p.brand || undefined, accent: p.accent || undefined, description: p.description, shortDescription: p.shortDescription ?? "",
+    brand: p.brand || undefined, sku: p.sku || undefined, barcode: p.barcode || undefined,
+    accent: p.accent || undefined, description: p.description, shortDescription: p.shortDescription ?? "",
     ingredients: p.ingredients ?? "", nutrition: p.nutrition ?? "", badges: p.badges ?? [],
-    stock: p.stock, featured: p.featured, isBestSeller: p.isBestSeller, available: p.available,
+    stock: p.stock, lowStockThreshold: p.lowStockThreshold, featured: p.featured, isBestSeller: p.isBestSeller, available: p.available,
   };
 }
 
@@ -258,10 +259,10 @@ export const getCollectionShowcase = unstable_cache(
       };
       const data = mapProductToData({
         id: p.id, name: p.name, slug: p.slug, price: p.price, comparePrice: p.comparePrice,
-        image: p.image, gallery: p.gallery, visual: p.visual, accent: p.accent, brand: p.brand,
+        image: p.image, gallery: p.gallery, visual: p.visual, accent: p.accent, brand: p.brand, sku: p.sku, barcode: p.barcode,
         description: p.description, shortDescription: p.shortDescription,
         ingredients: p.ingredients, nutrition: p.nutrition, badges: p.badges,
-        stock: p.stock, featured: p.featured, isBestSeller: p.isBestSeller, available: p.available,
+        stock: p.stock, lowStockThreshold: p.lowStockThreshold, featured: p.featured, isBestSeller: p.isBestSeller, available: p.available,
         category: p.category, collection: p.collection,
         images: (p as { images?: { url: string; isCover: boolean; sortOrder: number }[] }).images,
       });
