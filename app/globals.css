@@ -1113,15 +1113,19 @@ select option { background-color: #171717; color: #FFFFFF; }
 }
 .market-hero-reference {
   display: block;
-  width: min(calc(100% - 2rem), 1180px);
-  aspect-ratio: 1672 / 941;
+  width: min(calc(100% - clamp(1rem, 2.4vw, 2.5rem)), 1480px);
+  aspect-ratio: 1480 / 493;
   min-height: 0;
   margin: 1rem auto 0;
   background: var(--market-wine-dark);
 }
-.market-hero-reference-image { object-fit: contain; }
-.market-hero-reference-shop { position: absolute; left: 6.7%; top: 66.5%; width: 25%; height: 9%; z-index: 2; border-radius: 12px; }
+.market-hero-reference-image { object-fit: fill; }
+.market-hero-reference-shop { position: absolute; left: 24%; top: 66%; width: 15%; height: 10%; z-index: 2; border-radius: 12px; }
 .market-hero-reference-shop:focus-visible { outline: 3px solid #f2d478; outline-offset: 3px; }
+@media (max-width: 767px) {
+  .market-hero-reference { aspect-ratio: 1672 / 941; }
+  .market-hero-reference-image { object-fit: contain; }
+}
 .market-hero-media, .market-hero-shade { position: absolute; inset: 0; z-index: -1; }
 .market-hero-media img { object-position: 78% 50%; }
 .market-hero[data-custom-image="true"] .market-hero-media { inset: 0 0 32%; }
