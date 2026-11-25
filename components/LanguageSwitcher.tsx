@@ -11,7 +11,7 @@ const LANGUAGES: { code: Language; label: string; flag: string }[] = [
   { code: "ar", label: "العربية", flag: "🇲🇦" },
 ];
 
-export function LanguageSwitcher({ className = "" }: { className?: string }) {
+export function LanguageSwitcher({ className = "", dropUp = false }: { className?: string; dropUp?: boolean }) {
   const { lang, setLang } = useLanguage();
   const { t } = useTranslation("system");
   const router = useRouter();
@@ -67,12 +67,12 @@ export function LanguageSwitcher({ className = "" }: { className?: string }) {
           stroke="currentColor"
           strokeWidth="2"
         >
-          <polyline points="6 9 12 15 18 9" />
+          <polyline points={dropUp ? "6 15 12 9 18 15" : "6 9 12 15 18 9"} />
         </svg>
       </button>
 
       {open && (
-        <div className="language-menu absolute end-0 top-full z-50 mt-1.5 w-44 overflow-hidden rounded-md border border-line bg-card shadow-premium-lg">
+        <div className={`language-menu absolute end-0 z-50 w-44 overflow-hidden rounded-md border border-line bg-card shadow-premium-lg ${dropUp ? "bottom-full mb-1.5" : "top-full mt-1.5"}`}>
           {LANGUAGES.map((l) => (
             <button
               key={l.code}

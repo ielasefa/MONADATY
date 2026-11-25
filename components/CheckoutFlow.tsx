@@ -167,6 +167,11 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
       }
     });
 
+    // Explicit address guard — belt-and-suspenders on top of the loop above
+    if (!deliveryState.address.trim()) {
+      nextErrors.address = t("required_field");
+    }
+
     if (!isValidCheckoutEmail(deliveryState.email)) {
       nextErrors.email = t("invalid_email");
     }
@@ -185,7 +190,9 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
     if (Object.keys(nextErrors).length > 0) {
       setErrors(nextErrors);
       const firstField = Object.keys(nextErrors)[0];
-      event.currentTarget.querySelector<HTMLElement>(`[name="${firstField}"]`)?.focus();
+      const firstEl = event.currentTarget.querySelector<HTMLElement>(`[name="${firstField}"]`);
+      firstEl?.focus();
+      firstEl?.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
 
@@ -409,6 +416,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                     onChange={(e) => handleChange("address", e.target.value)}
                     placeholder={t("address_placeholder")}
                     className="input-premium"
+                    aria-required="true"
                     aria-invalid={Boolean(errors.address)}
                     aria-describedby={errors.address ? "err-address" : undefined}
                     required

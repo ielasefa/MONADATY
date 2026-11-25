@@ -95,7 +95,7 @@ export function Footer({
   const socialEntries = Object.entries(socialLinks).filter(([, value]) => value);
 
   return (
-    <footer className="storefront-theme market-footer relative w-full overflow-hidden">
+    <footer className="storefront-theme market-footer relative w-full">
       {/* Top gold divider */}
  {/* Top gold divider — luxury shimmer reveal */}
  <motion.div
@@ -310,7 +310,7 @@ export function Footer({
             <span className="text-sm tracking-[0.08em] text-secondary">
               {t("location", "Casablanca · Morocco")}
             </span>
-            <LanguageSwitcher />
+            <LanguageSwitcher dropUp />
           </div>
         </div>
       </motion.div>

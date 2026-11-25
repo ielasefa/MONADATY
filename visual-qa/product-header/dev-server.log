@@ -117,3 +117,29 @@ PostgreSQL is already running on 127.0.0.1:5432
  GET /manifest.webmanifest 200 in 2564ms
  GET /api/translations?namespace=system 200 in 2513ms
  GET /api/translations?namespace=home 200 in 2475ms
+ ○ Compiling / ...
+ ✓ Compiled / in 2.2s (1027 modules)
+ GET / 200 in 4643ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/home/ielasef/Desktop/MONADATY/.next/server/app/shop/page.js'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/ielasef/Desktop/MONADATY/.next/server/app/shop/page.js',
+  page: '/shop'
+}
+ ○ Compiling /api/translations ...
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /shop 500 in 4224ms
+ ✓ Compiled /api/translations in 4.7s (2203 modules)
+ GET / 200 in 3157ms
+ GET / 200 in 3189ms
+ GET /api/translations?namespace=system 200 in 440ms
+ GET /api/translations?namespace=home 200 in 519ms
+ GET /shop 200 in 857ms
+ GET / 200 in 289ms
+ GET / 200 in 213ms
+ GET /shop 200 in 159ms
+ GET / 200 in 156ms
+ GET /shop?category=cappy 200 in 210ms
+ GET / 200 in 232ms
+ GET / 200 in 218ms

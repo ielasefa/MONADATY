@@ -5,7 +5,7 @@ import { createContext, useContext, useState, useEffect, useCallback, type React
 export type Language = "fr" | "en" | "ar";
 
 const LANGUAGE_COOKIE = "monadaty_lang";
-const DEFAULT_LANG: Language = "fr";
+const DEFAULT_LANG: Language = "ar";
 
 type LanguageContextType = {
   lang: Language;
@@ -17,8 +17,8 @@ type LanguageContextType = {
 const LanguageContext = createContext<LanguageContextType>({
   lang: DEFAULT_LANG,
   setLang: () => {},
-  isRTL: false,
-  dir: "ltr",
+  isRTL: true,
+  dir: "rtl",
 });
 
 function getInitialLanguage(): Language {
