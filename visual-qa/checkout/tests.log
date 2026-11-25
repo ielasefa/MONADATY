@@ -1,0 +1,60 @@
+npm notice run monadaty@1.0.0 test
+npm notice run vitest run
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+
+ RUN  v2.1.9 /home/ielasef/Desktop/MONADATY
+
+ ✓ tests/unit/landing-legacy-images.test.ts (8 tests) 38ms
+ ✓ tests/integration/api-orders-create.test.ts (24 tests) 115ms
+ ✓ tests/unit/orders-create.test.ts (5 tests) 36ms
+ ✓ tests/integration/api-admin-featured-products.test.ts (13 tests) 150ms
+ ✓ tests/unit/config.test.ts (15 tests) 29ms
+ ✓ tests/integration/api-admin-landing-seo.test.ts (8 tests) 86ms
+ ✓ tests/unit/cart-stock-validation.test.ts (9 tests) 13ms
+ ✓ tests/unit/storage.test.ts (14 tests) 40ms
+ ✓ tests/unit/checkout-validators.test.ts (35 tests) 42ms
+ ✓ tests/unit/product-stock.test.ts (9 tests) 35ms
+stderr | tests/integration/api-admin-notifications-read.test.ts > POST /api/admin/notifications/read > returns 500 on database error
+2026-11-25T17:34:11.856Z [ERROR] [POST /api/admin/notifications/read] db down {"stack":"Error: db down\n    at /home/ielasef/Desktop/MONADATY/tests/integration/api-admin-notifications-read.test.ts:93:44\n    at file:///home/ielasef/Desktop/MONADATY/node_modules/@vitest/runner/dist/index.js:146:14\n    at file:///home/ielasef/Desktop/MONADATY/node_modules/@vitest/runner/dist/index.js:533:11\n    at runWithTimeout (file:///home/ielasef/Desktop/MONADATY/node_modules/@vitest/runner/dist/index.js:39:7)\n    at runTest (file:///home/ielasef/Desktop/MONADATY/node_modules/@vitest/runner/dist/index.js:1056:17)\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at runSuite (file:///home/ielasef/Desktop/MONADATY/node_modules/@vitest/runner/dist/index.js:1205:15)\n    at runSuite (file:///home/ielasef/Desktop/MONADATY/node_modules/@vitest/runner/dist/index.js:1205:15)\n    at runFiles (file:///home/ielasef/Desktop/MONADATY/node_modules/@vitest/runner/dist/index.js:1262:5)\n    at startTests (file:///home/ielasef/Desktop/MONADATY/node_modules/@vitest/runner/dist/index.js:1271:3)"}
+
+ ✓ tests/integration/api-admin-notifications-read.test.ts (7 tests) 70ms
+ ✓ tests/unit/csrf.test.ts (17 tests) 32ms
+ ✓ tests/unit/orders-stock-status.test.ts (5 tests) 24ms
+ ✓ tests/integration/api-admin-products-list.test.ts (3 tests) 89ms
+ ✓ tests/unit/translation-utils.test.ts (12 tests) 53ms
+ ✓ tests/unit/local-db-command.test.ts (4 tests) 2078ms
+   ✓ local database command environment > uses the configured local role from .env.local instead of defaulting to postgres 642ms
+   ✓ local database command environment > gives an explicit terminal configuration precedence over the file 490ms
+   ✓ local database command environment > reads the local override independently of the ordinary database configuration 496ms
+   ✓ local database command environment > rejects a remote host loaded from .env.local before executing the command 446ms
+ ✓ tests/unit/admin-translation-defaults.test.ts (5 tests) 30ms
+ ✓ tests/unit/admin-product-list.test.ts (8 tests) 22ms
+ ✓ tests/unit/rate-limiter.test.ts (7 tests) 79ms
+ ✓ tests/integration/api-translations.test.ts (4 tests) 38ms
+ ✓ tests/unit/money.test.ts (10 tests) 14ms
+ ✓ tests/unit/product-search.test.ts (11 tests) 13ms
+ ✓ tests/unit/invoice.test.ts (6 tests) 14ms
+stdout | unknown test
+2026-11-25T17:34:16.879Z [INFO]  SIGTERM signal received: closing HTTP connection
+
+ ✓ tests/unit/language-detection.test.ts (5 tests) 11ms
+ ✓ tests/unit/inventory-helpers.test.ts (7 tests) 62ms
+stdout | unknown test
+2026-11-25T17:34:17.647Z [INFO]  SIGTERM signal received: closing HTTP connection
+
+ ✓ tests/unit/slug.test.ts (8 tests) 18ms
+ ✓ tests/unit/auth-token.test.ts (4 tests) 48ms
+ ✓ tests/integration/api-admin-session.test.ts (3 tests) 37ms
+ ✓ tests/unit/latest-request.test.ts (1 test) 12ms
+ ✓ tests/unit/translations.test.ts (6 tests) 21ms
+stdout | unknown test
+2026-11-25T17:34:19.579Z [INFO]  SIGTERM signal received: closing HTTP connection
+
+ ✓ tests/unit/admin-login-destination.test.ts (10 tests) 16ms
+ ✓ tests/unit/landing-text.test.ts (2 tests) 15ms
+
+ Test Files  32 passed (32)
+      Tests  285 passed (285)
+   Start at  18:34:07
+   Duration  13.19s (transform 2.96s, setup 0ms, collect 8.43s, tests 3.38s, environment 21ms, prepare 8.27s)
+

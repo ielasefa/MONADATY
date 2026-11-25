@@ -19,3 +19,6 @@ deploy/
 /public/invoices/
 *.dump
 *.sql.gz
+
+.next-navigation-qa/
+.next-admin-qa/

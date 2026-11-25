@@ -1,167 +1,110 @@
 import Link from "next/link";
 import { SafeImage } from "@/components/SafeImage";
 import { getLandingContent } from "@/lib/db";
-import { loadCollections } from "@/lib/data";
 import { getLandingCopy } from "@/lib/landing-copy";
 import { getLanguage } from "@/lib/translations";
 import { FadeIn } from "@/components/motion/FadeIn";
-import { Reveal } from "@/components/Reveal";
+import "./about.css";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "À propos" };
+export async function generateMetadata() {
+  const copy = getLandingCopy(await getLanguage()).about;
+  return { title: copy.metadataTitle, description: copy.description, alternates: { canonical: "/about" } };
+}
+
+type IconName = "box" | "pin" | "wallet" | "bottles" | "tag" | "cart" | "truck";
+const serviceIcons: IconName[] = ["box", "pin", "wallet"];
+const valueIcons: IconName[] = ["bottles", "tag", "cart", "truck"];
+const stepIcons: IconName[] = ["bottles", "cart", "truck"];
 
 export default async function AboutPage() {
   const lang = await getLanguage();
   const copy = getLandingCopy(lang).about;
-  const [content, collections] = await Promise.all([getLandingContent(), loadCollections()]);
-  const firstImage = content.aboutSection.image?.trim() || collections[0]?.image?.trim();
-  const secondImage = collections.find((collection) => collection.image && collection.image !== firstImage)?.image;
+  const content = await getLandingContent();
+  const image = content.aboutSection.image?.trim() || "/uploads/monadaty/about/a60496f8d9234ed0.webp";
 
   return (
-    <div className="bg-black">
-      <section className="relative overflow-hidden border-b border-gold/[0.16] bg-surface">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_0%,rgba(214,179,90,0.1),transparent_38%)]" />
-        <div className="storefront-container relative grid items-center gap-12 py-16 md:py-20 lg:grid-cols-12 lg:gap-16 lg:py-28">
-          <FadeIn delay={0.08} y={20} duration={0.65} className="lg:col-span-6">
-            <p className="storefront-eyebrow">
-              <span className="h-px w-9 bg-gold" />
-              {copy.eyebrow}
-            </p>
-            <h1 className="storefront-page-title mt-6 max-w-[14ch]">
-              {copy.title}
-            </h1>
-            <p className="mt-6 max-w-xl text-sm leading-[1.9] text-white/58 sm:text-base">
-              {copy.description}
-            </p>
-            <Link href="/shop" className="btn-primary mt-8 h-12">
-              {copy.cta}
-            </Link>
-          </FadeIn>
-
-          <EditorialImage
-            src={firstImage}
-            alt={copy.storyTitle}
-            label={copy.values[0].title}
-            className="aspect-[4/5] lg:col-span-6 lg:aspect-[5/4]"
-            priority
-          />
-        </div>
+    <div className="market-about">
+      <section className="about-hero storefront-container" aria-labelledby="about-title">
+        <FadeIn className="about-hero-copy" y={12}>
+          <p className="storefront-eyebrow"><span />{copy.eyebrow}</p>
+          <h1 id="about-title">{copy.title}<em>{copy.titleAccent}</em></h1>
+          <p className="about-lede">{copy.description}</p>
+          <div className="about-actions">
+            <Link href="/shop" className="btn-primary">{copy.cta}</Link>
+            <a href="#notre-engagement" className="about-text-link">{copy.secondaryCta}</a>
+          </div>
+        </FadeIn>
+        <FadeIn className="about-hero-visual" delay={0.08} y={12}>
+          <figure>
+            <div className="about-image">
+              <SafeImage src={image} alt={copy.imageAlt} fill priority sizes="(min-width: 1024px) 46vw, 100vw" className="object-cover" />
+            </div>
+            <figcaption><span className="about-image-monogram" aria-hidden="true">M</span><span>{copy.imageCaption}</span></figcaption>
+          </figure>
+        </FadeIn>
+        <ul className="about-services">
+          {copy.services.map((service, i) => <li key={service}><AboutIcon name={serviceIcons[i]} /><span>{service}</span></li>)}
+        </ul>
       </section>
 
-      <section className="storefront-container storefront-section">
-        <div className="grid items-start gap-12 lg:grid-cols-12 lg:gap-20">
-          <Reveal className="lg:col-span-5 lg:sticky lg:top-28">
-            <p className="storefront-eyebrow">
-              <span className="h-px w-9 bg-gold" />
-              {copy.storyEyebrow}
-            </p>
-            <h2 className="storefront-section-title mt-5">
-              {copy.storyTitle}
-            </h2>
-            <p className="mt-6 max-w-lg text-sm leading-[1.9] text-white/58 sm:text-[0.95rem]">
-              {copy.storyDescription}
-            </p>
-          </Reveal>
-
-          <Reveal delay={0.1} className="lg:col-span-7">
-          <div className="grid gap-px overflow-hidden rounded-2xl border border-gold/[0.16] bg-gold/[0.16] sm:grid-cols-2">
-            {copy.values.map((value, index) => (
-              <article key={value.title} className="min-h-52 bg-card p-7 sm:p-8 lg:p-10">
-                <span className="font-display text-4xl text-gold/35">0{index + 1}</span>
-                <h3 className="mt-8 font-display text-2xl text-white">{value.title}</h3>
-                <p className="mt-3 text-sm leading-[1.8] text-white/58">{value.description}</p>
+      <section id="notre-engagement" className="about-values-section" aria-labelledby="about-values-title">
+        <div className="storefront-container about-values-layout">
+          <div className="about-section-copy">
+            <p className="storefront-eyebrow"><span />{copy.valuesEyebrow}</p>
+            <h2 id="about-values-title">{copy.valuesTitle}</h2>
+            <p>{copy.storyDescription}</p>
+            <div className="about-signature"><span>MONADATY</span><span>{copy.storyTitle}</span></div>
+          </div>
+          <div className="about-values-grid">
+            {copy.values.map((value, i) => (
+              <article key={value.title} className="about-value">
+                <span className="about-value-icon"><AboutIcon name={valueIcons[i]} /></span>
+                <h3>{value.title}</h3><p>{value.description}</p>
               </article>
             ))}
           </div>
-          </Reveal>
         </div>
       </section>
 
-      <section className="border-y border-gold/[0.16] bg-surface">
-        <div className="storefront-container storefront-section">
-          <div className="mb-10 max-w-3xl md:mb-14">
-            <p className="storefront-eyebrow">
-              <span className="h-px w-9 bg-gold" />
-              {copy.valuesEyebrow}
-            </p>
-            <h2 className="storefront-section-title mt-5">
-              {copy.valuesTitle}
-            </h2>
-          </div>
-
-          <div className="grid gap-6 lg:grid-cols-12 lg:items-stretch">
-            <EditorialImage
-              src={secondImage || firstImage}
-              alt={copy.valuesTitle}
-              label={copy.values[3].title}
-              className="aspect-[4/3] lg:col-span-7 lg:aspect-auto lg:min-h-[470px]"
-            />
-            <Reveal delay={0.1} className="lg:col-span-5">
-            <div className="flex h-full flex-col justify-between rounded-2xl border border-gold/[0.16] bg-card p-7 sm:p-9 lg:p-11">
-              <div>
-                <p className="text-[0.58rem] font-semibold uppercase tracking-[0.3em] text-gold">MONADATY</p>
-                <p className="mt-6 font-display text-3xl leading-[1.15] text-white sm:text-4xl">
-                  {copy.closingTitle}
-                </p>
-                <p className="mt-5 text-sm leading-[1.85] text-white/58">{copy.closingDescription}</p>
-              </div>
-              <Link href="/shop" className="btn-primary mt-10 h-12 w-full sm:w-fit">
-                {copy.cta}
-              </Link>
-            </div>
-            </Reveal>
-          </div>
+      <section className="storefront-container about-process-section" aria-labelledby="about-process-title">
+        <div className="about-process">
+          <div className="about-process-heading"><p className="storefront-eyebrow"><span />{copy.processEyebrow}</p><h2 id="about-process-title">{copy.processTitle}</h2></div>
+          <ol className="about-steps">
+            {copy.steps.map((step, i) => <li key={step.title}><span className="about-process-icon"><AboutIcon name={stepIcons[i]} /></span><h3>{step.title}</h3><p>{step.description}</p></li>)}
+          </ol>
         </div>
       </section>
 
-      <section className="storefront-container py-16 text-center md:py-20 lg:py-24">
-        <Reveal>
-        <p className="storefront-section-title mx-auto max-w-[18ch]">
-          {copy.closingTitle}
-        </p>
-        <p className="mx-auto mt-5 max-w-xl text-sm leading-[1.85] text-white/58">{copy.closingDescription}</p>
-        <Link href="/shop" className="btn-primary mt-8 h-12">{copy.cta}</Link>
-        </Reveal>
+      <section className="storefront-container about-delivery-section" aria-labelledby="about-delivery-title">
+        <div className="about-delivery">
+          <div className="about-section-copy">
+            <p className="storefront-eyebrow"><span />{copy.deliveryEyebrow}</p>
+            <h2 id="about-delivery-title">{copy.closingTitle}</h2>
+            <p>{copy.deliveryDescription}</p>
+            <Link href="/shop" className="btn-primary">{copy.cta}</Link>
+          </div>
+          <ul className="about-cities" aria-label={copy.services[1]}>
+            <li><AboutIcon name="pin" /><p>{lang === "ar" ? "الرباط" : "Rabat"}</p><span lang={lang === "ar" ? "fr" : "ar"}>{lang === "ar" ? "Rabat" : "الرباط"}</span></li>
+            <li><AboutIcon name="pin" /><p>{lang === "ar" ? "سلا" : "Salé"}</p><span lang={lang === "ar" ? "fr" : "ar"}>{lang === "ar" ? "Salé" : "سلا"}</span></li>
+          </ul>
+        </div>
       </section>
     </div>
   );
 }
 
-function EditorialImage({
-  src,
-  alt,
-  label,
-  className,
-  priority = false,
-}: {
-  src?: string | null;
-  alt: string;
-  label: string;
-  className: string;
-  priority?: boolean;
-}) {
+function AboutIcon({ name }: { name: IconName }) {
   return (
-    <Reveal delay={priority ? 0.42 : 0.06} className={className}>
-    <div className="group relative h-full w-full overflow-hidden rounded-2xl border border-gold/[0.16] bg-card">
-      {src ? (
-        <SafeImage
-          src={src}
-          alt={alt}
-          fill
-          priority={priority}
-          sizes="(min-width: 1024px) 55vw, 100vw"
-          className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-          fallback={null}
-        />
-      ) : (
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(214,179,90,0.11),transparent_58%)]" />
-      )}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-      <p className="absolute bottom-6 start-6 text-[0.56rem] font-semibold uppercase tracking-[0.3em] text-gold sm:bottom-8 sm:start-8">
-        {label}
-      </p>
-    </div>
-    </Reveal>
+    <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      {name === "box" && <><path d="m12 3 9 5-9 5-9-5 9-5Z" /><path d="M3 8v9l9 5 9-5V8M12 13v9M7 5.8l9 5" /></>}
+      {name === "pin" && <><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></>}
+      {name === "wallet" && <><rect x="3" y="5" width="18" height="15" rx="3" /><path d="M3 9h18M16 15h2M7 5V3h11" /></>}
+      {name === "bottles" && <><path d="M5 3h4v5l2 3v10H3V11l2-3V3ZM5 6h4M15 8h6v13h-6zM16 5h4M16 12h4M5 14h4" /></>}
+      {name === "tag" && <><path d="M3 3h8l10 10-8 8L3 11V3Z" /><circle cx="7.5" cy="7.5" r="1" /><path d="m12 11 4 4" /></>}
+      {name === "cart" && <><path d="M3 3h2l3 12h11l3-9H6M8 15l-1 3h12" /><circle cx="9" cy="21" r="1" /><circle cx="18" cy="21" r="1" /></>}
+      {name === "truck" && <><path d="M2 5h12v12H2V5ZM14 9h4l4 4v4h-8M2 17h3m12 0h-5" /><circle cx="7" cy="18" r="2" /><circle cx="18" cy="18" r="2" /></>}
+    </svg>
   );
 }

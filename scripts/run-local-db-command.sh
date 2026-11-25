@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-local_database_url="${LOCAL_DATABASE_URL:-postgresql://postgres@127.0.0.1:5432/monadaty?sslmode=disable}"
+local_database_url="$(node -e '
+  const { loadEnvConfig } = require("@next/env");
+  loadEnvConfig(process.cwd(), true, { info() {}, error: console.error });
+  process.stdout.write(process.env.LOCAL_DATABASE_URL || "postgresql://postgres@127.0.0.1:5432/monadaty?sslmode=disable");
+')"
 
 database_host="$(node -e '
   const value = process.argv[1];

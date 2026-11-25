@@ -16,6 +16,10 @@ export const productInclude = {
   images: { orderBy: { sortOrder: "asc" as const } },
 } as const;
 
+function isMissingTable(error: unknown): boolean {
+  return typeof error === "object" && error !== null && "code" in error && error.code === "P2021";
+}
+
 export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   websiteName: "MONADATY",
   logo: "",
@@ -194,6 +198,14 @@ export const getLandingCollections = unstable_cache(
     });
     return fallback.map(mapCollectionData);
   } catch (error) {
+    if (isMissingTable(error)) {
+      const rows = await prisma.collection.findMany({
+        where: { products: { some: { available: true, status: "Active" } } },
+        orderBy: { order: "asc" },
+        take: 3,
+      });
+      return rows.map(mapCollectionData);
+    }
     logError(error, "Database error in getLandingCollections");
     return [];
   }
@@ -271,7 +283,7 @@ export const getCollectionShowcase = unstable_cache(
     }
     return Array.from(grouped.values());
   } catch (error) {
-    logError(error, "Database error in getCollectionShowcase");
+    if (!isMissingTable(error)) logError(error, "Database error in getCollectionShowcase");
     return [];
   }
 },
@@ -351,7 +363,7 @@ export async function getCollectionShowcaseStats() {
       }, {}),
     };
   } catch (error) {
-    logError(error, "Database error in getCollectionShowcaseStats");
+    if (!isMissingTable(error)) logError(error, "Database error in getCollectionShowcaseStats");
     return { configuredCollections: 0, configuredProducts: 0, perCollection: {} };
   }
 }
@@ -421,6 +433,18 @@ export const getLandingFeaturedProducts = unstable_cache(
       .sort((a, b) => (orderMap.get(a.id) ?? 0) - (orderMap.get(b.id) ?? 0))
       .map(mapProductToData);
   } catch (error) {
+    if (isMissingTable(error)) {
+      const entries = await prisma.landingSection.findMany({
+        where: {
+          section: "featured_products",
+          enabled: true,
+          product: { available: true, status: "Active" },
+        },
+        orderBy: { position: "asc" },
+        include: { product: { include: productInclude } },
+      });
+      return entries.flatMap((entry) => entry.product ? [mapProductToData(entry.product)] : []);
+    }
     logError(error, "Database error in getLandingFeaturedProducts");
     return [];
   }
@@ -687,6 +711,21 @@ export const getLandingContent = unstable_cache(
       sectionOrder,
     };
   } catch (error) {
+    if (isMissingTable(error)) {
+      const settings = await getSiteSettings();
+      return {
+        hero: settings.hero,
+        featuredProducts: { ...settings.featuredProducts, productIds: "" },
+        collectionsSection: { ...settings.collectionsSection, selectedCollectionIds: "" },
+        aboutSection: settings.aboutSection,
+        testimonialsSection: settings.testimonialsSection,
+        newsletter: settings.newsletter,
+        moroccanMoment: { enabled: false, title: "", subtitle: "", description: "" },
+        finalCta: { enabled: false, subtitle: "", title: "", description: "", buttonText: "", buttonLink: "/shop" },
+        seo: null,
+        sectionOrder: settings.sectionOrder,
+      };
+    }
     logError(error, "Database error in getLandingContent");
     return {
       hero: { enabled: true, title: "WHOLESALE\nBEVERAGES.", subtitle: "Drinks for Professionals — Delivered to You", description: "A wide range of wholesale beverages for your business.", ctaText: "Order from MONADATY", ctaLink: "/shop", media: [] },

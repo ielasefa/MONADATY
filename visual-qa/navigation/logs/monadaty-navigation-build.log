@@ -1,0 +1,172 @@
+   ▲ Next.js 15.5.23
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · optimizePackageImports
+     · middlewareClientMaxBodySize: "12mb"
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 29.2s
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/103) ...
+   Generating static pages (25/103) 
+   Generating static pages (51/103) 
+   Generating static pages (77/103) 
+ ✓ Generating static pages (103/103)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                                     Size  First Load JS
+┌ ƒ /                                                        8.86 kB         181 kB
+├ ƒ /_not-found                                                353 B         103 kB
+├ ƒ /about                                                   1.94 kB         154 kB
+├ ƒ /admin                                                     353 B         103 kB
+├ ƒ /admin/admins                                            5.22 kB         117 kB
+├ ƒ /admin/automation                                        5.11 kB         108 kB
+├ ƒ /admin/blog                                              1.59 kB         120 kB
+├ ƒ /admin/categories                                        2.35 kB         121 kB
+├ ƒ /admin/change-password                                   5.93 kB         159 kB
+├ ƒ /admin/collections                                       2.75 kB         121 kB
+├ ƒ /admin/collections-showcase                              9.46 kB         171 kB
+├ ƒ /admin/customers                                         7.96 kB         111 kB
+├ ƒ /admin/dashboard                                         8.91 kB         169 kB
+├ ƒ /admin/inventory                                         5.32 kB         152 kB
+├ ƒ /admin/inventory/adjustments                             5.97 kB         159 kB
+├ ƒ /admin/inventory/audit                                   5.81 kB         149 kB
+├ ƒ /admin/inventory/purchase-orders                         5.19 kB         152 kB
+├ ƒ /admin/inventory/purchase-orders/[id]                    6.38 kB         162 kB
+├ ƒ /admin/inventory/suppliers                               5.13 kB         152 kB
+├ ƒ /admin/inventory/suppliers/[id]                          5.16 kB         121 kB
+├ ƒ /admin/inventory/transfers                               5.92 kB         159 kB
+├ ƒ /admin/inventory/warehouses                              5.14 kB         152 kB
+├ ƒ /admin/inventory/warehouses/[id]                         5.49 kB         162 kB
+├ ƒ /admin/invoices                                          5.96 kB         121 kB
+├ ƒ /admin/landing                                           16.1 kB         184 kB
+├ ƒ /admin/login                                             8.59 kB         115 kB
+├ ƒ /admin/orders                                            8.38 kB         111 kB
+├ ƒ /admin/orders/[id]                                       10.7 kB         167 kB
+├ ƒ /admin/products                                          7.32 kB         133 kB
+├ ƒ /admin/products/[id]/edit                                6.63 kB         127 kB
+├ ƒ /admin/products/add                                       4.6 kB         125 kB
+├ ƒ /admin/reports                                            4.2 kB         110 kB
+├ ƒ /admin/reports/customers                                 4.45 kB         107 kB
+├ ƒ /admin/reports/inventory                                 4.21 kB         107 kB
+├ ƒ /admin/reports/orders                                       5 kB         209 kB
+├ ƒ /admin/reports/products                                  4.41 kB         218 kB
+├ ƒ /admin/reports/profit                                    4.25 kB         107 kB
+├ ƒ /admin/reports/revenue                                   5.04 kB         225 kB
+├ ƒ /admin/reports/sales                                       11 kB         225 kB
+├ ƒ /admin/security                                           6.1 kB         118 kB
+├ ƒ /admin/security/api-keys                                 4.92 kB         117 kB
+├ ƒ /admin/security/audit-logs                               4.62 kB         107 kB
+├ ƒ /admin/security/device-sessions                          4.58 kB         117 kB
+├ ƒ /admin/security/login-history                            4.59 kB         107 kB
+├ ƒ /admin/settings                                           1.7 kB         161 kB
+├ ƒ /admin/shop                                                 3 kB         121 kB
+├ ƒ /admin/translations                                      6.16 kB         118 kB
+├ ƒ /api/admin/admins                                          353 B         103 kB
+├ ƒ /api/admin/admins/[id]                                     353 B         103 kB
+├ ƒ /api/admin/api-keys                                        353 B         103 kB
+├ ƒ /api/admin/audit-logs                                      353 B         103 kB
+├ ƒ /api/admin/automation/jobs                                 353 B         103 kB
+├ ƒ /api/admin/automation/logs                                 353 B         103 kB
+├ ƒ /api/admin/categories/create                               353 B         103 kB
+├ ƒ /api/admin/categories/list                                 353 B         103 kB
+├ ƒ /api/admin/change-password                                 353 B         103 kB
+├ ƒ /api/admin/collections/list                                353 B         103 kB
+├ ƒ /api/admin/collections/picker                              353 B         103 kB
+├ ƒ /api/admin/device-sessions                                 353 B         103 kB
+├ ƒ /api/admin/inventory/adjustments                           353 B         103 kB
+├ ƒ /api/admin/inventory/audit                                 353 B         103 kB
+├ ƒ /api/admin/inventory/bulk                                  353 B         103 kB
+├ ƒ /api/admin/inventory/dashboard                             353 B         103 kB
+├ ƒ /api/admin/inventory/export                                353 B         103 kB
+├ ƒ /api/admin/inventory/movements                             353 B         103 kB
+├ ƒ /api/admin/inventory/permissions                           353 B         103 kB
+├ ƒ /api/admin/inventory/purchase-orders                       353 B         103 kB
+├ ƒ /api/admin/inventory/purchase-orders/[id]                  353 B         103 kB
+├ ƒ /api/admin/inventory/purchase-orders/[id]/receive          353 B         103 kB
+├ ƒ /api/admin/inventory/stock                                 353 B         103 kB
+├ ƒ /api/admin/inventory/suppliers                             353 B         103 kB
+├ ƒ /api/admin/inventory/suppliers/[id]                        353 B         103 kB
+├ ƒ /api/admin/inventory/transfers                             353 B         103 kB
+├ ƒ /api/admin/inventory/warehouses                            353 B         103 kB
+├ ƒ /api/admin/inventory/warehouses/[id]                       353 B         103 kB
+├ ƒ /api/admin/invoices/[id]/cancel                            353 B         103 kB
+├ ƒ /api/admin/invoices/[id]/download                          353 B         103 kB
+├ ƒ /api/admin/invoices/by-order                               353 B         103 kB
+├ ƒ /api/admin/invoices/create                                 353 B         103 kB
+├ ƒ /api/admin/invoices/export/csv                             353 B         103 kB
+├ ƒ /api/admin/invoices/list                                   353 B         103 kB
+├ ƒ /api/admin/landing                                         353 B         103 kB
+├ ƒ /api/admin/landing/featured-products                       353 B         103 kB
+├ ƒ /api/admin/landing/order                                   353 B         103 kB
+├ ƒ /api/admin/landing/publish                                 353 B         103 kB
+├ ƒ /api/admin/landing/sections                                353 B         103 kB
+├ ƒ /api/admin/landing/seo                                     353 B         103 kB
+├ ƒ /api/admin/landing/versions                                353 B         103 kB
+├ ƒ /api/admin/landing/versions/restore                        353 B         103 kB
+├ ƒ /api/admin/login                                           353 B         103 kB
+├ ƒ /api/admin/login-history                                   353 B         103 kB
+├ ƒ /api/admin/logout                                          353 B         103 kB
+├ ƒ /api/admin/notifications/read                              353 B         103 kB
+├ ƒ /api/admin/notifications/read-all                          353 B         103 kB
+├ ƒ /api/admin/products                                        353 B         103 kB
+├ ƒ /api/admin/products/[id]                                   353 B         103 kB
+├ ƒ /api/admin/products/[id]/history                           353 B         103 kB
+├ ƒ /api/admin/products/[id]/variants                          353 B         103 kB
+├ ƒ /api/admin/products/[id]/variants/[variantId]              353 B         103 kB
+├ ƒ /api/admin/products/[id]/variants/[variantId]/duplicate    353 B         103 kB
+├ ƒ /api/admin/products/bulk                                   353 B         103 kB
+├ ƒ /api/admin/products/check-slug                             353 B         103 kB
+├ ƒ /api/admin/products/export                                 353 B         103 kB
+├ ƒ /api/admin/products/list                                   353 B         103 kB
+├ ƒ /api/admin/products/picker                                 353 B         103 kB
+├ ƒ /api/admin/products/upload                                 353 B         103 kB
+├ ƒ /api/admin/rate-limits                                     353 B         103 kB
+├ ƒ /api/admin/reports/customers                               353 B         103 kB
+├ ƒ /api/admin/reports/inventory                               353 B         103 kB
+├ ƒ /api/admin/reports/orders                                  353 B         103 kB
+├ ƒ /api/admin/reports/products                                353 B         103 kB
+├ ƒ /api/admin/reports/profit                                  353 B         103 kB
+├ ƒ /api/admin/reports/revenue                                 353 B         103 kB
+├ ƒ /api/admin/reports/sales                                   353 B         103 kB
+├ ƒ /api/admin/session                                         353 B         103 kB
+├ ƒ /api/admin/translations                                    353 B         103 kB
+├ ƒ /api/health                                                353 B         103 kB
+├ ƒ /api/health/public                                         353 B         103 kB
+├ ƒ /api/orders/create                                         353 B         103 kB
+├ ƒ /api/orders/get                                            353 B         103 kB
+├ ƒ /api/orders/list                                           353 B         103 kB
+├ ƒ /api/orders/update-status                                  353 B         103 kB
+├ ƒ /api/public/invoices/download                              353 B         103 kB
+├ ƒ /api/translations                                          353 B         103 kB
+├ ƒ /checkout                                                1.42 kB         104 kB
+├ ƒ /collections                                             2.42 kB         155 kB
+├ ƒ /home                                                      353 B         103 kB
+├ ○ /manifest.webmanifest                                      353 B         103 kB
+├ ƒ /offline                                                 4.31 kB         110 kB
+├ ● /product/[id]                                            4.29 kB         171 kB
+├   ├ /product/e4e98f22-9970-4ab4-a311-850190a1e090
+├   ├ /product/12142663-af6c-4c0b-98cb-1d4ae2fa9ae4
+├   ├ /product/7f120691-c4bf-477a-be35-46e6d2c737f3
+├   └ [+41 more paths]
+├ ƒ /robots.txt                                                353 B         103 kB
+├ ƒ /shop                                                    6.95 kB         174 kB
+├ ƒ /sitemap.xml                                               353 B         103 kB
+├ ƒ /success                                                 1.24 kB         148 kB
+├ ƒ /sw.js                                                     353 B         103 kB
+├ ƒ /uploads/[...path]                                         353 B         103 kB
+└ ƒ /wishlist                                                1.88 kB         174 kB
++ First Load JS shared by all                                 103 kB
+  ├ chunks/1255-d3668eefd1b4a69b.js                          46.1 kB
+  ├ chunks/4bd1b696-100b9d70ed4e49c1.js                      54.2 kB
+  └ other shared chunks (total)                              2.34 kB
+
+
+ƒ Middleware                                                 34.7 kB
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+

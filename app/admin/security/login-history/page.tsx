@@ -38,7 +38,7 @@ export default function LoginHistoryPage() {
     <div className="container-shell mx-auto px-6 py-10">
       <div className="mb-6">
         <p className="luxury-label mb-2">{t("security", "Security")}</p>
-        <h1 className="text-3xl font-semibold tracking-tight text-white">{t("login_history", "Login History")}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t("login_history", "Login History")}</h1>
         <input
           type="text"
           placeholder={t("search_placeholder")}
@@ -48,19 +48,19 @@ export default function LoginHistoryPage() {
         />
       </div>
 
-      {loading ? <div className="h-32 animate-pulse rounded-card bg-white/[0.04]" /> : (
+      {loading ? <div className="h-32 animate-pulse rounded-card bg-surface" /> : (
         <div className="space-y-2">
           {filtered.map((h, i) => (
             <div key={i} className={`luxury-card flex items-start justify-between p-4 ${h.suspicious ? "border-burgundy/20" : ""}`}>
               <div>
                 <div className="flex items-center gap-2">
                   <span className={`h-2 w-2 rounded-full ${h.success ? "bg-emerald" : "bg-burgundy"}`} />
-                  <span className="font-medium text-white">{h.browser} on {h.os}</span>
+                  <span className="font-medium text-foreground">{h.browser} on {h.os}</span>
                   {h.suspicious && <span className="badge-red text-[9px]">{t("suspicious")}</span>}
                 </div>
                 <p className="mt-1 text-xs text-muted">IP: {h.ip} | Device: {h.device} | Country: {h.country || "N/A"} | City: {h.city || "N/A"}</p>
               </div>
-              <div className="text-right text-xs text-muted">
+              <div className="text-end text-xs text-muted">
                 <p>{new Date(h.loginAt).toLocaleString()}</p>
                 {h.logoutAt && <p>Logout: {new Date(h.logoutAt).toLocaleString()}</p>}
                 {h.duration > 0 && <p>Duration: {Math.floor(h.duration / 60)}m {h.duration % 60}s</p>}

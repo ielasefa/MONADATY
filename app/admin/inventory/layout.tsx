@@ -20,7 +20,7 @@ export default function InventoryLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="container-shell mx-auto px-6 py-10">
-      <nav className="mb-10 flex flex-wrap items-center gap-1 rounded-2xl border border-white/[0.06] bg-card p-1.5">
+      <nav className="mb-10 flex flex-wrap items-center gap-1 rounded-2xl border border-line bg-card p-1.5">
         {navLinks.map((link) => {
           const isActive = link.href === "/admin/inventory"
             ? pathname === "/admin/inventory"
@@ -31,8 +31,8 @@ export default function InventoryLayout({ children }: { children: React.ReactNod
               href={link.href}
               className={`rounded-button px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.1em] transition-all duration-200 ${
                 isActive
-                  ? "bg-gold/10 text-gold shadow-sm"
-                  : "text-muted hover:bg-white/[0.04] hover:text-white"
+                  ? "bg-gold/10 text-accent shadow-sm"
+                  : "text-muted hover:bg-surface hover:text-foreground"
               }`}
             >
               {t(link.label)}

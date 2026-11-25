@@ -1,0 +1,1581 @@
+{
+  "checks": [
+    {
+      "lang": "fr",
+      "name": "about",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 319.296875,
+          "lineHeight": "62.8704px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "about",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 80.5,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "about",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 82.3125,
+          "lineHeight": "38.6568px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "about",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 80.5,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "about-text-zoom-125",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "lang": "fr",
+      "name": "home",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 78.21875,
+          "lineHeight": "39.117px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "home",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 75.5,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "home",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 78.21875,
+          "lineHeight": "39.117px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "home",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 81.1875,
+          "lineHeight": "40.592px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "shop",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 75.5,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "shop",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 75.5,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "shop",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 37.75,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "shop",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 129.125,
+          "lineHeight": "64.5696px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "product",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 47.1875,
+          "lineHeight": "47.2px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "product",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 33.03125,
+          "lineHeight": "33.04px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "product",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 33.03125,
+          "lineHeight": "33.04px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "product",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 47.1875,
+          "lineHeight": "47.2px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "collections",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 193.6875,
+          "lineHeight": "64.5696px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "collections",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 75.5,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "collections",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 37.75,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "collections",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 64.5625,
+          "lineHeight": "64.5696px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "checkout",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 322.8125,
+          "lineHeight": "64.5696px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "checkout",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 75.5,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "checkout",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 37.75,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "checkout",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 37.75,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "wishlist",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 129.125,
+          "lineHeight": "64.5696px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "wishlist",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 37.75,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "wishlist",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 37.75,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "wishlist",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 37.75,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "login",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+          "height": 30,
+          "lineHeight": "30px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "login",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+          "height": 30,
+          "lineHeight": "30px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "login",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+          "height": 30,
+          "lineHeight": "30px"
+        }
+      ]
+    },
+    {
+      "lang": "fr",
+      "name": "login",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+          "height": 37.5,
+          "lineHeight": "37.5px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "about",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 319.296875,
+          "lineHeight": "62.8704px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "about",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 80.5,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "about",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 82.3125,
+          "lineHeight": "38.6568px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "about",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 80.5,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "about-text-zoom-125",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "lang": "en",
+      "name": "home",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 156.4375,
+          "lineHeight": "39.117px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "home",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 151,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "home",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 117.328125,
+          "lineHeight": "39.117px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "home",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 121.78125,
+          "lineHeight": "40.592px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "shop",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 258.25,
+          "lineHeight": "64.5696px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "shop",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 75.5,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "shop",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 37.75,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "shop",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 37.75,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "product",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 47.1875,
+          "lineHeight": "47.2px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "product",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 33.03125,
+          "lineHeight": "33.04px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "product",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 33.03125,
+          "lineHeight": "33.04px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "product",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 33.03125,
+          "lineHeight": "33.04px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "collections",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 75.5,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "collections",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 75.5,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "collections",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 37.75,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "collections",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 37.75,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "checkout",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 322.8125,
+          "lineHeight": "64.5696px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "checkout",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 75.5,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "checkout",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 37.75,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "checkout",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 37.75,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "wishlist",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 129.125,
+          "lineHeight": "64.5696px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "wishlist",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 129.125,
+          "lineHeight": "64.5696px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "wishlist",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 37.75,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "wishlist",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif",
+          "height": 37.75,
+          "lineHeight": "37.76px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "login",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+          "height": 75,
+          "lineHeight": "37.5px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "login",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+          "height": 75,
+          "lineHeight": "37.5px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "login",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+          "height": 30,
+          "lineHeight": "30px"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "name": "login",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16px",
+      "dir": "ltr",
+      "h1": [
+        {
+          "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+          "height": 30,
+          "lineHeight": "30px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "about",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 101,
+          "lineHeight": "48px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "about",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 101,
+          "lineHeight": "48px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "about",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 103.28125,
+          "lineHeight": "49.14px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "about",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 101,
+          "lineHeight": "48px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "about-text-zoom-125",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "lang": "ar",
+      "name": "home",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 134.25,
+          "lineHeight": "44.7525px"
+        },
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 0,
+          "lineHeight": "43.2px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "home",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 129.5625,
+          "lineHeight": "43.2px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "home",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 129.5625,
+          "lineHeight": "43.2px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "home",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 233.25,
+          "lineHeight": "77.76px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "shop",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 43.1875,
+          "lineHeight": "43.2px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "shop",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 43.1875,
+          "lineHeight": "43.2px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "shop",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 43.1875,
+          "lineHeight": "43.2px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "shop",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 73.859375,
+          "lineHeight": "73.872px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "product",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 60,
+          "lineHeight": "60px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "product",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 42,
+          "lineHeight": "42px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "product",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 42,
+          "lineHeight": "42px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "product",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 42,
+          "lineHeight": "42px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "collections",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 147.71875,
+          "lineHeight": "73.872px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "collections",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 43.1875,
+          "lineHeight": "43.2px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "collections",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 43.1875,
+          "lineHeight": "43.2px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "collections",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 43.1875,
+          "lineHeight": "43.2px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "checkout",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 328.3125,
+          "lineHeight": "82.08px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "checkout",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 48,
+          "lineHeight": "48px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "checkout",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 48,
+          "lineHeight": "48px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "checkout",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 48,
+          "lineHeight": "48px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "wishlist",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 147.71875,
+          "lineHeight": "73.872px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "wishlist",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 43.1875,
+          "lineHeight": "43.2px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "wishlist",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 43.1875,
+          "lineHeight": "43.2px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "wishlist",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 43.1875,
+          "lineHeight": "43.2px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "login",
+      "width": 360,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 84,
+          "lineHeight": "42px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "login",
+      "width": 390,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 33.59375,
+          "lineHeight": "33.6px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "login",
+      "width": 768,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 33.59375,
+          "lineHeight": "33.6px"
+        }
+      ]
+    },
+    {
+      "lang": "ar",
+      "name": "login",
+      "width": 1440,
+      "overflow": false,
+      "bodyFont": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "fontSize": "16px",
+      "dir": "rtl",
+      "h1": [
+        {
+          "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+          "height": 42,
+          "lineHeight": "42px"
+        }
+      ]
+    }
+  ],
+  "audits": [
+    {
+      "lang": "fr",
+      "page": "about",
+      "violations": []
+    },
+    {
+      "lang": "en",
+      "page": "about",
+      "violations": []
+    },
+    {
+      "lang": "ar",
+      "page": "about",
+      "violations": []
+    }
+  ],
+  "errors": []
+}

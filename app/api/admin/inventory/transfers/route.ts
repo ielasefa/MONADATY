@@ -1,3 +1,4 @@
+import { ProductStockError } from "@/lib/product-stock";
 import { logError } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { authGuard, errorResponse, successResponse } from "@/lib/inventory-api";
@@ -30,6 +31,7 @@ export async function POST(request: NextRequest) {
 
     return successResponse({ ...result }, 200);
   } catch (err) {
+    if (err instanceof ProductStockError) return errorResponse(err.message, err.status);
     const message = err instanceof Error ? err.message : "Transfer failed";
     logError(err, "Stock transfer failed:");
     return errorResponse(message, 500);

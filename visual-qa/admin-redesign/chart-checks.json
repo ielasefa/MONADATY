@@ -1,0 +1,20 @@
+{
+  "checks": [
+    {
+      "language": "ar",
+      "name": "Chart labels stay outside horizontal bars",
+      "labelPositions": [
+        {
+          "labelRight": 888,
+          "barLeft": 896
+        }
+      ]
+    },
+    {
+      "language": "ar",
+      "name": "International phone number reading direction"
+    }
+  ],
+  "audits": [],
+  "errors": []
+}

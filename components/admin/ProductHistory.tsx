@@ -19,16 +19,16 @@ const ACTION_ICONS: Record<string, string> = {
 };
 
 const ACTION_COLORS: Record<string, string> = {
-  Created: "text-gold",
-  Edited: "text-white/70",
-  "Price Changed": "text-gold",
-  "Stock Changed": "text-gold",
-  "Status Changed": "text-gold/80",
+  Created: "text-accent",
+  Edited: "text-secondary",
+  "Price Changed": "text-accent",
+  "Stock Changed": "text-accent",
+  "Status Changed": "text-accent",
   "Deleted Image": "text-burgundy",
-  "Uploaded Image": "text-gold",
-  "Cover Changed": "text-gold",
-  "Variant Added": "text-gold",
-  "Variant Updated": "text-white/70",
+  "Uploaded Image": "text-accent",
+  "Cover Changed": "text-accent",
+  "Variant Added": "text-accent",
+  "Variant Updated": "text-secondary",
   "Variant Deleted": "text-burgundy",
 };
 
@@ -58,10 +58,10 @@ export function ProductHistory({ productId }: { productId: string }) {
       <div className="space-y-3">
         {Array.from({ length: 5 }).map((_, i) => (
           <div key={i} className="flex gap-3 animate-pulse">
-            <div className="h-8 w-8 rounded-full bg-white/5" />
+            <div className="h-8 w-8 rounded-full bg-surface" />
             <div className="flex-1 space-y-2">
-              <div className="h-4 w-48 rounded bg-white/5" />
-              <div className="h-3 w-24 rounded bg-white/5" />
+              <div className="h-4 w-48 rounded bg-surface" />
+              <div className="h-3 w-24 rounded bg-surface" />
             </div>
           </div>
         ))}
@@ -71,7 +71,7 @@ export function ProductHistory({ productId }: { productId: string }) {
 
   if (history.length === 0) {
     return (
-      <div className="flex flex-col items-center gap-3 py-8 text-white/50">
+      <div className="flex flex-col items-center gap-3 py-8 text-secondary">
         <span className="text-2xl">⏱</span>
         <p className="text-sm">{t("no_history_recorded", "No history recorded yet")}</p>
       </div>
@@ -82,18 +82,18 @@ export function ProductHistory({ productId }: { productId: string }) {
     <div className="relative space-y-0">
       {history.map((entry, idx) => {
         const icon = ACTION_ICONS[entry.action] || "•";
-        const color = ACTION_COLORS[entry.action] || "text-white/50";
+        const color = ACTION_COLORS[entry.action] || "text-secondary";
         const isLast = idx === history.length - 1;
 
         return (
           <div key={entry.id} className="relative flex gap-4 pb-6">
             {/* Timeline line */}
             {!isLast && (
-              <div className="absolute left-4 top-8 bottom-0 w-px bg-white/[0.06]" />
+              <div className="absolute left-4 top-8 bottom-0 w-px bg-surface" />
             )}
 
             {/* Icon */}
-            <div className={`relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/[0.06] bg-bg ${color}`}>
+            <div className={`relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line bg-canvas ${color}`}>
               <span className="text-xs">{icon}</span>
             </div>
 
@@ -101,7 +101,7 @@ export function ProductHistory({ productId }: { productId: string }) {
             <div className="min-w-0 flex-1">
               <div className="flex items-baseline gap-2">
                 <span className={`text-sm font-medium ${color}`}>{entry.action}</span>
-                <span className="text-xs text-white/50">
+                <span className="text-xs text-secondary">
                   {new Date(entry.createdAt).toLocaleDateString(undefined, {
                     year: "numeric",
                     month: "short",
@@ -112,11 +112,11 @@ export function ProductHistory({ productId }: { productId: string }) {
                 </span>
               </div>
               {entry.adminName && (
-                <p className="mt-0.5 text-xs text-white/50">by {entry.adminName}</p>
+                <p className="mt-0.5 text-xs text-secondary">by {entry.adminName}</p>
               )}
               {entry.field && (
-                <p className="mt-1 text-xs text-white/50">
-                  Field: <span className="text-white/60">{entry.field}</span>
+                <p className="mt-1 text-xs text-secondary">
+                  Field: <span className="text-secondary">{entry.field}</span>
                 </p>
               )}
               {(entry.oldValue || entry.newValue) && (
@@ -129,10 +129,10 @@ export function ProductHistory({ productId }: { productId: string }) {
                     </span>
                   )}
                   {(entry.oldValue && entry.newValue) && (
-                    <span className="text-white/50">→</span>
+                    <span className="text-secondary">→</span>
                   )}
                   {entry.newValue && (
-                    <span className="rounded bg-gold/10 px-1.5 py-0.5 text-gold">
+                    <span className="rounded bg-gold/10 px-1.5 py-0.5 text-accent">
                       {entry.newValue.length > 60
                         ? entry.newValue.slice(0, 60) + "..."
                         : entry.newValue}

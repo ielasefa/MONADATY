@@ -20,7 +20,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const pathname = headersList.get("x-admin-pathname") ?? "";
 
   if (pathname === "/admin/login") {
-    return <main className="min-h-screen bg-bg">{children}</main>;
+    return <div className="min-h-screen bg-canvas">{children}</div>;
   }
 
   const authed = await isAuthenticated();
@@ -34,7 +34,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   if (pathname === "/admin/change-password") {
-    return <main className="min-h-screen bg-bg">{children}</main>;
+    return <div className="min-h-screen bg-canvas">{children}</div>;
   }
 
   const [notifications, unreadCount] = await Promise.all([
@@ -42,12 +42,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     getUnreadCount(),
   ]);
   return (
-    <div className="admin-shell flex min-h-screen min-w-0 bg-[#0B0B0A]">
+    <div className="admin-shell flex min-h-screen min-w-0 bg-canvas">
       <SidebarWrapper />
-      <main className="min-w-0 flex-1 bg-[#0B0B0A] p-0">
+      <div className="admin-main min-w-0 flex-1 bg-canvas p-0">
         <AdminTopbar initialNotifications={notifications} initialUnread={unreadCount} />
-        {children}
-      </main>
+        <div className="admin-workspace">{children}</div>
+      </div>
     </div>
   );
 }

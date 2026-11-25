@@ -44,6 +44,14 @@ function extractOrigin(url: string): string | null {
   }
 }
 
+function isLocalDevelopmentHost(hostname: string): boolean {
+  if (["localhost", "[::1]", "0.0.0.0"].includes(hostname)) return true;
+  const parts = hostname.split(".").map(Number);
+  if (parts.length !== 4 || !parts.every(value => Number.isInteger(value) && value >= 0 && value <= 255)) return false;
+  const [first, second] = parts;
+  return first === 127 || first === 10 || (first === 192 && second === 168) || (first === 172 && second >= 16 && second <= 31);
+}
+
 export function validateOrigin(request: Request): boolean {
   const origin = request.headers.get("origin");
   const referer = request.headers.get("referer");
@@ -59,6 +67,15 @@ export function validateOrigin(request: Request): boolean {
     const parsed = new URL(rawSource);
     if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return false;
     const normalizedOrigin = parsed.origin;
+    if (process.env.NODE_ENV !== "production" && isLocalDevelopmentHost(parsed.hostname)) {
+      const target = new URL(request.url);
+      if (normalizedOrigin === target.origin) return true;
+      // Next dev can canonicalize a loopback/LAN URL to localhost internally.
+      // Only accept the browser's matching local Host on the same server port.
+      const host = request.headers.get("host");
+      if (host && isLocalDevelopmentHost(target.hostname) && target.port === parsed.port &&
+        normalizeConfiguredOrigin(target.protocol + "//" + host) === normalizedOrigin) return true;
+    }
 
     const allowedOrigins = getAllowedOrigins();
     for (const allowed of allowedOrigins) {

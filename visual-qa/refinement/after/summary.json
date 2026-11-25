@@ -1,0 +1,11 @@
+{
+  "viewportChecks": 168,
+  "accessibilityScans": 25,
+  "automatedViolations": 0,
+  "commerceChecks": 9,
+  "publicE2ETests": 3,
+  "unitAndIntegrationTests": 192,
+  "browserErrors": 0,
+  "failedAssets": 0,
+  "overflow": 0
+}

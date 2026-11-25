@@ -462,27 +462,27 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
         className={`flex min-h-[176px] max-w-4xl flex-col justify-center rounded-xl border-2 border-dashed p-5 text-center transition sm:p-6 ${
           dragOver
             ? "border-yellow bg-yellow/5"
-            : "border-white/[0.08] hover:border-white/20"
+            : "border-line hover:border-line"
         } ${!canAddMore ? "pointer-events-none opacity-50" : ""}`}
       >
-        <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-white/5">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D5B87D" strokeWidth="1.5">
+        <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-surface">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8C6228" strokeWidth="1.5">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
             <polyline points="17 8 12 3 7 8" />
             <line x1="12" y1="3" x2="12" y2="15" />
           </svg>
         </div>
-        <p className="text-sm text-white/80">
+        <p className="text-sm text-secondary">
           {canAddMore ? t("drag_drop_images") : t("max_images")}
         </p>
-        <p className="mt-1 text-xs text-white/50">
+        <p className="mt-1 text-xs text-secondary">
           JPG, PNG, WebP, GIF &mdash; Up to 10 MB each &mdash; Max {maxFiles} images
         </p>
         <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
           <button
             type="button"
             onClick={() => canAddMore && inputRef.current?.click()}
-            className="inline-flex h-9 items-center rounded-md border border-white/[0.12] bg-white/5 px-4 text-[11px] font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-white/10 disabled:opacity-50"
+            className="inline-flex h-9 items-center rounded-md border border-line bg-surface px-4 text-xs font-semibold uppercase tracking-[0.1em] text-foreground transition hover:bg-surface disabled:opacity-50"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="me-1.5">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -493,7 +493,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
           <button
             type="button"
             onClick={() => canAddMore && cameraRef.current?.click()}
-            className="inline-flex h-9 items-center rounded-md border border-white/[0.12] bg-white/5 px-4 text-[11px] font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-white/10 disabled:opacity-50"
+            className="inline-flex h-9 items-center rounded-md border border-line bg-surface px-4 text-xs font-semibold uppercase tracking-[0.1em] text-foreground transition hover:bg-surface disabled:opacity-50"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="me-1.5">
               <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
@@ -515,25 +515,25 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
                   ? "border-emerald-400/30 bg-emerald-400/10"
                   : item.status === "error"
                     ? "border-burgundy/20 bg-burgundy/5"
-                    : "border-white/[0.06] bg-bg"
+                    : "border-line bg-canvas"
               }`}
               data-upload-status={item.status}
               data-testid={`upload-item-${item.status}`}
             >
-              <div className="h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-white/5">
+              <div className="h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-surface">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={item.preview} alt={item.file.name} className="h-full w-full object-contain" />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="truncate text-xs font-medium text-white">{item.file.name}</p>
-                <p className="text-xs text-white/50">
+                <p className="truncate text-xs font-medium text-foreground">{item.file.name}</p>
+                <p className="text-xs text-secondary">
                   {item.width > 0 && item.height > 0
                     ? `${item.width} × ${item.height} — `
                     : ""}
                   {(item.file.size / 1024 / 1024).toFixed(1)} MB
                 </p>
                 {(item.status === "uploading" || item.status === "processing") && (
-                  <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+                  <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-surface">
                     <div
                       className="h-full rounded-full bg-yellow transition-all duration-300"
                       style={{ width: `${item.progress}%` }}
@@ -546,7 +546,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
               </div>
               <div className="shrink-0">
                 {item.status === "pending" && (
-                  <span className="flex items-center gap-1.5 text-xs text-white/50" data-testid="upload-status-pending">
+                  <span className="flex items-center gap-1.5 text-xs text-secondary" data-testid="upload-status-pending">
                     <svg className="animate-spin" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M21 12a9 9 0 1 1-6.219-8.56" />
                    </svg>
@@ -567,7 +567,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
                 </span>
                 )}
                 {item.status === "done" && (
-                  <span className="flex items-center gap-1 text-xs text-emerald-400" data-testid="upload-status-completed">
+                  <span className="flex items-center gap-1 text-xs text-emerald-700" data-testid="upload-status-completed">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0F8B6F" strokeWidth="3">
                       <polyline points="20 6 9 17 4 12" />
                    </svg>
@@ -576,7 +576,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
                 )}
                 {item.status === "duplicate" && (
                   <span className="flex items-center gap-1 text-xs text-yellow" data-testid="upload-status-duplicate">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D5B87D" strokeWidth="2.5">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8C6228" strokeWidth="2.5">
                       <circle cx="12" cy="12" r="10" />
                       <line x1="12" y1="8" x2="12" y2="12" />
                       <line x1="12" y1="16" x2="12.01" y2="16" />
@@ -606,7 +606,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
           <button
             type="button"
             onClick={handleDismissCompleted}
-            className="text-xs text-white/50 transition hover:text-white"
+            className="text-xs text-secondary transition hover:text-foreground"
           >
             {t("clear_completed", "Clear completed")}
           </button>
@@ -620,8 +620,8 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
             <div
               key={img.id}
               className={`group relative overflow-hidden rounded-lg border ${
-                img.isCover ? "border-yellow" : "border-white/[0.06]"
-              } bg-[#171717]`}
+                img.isCover ? "border-yellow" : "border-line"
+              } bg-surface`}
             >
               <div className="aspect-square overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -633,15 +633,15 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
                 />
               </div>
               {img.isCover && (
-                <span className="absolute start-1.5 top-1.5 rounded bg-yellow/90 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.1em] text-black">
+                <span className="absolute start-1.5 top-1.5 rounded bg-yellow/90 px-1.5 py-0.5 text-xs font-bold uppercase tracking-[0.1em] text-black">
                   Cover
               </span>
               )}
-              <div className="absolute inset-0 flex items-center justify-center gap-1 bg-black/50 opacity-0 transition group-hover:opacity-100">
+              <div className="absolute inset-0 flex items-center justify-center gap-1 admin-media-overlay bg-black/50 opacity-0 transition group-hover:opacity-100">
                 {!img.isCover && (
                   <button
                     onClick={() => handleSetCover(idx)}
-                    className="rounded bg-white/20 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-white backdrop-blur-sm transition hover:bg-white/30"
+                    className="rounded bg-surface px-2 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-foreground backdrop-blur-sm transition hover:bg-surface"
                     aria-label={t("set_as_cover", "Set as cover image")}
                   >
                     Cover
@@ -649,14 +649,14 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
                 )}
                 <button
                   onClick={() => handleRemove(idx)}
-                  className="rounded bg-red/60 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-white backdrop-blur-sm transition hover:bg-red/80"
+                  className="rounded bg-red/60 px-2 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-foreground backdrop-blur-sm transition hover:bg-red/80"
                   aria-label={t("remove_image")}
                 >
                   {t("remove_image")}
                 </button>
               </div>
               <div className="flex items-center justify-between px-1.5 py-1">
-                <p className="truncate text-[10px] text-white/50">
+                <p className="truncate text-xs text-secondary">
                   {img.width > 0 && img.height > 0
                     ? `${img.width}×${img.height}`
                     : ""}
@@ -666,7 +666,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
                   {idx > 0 && (
                     <button
                       onClick={() => handleMoveImage(idx, idx - 1)}
-                      className="rounded bg-white/10 p-0.5 text-white/50 transition hover:bg-white/20 hover:text-white"
+                      className="rounded bg-surface p-0.5 text-secondary transition hover:bg-surface hover:text-foreground"
                       aria-label={t("move_left")}
                     >
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -677,7 +677,7 @@ export function ImageUploader({ images, onChange, maxFiles = 10 }: Props) {
                   {idx < images.length - 1 && (
                     <button
                       onClick={() => handleMoveImage(idx, idx + 1)}
-                      className="rounded bg-white/10 p-0.5 text-white/50 transition hover:bg-white/20 hover:text-white"
+                      className="rounded bg-surface p-0.5 text-secondary transition hover:bg-surface hover:text-foreground"
                       aria-label={t("move_right")}
                     >
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

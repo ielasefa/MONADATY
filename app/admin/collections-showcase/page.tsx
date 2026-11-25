@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AdminCollectionShowcasePage() {
   const collections = await getAdminCollectionShowcase();
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-[#0B0B0A]">
+    <div className="min-h-[calc(100vh-4rem)] bg-canvas">
       <div className="container-shell">
         <CollectionShowcaseClient
           collections={collections}

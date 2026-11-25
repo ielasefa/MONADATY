@@ -1,0 +1,322 @@
+npm notice run monadaty@1.0.0 dev
+npm notice run npm run db:start && bash scripts/run-local-db-command.sh next dev --hostname 127.0.0.1 --port 3000
+npm notice run monadaty@1.0.0 db:start
+npm notice run bash scripts/db-start.sh
+PostgreSQL is already running on 127.0.0.1:5432
+   ▲ Next.js 15.5.23
+   - Local:        http://127.0.0.1:3000
+   - Network:      http://127.0.0.1:3000
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · optimizePackageImports
+     · middlewareClientMaxBodySize: "12mb"
+
+ ✓ Starting...
+ ✓ Ready in 3.3s
+ ○ Compiling /shop ...
+ ✓ Compiled /shop in 17.2s (1830 modules)
+ GET /shop 200 in 20959ms
+ GET /shop 200 in 992ms
+ ○ Compiling /about ...
+ ✓ Compiled /api/translations in 6.5s (1794 modules)
+ GET /api/translations?namespace=home 200 in 4849ms
+ GET /api/translations?namespace=system 200 in 4890ms
+ GET /shop 200 in 1157ms
+ GET /about 200 in 8654ms
+ GET /shop 200 in 632ms
+ GET /api/translations?namespace=system 200 in 60ms
+ GET /api/translations?namespace=home 200 in 67ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1563ms (1816 modules)
+ GET / 200 in 2533ms
+ GET /shop 200 in 1102ms
+ GET /api/translations?namespace=system 200 in 127ms
+ GET /api/translations?namespace=home 200 in 594ms
+ GET /shop 200 in 1268ms
+ GET /shop 200 in 705ms
+ GET /api/translations?namespace=system 200 in 107ms
+ GET /api/translations?namespace=home 200 in 129ms
+ ○ Compiling /product/[id] ...
+ ✓ Compiled /product/[id] in 1771ms (1850 modules)
+2026-11-25T17:56:15.648Z [INFO]  SIGTERM signal received: closing HTTP connection
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 200 in 3864ms
+ GET /shop 200 in 1280ms
+ ○ Compiling /collections ...
+ ✓ Compiled /collections in 1316ms (1858 modules)
+ GET /collections 200 in 2704ms
+ GET /shop 200 in 1334ms
+ ○ Compiling /checkout ...
+ ✓ Compiled /checkout in 4.5s (1872 modules)
+ GET /api/translations?namespace=system 200 in 466ms
+ GET /api/translations?namespace=home 200 in 663ms
+ GET /checkout 200 in 5298ms
+ GET /shop 200 in 569ms
+ GET /api/translations?namespace=system 200 in 61ms
+ GET /api/translations?namespace=home 200 in 248ms
+ ○ Compiling /wishlist ...
+ ✓ Compiled /wishlist in 896ms (1881 modules)
+ GET /wishlist 200 in 1567ms
+ ○ Compiling /middleware ...
+ GET /shop 200 in 1208ms
+ ✓ Compiled /middleware in 1039ms (117 modules)
+ ○ Compiling /admin/login ...
+ ✓ Compiled /admin/login in 3s (1923 modules)
+ GET /admin/login 200 in 4372ms
+ GET /shop 200 in 720ms
+ GET /shop 200 in 449ms
+ GET /shop 200 in 1500ms
+ GET /about 200 in 525ms
+ GET /shop 200 in 852ms
+ GET /api/translations?namespace=system 200 in 84ms
+ GET /api/translations?namespace=home 200 in 50ms
+ GET / 200 in 319ms
+ GET /shop 200 in 726ms
+ GET /shop 200 in 567ms
+ GET /shop 200 in 605ms
+ GET /api/translations?namespace=system 200 in 856ms
+ GET /api/translations?namespace=home 200 in 372ms
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 200 in 1477ms
+ GET /shop 200 in 1310ms
+2026-11-25T17:56:50.760Z [INFO]  SIGTERM signal received: closing HTTP connection
+ GET /collections 200 in 553ms
+ GET /shop 200 in 1099ms
+ GET /checkout 200 in 340ms
+ GET /shop 200 in 746ms
+ GET /api/translations?namespace=system 200 in 126ms
+ GET /api/translations?namespace=home 200 in 146ms
+ GET /wishlist 200 in 243ms
+ GET /shop 200 in 970ms
+ GET /admin/login 200 in 399ms
+ GET /shop 200 in 231ms
+ GET /shop 200 in 640ms
+ GET /shop 200 in 555ms
+ GET /about 200 in 378ms
+ GET /shop 200 in 741ms
+ GET /api/translations?namespace=system 200 in 51ms
+ GET /api/translations?namespace=home 200 in 47ms
+ GET /api/translations?namespace=home 200 in 60ms
+ GET / 200 in 338ms
+ GET /shop 200 in 779ms
+ GET /shop 200 in 521ms
+ GET /shop 200 in 1272ms
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 200 in 781ms
+ GET /shop 200 in 951ms
+2026-11-25T17:57:08.685Z [INFO]  SIGTERM signal received: closing HTTP connection
+ GET /collections 200 in 712ms
+ GET /checkout 200 in 338ms
+ GET /shop 200 in 1083ms
+ GET /shop 200 in 868ms
+ GET /api/translations?namespace=system 200 in 117ms
+ GET /api/translations?namespace=home 200 in 120ms
+ GET /wishlist 200 in 312ms
+ GET /shop 200 in 842ms
+ GET /admin/login 200 in 1198ms
+ GET /shop 200 in 1096ms
+ ✓ Compiled in 2.5s (1963 modules)
+ ✓ Compiled in 4.4s (1924 modules)
+ ✓ Compiled in 4s (1924 modules)
+ GET /about 200 in 946ms
+ ✓ Compiled in 11.4s (1821 modules)
+ GET /shop 200 in 1332ms
+ GET /shop 200 in 674ms
+ GET /shop 200 in 684ms
+ ○ Compiling /api/translations ...
+ ✓ Compiled /api/translations in 2.4s (1010 modules)
+ GET /api/translations?namespace=home 200 in 2441ms
+ GET /api/translations?namespace=system 200 in 2594ms
+ GET /shop 200 in 1109ms
+ GET /shop 200 in 689ms
+ GET /api/translations?namespace=system 200 in 84ms
+ GET /api/translations?namespace=home 200 in 1178ms
+ ○ Compiling /product/[id] ...
+ ✓ Compiled /product/[id] in 4.1s (1038 modules)
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 200 in 5665ms
+ GET /shop 200 in 1309ms
+2026-11-25T18:08:10.879Z [INFO]  SIGTERM signal received: closing HTTP connection
+ GET /api/translations?namespace=system 200 in 103ms
+ GET /api/translations?namespace=home 200 in 80ms
+ GET /shop 200 in 599ms
+ GET /shop 200 in 720ms
+ GET /api/translations?namespace=system 200 in 75ms
+ GET /api/translations?namespace=home 200 in 58ms
+ GET /api/translations?namespace=home 200 in 868ms
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 200 in 616ms
+ GET /shop 200 in 996ms
+2026-11-25T18:09:17.597Z [INFO]  SIGTERM signal received: closing HTTP connection
+ GET /api/translations?namespace=system 200 in 62ms
+ GET /api/translations?namespace=home 200 in 74ms
+ GET /api/translations?namespace=home 200 in 88ms
+ ○ Compiling /checkout ...
+ ✓ Compiled /checkout in 2.1s (1048 modules)
+ GET /checkout 200 in 2516ms
+ GET /shop 200 in 925ms
+ GET /shop 200 in 616ms
+ GET /api/translations?namespace=system 200 in 84ms
+ GET /api/translations?namespace=home 200 in 56ms
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 200 in 2117ms
+ GET /shop 200 in 1603ms
+2026-11-25T18:10:02.558Z [INFO]  SIGTERM signal received: closing HTTP connection
+ GET /api/translations?namespace=system 200 in 77ms
+ GET /api/translations?namespace=home 200 in 89ms
+ GET /checkout 200 in 112ms
+ GET /shop 200 in 413ms
+ GET /shop 200 in 620ms
+ GET /api/translations?namespace=system 200 in 58ms
+ GET /api/translations?namespace=home 200 in 60ms
+ GET /api/translations?namespace=home 200 in 44ms
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 200 in 594ms
+ GET /shop 200 in 963ms
+2026-11-25T18:10:17.352Z [INFO]  SIGTERM signal received: closing HTTP connection
+ GET /api/translations?namespace=system 200 in 57ms
+ GET /api/translations?namespace=home 200 in 54ms
+ GET /api/translations?namespace=home 200 in 103ms
+ GET /checkout 200 in 132ms
+ GET /shop 200 in 540ms
+ GET /shop 200 in 785ms
+ GET /api/translations?namespace=system 200 in 91ms
+ GET /api/translations?namespace=home 200 in 75ms
+ GET /api/translations?namespace=home 200 in 46ms
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 200 in 519ms
+ GET /shop 200 in 714ms
+2026-11-25T18:10:34.625Z [INFO]  SIGTERM signal received: closing HTTP connection
+ GET /api/translations?namespace=system 200 in 59ms
+ GET /api/translations?namespace=home 200 in 62ms
+ GET /checkout 200 in 94ms
+ GET /shop 200 in 445ms
+ GET /shop 200 in 670ms
+ GET /api/translations?namespace=system 200 in 49ms
+ GET /api/translations?namespace=home 200 in 50ms
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 200 in 694ms
+ GET /shop 200 in 878ms
+2026-11-25T18:10:47.165Z [INFO]  SIGTERM signal received: closing HTTP connection
+ GET /api/translations?namespace=system 200 in 61ms
+ GET /api/translations?namespace=home 200 in 61ms
+ GET /api/translations?namespace=home 200 in 85ms
+ GET /checkout 200 in 106ms
+ GET /shop 200 in 419ms
+ GET /shop 200 in 682ms
+ GET /api/translations?namespace=system 200 in 68ms
+ GET /api/translations?namespace=home 200 in 51ms
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 200 in 476ms
+ GET /shop 200 in 871ms
+2026-11-25T18:11:02.030Z [INFO]  SIGTERM signal received: closing HTTP connection
+ GET /api/translations?namespace=system 200 in 49ms
+ GET /api/translations?namespace=home 200 in 47ms
+ GET /api/translations?namespace=home 200 in 68ms
+ GET /checkout 200 in 142ms
+ GET /shop 200 in 690ms
+ GET /shop 200 in 759ms
+ GET /api/translations?namespace=system 200 in 72ms
+ GET /api/translations?namespace=home 200 in 58ms
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 200 in 537ms
+ GET /shop 200 in 711ms
+2026-11-25T18:11:17.483Z [INFO]  SIGTERM signal received: closing HTTP connection
+ GET /api/translations?namespace=system 200 in 62ms
+ GET /api/translations?namespace=home 200 in 72ms
+ GET /api/translations?namespace=home 200 in 91ms
+ GET /checkout 200 in 114ms
+ GET /shop 200 in 465ms
+ GET /shop 200 in 378ms
+ GET /shop 200 in 475ms
+ GET /api/translations?namespace=system 200 in 57ms
+ GET /api/translations?namespace=home 200 in 81ms
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 200 in 452ms
+ GET /shop 200 in 703ms
+2026-11-25T18:12:08.991Z [INFO]  SIGTERM signal received: closing HTTP connection
+ GET /api/translations?namespace=system 200 in 56ms
+ GET /api/translations?namespace=home 200 in 59ms
+ GET /api/translations?namespace=home 200 in 46ms
+ ✓ Compiled in 16.6s (1855 modules)
+ ✓ Compiled in 3.5s (1868 modules)
+ GET /shop 200 in 2668ms
+ GET /shop 200 in 1012ms
+ ○ Compiling /api/translations ...
+ ✓ Compiled /api/translations in 3.5s (1040 modules)
+ GET /api/translations?namespace=home 200 in 4550ms
+ GET /api/translations?namespace=system 200 in 5205ms
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 200 in 5365ms
+ GET /shop 200 in 741ms
+2026-11-25T18:16:44.077Z [INFO]  SIGTERM signal received: closing HTTP connection
+ GET /api/translations?namespace=system 200 in 73ms
+ GET /api/translations?namespace=home 200 in 60ms
+ GET /api/translations?namespace=home 200 in 56ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/home/ielasef/Desktop/MONADATY/.next/cache/webpack/client-development/0.pack.gz_' -> '/home/ielasef/Desktop/MONADATY/.next/cache/webpack/client-development/0.pack.gz'
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/home/ielasef/Desktop/MONADATY/.next/cache/webpack/server-development/0.pack.gz_' -> '/home/ielasef/Desktop/MONADATY/.next/cache/webpack/server-development/0.pack.gz'
+ GET /shop 200 in 643ms
+ GET /shop 200 in 515ms
+ GET /api/translations?namespace=system 200 in 70ms
+ GET /api/translations?namespace=home 200 in 75ms
+ GET /shop?search=coca 200 in 186ms
+ GET /shop?search=coca&sort=price-asc 200 in 138ms
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 200 in 349ms
+ GET /shop 200 in 753ms
+2026-11-25T18:18:46.702Z [INFO]  SIGTERM signal received: closing HTTP connection
+ GET /api/translations?namespace=system 200 in 60ms
+ GET /api/translations?namespace=home 200 in 53ms
+ GET /api/translations?namespace=home 200 in 57ms
+ GET /shop 200 in 358ms
+ GET /shop 200 in 558ms
+ GET /api/translations?namespace=system 200 in 51ms
+ GET /api/translations?namespace=home 200 in 50ms
+ GET /shop?search=coca 200 in 155ms
+ GET /shop?search=coca&sort=price-asc 200 in 119ms
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 200 in 379ms
+ GET /shop 200 in 618ms
+2026-11-25T18:18:56.961Z [INFO]  SIGTERM signal received: closing HTTP connection
+ GET /api/translations?namespace=system 200 in 63ms
+ GET /api/translations?namespace=home 200 in 57ms
+ GET /api/translations?namespace=home 200 in 49ms
+ GET /shop 200 in 380ms
+ GET /shop 200 in 537ms
+ GET /api/translations?namespace=system 200 in 69ms
+ GET /api/translations?namespace=home 200 in 48ms
+ GET /shop?search=coca 200 in 132ms
+ GET /shop?search=coca&sort=price-asc 200 in 119ms
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 200 in 622ms
+ GET /shop 200 in 667ms
+2026-11-25T18:19:06.852Z [INFO]  SIGTERM signal received: closing HTTP connection
+ GET /api/translations?namespace=system 200 in 98ms
+ GET /api/translations?namespace=home 200 in 136ms
+ ✓ Compiled in 5s (1874 modules)
+ GET /shop 200 in 3979ms
+ GET /shop 200 in 1359ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 2.6s (1861 modules)
+ GET /api/translations?namespace=home 200 in 3124ms
+ GET /api/translations?namespace=system 404 in 4112ms
+ GET /shop 200 in 720ms
+ GET /api/translations?namespace=system 200 in 99ms
+ GET /shop?search=coca 200 in 154ms
+ GET /shop?search=coca&sort=price-asc 200 in 124ms
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 200 in 508ms
+ ⨯ Failed to generate static paths for /product/[id]:
+TypeError: __webpack_modules__[moduleId] is not a function
+    at eval (webpack-internal:///(rsc)/./app/product/[id]/page.tsx:13:73)
+    at eval (webpack-internal:///(rsc)/./app/product/[id]/page.tsx:1:21)
+    at <unknown> (rsc)/./app/product/[id]/page.tsx (/home/ielasef/Desktop/MONADATY/.next/server/app/product/[id]/page.js:121:1) {
+  type: 'TypeError'
+}
+ GET /shop 200 in 709ms
+ GET /api/translations?namespace=system 200 in 59ms
+ GET /api/translations?namespace=home 200 in 55ms
+ GET /api/translations?namespace=home 200 in 49ms
+ GET /shop 200 in 429ms
+ GET /shop 200 in 583ms
+ GET /api/translations?namespace=system 200 in 44ms
+ GET /api/translations?namespace=home 200 in 44ms
+ GET /shop?search=coca 200 in 149ms
+ GET /shop?search=coca&sort=price-asc 200 in 118ms
+ ⨯ TypeError: __webpack_modules__[moduleId] is not a function
+    at eval (webpack-internal:///(rsc)/./app/product/[id]/page.tsx:13:73)
+    at eval (webpack-internal:///(rsc)/./app/product/[id]/page.tsx:1:21)
+    at <unknown> (rsc)/./app/product/[id]/page.tsx (/home/ielasef/Desktop/MONADATY/.next/server/app/product/[id]/page.js:121:1) {
+  type: 'TypeError',
+  page: '/product/e4e98f22-9970-4ab4-a311-850190a1e090'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 3.2s (2208 modules)
+ GET /shop?search=coca&sort=price-asc 200 in 2385ms
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 500 in 5441ms
+ GET /shop?search=coca&sort=price-asc 200 in 177ms
+ GET /shop 200 in 688ms
+[?25h

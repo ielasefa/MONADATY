@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { requireOrigin } from "@/lib/csrf";
 import { rateLimit } from "@/lib/rate-limiter";
 import { logError } from "@/lib/logger";
+import { isCheckoutCity, isValidCheckoutEmail } from "@/lib/checkout-validators";
 
 const MOROCCAN_PHONE_REGEX = /^(\+212|0)([5-7]\d{8})$/;
 
@@ -64,8 +65,8 @@ export async function POST(request: Request) {
     if (!customerName || typeof customerName !== "string" || !customerName.trim()) {
       return NextResponse.json({ error: "Full name is required", code: "VALIDATION_ERROR" }, { status: 400 });
     }
-    if (!customerEmail || typeof customerEmail !== "string" || !customerEmail.includes("@")) {
-      return NextResponse.json({ error: "Valid email is required", code: "VALIDATION_ERROR" }, { status: 400 });
+    if (!isValidCheckoutEmail(customerEmail)) {
+      return NextResponse.json({ error: "Enter a valid email or leave it empty", code: "VALIDATION_ERROR" }, { status: 400 });
     }
     if (!phone || typeof phone !== "string" || !MOROCCAN_PHONE_REGEX.test(phone.replace(/\s/g, ""))) {
       return NextResponse.json(
@@ -73,8 +74,8 @@ export async function POST(request: Request) {
         { status: 400 },
       );
     }
-    if (!city || typeof city !== "string") {
-      return NextResponse.json({ error: "City is required", code: "VALIDATION_ERROR" }, { status: 400 });
+    if (!isCheckoutCity(city)) {
+      return NextResponse.json({ error: "Delivery is available in Rabat and Salé only", code: "VALIDATION_ERROR" }, { status: 400 });
     }
     const dbCity = await prisma.city.findFirst({ where: { name: city, active: true } });
     if (!dbCity) {
@@ -100,7 +101,7 @@ export async function POST(request: Request) {
 
     const result = await createOrder({
       customerName: customerName as string,
-      customerEmail: customerEmail as string,
+      customerEmail: typeof customerEmail === "string" ? customerEmail.trim() : "",
       phone: phone as string,
       address: address as string,
       city: city as string,
@@ -137,7 +138,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: result.error, code: result.code }, { status });
     }
 
-    if (!result.replayed) {
+    if (!result.replayed && result.customerEmail) {
       sendOrderConfirmationEmail({
         orderNumber: result.orderNumber,
         customerName: result.customerName,

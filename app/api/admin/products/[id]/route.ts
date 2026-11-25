@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidateTag, revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@/generated/prisma/client";
+import { allocateStockChange } from "@/lib/stock-allocation";
+import { randomUUID } from "node:crypto";
 import { requireAdmin } from "@/lib/auth-guard";
 import { getAuthenticatedAdmin } from "@/lib/auth";
 import { requireOrigin } from "@/lib/csrf";
@@ -17,7 +20,7 @@ function sanitizeSlug(input: string): string {
     .slice(0, 255);
 }
 
-async function logHistory(params: {
+async function writeHistory(params: {
   productId: string;
   adminId: string;
   adminName: string;
@@ -25,9 +28,9 @@ async function logHistory(params: {
   field?: string;
   oldValue?: string;
   newValue?: string;
-}) {
+}, db: Pick<typeof prisma, "productHistory"> = prisma) {
   try {
-    await prisma.productHistory.create({
+    await db.productHistory.create({
       data: {
         productId: params.productId,
         adminId: params.adminId,
@@ -39,6 +42,7 @@ async function logHistory(params: {
       },
     });
   } catch (e) {
+    if (db !== prisma) throw e;
     logError(e, "PRODUCT_HISTORY");
   }
 }
@@ -53,7 +57,7 @@ export async function GET(
   try {
     const { id } = await params;
 
-    if (!id || !UUID_REGEX.test(id)) {
+    if (!id || !PRODUCT_ID_REGEX.test(id)) {
       return NextResponse.json({ error: "Invalid product id" }, { status: 400 });
     }
 
@@ -94,12 +98,18 @@ export async function PUT(
 
   const { id } = await params;
 
-  if (!id || !UUID_REGEX.test(id)) {
+  if (!id || !PRODUCT_ID_REGEX.test(id)) {
     return NextResponse.json({ error: "Invalid product id" }, { status: 400 });
   }
 
   try {
-    const existing = await prisma.product.findUnique({
+    const body = await request.json();
+    if (!body || typeof body !== "object" || Array.isArray(body)) return NextResponse.json({ error: "Invalid product data" }, { status: 400 });
+    const afterCommit: Array<() => Promise<unknown>> = [];
+    const response = await prisma.$transaction(async tx => {
+    const logHistory = (data: Parameters<typeof writeHistory>[0]) => writeHistory(data, tx);
+    await tx.$queryRaw(Prisma.sql`SELECT id FROM products WHERE id = ${id} FOR UPDATE`);
+    const existing = await tx.product.findUnique({
       where: { id },
       include: { images: true },
     });
@@ -107,7 +117,6 @@ export async function PUT(
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
 
-    const body = await request.json();
     const {
       name,
       slug,
@@ -119,6 +128,7 @@ export async function PUT(
       salePrice,
       costPrice,
       stock,
+      expectedStock,
       lowStockThreshold,
       categoryId,
       collectionId,
@@ -139,7 +149,7 @@ export async function PUT(
       return NextResponse.json({ error: "Invalid slug" }, { status: 400 });
     }
 
-    const existingSlug = await prisma.product.findFirst({
+    const existingSlug = await tx.product.findFirst({
       where: { slug: finalSlug, id: { not: id } },
     });
     if (existingSlug) {
@@ -148,7 +158,7 @@ export async function PUT(
 
     const finalSku = sku?.trim() || "";
     if (finalSku) {
-      const existingSku = await prisma.product.findFirst({
+      const existingSku = await tx.product.findFirst({
         where: { sku: finalSku, id: { not: id } },
       });
       if (existingSku) {
@@ -164,7 +174,11 @@ export async function PUT(
 
     const cleanSalePrice = String(salePrice || "").trim() ? String(salePrice).trim() : "";
     const cleanCostPrice = String(costPrice || "").trim() ? String(costPrice).trim() : "";
-    const finalStock = typeof stock === "number" ? Math.max(0, Math.floor(stock)) : 0;
+    if (stock !== undefined && (!Number.isInteger(stock) || stock < 0 || stock > 2147483647)) return NextResponse.json({ error: "Invalid stock quantity", code: "INVALID_STOCK" }, { status: 400 });
+    if (expectedStock !== undefined && (!Number.isInteger(expectedStock) || expectedStock < 0)) return NextResponse.json({ error: "Invalid stock baseline", code: "INVALID_STOCK" }, { status: 400 });
+    const stockChanged = stock !== undefined && stock !== expectedStock && stock !== existing.stock;
+    if (stockChanged && expectedStock !== existing.stock) return NextResponse.json({ error: "Stock changed since this form was opened. Reload the product before adjusting stock.", code: "STOCK_CONFLICT", currentStock: existing.stock }, { status: 409 });
+    const finalStock = stockChanged ? stock : existing.stock;
     const finalLowStock = typeof lowStockThreshold === "number" ? Math.max(1, Math.floor(lowStockThreshold)) : 5;
     const finalStatus = ALLOWED_STATUSES.includes(status) ? status : "Draft";
 
@@ -202,7 +216,7 @@ export async function PUT(
       price: cleanRegularPrice,
       salePrice: cleanSalePrice,
       costPrice: cleanCostPrice,
-      stock: finalStock,
+      ...(stockChanged ? { stock: finalStock } : {}),
       lowStockThreshold: finalLowStock,
       categoryId: categoryId || null,
       collectionId: collectionId || null,
@@ -215,15 +229,15 @@ export async function PUT(
 
     // Handle image deletions
     if (Array.isArray(deletedImageIds) && deletedImageIds.length > 0) {
-      const imagesToDelete = await prisma.productImage.findMany({
+      const imagesToDelete = await tx.productImage.findMany({
         where: { id: { in: deletedImageIds }, productId: id },
       });
 
-      await prisma.productImage.deleteMany({
+      await tx.productImage.deleteMany({
         where: { id: { in: deletedImageIds }, productId: id },
       });
 
-      await cleanupUnreferencedProductImages(imagesToDelete);
+      afterCommit.push(() => cleanupUnreferencedProductImages(imagesToDelete));
 
       for (const imgId of deletedImageIds) {
         const removedImg = imagesToDelete.find((i) => i.id === imgId);
@@ -246,7 +260,7 @@ export async function PUT(
       // Update existing images (sort order, cover)
       for (const img of images) {
         if (img.id && !img.id.startsWith("new-") && existingImageIds.includes(img.id)) {
-          await prisma.productImage.update({
+          await tx.productImage.update({
             where: { id: img.id },
             data: {
               sortOrder: img.sortOrder ?? 0,
@@ -270,7 +284,7 @@ export async function PUT(
           }
         } else if (!img.id || img.id.startsWith("new-")) {
           // New image
-          const created = await prisma.productImage.create({
+          const created = await tx.productImage.create({
             data: {
               productId: id,
               url: img.url,
@@ -299,7 +313,7 @@ export async function PUT(
       }
 
       // Update cover and gallery on product
-      const sortedImages = await prisma.productImage.findMany({
+      const sortedImages = await tx.productImage.findMany({
         where: { productId: id },
         orderBy: { sortOrder: "asc" },
       });
@@ -309,13 +323,14 @@ export async function PUT(
       productData.gallery = galleryUrls;
     }
 
-    await prisma.product.update({
+    await tx.product.update({
       where: { id },
-      data: productData as Parameters<typeof prisma.product.update>[0]["data"],
+      data: productData as Parameters<typeof tx.product.update>[0]["data"],
     });
+    if (stockChanged) await allocateStockChange(tx, { productId: id, previousStock: existing.stock, delta: finalStock - existing.stock, reference: randomUUID(), adminId: admin.id });
 
     if (Array.isArray(images)) {
-      await markProductUploadsAttached(images);
+      afterCommit.push(() => markProductUploadsAttached(images));
     }
 
     // Log history for changes
@@ -349,7 +364,7 @@ export async function PUT(
       });
     }
 
-    const updated = await prisma.product.findUnique({
+    const updated = await tx.product.findUnique({
       where: { id },
       include: {
         category: true,
@@ -359,6 +374,10 @@ export async function PUT(
       },
     });
 
+    return NextResponse.json({ product: updated });
+    });
+    for (const task of afterCommit) { try { await task(); } catch (error) { logError(error, "PRODUCT_AFTER_COMMIT"); } }
+    if (response.ok) {
     revalidateTag("landing");
     revalidatePath("/");
     revalidatePath("/shop");
@@ -368,14 +387,15 @@ export async function PUT(
     revalidatePath("/admin/products");
     revalidatePath("/admin/dashboard");
 
-    return NextResponse.json({ product: updated });
+    }
+    return response;
   } catch (err) {
     logError(err, "PRODUCT_UPDATE");
     return NextResponse.json({ error: "Failed to update product" }, { status: 500 });
   }
 }
 
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const PRODUCT_ID_REGEX = /^[a-z0-9][a-z0-9_-]{0,127}$/i;
 
 export async function DELETE(
   request: NextRequest,
@@ -388,7 +408,7 @@ export async function DELETE(
 
   const { id } = await params;
 
-  if (!id || !UUID_REGEX.test(id)) {
+  if (!id || !PRODUCT_ID_REGEX.test(id)) {
     return NextResponse.json({ error: "Invalid product id" }, { status: 400 });
   }
 

@@ -1,0 +1,22 @@
+Checking admin route: fr dashboard
+Checking admin route: fr products
+Checking admin route: fr orders
+Checking admin route: fr customers
+Checking admin route: fr inventory
+Checking admin route: fr settings
+Admin font checks: fr
+Checking admin route: en dashboard
+Checking admin route: en products
+Checking admin route: en orders
+Checking admin route: en customers
+Checking admin route: en inventory
+Checking admin route: en settings
+Admin font checks: en
+Checking admin route: ar dashboard
+Checking admin route: ar products
+Checking admin route: ar orders
+Checking admin route: ar customers
+Checking admin route: ar inventory
+Checking admin route: ar settings
+Admin font checks: ar
+{"checks":36,"overflows":[],"audits":[{"lang":"fr","violations":[]},{"lang":"en","violations":[]},{"lang":"ar","violations":[]}],"errors":[]}

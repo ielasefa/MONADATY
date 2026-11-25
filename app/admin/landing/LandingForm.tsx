@@ -224,7 +224,7 @@ export function LandingForm({
       <div className="mb-8 flex items-center justify-between">
         <div>
           <p className="luxury-label mb-2">{t("pages")}</p>
-          <h1 className="text-3xl font-semibold tracking-tight text-white">{t("landing_page")}</h1>
+          <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t("landing_page")}</h1>
           <p className="mt-1 text-sm text-muted">{t("manage_homepage")}</p>
         </div>
         <a href="/" target="_blank" className="btn-gold">{t("view_live_site")}</a>
@@ -232,13 +232,13 @@ export function LandingForm({
 
       <div className="flex gap-8">
         <div className="flex-1 min-w-0">
-          <div className="mb-8 flex flex-wrap gap-1 border-b border-white/[0.06]">
+          <div className="mb-8 flex flex-wrap gap-1 border-b border-line">
             {TABS_KEYS.map((tab, i) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(i)}
                 className={`px-4 py-2.5 text-sm transition border-b-2 font-medium ${
-                  i === activeTab ? "border-red text-white" : "border-transparent text-muted hover:text-white/70"
+                  i === activeTab ? "border-red text-foreground" : "border-transparent text-muted hover:text-secondary"
                 }`}
               >
                 {tab}
@@ -339,7 +339,7 @@ function Toggle({ name, checked, onChange, label }: { name: string; checked?: bo
   const isControlled = checked !== undefined;
   return (
     <label className="flex items-center gap-3 cursor-pointer">
-      <input type="checkbox" name={name} defaultChecked={!isControlled ? checked : undefined} checked={isControlled ? checked : undefined} onChange={isControlled ? (e) => onChange?.(e.target.checked) : undefined} value="true" className="h-4 w-4 rounded border-white/20 accent-gold" />
+      <input type="checkbox" name={name} defaultChecked={!isControlled ? checked : undefined} checked={isControlled ? checked : undefined} onChange={isControlled ? (e) => onChange?.(e.target.checked) : undefined} value="true" className="h-4 w-4 rounded border-line accent-gold" />
       <span className="text-sm text-muted">{label}</span>
     </label>
   );
@@ -373,11 +373,11 @@ function SectionOrderForm({ sectionOrder, onMove }: { sectionOrder: string[]; on
       <p className="text-sm text-muted mb-4">{t("section_order_desc", "Drag sections up or down to reorder how they appear on the homepage. All sections here are always rendered if enabled.")}</p>
       <div className="space-y-2">
         {sectionOrder.map((key, idx) => (
-          <div key={key} className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-surface p-3">
-            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/5 text-xs font-medium text-muted">{idx + 1}</span>
-            <span className="flex-1 text-sm font-medium text-white">{t(SECTION_LABELS[key] || key, SECTION_LABELS[key] || key)}</span>
-            <button type="button" onClick={() => onMove(idx, "up")} disabled={idx === 0} className="p-1 text-muted hover:text-white disabled:opacity-30 transition-colors">&#8593;</button>
-            <button type="button" onClick={() => onMove(idx, "down")} disabled={idx === sectionOrder.length - 1} className="p-1 text-muted hover:text-white disabled:opacity-30 transition-colors">&#8595;</button>
+          <div key={key} className="flex items-center gap-3 rounded-xl border border-line bg-surface p-3">
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-surface text-xs font-medium text-muted">{idx + 1}</span>
+            <span className="flex-1 text-sm font-medium text-foreground">{t(SECTION_LABELS[key] || key, SECTION_LABELS[key] || key)}</span>
+            <button type="button" onClick={() => onMove(idx, "up")} disabled={idx === 0} className="p-1 text-muted hover:text-foreground disabled:opacity-30 transition-colors">&#8593;</button>
+            <button type="button" onClick={() => onMove(idx, "down")} disabled={idx === sectionOrder.length - 1} className="p-1 text-muted hover:text-foreground disabled:opacity-30 transition-colors">&#8595;</button>
           </div>
         ))}
       </div>
@@ -433,20 +433,20 @@ function FeaturedForm({ featured, onChange, onSave, featuredEntries, searchQuery
         <button type="submit" className="btn-primary mt-2">{t("save")}</button>
       </form>
 
-      <div className="mt-8 border-t border-white/[0.06] pt-8">
+      <div className="mt-8 border-t border-line pt-8">
         <h3 className="luxury-label mb-4">{t("select_products", "Select Products")}</h3>
         <div className="relative mb-4">
           <input type="text" value={searchQuery} onChange={(e) => onSearch(e.target.value)} placeholder={t("landing_search_products", "Search products by name...")} className="input-premium w-full px-4 py-2.5" />
           {isSearching && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted">{t("searching", "Searching...")}</span>}
           {searchResults.length > 0 && (
-            <div className="absolute z-10 mt-1 w-full rounded-xl border border-white/[0.06] bg-surface shadow-lg max-h-60 overflow-y-auto">
+            <div className="absolute z-10 mt-1 w-full rounded-xl border border-line bg-surface shadow-lg max-h-60 overflow-y-auto">
               {searchResults.map((p) => (
-                <button key={p.id} type="button" onClick={() => onAddProduct(p.id)} className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-white/5 transition-colors">
-                  <div className="h-10 w-10 shrink-0 rounded-lg bg-white/5 flex items-center justify-center text-xs text-muted overflow-hidden">
+                <button key={p.id} type="button" onClick={() => onAddProduct(p.id)} className="flex w-full items-center gap-3 px-4 py-3 text-start hover:bg-surface transition-colors">
+                  <div className="h-10 w-10 shrink-0 rounded-lg bg-surface flex items-center justify-center text-xs text-muted overflow-hidden">
                     {p.image ? <SafeImage src={p.image} alt={p.name} fill className="object-cover" sizes="40px" /> : "IMG"}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-white truncate">{p.name}</p>
+                    <p className="text-sm font-medium text-foreground truncate">{p.name}</p>
                     <p className="text-xs text-muted">{p.price}</p>
                   </div>
                   <span className="badge-emerald text-xs">{t("add", "Add")}</span>
@@ -461,20 +461,20 @@ function FeaturedForm({ featured, onChange, onSave, featuredEntries, searchQuery
             <p className="text-sm text-muted py-4 text-center">{t("no_products_selected_desc", "No featured products selected. Search and add products above.")}</p>
           )}
           {featuredEntries.map((entry, idx) => (
-            <div key={entry.id} className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-surface p-3">
-              <div className="h-12 w-12 shrink-0 rounded-lg bg-white/5 flex items-center justify-center text-xs text-muted overflow-hidden">
+            <div key={entry.id} className="flex items-center gap-3 rounded-xl border border-line bg-surface p-3">
+              <div className="h-12 w-12 shrink-0 rounded-lg bg-surface flex items-center justify-center text-xs text-muted overflow-hidden">
                 {entry.product?.image ? (
                   <SafeImage src={entry.product.image} alt={entry.product.name} fill className="object-cover" sizes="48px" />
                 ) : "IMG"}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-white truncate">{entry.product?.name || "Unknown product"}</p>
+                <p className="text-sm font-medium text-foreground truncate">{entry.product?.name || "Unknown product"}</p>
                 <p className="text-xs text-muted">{entry.product?.price}</p>
               </div>
               <span className="text-xs text-muted mr-1">#{entry.position}</span>
-              <button type="button" onClick={() => onMoveProduct(entry.id, "up")} disabled={idx === 0} className="p-1 text-muted hover:text-white disabled:opacity-30 transition-colors">&#8593;</button>
-              <button type="button" onClick={() => onMoveProduct(entry.id, "down")} disabled={idx === featuredEntries.length - 1} className="p-1 text-muted hover:text-white disabled:opacity-30 transition-colors">&#8595;</button>
-              <button type="button" onClick={() => onToggleProduct(entry.id, !entry.enabled)} className={`p-1 transition-colors ${entry.enabled ? "text-gold" : "text-muted hover:text-white"}`}>
+              <button type="button" onClick={() => onMoveProduct(entry.id, "up")} disabled={idx === 0} className="p-1 text-muted hover:text-foreground disabled:opacity-30 transition-colors">&#8593;</button>
+              <button type="button" onClick={() => onMoveProduct(entry.id, "down")} disabled={idx === featuredEntries.length - 1} className="p-1 text-muted hover:text-foreground disabled:opacity-30 transition-colors">&#8595;</button>
+              <button type="button" onClick={() => onToggleProduct(entry.id, !entry.enabled)} className={`p-1 transition-colors ${entry.enabled ? "text-accent" : "text-muted hover:text-foreground"}`}>
                 {entry.enabled ? "\u25CF" : "\u25CB"}
               </button>
               <button type="button" onClick={() => onRemoveProduct(entry.id)} className="p-1 text-burgundy/60 hover:text-burgundy transition-colors">{"\u2715"}</button>
@@ -505,23 +505,23 @@ function CollectionsSectionForm({ section, onChange, onSave, allCollections, ena
         <button type="submit" className="btn-primary mt-2">{t("save")}</button>
       </form>
 
-      <div className="mt-8 border-t border-white/[0.06] pt-8">
+      <div className="mt-8 border-t border-line pt-8">
         <h3 className="luxury-label mb-2">{t("select_collections", "Select Collections")}</h3>
         <p className="text-sm text-muted mb-4">{t("toggle_collections_desc", "Toggle collections to show on the homepage. Use arrows to reorder.")}</p>
 
         {enabledCollections.length > 0 && (
           <div className="space-y-2 mb-6">
             {enabledCollections.map((col, idx) => (
-              <div key={col.id} className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-surface p-3">
-                <div className="h-10 w-10 shrink-0 rounded-lg bg-white/5 flex items-center justify-center text-xs text-muted overflow-hidden">
+              <div key={col.id} className="flex items-center gap-3 rounded-xl border border-line bg-surface p-3">
+                <div className="h-10 w-10 shrink-0 rounded-lg bg-surface flex items-center justify-center text-xs text-muted overflow-hidden">
                   {col.image ? <SafeImage src={col.image} alt={col.name} fill className="object-cover" sizes="40px" /> : col.name.charAt(0)}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-white truncate">{col.name}</p>
+                  <p className="text-sm font-medium text-foreground truncate">{col.name}</p>
                 </div>
                 <span className="text-xs text-muted mr-1">#{col.landingOrder}</span>
-                <button type="button" onClick={() => onMoveCollection(col.id, "up")} disabled={idx === 0} className="p-1 text-muted hover:text-white disabled:opacity-30 transition-colors">&#8593;</button>
-                <button type="button" onClick={() => onMoveCollection(col.id, "down")} disabled={idx === enabledCollections.length - 1} className="p-1 text-muted hover:text-white disabled:opacity-30 transition-colors">&#8595;</button>
+                <button type="button" onClick={() => onMoveCollection(col.id, "up")} disabled={idx === 0} className="p-1 text-muted hover:text-foreground disabled:opacity-30 transition-colors">&#8593;</button>
+                <button type="button" onClick={() => onMoveCollection(col.id, "down")} disabled={idx === enabledCollections.length - 1} className="p-1 text-muted hover:text-foreground disabled:opacity-30 transition-colors">&#8595;</button>
                 <button type="button" onClick={() => onToggleCollection(col.id, false)} className="p-1 text-burgundy/60 hover:text-burgundy transition-colors">{"\u2715"}</button>
               </div>
             ))}
@@ -530,12 +530,12 @@ function CollectionsSectionForm({ section, onChange, onSave, allCollections, ena
 
         <div className="space-y-2">
           {allCollections.filter((c) => !c.landingEnabled).map((col) => (
-            <div key={col.id} className="flex items-center gap-3 rounded-xl border border-dashed border-white/[0.06] bg-surface/50 p-3 opacity-60">
-              <div className="h-10 w-10 shrink-0 rounded-lg bg-white/5 flex items-center justify-center text-xs text-muted overflow-hidden">
+            <div key={col.id} className="flex items-center gap-3 rounded-xl border border-dashed border-line bg-surface/50 p-3 opacity-60">
+              <div className="h-10 w-10 shrink-0 rounded-lg bg-surface flex items-center justify-center text-xs text-muted overflow-hidden">
                 {col.image ? <SafeImage src={col.image} alt={col.name} fill className="object-cover" sizes="40px" /> : col.name.charAt(0)}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-white/70 truncate">{col.name}</p>
+                <p className="text-sm font-medium text-secondary truncate">{col.name}</p>
               </div>
               <button type="button" onClick={() => onToggleCollection(col.id, true)} className="badge-emerald text-xs">{t("show", "Show")}</button>
             </div>
@@ -581,11 +581,11 @@ function TestimonialsSectionForm({ section, onChange, onSave, testimonials, onSa
         <button type="submit" className="btn-primary mt-2">{t("save")}</button>
       </form>
 
-      <div className="border-t border-white/[0.06] pt-8">
+      <div className="border-t border-line pt-8">
         <h3 className="luxury-label mb-4">{t("manage_testimonials", "Manage Testimonials")}</h3>
         <div className="space-y-5">
           {testimonials.map((testimonial) => (
-            <div key={testimonial.id} className="rounded-[16px] border border-white/[0.06] bg-surface p-5">
+            <div key={testimonial.id} className="rounded-[16px] border border-line bg-surface p-5">
               <form onSubmit={(e) => { e.preventDefault(); onDeleteTestimonial(new FormData(e.currentTarget)); }} className="mb-3 flex justify-end">
                 <input type="hidden" name="id" value={testimonial.id} />
                 <button type="submit" className="badge-red">{t("delete")}</button>
@@ -597,15 +597,15 @@ function TestimonialsSectionForm({ section, onChange, onSave, testimonials, onSa
                 <Input label={t("order")} name="order" defaultValue={String(testimonial.order)} type="number" />
                 <label className="flex items-center gap-2 text-sm text-muted pt-6">
                   <input type="hidden" name="visible" value="false" />
-                  <input type="checkbox" name="visible" defaultChecked={testimonial.visible} value="true" className="h-4 w-4 rounded border-white/20 accent-gold" />
+                  <input type="checkbox" name="visible" defaultChecked={testimonial.visible} value="true" className="h-4 w-4 rounded border-line accent-gold" />
                   {t("visible")}
                 </label>
                 <button type="submit" className="btn-primary">{t("update")}</button>
               </form>
             </div>
           ))}
-          <details className="rounded-[16px] border border-dashed border-white/[0.06] p-5">
-            <summary className="cursor-pointer text-sm font-medium text-gold">{t("add_testimonial")}</summary>
+          <details className="rounded-[16px] border border-dashed border-line p-5">
+            <summary className="cursor-pointer text-sm font-medium text-accent">{t("add_testimonial")}</summary>
             <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); fd.set("visible", "true"); onSaveTestimonial(fd); }} className="mt-4 grid grid-cols-2 gap-4">
               <div className="col-span-2 grid grid-cols-2 gap-4">
                 <Input label={t("name")} name="name" />
@@ -633,7 +633,7 @@ function AnnouncementBarForm({ announcement, onChange, onSave }: { announcement:
         <Input label={t("button_text") || "Button Text"} name="buttonText" value={announcement.buttonText} onChange={(v) => onChange({ buttonText: v })} />
         <div className="grid grid-cols-2 gap-4">
           <Input label={t("bg_color") || "Background Color"} name="bgColor" value={announcement.bgColor} onChange={(v) => onChange({ bgColor: v })} placeholder="#D5B87D or rgba(213,184,125,0.1)" />
-          <Input label={t("text_color") || "Text Color"} name="textColor" value={announcement.textColor} onChange={(v) => onChange({ textColor: v })} placeholder="#D5B87D" />
+          <Input label={t("text_color") || "Text Color"} name="textColor" value={announcement.textColor} onChange={(v) => onChange({ textColor: v })} placeholder="#8C6228" />
         </div>
         <button type="submit" className="btn-primary mt-2">{t("save")}</button>
       </form>
@@ -686,15 +686,15 @@ function PreviewPanel({ draft, featuredEntries, testimonials }: {
   const visibleTestimonials = testimonials.filter((t) => t.visible);
   return (
     <div className="sticky top-6 luxury-card overflow-hidden">
-      <div className="border-b border-white/[0.06] px-5 py-3 flex items-center justify-between">
-        <span className="luxury-label text-[0.65rem]">{t("live_preview")}</span>
+      <div className="border-b border-line px-5 py-3 flex items-center justify-between">
+        <span className="luxury-label text-xs">{t("live_preview")}</span>
         <span className="badge-emerald">{t("auto_update")}</span>
       </div>
       <div className="max-h-[calc(100vh-10rem)] overflow-y-auto">
         <div className="p-6 space-y-10">
           {draft.hero.enabled && (
-            <div className="relative overflow-hidden rounded-card bg-white/5 px-6 py-8 shadow-sm border border-white/[0.06]">
-              <Hero settings={{ ...draft.hero, media: draft.hero.media || [] }} />
+            <div className="relative overflow-hidden rounded-card bg-surface px-6 py-8 shadow-sm border border-line">
+              <Hero settings={{ ...draft.hero, media: draft.hero.media || [] }} preview />
             </div>
           )}
 
@@ -702,12 +702,12 @@ function PreviewPanel({ draft, featuredEntries, testimonials }: {
             <PreviewSection title={draft.featuredProducts.title}>
               <div className="grid grid-cols-3 gap-4">
                 {enabledFeatured.map((entry) => (
-                  <div key={entry.id} className="rounded-card bg-white/10 p-4 shadow-sm border border-white/[0.08]">
+                  <div key={entry.id} className="rounded-card bg-surface p-4 shadow-sm border border-line">
                     <div className="aspect-square rounded-[16px] bg-gradient-to-br from-white/10 to-white/10 flex items-center justify-center overflow-hidden">
                       {entry.product?.image ? (
                         <SafeImage src={entry.product.image} alt={entry.product.name} fill className="object-cover" sizes="120px" />
                       ) : (
-                        <span className="text-4xl font-semibold tracking-[0.2em] text-gold/40">{t("img", "IMG")}</span>
+                        <span className="text-4xl font-semibold tracking-[0.08em] text-accent">{t("img", "IMG")}</span>
                       )}
                     </div>
                     <p className="mt-2 text-xs text-center text-muted/45 uppercase tracking-wider truncate">{entry.product?.name || t("product", "Product")}</p>
@@ -719,7 +719,7 @@ function PreviewPanel({ draft, featuredEntries, testimonials }: {
 
           {draft.collectionsSection.enabled && (
             <PreviewSection title={draft.collectionsSection.title}>
-              <div className="rounded-card bg-white/10 p-4 shadow-sm border border-white/[0.06]">
+              <div className="rounded-card bg-surface p-4 shadow-sm border border-line">
                 <p className="text-xs text-muted/60 text-center">{t("collections_section")}</p>
               </div>
             </PreviewSection>
@@ -727,7 +727,7 @@ function PreviewPanel({ draft, featuredEntries, testimonials }: {
 
           {draft.aboutSection.enabled && (
             <PreviewSection title={draft.aboutSection.title}>
-              <div className="rounded-card bg-white/10 p-4 shadow-sm border border-white/[0.08]">
+              <div className="rounded-card bg-surface p-4 shadow-sm border border-line">
                 <p className="text-xs text-muted/60 leading-relaxed line-clamp-3">{draft.aboutSection.description || t("about_description_placeholder", "About description")}</p>
               </div>
             </PreviewSection>
@@ -737,7 +737,7 @@ function PreviewPanel({ draft, featuredEntries, testimonials }: {
             <PreviewSection title={draft.testimonialsSection.title}>
               <div className="space-y-3">
                 {visibleTestimonials.map((t) => (
-                  <div key={t.id} className="rounded-card bg-white/10 p-4 shadow-sm border border-white/[0.08]">
+                  <div key={t.id} className="rounded-card bg-surface p-4 shadow-sm border border-line">
                     <p className="text-xs text-muted/70 leading-relaxed">&ldquo;{t.content}&rdquo;</p>
                     <p className="mt-2 text-xs font-medium text-muted">{t.name}</p>
                   </div>
@@ -748,8 +748,8 @@ function PreviewPanel({ draft, featuredEntries, testimonials }: {
 
           {draft.newsletter.enabled && (
             <PreviewSection title={draft.newsletter.title}>
-              <div className="rounded-card bg-white/10 p-4 shadow-sm border border-white/[0.08] text-center">
-                <p className="text-[0.65rem] text-muted/60">{draft.newsletter.placeholder || t("email_input_placeholder", "Email input")}</p>
+              <div className="rounded-card bg-surface p-4 shadow-sm border border-line text-center">
+                <p className="text-xs text-muted/60">{draft.newsletter.placeholder || t("email_input_placeholder", "Email input")}</p>
               </div>
             </PreviewSection>
           )}
@@ -766,7 +766,7 @@ function PreviewPanel({ draft, featuredEntries, testimonials }: {
 function PreviewSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="space-y-4">
-      <p className="text-xs font-medium uppercase tracking-[0.35em] text-gold text-center">{title}</p>
+      <p className="text-xs font-medium uppercase tracking-[0.08em] text-accent text-center">{title}</p>
       {children}
     </section>
   );

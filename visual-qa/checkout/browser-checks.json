@@ -1,0 +1,26 @@
+{
+  "checks": [
+    "FR/EN/AR and RTL; optional email; exactly Rabat and Salé; 360/390/768/1440 widths without horizontal overflow",
+    "Localized required-field and malformed-email validation focuses the invalid field",
+    "Edit opens the actual cart drawer; quantity and total refresh without losing delivery details",
+    "The real API rejects a city outside Rabat and Salé",
+    "Real Rabat checkout without email or postal code confirms, clears cart, stores the order and deducts exactly one stock unit; retry does not deduct again",
+    "Real Arabic/RTL checkout to Salé accepts an empty email and deducts one stock unit",
+    "Empty cart shows the shopping action without a checkout form"
+  ],
+  "audits": [
+    {
+      "lang": "fr",
+      "violations": []
+    },
+    {
+      "lang": "en",
+      "violations": []
+    },
+    {
+      "lang": "ar",
+      "violations": []
+    }
+  ],
+  "errors": []
+}

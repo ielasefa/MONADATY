@@ -40,10 +40,10 @@ function parseNumericValue(val: string): number {
 function TrendIndicator({ trend, trendDir }: { trend: string; trendDir: "up" | "down" | "neutral" }) {
   const isUp = trendDir === "up";
   const isDown = trendDir === "down";
-  const color = isUp ? "text-emerald-400" : isDown ? "text-burgundy" : "text-white/50";
+  const color = isUp ? "text-emerald-700" : isDown ? "text-burgundy" : "text-secondary";
   const rotate = isDown ? "rotate-180" : "";
   return (
-    <span className={`flex items-center gap-0.5 text-[0.6rem] font-medium ${color}`}>
+    <span className={`flex items-center gap-0.5 text-xs font-medium ${color}`}>
       <svg
         width="10"
         height="10"
@@ -80,18 +80,18 @@ export function KpiCards({ cards }: Props) {
               delay: Math.min(i * 0.07, 0.7),
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="group relative overflow-hidden rounded-xl border border-white/[0.06] bg-card p-5 h-full transition-all duration-300 hover:border-gold/20 hover:shadow-lg hover:shadow-gold/5"
+            className="group relative overflow-hidden rounded-xl border border-line bg-card p-5 h-full transition-all duration-300 hover:border-gold/20 hover:shadow-lg hover:shadow-gold/5"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
             <div className="relative z-10 flex flex-col h-full">
               <div className="flex items-center justify-between">
-                <span className="text-xs text-white/60">{card.icon}</span>
+                <span className="text-xs text-secondary">{card.icon}</span>
                 {card.trend && <TrendIndicator trend={card.trend} trendDir={card.trendDir} />}
               </div>
-              <p className="mt-3 text-[0.6rem] font-medium uppercase tracking-[0.15em] text-white/50">
+              <p className="mt-3 text-xs font-medium uppercase tracking-[0.08em] text-secondary">
                 {card.title}
               </p>
-              <p className="mt-1 flex-1 font-display text-xl font-semibold tracking-tight text-white">
+              <p className="mt-1 flex-1 font-display text-xl font-semibold tracking-tight text-foreground">
                 {isNumeric ? (
                   <>
                     <AnimatedNumber value={numericValue} />
@@ -119,11 +119,11 @@ export function KpiCardsSkeleton() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4, delay: i * 0.07 }}
-          className="animate-pulse rounded-xl border border-white/[0.06] bg-card p-5 h-full"
+          className="animate-pulse rounded-xl border border-line bg-card p-5 h-full"
         >
-          <div className="mb-3 h-3 w-8 rounded bg-white/5" />
-          <div className="mb-2 h-2 w-16 rounded bg-white/5" />
-          <div className="h-6 w-24 rounded bg-white/5" />
+          <div className="mb-3 h-3 w-8 rounded bg-surface" />
+          <div className="mb-2 h-2 w-16 rounded bg-surface" />
+          <div className="h-6 w-24 rounded bg-surface" />
         </motion.div>
       ))}
     </div>

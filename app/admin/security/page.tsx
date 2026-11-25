@@ -65,7 +65,7 @@ export default function SecurityPage() {
     <div className="container-shell mx-auto px-6 py-10">
       <div className="mb-8">
         <p className="luxury-label mb-2">{t("system_label")}</p>
-        <h1 className="text-3xl font-semibold tracking-tight text-white">{t("security_center")}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t("security_center")}</h1>
         <p className="mt-1 text-sm text-muted">{t("security_desc")}</p>
       </div>
 
@@ -75,7 +75,7 @@ export default function SecurityPage() {
             key={item.id}
             onClick={() => setSection(item.id)}
             className={`inline-flex h-9 items-center rounded-button px-4 text-xs font-semibold uppercase tracking-[0.1em] transition ${
-              section === item.id ? "bg-burgundy text-white" : "border border-white/[0.12] bg-white/5 text-muted hover:bg-white/10"
+              section === item.id ? "bg-burgundy text-foreground" : "border border-line bg-surface text-muted hover:bg-surface"
             }`}
           >
             {item.label}
@@ -83,32 +83,32 @@ export default function SecurityPage() {
         ))}
       </div>
 
-      {loading && <div className="h-32 animate-pulse rounded-card bg-white/[0.04]" />}
+      {loading && <div className="h-32 animate-pulse rounded-card bg-surface" />}
 
       {!loading && section === "overview" && (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <button onClick={() => setSection("audit-logs")} className="luxury-card group block w-full text-left p-6">
-            <h3 className="font-semibold text-white group-hover:text-gold">{t("audit_logs")}</h3>
+          <button onClick={() => setSection("audit-logs")} className="luxury-card group block w-full text-start p-6">
+            <h3 className="font-semibold text-foreground group-hover:text-accent">{t("audit_logs")}</h3>
             <p className="mt-1 text-sm text-muted">{auditLogs.length > 0 ? t("recent_entries").replace("{count}", String(auditLogs.length)) : t("view_all_admin_actions")}</p>
           </button>
-          <button onClick={() => setSection("login-history")} className="luxury-card group block w-full text-left p-6">
-            <h3 className="font-semibold text-white group-hover:text-gold">{t("login_history")}</h3>
+          <button onClick={() => setSection("login-history")} className="luxury-card group block w-full text-start p-6">
+            <h3 className="font-semibold text-foreground group-hover:text-accent">{t("login_history")}</h3>
             <p className="mt-1 text-sm text-muted">{loginHistory.length > 0 ? t("recent_logins").replace("{count}", String(loginHistory.length)) : t("monitor_login_attempts")}</p>
           </button>
-          <button onClick={() => setSection("sessions")} className="luxury-card group block w-full text-left p-6">
-            <h3 className="font-semibold text-white group-hover:text-gold">{t("device_sessions")}</h3>
+          <button onClick={() => setSection("sessions")} className="luxury-card group block w-full text-start p-6">
+            <h3 className="font-semibold text-foreground group-hover:text-accent">{t("device_sessions")}</h3>
             <p className="mt-1 text-sm text-muted">{sessions.length > 0 ? t("active_sessions_count").replace("{count}", String(sessions.length)) : t("manage_active_sessions")}</p>
           </button>
-          <button onClick={() => setSection("api-keys")} className="luxury-card group block w-full text-left p-6">
-            <h3 className="font-semibold text-white group-hover:text-gold">{t("api_keys")}</h3>
+          <button onClick={() => setSection("api-keys")} className="luxury-card group block w-full text-start p-6">
+            <h3 className="font-semibold text-foreground group-hover:text-accent">{t("api_keys")}</h3>
             <p className="mt-1 text-sm text-muted">{apiKeys.length > 0 ? t("keys_configured").replace("{count}", String(apiKeys.length)) : t("manage_api_access_keys")}</p>
           </button>
-          <button onClick={() => setSection("rate-limits")} className="luxury-card group block w-full text-left p-6">
-            <h3 className="font-semibold text-white group-hover:text-gold">{t("rate_limits")}</h3>
+          <button onClick={() => setSection("rate-limits")} className="luxury-card group block w-full text-start p-6">
+            <h3 className="font-semibold text-foreground group-hover:text-accent">{t("rate_limits")}</h3>
             <p className="mt-1 text-sm text-muted">{rateLimitData ? t("blocked_requests_count").replace("{count}", String(rateLimitData.blockedCount)) : t("monitor_rate_limits")}</p>
           </button>
           <div className="luxury-card p-6">
-            <h3 className="font-semibold text-white">{t("two_factor_auth")}</h3>
+            <h3 className="font-semibold text-foreground">{t("two_factor_auth")}</h3>
             <p className="mt-1 text-sm text-muted">{t("two_factor_desc")}</p>
             <button className="mt-3 btn-primary text-xs">{t("enable_2fa")}</button>
           </div>
@@ -116,16 +116,16 @@ export default function SecurityPage() {
       )}
 
       {!loading && section === "audit-logs" && (
-        <div className="rounded-card border border-white/[0.06] bg-card p-6">
-          <h3 className="mb-4 text-sm font-semibold text-white">{t("audit_logs")}</h3>
+        <div className="rounded-card border border-line bg-card p-6">
+          <h3 className="mb-4 text-sm font-semibold text-foreground">{t("audit_logs")}</h3>
           <div className="max-h-[600px] space-y-2 overflow-y-auto">
             {auditLogs.map((log, i) => (
-              <div key={i} className="flex items-start justify-between rounded border border-white/[0.04] px-3 py-2">
+              <div key={i} className="flex items-start justify-between rounded border border-line px-3 py-2">
                 <div>
-                  <p className="text-xs text-white/80"><span className="font-medium text-gold">{log.adminName}</span> {log.action} {log.entity}</p>
-                  {log.entityId && <p className="text-[10px] text-muted">{t("id_label")}: {log.entityId}</p>}
+                  <p className="text-xs text-secondary"><span className="font-medium text-accent">{log.adminName}</span> {log.action} {log.entity}</p>
+                  {log.entityId && <p className="text-xs text-muted">{t("id_label")}: {log.entityId}</p>}
                 </div>
-                <div className="text-right text-[10px] text-muted">
+                <div className="text-end text-xs text-muted">
                   <p>{new Date(log.createdAt).toLocaleString()}</p>
                   {log.ip && <p>{log.ip}</p>}
                 </div>
@@ -137,22 +137,22 @@ export default function SecurityPage() {
       )}
 
       {!loading && section === "login-history" && (
-        <div className="rounded-card border border-white/[0.06] bg-card p-6">
-          <h3 className="mb-4 text-sm font-semibold text-white">{t("login_history")}</h3>
+        <div className="rounded-card border border-line bg-card p-6">
+          <h3 className="mb-4 text-sm font-semibold text-foreground">{t("login_history")}</h3>
           <div className="max-h-[600px] space-y-2 overflow-y-auto">
             {loginHistory.map((h, i) => (
               <div key={i} className={`flex items-start justify-between rounded border px-3 py-2 ${
-                h.success ? "border-white/[0.04]" : "border-burgundy/20 bg-burgundy/[0.03]"
+                h.success ? "border-line" : "border-burgundy/20 bg-burgundy/[0.03]"
               }`}>
                 <div>
                   <div className="flex items-center gap-2">
                     <span className={`h-2 w-2 rounded-full ${h.success ? "bg-emerald" : "bg-burgundy"}`} />
-                    <span className="text-xs text-white/80">{h.browser} / {h.os}</span>
+                    <span className="text-xs text-secondary">{h.browser} / {h.os}</span>
                     {h.suspicious && <span className="badge-red text-[9px]">{t("suspicious")}</span>}
                   </div>
-                  <p className="text-[10px] text-muted">{h.ip} — {h.device}</p>
+                  <p className="text-xs text-muted">{h.ip} — {h.device}</p>
                 </div>
-                <div className="text-right text-[10px] text-muted">
+                <div className="text-end text-xs text-muted">
                   <p>{new Date(h.loginAt).toLocaleString()}</p>
                   {h.duration > 0 && <p>{t("duration_label")}{h.duration}s</p>}
                 </div>
@@ -164,9 +164,9 @@ export default function SecurityPage() {
       )}
 
       {!loading && section === "sessions" && (
-        <div className="rounded-card border border-white/[0.06] bg-card p-6">
+        <div className="rounded-card border border-line bg-card p-6">
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-white">{t("device_sessions")}</h3>
+            <h3 className="text-sm font-semibold text-foreground">{t("device_sessions")}</h3>
             <button
               onClick={async () => {
                 await fetch("/api/admin/device-sessions?allExceptCurrent=true", { method: "DELETE" });
@@ -179,10 +179,10 @@ export default function SecurityPage() {
           </div>
           <div className="space-y-2">
             {sessions.map((s, i) => (
-              <div key={i} className="flex items-center justify-between rounded border border-white/[0.04] px-3 py-2">
+              <div key={i} className="flex items-center justify-between rounded border border-line px-3 py-2">
                 <div>
-                  <p className="text-xs text-white/80">{s.browser} on {s.os}</p>
-                  <p className="text-[10px] text-muted">{s.ip} — {t("last_active")}: {new Date(s.lastActiveAt).toLocaleString()}</p>
+                  <p className="text-xs text-secondary">{s.browser} on {s.os}</p>
+                  <p className="text-xs text-muted">{s.ip} — {t("last_active")}: {new Date(s.lastActiveAt).toLocaleString()}</p>
                 </div>
                 <button
                   onClick={async () => {
@@ -202,8 +202,8 @@ export default function SecurityPage() {
 
       {!loading && section === "api-keys" && (
         <div className="space-y-6">
-          <div className="rounded-card border border-white/[0.06] bg-card p-6">
-            <h3 className="mb-4 text-sm font-semibold text-white">{t("create_api_key")}</h3>
+          <div className="rounded-card border border-line bg-card p-6">
+            <h3 className="mb-4 text-sm font-semibold text-foreground">{t("create_api_key")}</h3>
             <form onSubmit={async (e) => {
               e.preventDefault();
               const form = e.target as HTMLFormElement;
@@ -231,17 +231,17 @@ export default function SecurityPage() {
             </form>
           </div>
 
-          <div className="rounded-card border border-white/[0.06] bg-card p-6">
-            <h3 className="mb-4 text-sm font-semibold text-white">{t("api_keys")}</h3>
+          <div className="rounded-card border border-line bg-card p-6">
+            <h3 className="mb-4 text-sm font-semibold text-foreground">{t("api_keys")}</h3>
             <div className="space-y-2">
               {apiKeys.map((key, i) => (
-                <div key={i} className="flex items-center justify-between rounded border border-white/[0.04] px-3 py-2">
+                <div key={i} className="flex items-center justify-between rounded border border-line px-3 py-2">
                   <div>
-                    <p className="text-xs text-white/80">{key.name} — {key.key?.slice(0, 20)}...</p>
-                    <p className="text-[10px] text-muted">{t("uses_label")}: {key.usageCount} | {t("active_label")}: {key.isActive ? t("yes") : t("no")}</p>
+                    <p className="text-xs text-secondary">{key.name} — {key.key?.slice(0, 20)}...</p>
+                    <p className="text-xs text-muted">{t("uses_label")}: {key.usageCount} | {t("active_label")}: {key.isActive ? t("yes") : t("no")}</p>
                   </div>
                   <div className="flex gap-2">
-                    <button className="text-xs text-gold hover:text-gold/80">{t("regenerate")}</button>
+                    <button className="text-xs text-accent hover:text-accent">{t("regenerate")}</button>
                     <button className="text-xs text-burgundy hover:text-burgundy/80">{t("delete")}</button>
                   </div>
                 </div>
@@ -255,30 +255,30 @@ export default function SecurityPage() {
       {!loading && section === "rate-limits" && rateLimitData && (
         <div className="space-y-6">
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-            <div className="rounded-card border border-white/[0.06] bg-card p-4">
-                <p className="text-[10px] text-muted">{t("total_requests")}</p>
-              <p className="mt-1 text-xl font-semibold text-white">{rateLimitData.totalRequests}</p>
+            <div className="rounded-card border border-line bg-card p-4">
+                <p className="text-xs text-muted">{t("total_requests")}</p>
+              <p className="mt-1 text-xl font-semibold text-foreground">{rateLimitData.totalRequests}</p>
             </div>
-            <div className="rounded-card border border-white/[0.06] bg-card p-4">
-              <p className="text-[10px] text-muted">{t("blocked")}</p>
+            <div className="rounded-card border border-line bg-card p-4">
+              <p className="text-xs text-muted">{t("blocked")}</p>
               <p className="mt-1 text-xl font-semibold text-burgundy">{rateLimitData.blockedCount}</p>
             </div>
-            <div className="rounded-card border border-white/[0.06] bg-card p-4">
-              <p className="text-[10px] text-muted">{t("slow_requests")}</p>
-              <p className="mt-1 text-xl font-semibold text-gold">{rateLimitData.slowCount}</p>
+            <div className="rounded-card border border-line bg-card p-4">
+              <p className="text-xs text-muted">{t("slow_requests")}</p>
+              <p className="mt-1 text-xl font-semibold text-accent">{rateLimitData.slowCount}</p>
             </div>
-            <div className="rounded-card border border-white/[0.06] bg-card p-4">
-              <p className="text-[10px] text-muted">{t("top_attackers")}</p>
-              <p className="mt-1 text-xl font-semibold text-white">{rateLimitData.topAttackers?.length || 0}</p>
+            <div className="rounded-card border border-line bg-card p-4">
+              <p className="text-xs text-muted">{t("top_attackers")}</p>
+              <p className="mt-1 text-xl font-semibold text-foreground">{rateLimitData.topAttackers?.length || 0}</p>
             </div>
           </div>
 
-          <div className="rounded-card border border-white/[0.06] bg-card p-6">
-            <h3 className="mb-4 text-sm font-semibold text-white">{t("top_attackers")}</h3>
+          <div className="rounded-card border border-line bg-card p-6">
+            <h3 className="mb-4 text-sm font-semibold text-foreground">{t("top_attackers")}</h3>
             <div className="space-y-2">
               {(rateLimitData.topAttackers || []).map((a, i) => (
-                <div key={i} className="flex items-center justify-between rounded border border-white/[0.04] px-3 py-2 text-xs">
-                  <span className="text-white/80">{a.ip}</span>
+                <div key={i} className="flex items-center justify-between rounded border border-line px-3 py-2 text-xs">
+                  <span className="text-secondary">{a.ip}</span>
                   <span className="text-muted">{t("blocked_requests_count").replace("{count}", String(a.count))}</span>
                 </div>
               ))}

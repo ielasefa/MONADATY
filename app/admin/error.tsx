@@ -19,13 +19,13 @@ export default function AdminError({
             <path d="M15 9l-6 6M9 9l6 6" />
           </svg>
         </div>
-        <h1 className="mb-2 font-display text-2xl font-semibold text-white">{t("something_went_wrong")}</h1>
+        <h1 className="mb-2 font-display text-2xl font-semibold text-foreground">{t("something_went_wrong")}</h1>
         <p className="mb-6 text-sm text-muted">
           {t("unexpected_error")}
         </p>
         <button
           onClick={reset}
-          className="inline-flex h-12 items-center justify-center rounded-button bg-burgundy px-6 text-sm font-medium text-white transition hover:bg-burgundy/90"
+          className="inline-flex h-12 items-center justify-center rounded-button bg-burgundy px-6 text-sm font-medium text-foreground transition hover:bg-burgundy/90"
         >
           {t("try_again")}
         </button>

@@ -26,10 +26,10 @@ export function CustomerInvoiceDownload({ orderId }: Props) {
   if (!invoice || invoice.status !== "Issued") return null;
 
   return (
-    <div className="rounded-md border border-ivory/[0.06] bg-black-surface p-6 md:p-8">
+    <div className="rounded-md border border-line bg-card p-6 md:p-8">
       <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left">
-        <div className="flex h-14 w-14 items-center justify-center rounded-md bg-ivory/[0.04]">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6A15B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <div className="flex h-14 w-14 items-center justify-center rounded-md bg-canvas text-accent">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
             <polyline points="14 2 14 8 20 8" />
             <line x1="16" y1="13" x2="8" y2="13" />
@@ -38,8 +38,8 @@ export function CustomerInvoiceDownload({ orderId }: Props) {
           </svg>
         </div>
         <div className="flex-1">
-          <p className="font-display text-lg font-semibold text-ivory">{t("invoice_available")}</p>
-          <p className="text-sm text-ivory/35">
+          <p className="font-display text-lg font-semibold text-foreground">{t("invoice_available")}</p>
+          <p className="text-sm text-secondary">
             {t("invoice_ready", { number: invoice.invoiceNumber })}
           </p>
         </div>

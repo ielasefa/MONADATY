@@ -44,26 +44,26 @@ const ICONS: Record<BenefitIcon, JSX.Element> = {
 
 export function ProductBenefits({ label, items }: ProductBenefitsProps) {
   return (
-    <section className="border-y border-white/[0.06] bg-white/[0.01]">
+    <section className="border-y border-line bg-white/[0.01]">
       <div className="mx-auto w-full max-w-[1400px] px-6 py-16 sm:px-8 md:py-24 lg:px-12">
         <div className="mb-12 flex items-center gap-4 md:mb-14">
           <span className="h-px w-10 bg-gold/50" />
-          <p className="text-[0.68rem] font-medium uppercase tracking-[0.3em] text-gold">{label}</p>
+          <p className="text-sm font-medium uppercase tracking-[0.08em] text-accent">{label}</p>
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {items.map((item) => (
             <div
               key={item.icon}
-              className="group flex flex-col rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8 transition-colors duration-300 hover:border-gold/25"
+              className="group flex flex-col rounded-2xl border border-line bg-white/[0.02] p-8 transition-colors duration-300 hover:border-line"
             >
-              <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gold/25 bg-gold/[0.06] text-gold transition-colors duration-300 group-hover:bg-gold/10">
+              <span className="flex h-12 w-12 items-center justify-center rounded-full border border-line bg-gold/[0.06] text-accent transition-colors duration-300 group-hover:bg-gold/10">
                 {ICONS[item.icon]}
               </span>
-              <h3 className="mt-6 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-white/90">
+              <h3 className="mt-6 text-sm font-semibold uppercase tracking-[0.08em] text-secondary">
                 {item.title}
               </h3>
-              <p className="mt-3 text-[0.85rem] leading-relaxed text-white/40">{item.description}</p>
+              <p className="mt-3 text-sm leading-relaxed text-secondary">{item.description}</p>
             </div>
           ))}
         </div>

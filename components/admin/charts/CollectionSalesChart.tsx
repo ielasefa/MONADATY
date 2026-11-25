@@ -13,14 +13,14 @@ type Props = {
   data: { name: string; value: number }[];
 };
 
-const COLORS = ["#D5B87D", "#8F1F30", "#0F8B6F", "#3B82F6", "#8B5CF6", "#D5B87D"];
+const COLORS = ["#8C6228", "#8F1F30", "#0F8B6F", "#3B82F6", "#8B5CF6", "#8C6228"];
 
 export default function CollectionSalesChart({ data }: Props) {
   const { t } = useTranslation("admin");
   if (data.length === 0) {
     return (
-      <div className="rounded-xl border border-white/[0.06] bg-surface p-6">
-        <p className="mb-4 text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-white/50">
+      <div className="rounded-xl border border-line bg-card p-6">
+        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.08em] text-secondary">
           {t("sales_by_collection", "Sales by Collection")}
         </p>
         <div className="flex h-48 items-center justify-center">
@@ -31,8 +31,8 @@ export default function CollectionSalesChart({ data }: Props) {
   }
 
   return (
-    <div className="rounded-xl border border-white/[0.06] bg-surface p-6">
-      <p className="mb-4 text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-white/50">
+    <div className="rounded-xl border border-line bg-card p-6">
+      <p className="mb-4 text-xs font-semibold uppercase tracking-[0.08em] text-secondary">
         {t("sales_by_collection", "Sales by Collection")}
       </p>
       <div className="flex h-48 items-center justify-center">
@@ -54,11 +54,11 @@ export default function CollectionSalesChart({ data }: Props) {
             </Pie>
             <Tooltip
               contentStyle={{
-                background: "rgba(16,16,16,0.95)",
-                border: "1px solid rgba(255,255,255,0.08)",
+                background: "#FFFFFF",
+                border: "1px solid #E8E1D8",
                 borderRadius: "12px",
                 backdropFilter: "blur(16px)",
-                color: "#fff",
+                color: "#171717",
                 fontSize: "12px",
               }}
               formatter={(value) => [`${Number(value).toFixed(2)} DH`, t("revenue", "Revenue")]}
@@ -72,7 +72,7 @@ export default function CollectionSalesChart({ data }: Props) {
                 className="h-2 w-2 rounded-full"
                 style={{ backgroundColor: COLORS[index % COLORS.length] }}
               />
-              <span className="text-[0.6rem] text-muted">{entry.name}</span>
+              <span className="text-xs text-muted">{entry.name}</span>
             </div>
           ))}
         </div>

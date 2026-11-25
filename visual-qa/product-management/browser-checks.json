@@ -1,0 +1,29 @@
+{
+  "checks": [
+    "Desktop decrement/increment persist without a page reload",
+    "Lost response retry reuses the operation and never deducts twice",
+    "Multiword, accented, format, SKU, Arabic and barcode search",
+    "Search remains synchronized while changing stock filters",
+    "Three languages, RTL and four viewport widths",
+    "Editing metadata preserves stock sold since the form opened",
+    "Stale absolute stock edit is rejected without modifying inventory",
+    "Fresh absolute quantity edit is persisted",
+    "Invalid quantities and cross-origin stock writes are rejected",
+    "Duplicating catalogue content never duplicates inventory"
+  ],
+  "audits": [
+    {
+      "lang": "fr",
+      "violations": []
+    },
+    {
+      "lang": "en",
+      "violations": []
+    },
+    {
+      "lang": "ar",
+      "violations": []
+    }
+  ],
+  "errors": []
+}

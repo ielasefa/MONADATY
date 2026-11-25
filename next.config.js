@@ -42,6 +42,7 @@ function buildCSP() {
 const CONTENT_SECURITY_POLICY = buildCSP();
 
 module.exports = {
+  distDir: process.env.MONADATY_BUILD_DIR || ".next",
   // IMPORTANT FOR AZURE DEPLOYMENT
   output: "standalone",
   deploymentId: process.env.DEPLOYMENT_VERSION,

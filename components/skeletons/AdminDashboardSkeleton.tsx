@@ -17,7 +17,7 @@ export function AdminDashboardSkeleton() {
            initial={{ opacity: 0, scale: 0.95 }}
            animate={{ opacity: 1, scale: 1 }}
            transition={{ duration: 0.4, delay: i * 0.05 }}
-           className="rounded-xl border border-white/[0.06] bg-surface p-5"
+           className="rounded-xl border border-line bg-surface p-5"
          >
            <div className="mb-3 h-3 w-8 rounded-full bg-white/5 skeleton-shimmer-wave" />
            <div className="mb-2 h-2 w-16 rounded-full bg-white/5 skeleton-shimmer-wave" />
@@ -32,7 +32,7 @@ export function AdminDashboardSkeleton() {
            initial={{ opacity: 0, y: 12 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ duration: 0.5, delay: 0.2 + i * 0.1 }}
-           className="rounded-xl border border-white/[0.06] bg-surface p-6"
+           className="rounded-xl border border-line bg-surface p-6"
          >
            <Skeleton className="mb-4 h-4 w-32" rounded="md" />
            <Skeleton className="h-48 w-full rounded-lg skeleton-shimmer-wave" />
@@ -48,7 +48,7 @@ export function AdminDashboardSkeleton() {
              initial={{ opacity: 0, scale: 0.92 }}
              animate={{ opacity: 1, scale: 1 }}
              transition={{ duration: 0.4, delay: 0.3 + i * 0.06 }}
-             className="rounded-xl border border-white/[0.06] bg-surface p-4"
+             className="rounded-xl border border-line bg-surface p-4"
            >
              <Skeleton className="mx-auto h-6 w-6 rounded-full skeleton-shimmer-wave" />
              <Skeleton className="mx-auto mt-2 h-3 w-16 rounded-full skeleton-shimmer-wave" />
@@ -63,7 +63,7 @@ export function AdminDashboardSkeleton() {
            initial={{ opacity: 0, y: 10 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ duration: 0.5, delay: 0.4 + i * 0.08 }}
-           className="rounded-2xl border border-white/[0.06] bg-surface p-6"
+           className="rounded-2xl border border-line bg-surface p-6"
          >
            <Skeleton className="h-3 w-20 rounded-full skeleton-shimmer-wave" />
            <Skeleton className="mt-3 h-7 w-28 rounded-md skeleton-shimmer-wave" />
@@ -75,7 +75,7 @@ export function AdminDashboardSkeleton() {
        initial={{ opacity: 0, y: 10 }}
        animate={{ opacity: 1, y: 0 }}
        transition={{ duration: 0.5, delay: 0.6 }}
-       className="rounded-2xl border border-white/[0.06] bg-surface p-6"
+       className="rounded-2xl border border-line bg-surface p-6"
      >
        <Skeleton className="mb-4 h-5 w-36 rounded-md skeleton-shimmer-wave" />
        <div className="space-y-3">

@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { isCheckoutCity, isValidCheckoutEmail } from "@/lib/checkout-validators";
 
 const MOROCCAN_PHONE_REGEX = /^(\+212|0)([5-7]\d{8})$/;
 
@@ -12,9 +13,6 @@ function validatePostalCode(code: string): boolean {
   return code === "" || MOROCCAN_POSTAL_REGEX.test(code);
 }
 
-function validateEmail(email: string): boolean {
-  return typeof email === "string" && email.includes("@") && email.length >= 3;
-}
 
 function validateName(name: string): boolean {
   return typeof name === "string" && name.trim().length > 0;
@@ -62,17 +60,33 @@ describe("checkout field validators", () => {
 
   describe("validateEmail", () => {
     it("accepts a valid email", () => {
-      expect(validateEmail("test@example.com")).toBe(true);
-      expect(validateEmail("a@b.c")).toBe(true);
+      expect(isValidCheckoutEmail("test@example.com")).toBe(true);
+      expect(isValidCheckoutEmail("a@b.c")).toBe(true);
     });
 
     it("rejects missing @", () => {
-      expect(validateEmail("test.example.com")).toBe(false);
+      expect(isValidCheckoutEmail("test.example.com")).toBe(false);
     });
 
     it("rejects too-short strings", () => {
-      expect(validateEmail("a@")).toBe(false);
+      expect(isValidCheckoutEmail("a@")).toBe(false);
     });
+  });
+
+  it.each([undefined, null, "", "   "])("allows omitted or blank email (%s)", (email) => {
+    expect(isValidCheckoutEmail(email)).toBe(true);
+  });
+
+  it.each([false, 42, {}, [], "a@b", "a b@example.com", "a@@example.com", "a@", "a@b.", "a".repeat(255) + "@test.com"])("rejects malformed optional email (%s)", (email) => {
+    expect(isValidCheckoutEmail(email)).toBe(false);
+  });
+
+  it.each(["Rabat", "Salé"])("allows delivery in %s", (city) => {
+    expect(isCheckoutCity(city)).toBe(true);
+  });
+
+  it.each(["Casablanca", "Témara", "Sale", "", undefined, null, 0])("rejects unsupported delivery city (%s)", (city) => {
+    expect(isCheckoutCity(city)).toBe(false);
   });
 
   describe("validateName", () => {

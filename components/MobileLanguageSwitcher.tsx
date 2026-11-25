@@ -23,17 +23,19 @@ export function MobileLanguageSwitcher({ onSelect }: { onSelect?: () => void }) 
 
   return (
     <div className="space-y-1">
-      <p className="px-3 text-[0.5rem] font-semibold uppercase tracking-[0.22em] text-ivory/30">
-        {t("language")}
+      <p className="px-3 text-sm font-semibold uppercase tracking-[0.08em] text-secondary">
+        {t("language", { fr: "Langue", en: "Language", ar: "اللغة" }[lang])}
       </p>
       {LANGUAGES.map((l) => (
         <button
           key={l.code}
+          type="button"
+          aria-pressed={lang === l.code}
           onClick={() => handleLanguageChange(l.code)}
-          className={`flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm transition-colors duration-150 ${
+          className={`flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-start text-sm transition-colors duration-150 ${
             lang === l.code
-              ? "bg-ivory/[0.04] text-ivory"
-              : "text-ivory/40 hover:bg-ivory/[0.03] hover:text-ivory"
+              ? "bg-ivory/[0.04] text-foreground"
+              : "text-secondary hover:bg-ivory/[0.03] hover:text-foreground"
           }`}
         >
           <span className="text-base">{l.flag}</span>
@@ -42,7 +44,7 @@ export function MobileLanguageSwitcher({ onSelect }: { onSelect?: () => void }) 
             <svg
               width={24}
               height={24}
-              className="h-3.5 w-3.5 shrink-0 text-gold"
+              className="h-3.5 w-3.5 shrink-0 text-accent"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"

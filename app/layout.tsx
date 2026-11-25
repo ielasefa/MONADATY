@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Serif_Display, DM_Sans } from "next/font/google";
+import { Playfair_Display, Inter, Noto_Sans_Arabic } from "next/font/google";
 import { headers, cookies } from "next/headers";
 import "./globals.css";
+import "./admin.css";
+import "./typography.css";
 import { CartProvider } from "@/components/cart-context";
 import { WishlistProvider } from "@/components/wishlist-context";
 import { LanguageProvider } from "@/context/LanguageContext";
@@ -16,16 +18,23 @@ import { getLanguageFromCookie, getTranslation, loadTranslationNamespaces, LANGU
 import { TranslationProvider } from "@/components/TranslationHydrator";
 import { SiteShell } from "@/components/SiteShell";
 
-const dmSerifDisplay = DM_Serif_Display({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-dm-serif",
-});
-
-const dmSans = DM_Sans({
+const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-dm-sans",
+  variable: "--font-playfair",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const arabic = Noto_Sans_Arabic({
+  subsets: ["arabic"],
+  variable: "--font-arabic",
+  display: "swap",
 });
 
 const siteName = process.env.APP_NAME || "MONADATY";
@@ -59,10 +68,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+      { url: "/favicon.svg", sizes: "any", type: "image/svg+xml" },
+      { url: "/icons/favicon-32.png", sizes: "32x32", type: "image/png" },
     ],
-    apple: "/apple-touch-icon.svg",
+    shortcut: "/favicon.ico",
+    apple: { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
   },
   appleWebApp: {
     capable: true,
@@ -75,7 +85,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#0B0B0A",
+  themeColor: "#780B10",
 };
 
 export default async function RootLayout({
@@ -90,20 +100,16 @@ export default async function RootLayout({
   const dirFromLang = langFromCookie === "ar" ? "rtl" : "ltr";
   const initialTranslations = await loadTranslationNamespaces(
     isAdmin
-      ? ["common", "navbar", "footer", "products", "cart", "buttons", "errors", "admin", "auth"]
-      : ["common", "navbar", "footer", "products", "cart", "buttons", "errors"],
+      ? ["common", "navbar", "footer", "products", "cart", "buttons", "errors", "admin", "auth", "inventory", "invoice"]
+      : ["common", "navbar", "footer", "products", "cart", "buttons", "errors", "shop", "checkout", "success", "wishlist"],
   );
   const commonTr = initialTranslations.common ?? {};
   const skipLabel = getTranslation(commonTr, "skip_to_main", langFromCookie, "Skip to main content");
 
   return (
-    <html lang={langFromCookie} dir={dirFromLang} className={`${dmSerifDisplay.variable} ${dmSans.variable}`}>
+    <html lang={langFromCookie} dir={dirFromLang} className={`${playfairDisplay.variable} ${inter.variable} ${arabic.variable}`}>
       <head>
-        <link rel="apple-touch-icon" href="/apple-touch-icon.svg" sizes="180x180" />
-        <meta name="msapplication-TileColor" content="#0B0B0A" />
-        <meta name="theme-color" content="#0B0B0A" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <meta name="msapplication-TileColor" content="#780B10" />
         <link rel="prefetch" href="/shop" as="document" />
       </head>
       <body>

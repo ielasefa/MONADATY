@@ -1,6 +1,8 @@
 import { prisma } from "./prisma";
 import { cookies } from "next/headers";
 import { interpolate, resolveTranslation, NAMESPACES, type Language, DEFAULT_LANGUAGE } from "./translation-utils";
+import adminDefaults from "./admin-copy.generated.json";
+import { ADMIN_UI_COPY } from "./admin-ui-copy";
 
 export type { Language };
 export { DEFAULT_LANGUAGE };
@@ -32,22 +34,29 @@ export async function loadTranslationNamespaces(namespaces: string[]): Promise<T
   const uniqueNamespaces = [...new Set(namespaces.filter(Boolean))];
   if (uniqueNamespaces.length === 0) return {};
 
+  const defaults = adminDefaults as TranslationNamespaces;
+  const translations: TranslationNamespaces = Object.fromEntries(
+    uniqueNamespaces.map(namespace => [namespace, { ...defaults[namespace], ...ADMIN_UI_COPY[namespace] }]),
+  );
+
   try {
     const rows = await prisma.translation.findMany({
       where: { namespace: { in: uniqueNamespaces } },
       select: { namespace: true, key: true, fr: true, en: true, ar: true },
     });
 
-    const translations: TranslationNamespaces = Object.fromEntries(
-      uniqueNamespaces.map((namespace) => [namespace, {}]),
-    );
     for (const row of rows) {
-      translations[row.namespace][row.key] = { fr: row.fr, en: row.en, ar: row.ar };
+      const fallback = translations[row.namespace][row.key];
+      translations[row.namespace][row.key] = {
+        fr: row.fr?.trim() ? row.fr : fallback?.fr || "",
+        en: row.en?.trim() ? row.en : fallback?.en || "",
+        ar: row.ar?.trim() ? row.ar : fallback?.ar || "",
+      };
     }
 
     return translations;
   } catch {
-    return {};
+    return translations;
   }
 }
 

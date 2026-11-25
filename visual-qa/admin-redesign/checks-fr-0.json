@@ -1,0 +1,518 @@
+{
+  "checks": [
+    {
+      "route": "/admin/dashboard",
+      "language": "fr",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Bon retour, Monadaty",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/dashboard",
+      "language": "fr",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Bon retour, Monadaty",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/dashboard",
+      "language": "fr",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Bon retour, Monadaty",
+      "sidebarVisible": true,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/dashboard",
+      "language": "fr",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Bon retour, Monadaty",
+      "sidebarVisible": true,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/products",
+      "language": "fr",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Gestion des produits",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/products",
+      "language": "fr",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Gestion des produits",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/products",
+      "language": "fr",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Gestion des produits",
+      "sidebarVisible": true,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/products",
+      "language": "fr",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Gestion des produits",
+      "sidebarVisible": true,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/products/add",
+      "language": "fr",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Ajouter un produit",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/products/add",
+      "language": "fr",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Ajouter un produit",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/products/add",
+      "language": "fr",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Ajouter un produit",
+      "sidebarVisible": true,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/products/add",
+      "language": "fr",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Ajouter un produit",
+      "sidebarVisible": true,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/products/white-grape-fizz/edit",
+      "language": "fr",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Modifier le produit",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/products/white-grape-fizz/edit",
+      "language": "fr",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Modifier le produit",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/products/white-grape-fizz/edit",
+      "language": "fr",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Modifier le produit",
+      "sidebarVisible": true,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/products/white-grape-fizz/edit",
+      "language": "fr",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Modifier le produit",
+      "sidebarVisible": true,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/orders/5744c506-37c9-4c5c-a22d-1baa3c868341",
+      "language": "fr",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "QA-UI-001",
+      "sidebarVisible": false,
+      "rawKeys": [
+        "cancel_invoice"
+      ]
+    },
+    {
+      "route": "/admin/orders/5744c506-37c9-4c5c-a22d-1baa3c868341",
+      "language": "fr",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "QA-UI-001",
+      "sidebarVisible": false,
+      "rawKeys": [
+        "cancel_invoice"
+      ]
+    },
+    {
+      "route": "/admin/orders/5744c506-37c9-4c5c-a22d-1baa3c868341",
+      "language": "fr",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "QA-UI-001",
+      "sidebarVisible": true,
+      "rawKeys": [
+        "cancel_invoice"
+      ]
+    },
+    {
+      "route": "/admin/orders/5744c506-37c9-4c5c-a22d-1baa3c868341",
+      "language": "fr",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "QA-UI-001",
+      "sidebarVisible": true,
+      "rawKeys": [
+        "cancel_invoice"
+      ]
+    },
+    {
+      "route": "/admin/inventory/warehouses/a8b98247-c07b-47a8-a50e-3006ccc7a050",
+      "language": "fr",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Modifier: Entrepôt Preview",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/inventory/warehouses/a8b98247-c07b-47a8-a50e-3006ccc7a050",
+      "language": "fr",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Modifier: Entrepôt Preview",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/inventory/warehouses/a8b98247-c07b-47a8-a50e-3006ccc7a050",
+      "language": "fr",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Modifier: Entrepôt Preview",
+      "sidebarVisible": true,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/inventory/warehouses/a8b98247-c07b-47a8-a50e-3006ccc7a050",
+      "language": "fr",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Modifier: Entrepôt Preview",
+      "sidebarVisible": true,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/inventory/suppliers/7e949f9b-5897-463c-9b02-6fd18f2cbb3d",
+      "language": "fr",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Modifier: Fournisseur Preview",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/inventory/suppliers/7e949f9b-5897-463c-9b02-6fd18f2cbb3d",
+      "language": "fr",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Modifier: Fournisseur Preview",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/inventory/suppliers/7e949f9b-5897-463c-9b02-6fd18f2cbb3d",
+      "language": "fr",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Modifier: Fournisseur Preview",
+      "sidebarVisible": true,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/inventory/suppliers/7e949f9b-5897-463c-9b02-6fd18f2cbb3d",
+      "language": "fr",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Modifier: Fournisseur Preview",
+      "sidebarVisible": true,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/inventory/purchase-orders/ad265f84-e907-4cf2-a831-53af82c8ddfb",
+      "language": "fr",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "QA-PO-001",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/inventory/purchase-orders/ad265f84-e907-4cf2-a831-53af82c8ddfb",
+      "language": "fr",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "QA-PO-001",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/inventory/purchase-orders/ad265f84-e907-4cf2-a831-53af82c8ddfb",
+      "language": "fr",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "QA-PO-001",
+      "sidebarVisible": true,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/inventory/purchase-orders/ad265f84-e907-4cf2-a831-53af82c8ddfb",
+      "language": "fr",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "QA-PO-001",
+      "sidebarVisible": true,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/categories",
+      "language": "fr",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Catégories",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/categories",
+      "language": "fr",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Catégories",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/categories",
+      "language": "fr",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Catégories",
+      "sidebarVisible": true,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/categories",
+      "language": "fr",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Catégories",
+      "sidebarVisible": true,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/collections",
+      "language": "fr",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Collections",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/collections",
+      "language": "fr",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Collections",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/collections",
+      "language": "fr",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Collections",
+      "sidebarVisible": true,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/collections",
+      "language": "fr",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Collections",
+      "sidebarVisible": true,
+      "rawKeys": []
+    }
+  ],
+  "audits": [
+    {
+      "route": "/admin/dashboard",
+      "language": "fr",
+      "violations": []
+    },
+    {
+      "route": "/admin/products",
+      "language": "fr",
+      "violations": []
+    },
+    {
+      "route": "/admin/products/add",
+      "language": "fr",
+      "violations": []
+    },
+    {
+      "route": "/admin/categories",
+      "language": "fr",
+      "violations": []
+    }
+  ],
+  "errors": [],
+  "interactions": [
+    "Real browser login and authenticated dashboard"
+  ]
+}

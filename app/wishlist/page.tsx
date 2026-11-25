@@ -18,8 +18,8 @@ export default async function WishlistPage() {
   const products: Product[] = rows;
 
 return (
-    <div className="bg-black">
-      <section className="relative overflow-hidden border-b border-gold/[0.16] bg-surface">
+    <div className="bg-canvas">
+      <section className="relative overflow-hidden border-b border-line bg-surface">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_0%,rgba(214,179,90,0.09),transparent_36%)]" />
         <div className="storefront-container storefront-section relative">
           <FadeIn y={18} duration={0.62}>
@@ -30,7 +30,7 @@ return (
           <h1 className="storefront-page-title mt-6">
             {copy.wishlist.title}
           </h1>
-          <p className="mt-5 max-w-xl text-sm leading-[1.85] text-white/58 sm:text-[0.95rem]">
+          <p className="mt-5 max-w-xl text-sm leading-[1.85] text-secondary sm:text-[0.95rem]">
             {copy.wishlist.description}
           </p>
           </FadeIn>

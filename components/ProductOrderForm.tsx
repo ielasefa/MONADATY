@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/components/cart-context";
 import type { Product } from "@/types";
@@ -46,16 +47,16 @@ export function ProductOrderForm({ product }: ProductOrderFormProps) {
   const controlsDisabled = isOutOfStock || adding || buying;
 
   const buttonBase =
-    "h-14 flex-1 w-full rounded-xl px-6 text-[0.62rem] font-medium uppercase tracking-[0.18em] whitespace-nowrap transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rouge/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B0B0A] disabled:cursor-not-allowed disabled:opacity-40";
+    "h-14 flex-1 w-full rounded-xl px-6 text-sm font-medium uppercase tracking-[0.08em] whitespace-nowrap transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rouge/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B0B0A] disabled:cursor-not-allowed disabled:opacity-40";
 
   const qtyControl =
-    "flex h-14 w-14 shrink-0 items-center justify-center rounded-xl text-lg font-light text-white/45 transition-colors duration-200 hover:bg-white/[0.05] hover:text-white disabled:cursor-not-allowed disabled:opacity-40";
+    "flex h-14 w-14 shrink-0 items-center justify-center rounded-xl text-lg font-light text-secondary transition-colors duration-200 hover:bg-white/[0.05] hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40";
 
 return (
-      <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 md:p-8">
-        <div className="flex w-full max-w-[540px] flex-col gap-4 xl:flex-row xl:items-stretch">
+      <div className="product-order-form storefront-panel p-4 sm:p-6 md:p-8">
+        <div className="product-order-controls flex w-full max-w-[540px] flex-col gap-4 xl:flex-row xl:items-stretch">
           {/* Quantity selector — quiet, bordered, aligned with the actions */}
-          <div className="flex h-14 shrink-0 items-center justify-between rounded-xl border border-white/10 bg-[#0B0B0A]/40 px-2 xl:px-1">
+          <div className="product-quantity flex h-14 shrink-0 items-center justify-between rounded-xl border border-[#E8E1D8] bg-[#FAF8F5] px-2 xl:px-1">
           <span className="sr-only">{t("quantity", "Quantity")}</span>
           <div className="flex h-full items-center gap-1 xl:gap-0">
             <motion.button
@@ -74,7 +75,7 @@ return (
               initial={shouldReduceMotion ? false : { opacity: 0.4, y: -3 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: shouldReduceMotion ? 0 : 0.2, ease: PREMIUM_EASE }}
-              className="min-w-10 text-center text-sm font-medium tabular-nums text-white"
+              className="min-w-10 text-center text-sm font-medium tabular-nums text-foreground"
             >
               {quantity}
             </motion.span>
@@ -93,7 +94,7 @@ return (
         </div>
 
         {/* ADD TO CART / BUY NOW — primary, uncluttered */}
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:flex xl:flex-1">
+        <div className="product-order-actions grid grid-cols-1 gap-3 sm:grid-cols-2 xl:flex xl:flex-1">
           <motion.button
             type="button"
             onClick={handleAddToCart}
@@ -101,11 +102,11 @@ return (
             whileHover={controlsDisabled || shouldReduceMotion ? undefined : { y: -2, scale: 1.01 }}
             whileTap={controlsDisabled || shouldReduceMotion ? undefined : { y: 0, scale: 0.98 }}
             transition={{ duration: 0.24, ease: PREMIUM_EASE }}
-            className={`${buttonBase} bg-rouge text-white shadow-[0_16px_40px_-20px_rgba(110,31,42,0.6)] hover:bg-rouge-hover`}
+            className={`${buttonBase} btn-primary`}
           >
             {adding ? (
               <span className="flex items-center justify-center gap-2">
-                <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-line border-t-white" />
                 {t("adding")}
               </span>
             ) : (
@@ -121,7 +122,7 @@ return (
             whileHover={controlsDisabled || shouldReduceMotion ? undefined : { y: -2, scale: 1.01 }}
             whileTap={controlsDisabled || shouldReduceMotion ? undefined : { y: 0, scale: 0.98 }}
             transition={{ duration: 0.24, ease: PREMIUM_EASE }}
-            className={`${buttonBase} border-2 border-rouge bg-transparent text-white hover:bg-rouge hover:border-rouge`}
+            className={`${buttonBase} btn-secondary`}
           >
             {buying ? (
               <span className="flex items-center justify-center gap-2">
@@ -136,15 +137,15 @@ return (
       </div>
 
       {/* Panel footer — stock + trust cue */}
-      <div className="mt-6 flex items-center justify-between border-t border-white/[0.08] pt-6">
-        <p className="flex items-center gap-3 text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-white/45">
+      <div className="product-order-note mt-6 flex items-center justify-between border-t border-line pt-6">
+        <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.08em] text-secondary">
           <span
             aria-hidden="true"
             className={`h-1.5 w-1.5 rounded-full ${isOutOfStock ? "bg-white/20" : "bg-gold"}`}
           />
           {isOutOfStock ? t("out_of_stock") : t("in_stock")}
         </p>
-        <p className="flex items-center gap-2 text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-white/30">
+        <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.08em] text-secondary">
           <svg
             aria-hidden="true"
             width={12}

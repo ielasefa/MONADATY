@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useTranslation } from "@/hooks/useTranslation";
 import { EASE, Panel, SectionHeading } from "./ui";
 import {
@@ -38,7 +39,7 @@ export function QuickActions() {
       <SectionHeading
         title={t("quick_actions", "Quick Actions")}
         action={
-          <span className="hidden items-center gap-1.5 text-[0.64rem] uppercase tracking-[0.18em] text-white/30 sm:inline-flex">
+          <span className="hidden items-center gap-1.5 text-xs uppercase tracking-[0.08em] text-secondary sm:inline-flex">
             <span className="h-1 w-1 rounded-full bg-gold/50" aria-hidden />
             {t("shortcuts", "Shortcuts")}
           </span>
@@ -57,21 +58,21 @@ export function QuickActions() {
             >
               <Link
                 href={action.href}
-                className="group relative flex h-full min-h-28 flex-col overflow-hidden rounded-lg border border-white/[0.06] bg-card p-3.5 transition-colors duration-300 hover:border-gold/25"
+                className="group relative flex h-full min-h-28 flex-col overflow-hidden rounded-lg border border-line bg-card p-3.5 transition-colors duration-300 hover:border-gold/25"
               >
                 <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-gold/[0.05] blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
 
                 <div className="flex items-center justify-between">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.03] text-white/60 transition-colors duration-300 group-hover:border-gold/25 group-hover:bg-gold/10 group-hover:text-gold">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-line bg-surface text-secondary transition-colors duration-300 group-hover:border-gold/25 group-hover:bg-gold/10 group-hover:text-accent">
                     <Glyph className="h-[18px] w-[18px]" />
                   </span>
-                  <IconArrowRight className="h-3.5 w-3.5 text-white/20 opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:opacity-100 group-hover:text-gold" />
+                  <IconArrowRight className="h-3.5 w-3.5 text-secondary opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:opacity-100 group-hover:text-accent" />
                 </div>
 
-                <p className="mt-3.5 text-[0.82rem] font-semibold leading-snug text-white">
+                <p className="mt-3.5 text-sm font-semibold leading-snug text-foreground">
                   {action.label}
                 </p>
-                <p className="mt-1 text-[0.68rem] leading-relaxed text-muted">{action.desc}</p>
+                <p className="mt-1 text-xs leading-relaxed text-muted">{action.desc}</p>
               </Link>
             </motion.div>
           );

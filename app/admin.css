@@ -1,0 +1,152 @@
+/* Administration shares the storefront palette without changing public pages. */
+.admin-shell {
+  --color-foreground: 23 23 23;
+  --color-secondary: 107 101 96;
+  --color-accent: 140 98 40;
+  --color-canvas: 250 248 245;
+  --color-line: 232 225 216;
+  --color-surface: 250 248 245;
+  --color-elevated: 255 255 255;
+  --color-brand: 120 11 16;
+  --color-burgundy-hover: 155 17 30;
+  --color-gold: 184 134 59;
+  --color-gold-light: 232 205 145;
+  --color-gold-dark: 140 98 40;
+  --color-muted: 107 101 96;
+  --bg: var(--market-paper);
+  --bg-1: var(--market-paper);
+  --bg-2: #fff;
+  --bg-3: #fff;
+  --surface: var(--market-paper);
+  --card: #fff;
+  --gold: var(--market-gold-dark);
+  --gold-light: var(--market-gold-light);
+  --gold-dark: var(--market-gold-dark);
+  --rouge: var(--market-wine);
+  --rouge-hover: var(--market-wine-hover);
+  --text-primary: var(--market-ink);
+  --text-secondary: var(--market-muted);
+  --text-muted: var(--market-muted);
+  --glass-bg: #fff;
+  --glass-bg-heavy: #fff;
+  --glass-border: var(--market-line);
+  background: var(--market-paper);
+  color: var(--market-ink);
+  color-scheme: light;
+  font-family: var(--font-ui);
+  font-size: .875rem;
+}
+
+.admin-main { width: 0; }
+.admin-workspace { width: 100%; max-width: 1600px; margin-inline: auto; }
+.admin-shell .container-shell { width: 100%; max-width: none; margin-inline: auto; padding: 28px 16px 40px; }
+.admin-shell h1 { color: var(--market-wine); font-family: var(--font-editorial); font-size: clamp(1.8rem, 2.8vw, 2.4rem); font-weight: 600; line-height: 1.2; letter-spacing: -.025em; }
+.admin-shell :is(h2, h3), .admin-shell .font-display:not(h1) { font-family: var(--font-ui); }
+.admin-shell :is(h2, h3) { letter-spacing: -.015em; }
+.admin-shell :is(.luxury-label, .admin-label) { display: block; color: var(--market-muted); font-size: .875rem; font-weight: 500; line-height: 1.5; letter-spacing: 0; text-transform: none; }
+.admin-shell label, .admin-shell button { font-size: .875rem; }
+.admin-shell :focus-visible { outline: 2px solid var(--market-gold-dark); outline-offset: 3px; }
+
+.admin-topbar { position: sticky; top: 12px; z-index: 40; display: flex; min-height: 72px; min-width: 0; align-items: center; justify-content: space-between; gap: 12px; margin: 12px 16px 0; padding: 12px 14px; padding-inline-start: 62px; border: 1px solid var(--market-line); border-radius: 20px; background: #fff; box-shadow: var(--market-shadow); }
+.admin-topbar .language-switcher > button { min-height: 44px; color: var(--market-muted); }
+.admin-topbar-title { overflow: hidden; color: var(--market-wine); font-size: .9375rem; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.admin-topbar-caption { color: var(--market-muted); font-size: .75rem; line-height: 1.5; }
+.admin-topbar-actions { display: flex; flex-shrink: 0; align-items: center; gap: 8px; }
+.admin-topbar .admin-brand-badge { width: 36px; height: 36px; font-size: 18px; }
+.admin-icon-button { display: inline-flex; width: 44px; height: 44px; flex-shrink: 0; align-items: center; justify-content: center; border: 1px solid var(--market-line); border-radius: 10px; background: #fff; color: var(--market-wine); transition: background-color 180ms; }
+.admin-icon-button:hover { background: var(--market-paper); }
+.admin-menu-toggle { position: fixed; inset-inline-start: 24px; top: 26px; z-index: 60; }
+
+.admin-sidebar {
+  --color-foreground: 255 255 255;
+  --color-secondary: 239 215 209;
+  --color-accent: 232 205 145;
+  --color-gold: 232 205 145;
+  --color-muted: 239 215 209;
+  --color-line: 126 69 65;
+  color: #fff;
+  background: linear-gradient(165deg, #65090e, var(--market-wine-dark) 75%);
+}
+.admin-sidebar-brand { display: flex; min-height: 100px; flex-shrink: 0; align-items: center; gap: 12px; padding: 24px 18px; border-bottom: 1px solid rgb(255 255 255 / 12%); }
+.admin-brand-badge { display: flex; width: 40px; height: 40px; flex-shrink: 0; align-items: center; justify-content: center; border: 1px solid rgb(232 205 145 / 45%); border-radius: 12px; background: var(--market-metal); color: var(--market-wine-dark); font-family: var(--font-editorial); font-size: 24px; font-weight: 600; }
+.admin-sidebar-group { margin-bottom: 8px; padding-inline: 12px; color: #d9bc8b; font-size: .75rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
+.admin-sidebar-link { position: relative; display: flex; min-height: 44px; align-items: center; gap: 12px; border-radius: 10px; padding: 10px 12px; color: #efd7d1; font-size: .875rem; font-weight: 500; transition: background-color 180ms, color 180ms; }
+.admin-sidebar-link:hover { color: #fff; background: rgb(255 255 255 / 8%); }
+.admin-sidebar-link[aria-current="page"] { color: var(--market-wine); background: #fff; box-shadow: 0 3px 10px rgb(0 0 0 / 5%); }
+.admin-sidebar-link svg { flex-shrink: 0; width: 19px; height: 19px; }
+.admin-sidebar :focus-visible { outline-color: var(--market-gold-light); }
+.admin-sidebar-footer { display: grid; flex-shrink: 0; gap: 4px; border-top: 1px solid rgb(255 255 255 / 12%); padding: 12px; }
+
+.admin-shell :is(.luxury-card, .glass, .admin-panel, .glass-elevated, .admin-panel-elevated) { border: 1px solid var(--market-line); border-radius: 16px; background: #fff; box-shadow: var(--market-shadow); backdrop-filter: none; }
+.admin-shell :is(input, select, textarea) { accent-color: var(--market-wine); }
+.admin-shell input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="color"]),
+.admin-shell select, .admin-shell textarea, .admin-shell .admin-input { min-height: 44px; border: 1px solid #d8cfc4; border-radius: 10px; background-color: var(--market-paper); color: var(--market-ink); font-size: 1rem; box-shadow: none; }
+.admin-shell :is(input, textarea)::placeholder { color: var(--market-muted); opacity: 1; }
+.admin-shell :is(input, select, textarea):focus { border-color: var(--market-wine); outline: none; box-shadow: 0 0 0 3px rgb(120 11 16 / 8%); }
+.admin-shell :is(input[type="email"], input[type="url"], input[type="tel"], input[name="phone"], input[name="contactPhone"]) { direction: ltr; text-align: start; }
+.admin-shell :is(input, textarea):-webkit-autofill { -webkit-text-fill-color: var(--market-ink); -webkit-box-shadow: 0 0 0 1000px var(--market-paper) inset; }
+.admin-shell button:not([role="switch"]):not(.admin-sidebar-link) { min-height: 44px; }
+.admin-shell :is(.btn-primary, .btn-primary-sm, .admin-primary) { --color-foreground: 255 255 255; min-height: 44px; border: 1px solid transparent; border-radius: 10px; background: var(--market-wine); color: #fff; font-size: .875rem; font-weight: 600; letter-spacing: 0; text-transform: none; box-shadow: none; }
+.admin-shell :is(.btn-primary, .btn-primary-sm, .admin-primary):hover { background: var(--market-wine-hover); transform: none; }
+.admin-shell .btn-gold { min-height: 44px; border: 1px solid transparent; border-radius: 10px; background: var(--market-metal); color: var(--market-wine-dark); font-size: .875rem; font-weight: 600; letter-spacing: 0; text-transform: none; box-shadow: none; }
+.admin-shell :is(.btn-secondary, .admin-secondary) { min-height: 44px; border: 1px solid var(--market-line); border-radius: 10px; background: #fff; color: var(--market-wine); font-size: .875rem; font-weight: 600; letter-spacing: 0; text-transform: none; box-shadow: none; }
+.admin-shell :is(.btn-secondary, .admin-secondary):hover { background: var(--market-paper); border-color: var(--market-gold-dark); color: var(--market-wine); transform: none; }
+.admin-shell :is(.bg-burgundy, .bg-rouge, .bg-brand, .bg-red-600, .bg-emerald-600, .bg-green-600, .bg-blue-600) { --color-foreground: 255 255 255; color: #fff; }
+.admin-shell .badge-red { border: 1px solid #f2c5c5; background: #fff0f0; color: #a32424; }
+.admin-shell .badge-gold { border: 1px solid #e8d7b2; background: #fcf5e6; color: var(--market-gold-dark); }
+.admin-shell .admin-media-overlay { --color-foreground: 255 255 255; --color-secondary: 255 255 255; flex-direction: column; padding: 8px; color: #fff; }
+.admin-shell .admin-media-overlay button { --color-foreground: 120 11 16; --color-secondary: 120 11 16; background: #fff; color: var(--market-wine); }
+.admin-shell [role="dialog"]:not(.admin-sidebar) { border-color: var(--market-line); background-color: #fff; color: var(--market-ink); box-shadow: 0 20px 70px rgb(69 4 7 / 15%); }
+.admin-shell table { width: 100%; border-collapse: separate; border-spacing: 0; }
+.admin-shell table thead { background: var(--market-paper); }
+.admin-shell table th { padding-block: 14px; color: var(--market-muted); font-size: .75rem; font-weight: 600; letter-spacing: .025em; text-transform: none; }
+.admin-shell table td { border-bottom: 1px solid var(--market-line); }
+.admin-shell table tbody tr:last-child td { border-bottom: none; }
+.admin-shell table tbody tr:hover { background-color: var(--market-paper); }
+.admin-shell .recharts-text { fill: var(--market-muted); }
+.admin-shell .recharts-wrapper { direction: ltr; }
+.admin-shell .recharts-cartesian-grid line { stroke: var(--market-line); }
+.admin-shell ::-webkit-scrollbar { width: 6px; height: 6px; }
+.admin-shell ::-webkit-scrollbar-thumb { border-radius: 999px; background: #d9c9b7; }
+.admin-shell .skeleton, .admin-shell .motion-skeleton { background: #eee7df; }
+
+.admin-dashboard-welcome { position: relative; display: flex; flex-direction: column; gap: 24px; overflow: hidden; border: 1px solid var(--market-wine-dark); border-radius: 20px; background: var(--market-wine-dark); padding: clamp(24px, 3vw, 40px); color: white; }
+.admin-dashboard-welcome::after { content: ""; position: absolute; inset-inline-end: -80px; bottom: -210px; width: 420px; height: 420px; border: 1px solid rgb(232 205 145 / 24%); border-radius: 50%; pointer-events: none; }
+.admin-dashboard-welcome h1 { color: white; font-size: clamp(1.8rem, 3vw, 2.6rem); }
+.admin-dashboard-welcome > * { position: relative; z-index: 1; }
+.admin-dashboard-welcome .admin-welcome-name { color: var(--market-gold-light); }
+.admin-kpi-card { border: 1px solid var(--market-line); border-radius: 16px; background: #fff; box-shadow: var(--market-shadow); }
+.admin-kpi-card:hover { border-color: #ccb28a; }
+.admin-kpi-card[data-accent="true"] { border-top: 3px solid var(--market-gold); padding-top: 18px; }
+.admin-kpi-label { min-height: 2.5em; }
+.admin-kpi-card .admin-kpi-value { overflow-wrap: anywhere; color: var(--market-wine); font-family: var(--font-ui); font-size: clamp(1.35rem, 2.4vw, 2.2rem); font-weight: 650; font-variant-numeric: tabular-nums; }
+.admin-notifications { width: min(380px, calc(100vw - 32px)); max-height: min(500px, 70dvh); overflow-y: auto; border: 1px solid var(--market-line); border-radius: 16px; background: #fff; box-shadow: 0 12px 40px rgb(69 4 7 / 12%); }
+
+@media (max-width: 639px) {
+  .admin-topbar .language-switcher > button > svg { display: none; }
+  .admin-sidebar:not([data-open="true"]) { visibility: hidden; }
+  .admin-sidebar[data-open="true"] { visibility: visible; }
+  .admin-sidebar-brand { min-height: 88px; }
+  .admin-notifications { position: fixed; top: 96px; inset-inline: 16px; }
+}
+@media (min-width: 640px) {
+  .admin-menu-toggle { display: none; }
+  .admin-sidebar { position: sticky; top: 16px; height: calc(100dvh - 32px); margin-block: 16px; margin-inline-start: 16px; border-radius: 20px; }
+  .admin-sidebar-brand { justify-content: center; padding-inline: 12px; }
+  .admin-sidebar-link { justify-content: center; padding-inline: 8px; }
+  .admin-sidebar-footer { padding: 8px; }
+  .admin-topbar { top: 16px; margin: 16px 24px 0; padding: 12px 20px; }
+  .admin-shell .container-shell { padding: 28px 24px 48px; }
+}
+@media (min-width: 1024px) {
+  .admin-sidebar-brand { justify-content: flex-start; padding-inline: 20px; }
+  .admin-sidebar-link { justify-content: flex-start; padding-inline: 12px; }
+  .admin-sidebar-footer { padding: 16px; }
+  .admin-dashboard-welcome { flex-direction: row; align-items: flex-end; justify-content: space-between; }
+}
+[lang="ar"] .admin-shell { font-family: var(--font-arabic), Tahoma, sans-serif; }
+[lang="ar"] .admin-shell :is(h1, h2, h3, .font-display) { font-family: var(--font-arabic), Tahoma, sans-serif; line-height: 1.45; letter-spacing: 0; }
+[lang="ar"] .admin-shell :is(.uppercase, .admin-sidebar-group) { letter-spacing: 0; text-transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .admin-shell *, .admin-shell *::before, .admin-shell *::after { scroll-behavior: auto; animation-duration: .01ms; transition-duration: .01ms; }
+}

@@ -18,10 +18,10 @@ export default async function AdminSettingsPage() {
 
   return (
     <div className="container-shell">
-      <header className="mb-6 border-b border-white/[0.08] pb-6">
-        <p className="luxury-label text-[#D6B35A]/75">{getTranslation(translations, "configuration", lang, "Configuration")}</p>
-        <h1 className="mt-2 text-white">{getTranslation(translations, "settings", lang, "Paramètres")}</h1>
-        <p className="mt-1.5 text-sm text-white/45">{getTranslation(translations, "general_config", lang, "Configuration générale")}</p>
+      <header className="mb-6 border-b border-line pb-6">
+        <p className="luxury-label text-accent">{getTranslation(translations, "configuration", lang, "Configuration")}</p>
+        <h1 className="mt-2 text-foreground">{getTranslation(translations, "settings", lang, "Paramètres")}</h1>
+        <p className="mt-1.5 text-sm text-secondary">{getTranslation(translations, "general_config", lang, "Configuration générale")}</p>
       </header>
       <SettingsForm settings={settings} saveSettingsAction={saveSettingsAction} />
     </div>

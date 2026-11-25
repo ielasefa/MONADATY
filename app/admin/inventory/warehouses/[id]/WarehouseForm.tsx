@@ -77,19 +77,19 @@ export function WarehouseForm({
         <div>
           <Link
             href="/admin/inventory/warehouses"
-            className="mb-2 inline-flex items-center gap-1 text-xs text-muted transition hover:text-white"
+            className="mb-2 inline-flex items-center gap-1 text-xs text-muted transition hover:text-foreground"
           >
             &larr; Back to Warehouses
           </Link>
-          <h1 className="text-3xl font-semibold tracking-tight text-white">
+          <h1 className="text-3xl font-semibold tracking-tight text-foreground">
             {isNew ? t("add_warehouse", "Add Warehouse") : `${t("edit")}: ${warehouse.name}`}
           </h1>
         </div>
       </div>
 
       <form action={handleSubmit} className="space-y-8">
-        <div className="luxury-card rounded-card border border-white/[0.06] bg-card p-6">
-          <p className="luxury-label mb-6 text-[10px] text-muted">{t("warehouse_information", "Warehouse Information")}</p>
+        <div className="luxury-card rounded-card border border-line bg-card p-6">
+          <p className="luxury-label mb-6 text-xs text-muted">{t("warehouse_information", "Warehouse Information")}</p>
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <Field label={t("warehouse_name", "Warehouse Name")} name="name" defaultValue={warehouse?.name} required />
             <Field label={t("code_label", "Code")} name="code" defaultValue={warehouse?.code} required />
@@ -109,18 +109,18 @@ export function WarehouseForm({
                 type="checkbox"
                 name="isDefault"
                 defaultChecked={warehouse?.isDefault ?? false}
-                className="h-4 w-4 rounded border-white/20 bg-white/5 accent-gold"
+                className="h-4 w-4 rounded border-line bg-surface accent-gold"
               />
-              <span className="text-sm text-white">{t("default_warehouse", "Default Warehouse")}</span>
+              <span className="text-sm text-foreground">{t("default_warehouse", "Default Warehouse")}</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
                 name="isActive"
                 defaultChecked={warehouse?.isActive ?? true}
-                className="h-4 w-4 rounded border-white/20 bg-white/5 accent-gold"
+                className="h-4 w-4 rounded border-line bg-surface accent-gold"
               />
-              <span className="text-sm text-white">{t("active", "Active")}</span>
+              <span className="text-sm text-foreground">{t("active", "Active")}</span>
             </label>
           </div>
         </div>
@@ -144,27 +144,27 @@ export function WarehouseForm({
 
       {!isNew && stocks.length > 0 && (
         <div className="mt-10">
-          <p className="luxury-label mb-4 text-[10px] text-muted">Stock Records ({stocks.length})</p>
-          <div className="glass overflow-hidden rounded-card border border-white/[0.06]">
+          <p className="luxury-label mb-4 text-xs text-muted">Stock Records ({stocks.length})</p>
+          <div className="glass overflow-hidden rounded-card border border-line">
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm">
+              <table className="w-full text-start text-sm">
                 <thead>
-                  <tr className="border-b border-white/[0.06] text-xs uppercase tracking-[0.1em] text-muted">
+                  <tr className="border-b border-line text-xs uppercase tracking-[0.1em] text-muted">
                     <th className="px-5 py-4 font-medium">{t("product", "Product")}</th>
                     <th className="px-5 py-4 font-medium">{t("sku", "SKU")}</th>
-                    <th className="px-5 py-4 font-medium text-right">{t("stock", "Stock")}</th>
-                    <th className="px-5 py-4 font-medium text-right">{t("reserved_stock", "Reserved")}</th>
-                    <th className="px-5 py-4 font-medium text-right">{t("available_stock", "Available")}</th>
+                    <th className="px-5 py-4 font-medium text-end">{t("stock", "Stock")}</th>
+                    <th className="px-5 py-4 font-medium text-end">{t("reserved_stock", "Reserved")}</th>
+                    <th className="px-5 py-4 font-medium text-end">{t("available_stock", "Available")}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/[0.06]">
+                <tbody className="divide-y divide-line">
                   {stocks.map((s) => (
-                    <motion.tr key={s.id} className="transition hover:bg-white/[0.02]">
-                      <td className="px-5 py-4 font-medium text-white">{s.productName}</td>
+                    <motion.tr key={s.id} className="transition hover:bg-surface">
+                      <td className="px-5 py-4 font-medium text-foreground">{s.productName}</td>
                       <td className="px-5 py-4 font-mono text-xs text-muted">{s.sku || "\u2014"}</td>
-                      <td className="px-5 py-4 text-right text-white">{s.stock}</td>
-                      <td className="px-5 py-4 text-right text-muted">{s.reservedStock}</td>
-                      <td className="px-5 py-4 text-right font-medium text-gold">
+                      <td className="px-5 py-4 text-end text-foreground">{s.stock}</td>
+                      <td className="px-5 py-4 text-end text-muted">{s.reservedStock}</td>
+                      <td className="px-5 py-4 text-end font-medium text-accent">
                         {s.stock - s.reservedStock}
                       </td>
                     </motion.tr>
@@ -194,7 +194,7 @@ function Field({
 }) {
   return (
     <div className="space-y-2">
-      <label className="luxury-label text-[10px] text-muted">{label}</label>
+      <label className="luxury-label text-xs text-muted">{label}</label>
       <input
         type={type}
         name={name}

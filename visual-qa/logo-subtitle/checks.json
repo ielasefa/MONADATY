@@ -1,0 +1,170 @@
+[
+  {
+    "lang": "fr",
+    "width": 360,
+    "symbol": "<svg width=\"56\" height=\"25\" viewBox=\"0 0 56 25\" fill=\"none\" aria-hidden=\"true\"><defs><linearGradient id=\"market-wordmark-metal\" x1=\"0\" y1=\"0\" x2=\"56\" y2=\"25\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#8C6228\"></stop><stop offset=\".5\" stop-color=\"#E8CD91\"></stop><stop offset=\"1\" stop-color=\"#8C6228\"></stop></linearGradient></defs><path d=\"M2 22C11 22 12 4 20 4s8 16 14 16S39 4 46 4s7 16 10 18\" stroke=\"url(#market-wordmark-metal)\" stroke-width=\"6\"></path></svg>",
+    "wordmark": "MONADATY",
+    "subtitle": "ELASRI BUSINESS",
+    "mainStyle": {
+      "fontFamily": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16.96px",
+      "fontWeight": "800",
+      "letterSpacing": "1.1872px",
+      "color": "rgb(120, 11, 16)",
+      "lineHeight": "16.96px"
+    },
+    "subtitleStyle": {
+      "fontFamily": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "10px",
+      "fontWeight": "700",
+      "letterSpacing": "1.2px",
+      "color": "rgb(120, 11, 16)",
+      "lineHeight": "10px"
+    },
+    "size": {
+      "width": 113.5,
+      "height": 51.8125
+    },
+    "overflow": false
+  },
+  {
+    "lang": "fr",
+    "width": 1440,
+    "symbol": "<svg width=\"56\" height=\"25\" viewBox=\"0 0 56 25\" fill=\"none\" aria-hidden=\"true\"><defs><linearGradient id=\"market-wordmark-metal\" x1=\"0\" y1=\"0\" x2=\"56\" y2=\"25\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#8C6228\"></stop><stop offset=\".5\" stop-color=\"#E8CD91\"></stop><stop offset=\"1\" stop-color=\"#8C6228\"></stop></linearGradient></defs><path d=\"M2 22C11 22 12 4 20 4s8 16 14 16S39 4 46 4s7 16 10 18\" stroke=\"url(#market-wordmark-metal)\" stroke-width=\"6\"></path></svg>",
+    "wordmark": "MONADATY",
+    "subtitle": "ELASRI BUSINESS",
+    "mainStyle": {
+      "fontFamily": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "28.8px",
+      "fontWeight": "800",
+      "letterSpacing": "2.016px",
+      "color": "rgb(120, 11, 16)",
+      "lineHeight": "28.8px"
+    },
+    "subtitleStyle": {
+      "fontFamily": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "10.4px",
+      "fontWeight": "700",
+      "letterSpacing": "1.248px",
+      "color": "rgb(120, 11, 16)",
+      "lineHeight": "10.4px"
+    },
+    "size": {
+      "width": 189.140625,
+      "height": 71.0625
+    },
+    "overflow": false
+  },
+  {
+    "lang": "en",
+    "width": 360,
+    "symbol": "<svg width=\"56\" height=\"25\" viewBox=\"0 0 56 25\" fill=\"none\" aria-hidden=\"true\"><defs><linearGradient id=\"market-wordmark-metal\" x1=\"0\" y1=\"0\" x2=\"56\" y2=\"25\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#8C6228\"></stop><stop offset=\".5\" stop-color=\"#E8CD91\"></stop><stop offset=\"1\" stop-color=\"#8C6228\"></stop></linearGradient></defs><path d=\"M2 22C11 22 12 4 20 4s8 16 14 16S39 4 46 4s7 16 10 18\" stroke=\"url(#market-wordmark-metal)\" stroke-width=\"6\"></path></svg>",
+    "wordmark": "MONADATY",
+    "subtitle": "ELASRI BUSINESS",
+    "mainStyle": {
+      "fontFamily": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "16.96px",
+      "fontWeight": "800",
+      "letterSpacing": "1.1872px",
+      "color": "rgb(120, 11, 16)",
+      "lineHeight": "16.96px"
+    },
+    "subtitleStyle": {
+      "fontFamily": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "10px",
+      "fontWeight": "700",
+      "letterSpacing": "1.2px",
+      "color": "rgb(120, 11, 16)",
+      "lineHeight": "10px"
+    },
+    "size": {
+      "width": 113.5,
+      "height": 51.8125
+    },
+    "overflow": false
+  },
+  {
+    "lang": "en",
+    "width": 1440,
+    "symbol": "<svg width=\"56\" height=\"25\" viewBox=\"0 0 56 25\" fill=\"none\" aria-hidden=\"true\"><defs><linearGradient id=\"market-wordmark-metal\" x1=\"0\" y1=\"0\" x2=\"56\" y2=\"25\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#8C6228\"></stop><stop offset=\".5\" stop-color=\"#E8CD91\"></stop><stop offset=\"1\" stop-color=\"#8C6228\"></stop></linearGradient></defs><path d=\"M2 22C11 22 12 4 20 4s8 16 14 16S39 4 46 4s7 16 10 18\" stroke=\"url(#market-wordmark-metal)\" stroke-width=\"6\"></path></svg>",
+    "wordmark": "MONADATY",
+    "subtitle": "ELASRI BUSINESS",
+    "mainStyle": {
+      "fontFamily": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "28.8px",
+      "fontWeight": "800",
+      "letterSpacing": "2.016px",
+      "color": "rgb(120, 11, 16)",
+      "lineHeight": "28.8px"
+    },
+    "subtitleStyle": {
+      "fontFamily": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "fontSize": "10.4px",
+      "fontWeight": "700",
+      "letterSpacing": "1.248px",
+      "color": "rgb(120, 11, 16)",
+      "lineHeight": "10.4px"
+    },
+    "size": {
+      "width": 189.140625,
+      "height": 71.0625
+    },
+    "overflow": false
+  },
+  {
+    "lang": "ar",
+    "width": 360,
+    "symbol": "<svg width=\"56\" height=\"25\" viewBox=\"0 0 56 25\" fill=\"none\" aria-hidden=\"true\"><defs><linearGradient id=\"market-wordmark-metal\" x1=\"0\" y1=\"0\" x2=\"56\" y2=\"25\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#8C6228\"></stop><stop offset=\".5\" stop-color=\"#E8CD91\"></stop><stop offset=\"1\" stop-color=\"#8C6228\"></stop></linearGradient></defs><path d=\"M2 22C11 22 12 4 20 4s8 16 14 16S39 4 46 4s7 16 10 18\" stroke=\"url(#market-wordmark-metal)\" stroke-width=\"6\"></path></svg>",
+    "wordmark": "MONADATY",
+    "subtitle": "ELASRI BUSINESS",
+    "mainStyle": {
+      "fontFamily": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Inter, \"Inter Fallback\", Tahoma, sans-serif",
+      "fontSize": "16.96px",
+      "fontWeight": "800",
+      "letterSpacing": "normal",
+      "color": "rgb(120, 11, 16)",
+      "lineHeight": "16.96px"
+    },
+    "subtitleStyle": {
+      "fontFamily": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Inter, \"Inter Fallback\", Tahoma, sans-serif",
+      "fontSize": "10px",
+      "fontWeight": "700",
+      "letterSpacing": "normal",
+      "color": "rgb(120, 11, 16)",
+      "lineHeight": "10px"
+    },
+    "size": {
+      "width": 100,
+      "height": 51.8125
+    },
+    "overflow": false
+  },
+  {
+    "lang": "ar",
+    "width": 1440,
+    "symbol": "<svg width=\"56\" height=\"25\" viewBox=\"0 0 56 25\" fill=\"none\" aria-hidden=\"true\"><defs><linearGradient id=\"market-wordmark-metal\" x1=\"0\" y1=\"0\" x2=\"56\" y2=\"25\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#8C6228\"></stop><stop offset=\".5\" stop-color=\"#E8CD91\"></stop><stop offset=\"1\" stop-color=\"#8C6228\"></stop></linearGradient></defs><path d=\"M2 22C11 22 12 4 20 4s8 16 14 16S39 4 46 4s7 16 10 18\" stroke=\"url(#market-wordmark-metal)\" stroke-width=\"6\"></path></svg>",
+    "wordmark": "MONADATY",
+    "subtitle": "ELASRI BUSINESS",
+    "mainStyle": {
+      "fontFamily": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Inter, \"Inter Fallback\", Tahoma, sans-serif",
+      "fontSize": "28.8px",
+      "fontWeight": "800",
+      "letterSpacing": "normal",
+      "color": "rgb(120, 11, 16)",
+      "lineHeight": "28.8px"
+    },
+    "subtitleStyle": {
+      "fontFamily": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Inter, \"Inter Fallback\", Tahoma, sans-serif",
+      "fontSize": "10.4px",
+      "fontWeight": "700",
+      "letterSpacing": "normal",
+      "color": "rgb(120, 11, 16)",
+      "lineHeight": "10.4px"
+    },
+    "size": {
+      "width": 169,
+      "height": 71.0625
+    },
+    "overflow": false
+  }
+]

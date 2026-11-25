@@ -109,16 +109,16 @@ export function TransfersClient({
     <div>
       <div className="mb-8">
         <p className="luxury-label mb-2">{t("inventory", "Inventory")}</p>
-        <h1 className="text-3xl font-semibold tracking-tight text-white">{t("stock_transfers", "Stock Transfers")}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t("stock_transfers", "Stock Transfers")}</h1>
         <p className="mt-1 text-sm text-muted">{t("stock_transfers_desc", "Transfer stock between warehouses")}</p>
       </div>
 
-      <div className="mb-10 luxury-card rounded-card border border-white/[0.06] bg-card p-6">
-        <p className="luxury-label mb-6 text-[10px] text-muted">{t("new_transfer", "New Transfer")}</p>
+      <div className="mb-10 luxury-card rounded-card border border-line bg-card p-6">
+        <p className="luxury-label mb-6 text-xs text-muted">{t("new_transfer", "New Transfer")}</p>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <div className="space-y-2">
-              <label className="luxury-label text-[10px] text-muted">{t("from_warehouse", "From Warehouse")}</label>
+              <label className="luxury-label text-xs text-muted">{t("from_warehouse", "From Warehouse")}</label>
               <select
                 value={fromWarehouse}
                 onChange={(e) => setFromWarehouse(e.target.value)}
@@ -132,7 +132,7 @@ export function TransfersClient({
               </select>
             </div>
             <div className="space-y-2">
-              <label className="luxury-label text-[10px] text-muted">{t("to_warehouse", "To Warehouse")}</label>
+              <label className="luxury-label text-xs text-muted">{t("to_warehouse", "To Warehouse")}</label>
               <select
                 value={toWarehouse}
                 onChange={(e) => setToWarehouse(e.target.value)}
@@ -146,7 +146,7 @@ export function TransfersClient({
               </select>
             </div>
             <div className="space-y-2">
-              <label className="luxury-label text-[10px] text-muted">{t("product", "Product")}</label>
+              <label className="luxury-label text-xs text-muted">{t("product", "Product")}</label>
               <input
                 type="text"
                 value={productQuery}
@@ -159,7 +159,7 @@ export function TransfersClient({
               />
               {searching && <p className="text-xs text-muted">{t("searching", "Searching...")}</p>}
               {searchResults.length > 0 && !selectedProduct && (
-                <div className="mt-1 max-h-40 overflow-y-auto rounded-card border border-white/[0.06] bg-surface">
+                <div className="mt-1 max-h-40 overflow-y-auto rounded-card border border-line bg-surface">
                   {searchResults.map((p) => (
                     <button
                       key={p.id}
@@ -169,7 +169,7 @@ export function TransfersClient({
                         setProductQuery(p.name);
                         setSearchResults([]);
                       }}
-                      className="w-full px-4 py-2 text-left text-sm text-white transition hover:bg-white/[0.04]"
+                      className="w-full px-4 py-2 text-start text-sm text-foreground transition hover:bg-surface"
                     >
                       {p.name}
                       <span className="ml-2 text-xs text-muted">SKU: {p.sku || "\u2014"} | Stock: {p.stock}</span>
@@ -179,7 +179,7 @@ export function TransfersClient({
               )}
               {selectedProduct && (
                 <div className="mt-1 flex items-center gap-2 rounded-lg bg-emerald/10 px-3 py-2">
-                  <span className="text-sm text-gold">{selectedProduct.name}</span>
+                  <span className="text-sm text-accent">{selectedProduct.name}</span>
                   <span className="text-xs text-muted">(Stock: {selectedProduct.stock})</span>
                   <button
                     type="button"
@@ -195,7 +195,7 @@ export function TransfersClient({
               )}
             </div>
             <div className="space-y-2">
-              <label className="luxury-label text-[10px] text-muted">{t("quantity", "Quantity")}</label>
+              <label className="luxury-label text-xs text-muted">{t("quantity", "Quantity")}</label>
               <input
                 type="number"
                 min={1}
@@ -207,7 +207,7 @@ export function TransfersClient({
             </div>
             <div className="md:col-span-2">
               <div className="space-y-2">
-                <label className="luxury-label text-[10px] text-muted">{t("reason_optional", "Reason (Optional)")}</label>
+                <label className="luxury-label text-xs text-muted">{t("reason_optional", "Reason (Optional)")}</label>
                 <textarea
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
@@ -229,20 +229,20 @@ export function TransfersClient({
       </div>
 
       <div>
-        <p className="luxury-label mb-4 text-[10px] text-muted">{t("recent_transfers", "Recent Transfers")}</p>
-        <div className="glass overflow-hidden rounded-card border border-white/[0.06]">
+        <p className="luxury-label mb-4 text-xs text-muted">{t("recent_transfers", "Recent Transfers")}</p>
+        <div className="glass overflow-hidden rounded-card border border-line">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
+            <table className="w-full text-start text-sm">
               <thead>
-                <tr className="border-b border-white/[0.06] text-xs uppercase tracking-[0.1em] text-muted">
+                <tr className="border-b border-line text-xs uppercase tracking-[0.1em] text-muted">
                   <th className="px-5 py-4 font-medium">{t("date", "Date")}</th>
                   <th className="px-5 py-4 font-medium">{t("product", "Product")}</th>
                   <th className="px-5 py-4 font-medium">{t("warehouse", "Warehouse")}</th>
-                  <th className="px-5 py-4 font-medium text-right">{t("qty", "Qty")}</th>
+                  <th className="px-5 py-4 font-medium text-end">{t("qty", "Qty")}</th>
                   <th className="px-5 py-4 font-medium">{t("reason", "Reason")}</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/[0.06]">
+              <tbody className="divide-y divide-line">
                 {recentTransfers.map((t, i) => (
                   <motion.tr
                     key={t.id}
@@ -250,14 +250,14 @@ export function TransfersClient({
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.3, delay: i * 0.04 }}
-                    className="transition hover:bg-white/[0.02]"
+                    className="transition hover:bg-surface"
                   >
                     <td className="px-5 py-4 text-xs text-muted">
                       {new Date(t.createdAt).toLocaleDateString()}
                     </td>
-                    <td className="px-5 py-4 text-sm text-white">{t.productId.slice(0, 8)}...</td>
+                    <td className="px-5 py-4 text-sm text-foreground">{t.productId.slice(0, 8)}...</td>
                     <td className="px-5 py-4 text-muted">{t.warehouseName}</td>
-                    <td className="px-5 py-4 text-right font-medium text-white">
+                    <td className="px-5 py-4 text-end font-medium text-foreground">
                       {t.quantity > 0 ? `+${t.quantity}` : t.quantity}
                     </td>
                     <td className="px-5 py-4 text-muted">{t.reason || "\u2014"}</td>

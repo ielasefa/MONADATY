@@ -6,15 +6,15 @@ import { useMemo, useRef, useState } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useCart } from "@/components/cart-context";
 import { formatMoney, parseMoney } from "@/lib/money";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { ProductImage } from "@/components/ProductImage";
 import { resolveDatabaseProductImage } from "@/lib/product-images";
 import { PREMIUM_EASE } from "@/lib/motion";
+import { isCheckoutCity, isValidCheckoutEmail } from "@/lib/checkout-validators";
 
 function formatPrice(price: string, quantity: number): string {
-  const numeric = parseFloat(price.replace(/[^0-9.]/g, ""));
-  const total = numeric * quantity;
-  return total.toFixed(2).replace(/\.?0+$/, "") + " DH";
+  return formatMoney(parseMoney(price) * quantity);
 }
 
 type City = { name: string };
@@ -116,7 +116,7 @@ const emptyDeliveryState: DeliveryState = {
 
 export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
   const router = useRouter();
-  const { clearCart, items } = useCart();
+  const { clearCart, items, openDrawer } = useCart();
   const [deliveryState, setDeliveryState] = useState<DeliveryState>(emptyDeliveryState);
   const [errors, setErrors] = useState<DeliveryErrors>({});
   const [submissionError, setSubmissionError] = useState("");
@@ -126,6 +126,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
   const shouldReduce = useReducedMotion();
   const { t, lang } = useTranslation("checkout");
   const errorCopy = checkoutErrorCopy[lang];
+  const deliveryCities = cities.filter((city) => isCheckoutCity(city.name));
 
   const subtotalValue = useMemo(
     () => items.reduce((total, item) => total + parseMoney(item.price) * item.quantity, 0),
@@ -159,12 +160,19 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
 
     const nextErrors: DeliveryErrors = {};
 
-    const requiredFields: Array<keyof DeliveryState> = ["fullName", "email", "phone", "city", "address"];
+    const requiredFields: Array<keyof DeliveryState> = ["fullName", "phone", "city", "address"];
     requiredFields.forEach((field) => {
       if (deliveryState[field].trim().length === 0) {
         nextErrors[field] = t("required_field");
       }
     });
+
+    if (!isValidCheckoutEmail(deliveryState.email)) {
+      nextErrors.email = t("invalid_email");
+    }
+    if (!deliveryCities.some((city) => city.name === deliveryState.city)) {
+      nextErrors.city = t("select_city");
+    }
 
     if (deliveryState.phone && !validateMoroccanPhone(deliveryState.phone)) {
       nextErrors.phone = t("invalid_phone");
@@ -176,6 +184,8 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
 
     if (Object.keys(nextErrors).length > 0) {
       setErrors(nextErrors);
+      const firstField = Object.keys(nextErrors)[0];
+      event.currentTarget.querySelector<HTMLElement>(`[name="${firstField}"]`)?.focus();
       return;
     }
 
@@ -267,15 +277,15 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
         className="flex min-h-[60vh] items-center justify-center"
       >
         <div className="max-w-lg text-center">
-          <div className="mx-auto mb-8 flex h-20 w-20 items-center justify-center rounded-full border border-gold/[0.16] bg-card">
-            <svg className="h-8 w-8 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.2}>
+          <div className="mx-auto mb-8 flex h-20 w-20 items-center justify-center rounded-full border border-line bg-card">
+            <svg className="h-8 w-8 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121 0 2.09-.773 2.34-1.872l1.836-8.046A1.125 1.125 0 0018.054 3H5.106m2.394 11.25l-1.5-6h13.5" />
             </svg>
           </div>
-          <h2 className="font-display text-2xl text-white md:text-3xl">
+          <h2 className="font-display text-2xl text-foreground md:text-3xl">
             {t("your_box_empty")}
           </h2>
-          <p className="mx-auto mt-4 max-w-md text-[0.82rem] leading-relaxed text-white/60">
+          <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-secondary">
             {t("add_drinks_before_checkout")}
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -291,305 +301,182 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
     );
   }
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: shouldReduce ? 0 : 0.08 },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 16 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: shouldReduce ? 0 : 0.5, ease: PREMIUM_EASE },
-    },
-  };
+  function renderInput(
+    field: Exclude<keyof DeliveryState, "city" | "address">,
+    label: string,
+    type: string,
+    autoComplete: string,
+    placeholder: string,
+    optional = false,
+  ) {
+    const id = field === "fullName" ? "checkout-name" : field === "postalCode" ? "checkout-postal" : `checkout-${field}`;
+    const hint = field === "email" ? t("email_optional_hint") : undefined;
+    return (
+      <div className="checkout-field">
+        <label htmlFor={id}>
+          {label} {optional ? <span className="checkout-optional">({t("optional")})</span> : <span className="checkout-required" aria-hidden="true">*</span>}
+        </label>
+        <input
+          id={id}
+          name={field}
+          type={type}
+          autoComplete={autoComplete}
+          inputMode={field === "postalCode" ? "numeric" : undefined}
+          maxLength={field === "postalCode" ? 5 : field === "email" ? 254 : 160}
+          value={deliveryState[field]}
+          onChange={(e) => handleChange(field, e.target.value)}
+          placeholder={placeholder}
+          className="input-premium"
+          dir={field === "phone" || field === "email" ? "ltr" : undefined}
+          aria-invalid={Boolean(errors[field])}
+          aria-describedby={errors[field] ? `err-${field}` : hint ? `hint-${field}` : undefined}
+          required={!optional}
+        />
+        {errors[field] ? <p id={`err-${field}`} className="checkout-field-error">{errors[field]}</p>
+          : hint && <p id={`hint-${field}`} className="checkout-field-hint">{hint}</p>}
+      </div>
+    );
+  }
 
   return (
     <motion.div
-      variants={containerVariants}
-      initial={shouldReduce ? false : "hidden"}
-      animate="visible"
+      initial={shouldReduce ? false : { opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: shouldReduce ? 0 : 0.4, ease: PREMIUM_EASE }}
+      className="checkout-content"
     >
-      <motion.div variants={itemVariants} className="mb-8">
-        <Link
-          href="/shop"
-          className="inline-flex items-center gap-2 text-[0.52rem] font-semibold uppercase tracking-[0.32em] text-white/50 transition-colors duration-300 hover:text-gold"
-        >
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="rtl:rotate-180">
-            <path d="M19 12H5m7-7-7 7 7 7" />
-          </svg>
+      <div className="checkout-toolbar">
+        <Link href="/shop" className="checkout-back">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" className="rtl:rotate-180"><path d="M19 12H5m7-7-7 7 7 7" /></svg>
           {t("back_to_drinks")}
         </Link>
-      </motion.div>
+        <span className="checkout-area"><CheckoutIcon name="pin" />{t("delivery_area")}</span>
+      </div>
 
-      <div className="grid gap-10 lg:grid-cols-[65fr_35fr] lg:items-start">
-        <motion.div variants={itemVariants}>
-          <form onSubmit={handleSubmit} className="space-y-12" aria-busy={isSubmitting}>
-            <div>
-              <div className="mb-8 flex items-center gap-4">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-rouge text-[0.55rem] font-semibold text-white">1</span>
-                <div>
-                  <p className="label-utility text-gold/60">{t("step_delivery", "Delivery")}</p>
-                  <h2 className="mt-1 font-display text-xl text-white">{t("deliver_to_door")}</h2>
-                </div>
+      <div className="checkout-grid">
+        <form id="checkout-form" onSubmit={handleSubmit} noValidate aria-busy={isSubmitting}>
+          <fieldset disabled={isSubmitting} className="checkout-form-sections">
+            <section className="checkout-card" aria-labelledby="contact-heading">
+              <div className="checkout-card-heading">
+                <span className="checkout-step" aria-hidden="true">01</span>
+                <div><h2 id="contact-heading">{t("contact_title")}</h2><p>{t("contact_description")}</p></div>
               </div>
-
-              <div className="space-y-5">
-                <div className="grid gap-5 sm:grid-cols-2">
-                  <div className="space-y-2">
-<label htmlFor="checkout-name" className="text-[0.62rem] font-medium text-white/60">
-                       {t("full_name")} <span className="text-rouge">*</span>
-                     </label>
-                    <input
-                      id="checkout-name"
-                      type="text"
-                      name="fullName"
-                      value={deliveryState.fullName}
-                      onChange={(e) => handleChange("fullName", e.target.value)}
-                      placeholder={t("full_name_placeholder")}
-                      className="input-premium"
-                      style={{ caretColor: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-                      aria-invalid={Boolean(errors.fullName)}
-                      aria-describedby={errors.fullName ? "err-fullName" : undefined}
-                      required
-                    />
-                    {errors.fullName && <p id="err-fullName" className="text-[0.6rem] text-rouge">{errors.fullName}</p>}
-                  </div>
-
-                  <div className="space-y-2">
-<label htmlFor="checkout-email" className="text-[0.62rem] font-medium text-white/60">
-                       {t("email")} <span className="text-rouge">*</span>
-                     </label>
-                    <input
-                      id="checkout-email"
-                      type="email"
-                      name="email"
-                      value={deliveryState.email}
-                      onChange={(e) => handleChange("email", e.target.value)}
-                      placeholder={t("email_placeholder")}
-                      className="input-premium"
-                      style={{ caretColor: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-                      aria-invalid={Boolean(errors.email)}
-                      aria-describedby={errors.email ? "err-email" : undefined}
-                      required
-                    />
-                    {errors.email && <p id="err-email" className="text-[0.6rem] text-rouge">{errors.email}</p>}
-                  </div>
+              <div className="checkout-fields">
+                <div className="checkout-field-row">
+                  {renderInput("fullName", t("full_name"), "text", "name", t("full_name_placeholder"))}
+                  {renderInput("phone", t("phone"), "tel", "tel", t("phone_example"))}
                 </div>
+                {renderInput("email", t("email"), "email", "email", t("email_placeholder"), true)}
+              </div>
+            </section>
 
-                <div className="space-y-2">
-<label htmlFor="checkout-phone" className="text-[0.62rem] font-medium text-white/60">
-                     {t("phone")} <span className="text-rouge">*</span>
-                   </label>
-                  <input
-                    id="checkout-phone"
-                    type="tel"
-                    name="phone"
-                    value={deliveryState.phone}
-                    onChange={(e) => handleChange("phone", e.target.value)}
-                    placeholder={t("phone_placeholder")}
-                    className="input-premium"
-                    style={{ caretColor: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-                    aria-invalid={Boolean(errors.phone)}
-                    aria-describedby={errors.phone ? "err-phone" : undefined}
-                    required
-                  />
-                  {errors.phone && <p id="err-phone" className="text-[0.6rem] text-rouge">{errors.phone}</p>}
-                </div>
-
-                <div className="grid gap-5 sm:grid-cols-2">
-                  <div className="space-y-2">
-<label htmlFor="checkout-city" className="text-[0.62rem] font-medium text-white/60">
-                       {t("city")} <span className="text-rouge">*</span>
-                     </label>
+            <section className="checkout-card" aria-labelledby="delivery-heading">
+              <div className="checkout-card-heading">
+                <span className="checkout-step" aria-hidden="true">02</span>
+                <div><h2 id="delivery-heading">{t("delivery_title")}</h2><p>{t("delivery_description")}</p></div>
+              </div>
+              <div className="checkout-fields">
+                <div className="checkout-field-row">
+                  <div className="checkout-field">
+                    <label htmlFor="checkout-city">{t("city")} <span className="checkout-required" aria-hidden="true">*</span></label>
                     <select
                       id="checkout-city"
                       name="city"
+                      autoComplete="address-level2"
                       value={deliveryState.city}
                       onChange={(e) => handleChange("city", e.target.value)}
                       className="input-premium"
                       aria-invalid={Boolean(errors.city)}
-                      aria-describedby={errors.city ? "err-city" : undefined}
+                      aria-describedby={errors.city ? "err-city" : "hint-city"}
                       required
                     >
-                      <option value="" className="bg-card">{t("select_city")}</option>
-                      {cities.map((city) => (
-                        <option key={city.name} value={city.name} className="bg-card">{city.name}</option>
-                      ))}
+                      <option value="">{t("select_city")}</option>
+                      {deliveryCities.map((city) => <option key={city.name} value={city.name}>{lang === "ar" ? city.name === "Rabat" ? "الرباط" : "سلا" : city.name}</option>)}
                     </select>
-                    {errors.city && <p id="err-city" className="text-[0.6rem] text-rouge">{errors.city}</p>}
+                    {errors.city && <p id="err-city" className="checkout-field-error">{errors.city}</p>}
                   </div>
-
-                  <div className="space-y-2">
-<label htmlFor="checkout-address" className="text-[0.62rem] font-medium text-white/60">
-                       {t("address")} <span className="text-rouge">*</span>
-                     </label>
-                    <input
-                      id="checkout-address"
-                      type="text"
-                      name="address"
-                      value={deliveryState.address}
-                      onChange={(e) => handleChange("address", e.target.value)}
-                      placeholder={t("address_placeholder")}
-                      className="input-premium"
-                      style={{ caretColor: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-                      aria-invalid={Boolean(errors.address)}
-                      aria-describedby={errors.address ? "err-address" : undefined}
-                      required
-                    />
-                    {errors.address && <p id="err-address" className="text-[0.6rem] text-rouge">{errors.address}</p>}
-                  </div>
+                  {renderInput("postalCode", t("postal_code"), "text", "postal-code", t("postal_example"), true)}
                 </div>
-
-                <div className="grid gap-5 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <label htmlFor="checkout-postal" className="text-[0.62rem] font-medium text-white/60">
-                      {t("postal_code")}
-                    </label>
-                    <input
-                      id="checkout-postal"
-                      type="text"
-                      name="postalCode"
-                      value={deliveryState.postalCode}
-                      onChange={(e) => handleChange("postalCode", e.target.value)}
-                      placeholder={t("postal_placeholder")}
-                      className="input-premium"
-                      style={{ caretColor: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-                    />
-                    {errors.postalCode && <p className="text-[0.6rem] text-rouge">{errors.postalCode}</p>}
-                  </div>
-
-                  <div className="space-y-2">
-                    <label htmlFor="checkout-country" className="text-[0.62rem] font-medium text-white/60">
-                      {t("country_label")}
-                    </label>
-                    <input
-                      id="checkout-country"
-                      type="text"
-                      value={t("morocco")}
-                      readOnly
-                      className="input-premium cursor-default opacity-70"
-                      style={{ caretColor: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-                    />
-                  </div>
+                <div className="checkout-field">
+                  <label htmlFor="checkout-address">{t("address")} <span className="checkout-required" aria-hidden="true">*</span></label>
+                  <textarea
+                    id="checkout-address"
+                    name="address"
+                    autoComplete="street-address"
+                    rows={3}
+                    maxLength={500}
+                    value={deliveryState.address}
+                    onChange={(e) => handleChange("address", e.target.value)}
+                    placeholder={t("address_placeholder")}
+                    className="input-premium"
+                    aria-invalid={Boolean(errors.address)}
+                    aria-describedby={errors.address ? "err-address" : undefined}
+                    required
+                  />
+                  {errors.address && <p id="err-address" className="checkout-field-error">{errors.address}</p>}
                 </div>
+                <p id="hint-city" className="checkout-delivery-note"><CheckoutIcon name="pin" />{deliveryCities.length ? t("delivery_area_hint") : t("no_delivery_cities")}</p>
               </div>
-            </div>
+            </section>
 
-            <div className="h-px w-full bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
-
-            <div>
-              <div className="mb-8 flex items-center gap-4">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-rouge text-[0.55rem] font-semibold text-white">2</span>
-                <div>
-                  <p className="label-utility text-gold/60">{t("step_payment", "Payment")}</p>
-                  <h2 className="mt-1 font-display text-xl text-white">{t("cash_on_delivery")}</h2>
-                </div>
+            <section className="checkout-card" aria-labelledby="payment-heading">
+              <div className="checkout-card-heading">
+                <span className="checkout-step" aria-hidden="true">03</span>
+                <div><h2 id="payment-heading">{t("step_payment")}</h2><p>{t("payment_at_delivery")}</p></div>
               </div>
-
-              <div className="rounded-xl border border-gold/[0.16] bg-card p-5">
-                <div className="flex items-center gap-4">
-<div className="flex h-10 w-10 items-center justify-center rounded-full bg-rouge/10">
-                     <svg aria-hidden="true" width={18} height={18} viewBox="0 0 24 24" className="shrink-0 text-gold" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 2a10 10 0 1 0 10 10" />
-                      <path d="M12 6v6l4 2" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-[0.75rem] font-medium text-white">{t("cash_on_delivery")}</p>
-                    <p className="mt-0.5 text-[0.62rem] text-white/50">{t("cash_on_delivery_desc")}</p>
-                  </div>
-                </div>
+              <div className="checkout-payment">
+                <span className="checkout-payment-icon"><CheckoutIcon name="wallet" /></span>
+                <div><h3>{t("cash_on_delivery")}</h3><p>{t("cash_on_delivery_desc")}</p></div>
+                <span className="checkout-payment-check" role="img" aria-label={t("payment_selected")}><CheckoutIcon name="check" /></span>
               </div>
-            </div>
+            </section>
+          </fieldset>
+        </form>
 
-            <div className="pt-2">
-              {submissionError && (
-                <div
-                  role="alert"
-                  className="mb-4 rounded-xl border border-rouge/35 bg-rouge/10 px-4 py-3 text-[0.68rem] leading-relaxed text-white/80"
-                >
-                  {submissionError}
-                </div>
-              )}
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="btn-primary h-12 w-full px-8 text-[0.58rem]"
-              >
-                {isSubmitting ? (
-                  <span className="flex items-center gap-3">
-                    <svg className="h-3.5 w-3.5 animate-spin" viewBox="0 0 24 24" fill="none">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                    </svg>
-                    {t("confirming")}
-                  </span>
-                ) : (
-                  canRetryConfirmation ? errorCopy.retryButton : t("place_order")
-                )}
-              </button>
-            </div>
-          </form>
-        </motion.div>
-
-        <motion.aside
-          variants={itemVariants}
-          className="lg:sticky lg:top-28"
-        >
-          <div className="rounded-2xl border border-gold/[0.16] bg-card p-5 sm:p-6">
-            <div className="mb-6">
-              <p className="label-utility text-gold/60">{t("order_summary_title")}</p>
-              <h2 className="mt-1 font-display text-white">{items.length} {t("drinks_count")}</h2>
-            </div>
-
-            <div className="space-y-4">
+        <aside className="checkout-summary" aria-labelledby="summary-heading">
+          <div className="checkout-summary-heading">
+            <div><p>MONADATY</p><h2 id="summary-heading">{t("order_summary_title")}</h2></div>
+            <span className="checkout-summary-count">{items.length} {t(items.length === 1 ? "order_line" : "order_lines")}</span>
+          </div>
+          <div className="checkout-summary-body">
+            <div className="checkout-summary-toolbar"><p>{t("checkout_review")}</p><button type="button" onClick={openDrawer} disabled={isSubmitting} aria-haspopup="dialog">{t("edit_cart")}</button></div>
+            <div className="checkout-items">
               {lineItems.map((item) => (
-                <div key={item.id} className="flex gap-3">
-                  <div className="relative h-16 w-14 shrink-0 overflow-hidden rounded-lg border border-gold/[0.12] bg-black">
-                    <ProductImage
-                      product={item}
-                      alt={item.name}
-                      fill
-                      sizes="56px"
-                      className="object-contain p-1"
-                    />
-                  </div>
-                  <div className="flex min-w-0 flex-1 flex-col justify-center">
-                    {item.category && (
-                      <p className="text-[0.38rem] uppercase tracking-[0.28em] text-white/30">{item.category}</p>
-                    )}
-                    <p className="truncate font-display text-[0.78rem] text-white">{item.name}</p>
-<div className="mt-1 flex items-center justify-between gap-2 text-[0.6rem] text-white/40">
-                       <span>{t("qty_label")} {item.quantity}</span>
-                       <span className="font-medium text-gold">{item.lineTotal}</span>
-                     </div>
+                <div key={item.id} className="checkout-item">
+                  <div className="checkout-item-image"><ProductImage product={item} alt={item.name} fill sizes="68px" className="object-contain p-2" /></div>
+                  <div className="checkout-item-details">
+                    {item.brand && <p className="checkout-item-brand">{item.brand}</p>}
+                    <h3>{item.name}</h3>
+                    <div><span>{t("qty_label")} {item.quantity}</span><span className="checkout-item-price" dir="ltr">{item.lineTotal}</span></div>
                   </div>
                 </div>
               ))}
             </div>
-
-            <div className="mt-6 space-y-3 border-t border-white/[0.06] pt-5">
-              <div className="flex items-center justify-between text-[0.7rem]">
-                <span className="text-white/50">{t("cart_subtotal")}</span>
-                <span className="font-medium text-white">{formatMoney(subtotalValue)}</span>
-              </div>
-              <div className="flex items-center justify-between text-[0.7rem]">
-                <span className="text-white/50">{t("tax_rate")}</span>
-                <span className="font-medium text-white">{formatMoney(taxValue)}</span>
-              </div>
-              <div className="flex items-center justify-between border-t border-white/[0.06] pt-4">
-                <span className="label-utility tracking-[0.22em] text-gold">{t("cart_total")}</span>
-                <span className="font-display text-xl text-gold">{formatMoney(totalValue)}</span>
-              </div>
-            </div>
+            <dl className="checkout-totals">
+              <div><dt>{t("cart_subtotal")}</dt><dd dir="ltr">{formatMoney(subtotalValue)}</dd></div>
+              <div><dt>{t("tax_rate")}</dt><dd dir="ltr">{formatMoney(taxValue)}</dd></div>
+              <div><dt>{t("delivery_fee")}</dt><dd className="checkout-free">{t("delivery_included")}</dd></div>
+            </dl>
+            <div className="checkout-grand-total"><div><p>{t("cart_total")}</p><span>{t("payment_at_delivery")}</span></div><strong dir="ltr">{formatMoney(totalValue)}</strong></div>
+            {submissionError && <div role="alert" className="checkout-submission-error">{submissionError}</div>}
+            <button type="submit" form="checkout-form" disabled={isSubmitting || !deliveryCities.length} className="checkout-submit btn-primary">
+              {isSubmitting ? <><svg aria-hidden="true" className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>{t("confirming")}</> : <>{canRetryConfirmation ? errorCopy.retryButton : t("place_order")}<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" className="rtl:rotate-180"><path d="M5 12h14m-7-7 7 7-7 7" /></svg></>}
+            </button>
+            <p className="checkout-privacy"><CheckoutIcon name="shield" />{t("checkout_privacy")}</p>
           </div>
-        </motion.aside>
+        </aside>
       </div>
     </motion.div>
+  );
+}
+
+function CheckoutIcon({ name }: { name: "pin" | "wallet" | "check" | "shield" }) {
+  return (
+    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      {name === "pin" && <><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></>}
+      {name === "wallet" && <><rect x="3" y="5" width="18" height="15" rx="3" /><path d="M3 9h18M16 15h2M7 5V3h11" /></>}
+      {name === "check" && <path d="m5 12 4 4L19 6" />}
+      {name === "shield" && <><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z" /><path d="m8 12 3 3 5-6" /></>}
+    </svg>
   );
 }

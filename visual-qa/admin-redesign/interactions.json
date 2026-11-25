@@ -1,0 +1,139 @@
+{
+  "checks": [
+    {
+      "language": "fr",
+      "name": "Live admin language switching, drawer and focus return"
+    },
+    {
+      "language": "fr",
+      "name": "Product search and URL filter"
+    },
+    {
+      "language": "fr",
+      "name": "Category form and image controls"
+    },
+    {
+      "language": "fr",
+      "name": "Translation creation panel and inline language editor"
+    },
+    {
+      "language": "fr",
+      "name": "Article form and responsive fields"
+    },
+    {
+      "language": "fr",
+      "name": "Automation logs panel"
+    },
+    {
+      "language": "en",
+      "name": "Live admin language switching, drawer and focus return"
+    },
+    {
+      "language": "en",
+      "name": "Product search and URL filter"
+    },
+    {
+      "language": "en",
+      "name": "Category form and image controls"
+    },
+    {
+      "language": "en",
+      "name": "Translation creation panel and inline language editor"
+    },
+    {
+      "language": "en",
+      "name": "Article form and responsive fields"
+    },
+    {
+      "language": "en",
+      "name": "Automation logs panel"
+    },
+    {
+      "language": "ar",
+      "name": "Live admin language switching, drawer and focus return"
+    },
+    {
+      "language": "ar",
+      "name": "Product search and URL filter"
+    },
+    {
+      "language": "ar",
+      "name": "Category form and image controls"
+    },
+    {
+      "language": "ar",
+      "name": "Translation creation panel and inline language editor"
+    },
+    {
+      "language": "ar",
+      "name": "Article form and responsive fields"
+    },
+    {
+      "language": "ar",
+      "name": "Automation logs panel"
+    }
+  ],
+  "audits": [
+    {
+      "name": "Mobile navigation",
+      "language": "fr",
+      "violations": []
+    },
+    {
+      "name": "Category editor",
+      "language": "fr",
+      "violations": []
+    },
+    {
+      "name": "Translation new and edit controls",
+      "language": "fr",
+      "violations": []
+    },
+    {
+      "name": "Article form",
+      "language": "fr",
+      "violations": []
+    },
+    {
+      "name": "Mobile navigation",
+      "language": "en",
+      "violations": []
+    },
+    {
+      "name": "Category editor",
+      "language": "en",
+      "violations": []
+    },
+    {
+      "name": "Translation new and edit controls",
+      "language": "en",
+      "violations": []
+    },
+    {
+      "name": "Article form",
+      "language": "en",
+      "violations": []
+    },
+    {
+      "name": "Mobile navigation",
+      "language": "ar",
+      "violations": []
+    },
+    {
+      "name": "Category editor",
+      "language": "ar",
+      "violations": []
+    },
+    {
+      "name": "Translation new and edit controls",
+      "language": "ar",
+      "violations": []
+    },
+    {
+      "name": "Article form",
+      "language": "ar",
+      "violations": []
+    }
+  ],
+  "errors": []
+}

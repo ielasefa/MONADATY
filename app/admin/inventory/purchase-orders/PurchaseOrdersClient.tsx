@@ -16,10 +16,10 @@ type PO = {
 };
 
 const statusColors: Record<string, string> = {
-  Draft: "bg-white/10 text-white/60 border border-white/10",
+  Draft: "bg-surface text-secondary border border-line",
   Pending: "badge-gold",
-  Approved: "bg-gold/10 text-gold border border-emerald/20",
-  Ordered: "bg-gold/30 text-gold border border-blue-500/20",
+  Approved: "bg-gold/10 text-accent border border-emerald/20",
+  Ordered: "bg-gold/30 text-accent border border-blue-500/20",
   Received: "badge-emerald",
   Cancelled: "badge-red",
 };
@@ -58,7 +58,7 @@ export function PurchaseOrdersClient({
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="luxury-label mb-2">{t("inventory", "Inventory")}</p>
-          <h1 className="text-3xl font-semibold tracking-tight text-white">{t("po_title", "Purchase Orders")}</h1>
+          <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t("po_title", "Purchase Orders")}</h1>
           <p className="mt-1 text-sm text-muted">{initial.length} total orders</p>
         </div>
         <Link
@@ -102,21 +102,21 @@ export function PurchaseOrdersClient({
         </select>
       </div>
 
-      <div className="glass overflow-hidden rounded-card border border-white/[0.06]">
+      <div className="glass overflow-hidden rounded-card border border-line">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
+          <table className="w-full text-start text-sm">
             <thead>
-              <tr className="border-b border-white/[0.06] text-xs uppercase tracking-[0.1em] text-muted">
+              <tr className="border-b border-line text-xs uppercase tracking-[0.1em] text-muted">
                 <th className="px-5 py-4 font-medium">{t("order_number_prefix", "Order #")}</th>
                 <th className="px-5 py-4 font-medium">{t("supplier", "Supplier")}</th>
                 <th className="px-5 py-4 font-medium">{t("warehouse", "Warehouse")}</th>
                 <th className="px-5 py-4 font-medium">{t("status", "Status")}</th>
-                <th className="px-5 py-4 font-medium text-right">{t("total")}</th>
-                <th className="px-5 py-4 font-medium text-right">{t("date", "Date")}</th>
-                <th className="px-5 py-4 font-medium text-right">{t("actions", "Actions")}</th>
+                <th className="px-5 py-4 font-medium text-end">{t("total")}</th>
+                <th className="px-5 py-4 font-medium text-end">{t("date", "Date")}</th>
+                <th className="px-5 py-4 font-medium text-end">{t("actions", "Actions")}</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/[0.06]">
+            <tbody className="divide-y divide-line">
               {filtered.map((o, i) => (
                 <motion.tr
                   key={o.id}
@@ -124,24 +124,24 @@ export function PurchaseOrdersClient({
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.3, delay: i * 0.04 }}
-                  className="transition hover:bg-white/[0.02]"
+                  className="transition hover:bg-surface"
                 >
-                  <td className="px-5 py-4 font-mono text-xs font-medium text-white">{o.orderNumber}</td>
+                  <td className="px-5 py-4 font-mono text-xs font-medium text-foreground">{o.orderNumber}</td>
                   <td className="px-5 py-4 text-muted">{o.supplierName}</td>
                   <td className="px-5 py-4 text-muted">{o.warehouseName}</td>
                   <td className="px-5 py-4">
-                    <span className={`inline-flex rounded-full px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.15em] ${statusColors[o.status] || "bg-white/10 text-white/60"}`}>
+                    <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold uppercase tracking-[0.08em] ${statusColors[o.status] || "bg-surface text-secondary"}`}>
                       {o.status}
                     </span>
                   </td>
-                  <td className="px-5 py-4 text-right font-medium text-white">{o.total}</td>
-                  <td className="px-5 py-4 text-right text-xs text-muted">
+                  <td className="px-5 py-4 text-end font-medium text-foreground">{o.total}</td>
+                  <td className="px-5 py-4 text-end text-xs text-muted">
                     {new Date(o.createdAt).toLocaleDateString()}
                   </td>
-                  <td className="px-5 py-4 text-right">
+                  <td className="px-5 py-4 text-end">
                     <Link
                       href={`/admin/inventory/purchase-orders/${o.id}`}
-                      className="rounded-button px-3 py-1.5 text-sm font-medium text-gold transition hover:bg-gold/10"
+                      className="rounded-button px-3 py-1.5 text-sm font-medium text-accent transition hover:bg-gold/10"
                     >
                       View
                     </Link>

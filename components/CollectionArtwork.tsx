@@ -63,7 +63,7 @@ function FallbackVisual({
   const accentMono = hexToRgba(accent, 0.5);
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-black-soft">
+    <div className="relative h-full w-full overflow-hidden bg-surface">
       <div
         className="absolute inset-0"
         style={{

@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { IconArrowUp, IconArrowDown, IconEmpty } from "./icons";
 
 export const EASE = [0.16, 1, 0.3, 1] as const;
@@ -60,7 +61,7 @@ export function Panel({
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: EASE, delay }}
-      className={`rounded-xl border border-white/[0.06] bg-surface ${
+      className={`rounded-xl border border-line bg-card ${
         hover
           ? "transition-colors duration-300 hover:border-gold/20"
           : ""
@@ -85,7 +86,7 @@ export function SectionHeading({
     <div className={`flex items-end justify-between gap-4 ${className}`}>
       <div className="flex items-center gap-2.5">
         <span className="h-3.5 w-px bg-gold/60" aria-hidden />
-        <h2 className="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-white/70">
+        <h2 className="text-xs font-semibold uppercase tracking-[0.08em] text-secondary">
           {title}
         </h2>
       </div>
@@ -108,11 +109,11 @@ export function TrendPill({
   const isNeutral = Math.abs(value) < 0.05 && suffix === "";
   return (
     <span
-      className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[0.66rem] font-semibold ${
+      className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold ${
         isNeutral
-          ? "bg-white/[0.05] text-white/40"
+          ? "bg-card text-secondary"
           : up
-            ? "bg-emerald-500/10 text-emerald-400"
+            ? "bg-emerald-500/10 text-emerald-700"
             : "bg-[rgba(110,31,42,0.12)] text-[var(--rouge)]"
       }`}
     >
@@ -126,15 +127,15 @@ export function TrendPill({
 
 /* ── Status badge ────────────────────────────────────────────── */
 const STATUS_STYLE: Record<string, string> = {
-  pending: "bg-amber-500/10 text-amber-400 border-amber-500/15",
-  processing: "bg-blue-500/10 text-blue-400 border-blue-500/15",
-  shipped: "bg-teal-500/10 text-teal-400 border-teal-500/15",
-  out_for_delivery: "bg-purple-500/10 text-purple-400 border-purple-500/15",
-  delivered: "bg-emerald-500/10 text-emerald-400 border-emerald-500/15",
-  completed: "bg-emerald-500/10 text-emerald-400 border-emerald-500/15",
-  cancelled: "bg-red-500/10 text-red-400 border-red-500/15",
-  refunded: "bg-red-500/10 text-red-400 border-red-500/15",
-  paid: "bg-emerald-500/10 text-emerald-400 border-emerald-500/15",
+  pending: "bg-amber-500/10 text-amber-700 border-amber-500/15",
+  processing: "bg-blue-500/10 text-blue-700 border-blue-500/15",
+  shipped: "bg-teal-500/10 text-teal-700 border-teal-500/15",
+  out_for_delivery: "bg-purple-500/10 text-purple-700 border-purple-500/15",
+  delivered: "bg-emerald-500/10 text-emerald-700 border-emerald-500/15",
+  completed: "bg-emerald-500/10 text-emerald-700 border-emerald-500/15",
+  cancelled: "bg-red-500/10 text-red-700 border-red-500/15",
+  refunded: "bg-red-500/10 text-red-700 border-red-500/15",
+  paid: "bg-emerald-500/10 text-emerald-700 border-emerald-500/15",
 };
 
 const STATUS_DOT: Record<string, string> = {
@@ -152,12 +153,12 @@ const STATUS_DOT: Record<string, string> = {
 export function StatusBadge({ status, label }: { status: string; label: string }) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.12em] ${
-        STATUS_STYLE[status] ?? "border-white/[0.08] bg-white/[0.04] text-white/60"
+      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.12em] ${
+        STATUS_STYLE[status] ?? "border-line bg-card text-secondary"
       }`}
     >
       <span
-        className={`h-1.5 w-1.5 rounded-full ${STATUS_DOT[status] ?? "bg-white/40"}`}
+        className={`h-1.5 w-1.5 rounded-full ${STATUS_DOT[status] ?? "bg-card"}`}
         aria-hidden
       />
       {label}
@@ -179,15 +180,15 @@ export function EmptyState({
 }) {
   return (
     <div className="flex flex-col items-center justify-center px-6 py-12 text-center">
-      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-white/[0.06] bg-white/[0.03] text-gold/70">
+      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-line bg-card text-accent">
         {icon}
       </div>
-      <p className="text-sm font-medium text-white/85">{title}</p>
+      <p className="text-sm font-medium text-secondary">{title}</p>
       <p className="mt-1 max-w-[30ch] text-xs leading-relaxed text-muted">{description}</p>
       {cta && (
         <Link
           href={cta.href}
-          className="mt-4 inline-flex items-center gap-1.5 rounded-lg border border-white/[0.08] bg-white/[0.03] px-3.5 py-2 text-[0.66rem] font-semibold uppercase tracking-[0.14em] text-white/70 transition-colors duration-200 hover:border-gold/30 hover:text-gold"
+          className="mt-4 inline-flex items-center gap-1.5 rounded-lg border border-line bg-card px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-secondary transition-colors duration-200 hover:border-gold/30 hover:text-accent"
         >
           {cta.label}
         </Link>
@@ -251,5 +252,5 @@ export function Sparkline({
 
 /* ── Skeleton primitives ─────────────────────────────────────── */
 export function SkeletonBlock({ className = "" }: { className?: string }) {
-  return <div className={`animate-pulse rounded-md bg-white/[0.05] ${className}`} />;
+  return <div className={`animate-pulse rounded-md bg-card ${className}`} />;
 }

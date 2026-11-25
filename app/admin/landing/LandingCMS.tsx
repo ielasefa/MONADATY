@@ -68,7 +68,7 @@ function Input({ label, name, value, onChange, type = "text", rows, placeholder,
   const id = `cms-${name}`;
   return (
     <div className="space-y-1.5">
-      <label htmlFor={id} className="text-[0.65rem] font-medium uppercase tracking-[0.12em] text-white/50">{label}</label>
+      <label htmlFor={id} className="text-xs font-medium uppercase tracking-[0.12em] text-secondary">{label}</label>
       {rows ? (
         <textarea id={id} name={name} value={value} onChange={(e) => onChange(e.target.value)} rows={rows} maxLength={maxLength} placeholder={placeholder} className="input-premium min-h-[96px] w-full resize-y py-3 leading-relaxed" />
       ) : (
@@ -86,11 +86,11 @@ function Toggle({ label, checked, onChange }: { label: string; checked: boolean;
         role="switch"
         aria-checked={checked}
         onClick={() => onChange(!checked)}
-        className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 ${checked ? "bg-burgundy" : "bg-white/20"}`}
+        className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 ${checked ? "bg-burgundy" : "bg-surface"}`}
       >
         <span className={`inline-block h-3.5 w-3.5 rounded-full bg-white transition-transform duration-200 ${checked ? "translate-x-[18px]" : "translate-x-[3px]"}`} />
       </button>
-      <span className="text-sm text-white/80">{label}</span>
+      <span className="text-sm text-secondary">{label}</span>
     </label>
   );
 }
@@ -98,7 +98,7 @@ function Toggle({ label, checked, onChange }: { label: string; checked: boolean;
 function ImageField({ label, value, onChange, folder }: { label: string; value: string; onChange: (v: string) => void; folder?: string }) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[0.65rem] font-medium uppercase tracking-[0.12em] text-white/50">{label}</label>
+      <label className="text-xs font-medium uppercase tracking-[0.12em] text-secondary">{label}</label>
       <SingleImageUploader
         label=""
         value={value}
@@ -114,11 +114,11 @@ function SectionCard({ title, icon, children, badge }: {
   title: string; icon?: string; children: React.ReactNode; badge?: React.ReactNode;
 }) {
   return (
-    <section data-testid="landing-section-card" className="space-y-6 rounded-xl border border-white/[0.07] bg-[#121211] p-5 shadow-[0_16px_40px_-28px_rgba(0,0,0,0.9)] sm:p-6 lg:p-7">
-      <div className="-mx-5 flex items-center justify-between border-b border-white/[0.06] px-5 pb-5 sm:-mx-6 sm:px-6 lg:-mx-7 lg:px-7">
+    <section data-testid="landing-section-card" className="space-y-6 rounded-xl border border-line bg-card p-5 shadow-[0_16px_40px_-28px_rgba(0,0,0,0.9)] sm:p-6 lg:p-7">
+      <div className="-mx-5 flex items-center justify-between border-b border-line px-5 pb-5 sm:-mx-6 sm:px-6 lg:-mx-7 lg:px-7">
         <div className="flex items-center gap-3">
-          {icon && <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gold/10 text-[0.7rem] text-gold">{icon}</span>}
-          <h3 className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-white/90">{title}</h3>
+          {icon && <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gold/10 text-xs text-accent">{icon}</span>}
+          <h3 className="text-xs font-semibold uppercase tracking-[0.08em] text-secondary">{title}</h3>
         </div>
         {badge}
       </div>
@@ -214,10 +214,13 @@ export function LandingCMS({ configId, landingData, featuredEntries, allCollecti
   const handleSave = useCallback(async () => {
     setSaving(true);
     try {
+      if (draft.featured && localFeaturedEntries.length !== 4) {
+        throw new Error(t("choose_four_featured", "Choose exactly four products for the homepage."));
+      }
       for (const [dbKey, sectionType] of Object.entries(SECTION_TYPE_MAP)) {
         const data = draft[dbKey];
         if (!data) continue;
-        
+
         const sectionDataToSave = { ...data, configId: undefined, id: undefined };
         if (sectionType === "featured") {
           (sectionDataToSave as any).productIds = localFeaturedEntries.map(e => e.productId).filter(Boolean).join(",");
@@ -225,7 +228,7 @@ export function LandingCMS({ configId, landingData, featuredEntries, allCollecti
         if (sectionType === "collections") {
           (sectionDataToSave as any).selectedCollectionIds = localSelectedCollectionIds.filter(Boolean).join(",");
         }
-        
+
         await apiPut("/api/admin/landing/sections", { configId, sectionType, data: sectionDataToSave });
       }
       await apiPut("/api/admin/landing/order", { configId, order });
@@ -283,29 +286,29 @@ export function LandingCMS({ configId, landingData, featuredEntries, allCollecti
   }, [markUnsaved]);
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] min-w-0 overflow-hidden bg-[#0B0B0A]">
+    <div className="flex h-[calc(100vh-4rem)] min-w-0 overflow-hidden bg-canvas">
 
       {/* ── LEFT SIDEBAR ── */}
       <aside
         aria-label={t("landing_sections", "Sections")}
-        className="flex w-14 shrink-0 flex-col border-e border-white/[0.06] bg-[#121211] xl:w-52"
+        className="flex w-14 shrink-0 flex-col border-e border-line bg-card xl:w-52"
       >
-        <div className="border-b border-white/[0.06] px-3 py-4 xl:px-4">
+        <div className="border-b border-line px-3 py-4 xl:px-4">
           <div className="flex items-center justify-between">
             <div className="hidden xl:block">
-              <p className="text-[0.55rem] font-medium uppercase tracking-[0.15em] text-white/30">{t("landing_page", "Landing Page")}</p>
+              <p className="text-xs font-medium uppercase tracking-[0.08em] text-secondary">{t("landing_page", "Landing Page")}</p>
               <div className="flex items-center gap-2 mt-1">
                 <span className={`inline-block h-1.5 w-1.5 rounded-full ${status === "published" ? "bg-emerald-400" : "bg-gold animate-pulse"}`} />
-                <span className="text-[0.65rem] font-medium uppercase tracking-[0.1em] text-white/50">{status}</span>
+                <span className="text-xs font-medium uppercase tracking-[0.1em] text-secondary">{status}</span>
               </div>
             </div>
-            {publishedAt && <span className="hidden text-[0.5rem] text-white/25 xl:inline">{(new Date(publishedAt)).toLocaleDateString()}</span>}
+            {publishedAt && <span className="hidden text-xs text-secondary xl:inline">{(new Date(publishedAt)).toLocaleDateString()}</span>}
             <span className={`mx-auto h-2 w-2 rounded-full xl:hidden ${status === "published" ? "bg-emerald-400" : "bg-gold"}`} aria-label={status} />
           </div>
         </div>
 
         <div className="flex-1 overflow-y-auto p-2">
-          <p className="mb-2 hidden px-2 text-[0.5rem] font-medium uppercase tracking-[0.15em] text-white/20 xl:block">{t("landing_sections", "Sections")}</p>
+          <p className="mb-2 hidden px-2 text-xs font-medium uppercase tracking-[0.08em] text-secondary xl:block">{t("landing_sections", "Sections")}</p>
           <Reorder.Group axis="y" values={order} onReorder={handleReorderSections} className="space-y-0.5">
             {order.map((key) => {
               const sectionKey = key;
@@ -320,19 +323,19 @@ export function LandingCMS({ configId, landingData, featuredEntries, allCollecti
                     title={displayLabel}
                     className={`flex min-h-10 w-full items-center justify-center gap-2.5 rounded-md px-2 py-2 text-start text-sm transition-all duration-150 xl:justify-start xl:px-3 ${
                       activeSection === sectionKey
-                        ? "border-s-[3px] border-burgundy bg-burgundy/15 text-white"
-                        : "border-s-[3px] border-transparent text-white/40 hover:bg-white/5 hover:text-white"
+                        ? "border-s-[3px] border-burgundy bg-burgundy/15 text-foreground"
+                        : "border-s-[3px] border-transparent text-secondary hover:bg-surface hover:text-foreground"
                     }`}
                   >
-                    <span className="text-[0.7rem]">{icon}</span>
-                    <span className="hidden flex-1 truncate text-[0.7rem] xl:block">{displayLabel}</span>
-                    <span className="hidden text-[0.5rem] text-white/20 xl:block">⋮⋮</span>
+                    <span className="text-xs">{icon}</span>
+                    <span className="hidden flex-1 truncate text-xs xl:block">{displayLabel}</span>
+                    <span className="hidden text-xs text-secondary xl:block">⋮⋮</span>
                   </button>
                 </Reorder.Item>
               );
             })}
           </Reorder.Group>
-          <div className="mt-2 border-t border-white/[0.06] pt-2">
+          <div className="mt-2 border-t border-line pt-2">
             <button
               type="button"
               data-section-key="seo"
@@ -340,44 +343,44 @@ export function LandingCMS({ configId, landingData, featuredEntries, allCollecti
               title={t(SECTION_LABELS.seo, SECTION_LABELS.seo)}
               className={`flex min-h-10 w-full items-center justify-center gap-2.5 rounded-md px-2 py-2 text-start text-sm transition-all duration-150 xl:justify-start xl:px-3 ${
                 activeSection === "seo"
-                  ? "border-s-[3px] border-burgundy bg-burgundy/15 text-white"
-                  : "border-s-[3px] border-transparent text-white/40 hover:bg-white/5 hover:text-white"
+                  ? "border-s-[3px] border-burgundy bg-burgundy/15 text-foreground"
+                  : "border-s-[3px] border-transparent text-secondary hover:bg-surface hover:text-foreground"
               }`}
             >
-              <span className="text-[0.7rem]">{SECTION_ICONS.seo}</span>
-              <span className="hidden flex-1 truncate text-[0.7rem] xl:block">{t(SECTION_LABELS.seo, SECTION_LABELS.seo)}</span>
+              <span className="text-xs">{SECTION_ICONS.seo}</span>
+              <span className="hidden flex-1 truncate text-xs xl:block">{t(SECTION_LABELS.seo, SECTION_LABELS.seo)}</span>
             </button>
           </div>
         </div>
 
-        <div className="space-y-2 border-t border-white/[0.06] p-3">
+        <div className="space-y-2 border-t border-line p-3">
           <div className="flex items-center justify-center xl:justify-between">
-            <span className="hidden text-[0.5rem] font-medium uppercase tracking-[0.1em] text-white/25 xl:inline">{versions.length} versions</span>
-            <button onClick={() => setShowVersions(true)} title={t("history_label", "History")} className="flex h-9 w-9 items-center justify-center rounded-md text-sm text-gold transition-colors hover:bg-gold/10 hover:text-gold-light xl:h-auto xl:w-auto xl:text-[0.6rem]">↶<span className="hidden xl:ms-1 xl:inline">{t("history_label", "History")}</span></button>
+            <span className="hidden text-xs font-medium uppercase tracking-[0.1em] text-secondary xl:inline">{versions.length} versions</span>
+            <button onClick={() => setShowVersions(true)} title={t("history_label", "History")} className="flex h-9 w-9 items-center justify-center rounded-md text-sm text-accent transition-colors hover:bg-gold/10 hover:text-accent xl:h-auto xl:w-auto xl:text-xs">↶<span className="hidden xl:ms-1 xl:inline">{t("history_label", "History")}</span></button>
           </div>
-          <div className="hidden text-[0.5rem] text-white/20 xl:block">{t("landing_ctrl_s", "Ctrl+S to save")}</div>
+          <div className="hidden text-xs text-secondary xl:block">{t("landing_ctrl_s", "Ctrl+S to save")}</div>
         </div>
       </aside>
 
       {/* ── EDITOR PANEL ── */}
-      <main className="flex min-w-0 flex-1 flex-col bg-[#0B0B0A]">
-        <div className="flex min-h-16 flex-wrap items-center justify-between gap-3 border-b border-white/[0.06] bg-[#0B0B0A] px-4 py-3 sm:px-6 lg:px-8">
+      <main className="flex min-w-0 flex-1 flex-col bg-canvas">
+        <div className="flex min-h-16 flex-wrap items-center justify-between gap-3 border-b border-line bg-canvas px-4 py-3 sm:px-6 lg:px-8">
           <div className="flex min-w-0 items-center gap-3">
             <span className="h-8 w-1 shrink-0 rounded-full bg-gradient-to-b from-gold via-gold/50 to-transparent" />
             <div className="min-w-0">
-              <h1 className="truncate text-base font-semibold text-white">{t(SECTION_LABELS[activeSection] || activeSection, SECTION_LABELS[activeSection] || activeSection)}</h1>
-              <p className="mt-0.5 hidden max-w-2xl truncate text-xs text-white/40 md:block">{SECTION_DESCRIPTIONS[activeSection] || t("landing_section_editor", "Section Editor")}</p>
+              <h1 className="truncate text-base font-semibold text-foreground">{t(SECTION_LABELS[activeSection] || activeSection, SECTION_LABELS[activeSection] || activeSection)}</h1>
+              <p className="mt-0.5 hidden max-w-2xl truncate text-xs text-secondary md:block">{SECTION_DESCRIPTIONS[activeSection] || t("landing_section_editor", "Section Editor")}</p>
             </div>
-            {unsaved && <span className="shrink-0 rounded-full bg-gold/10 px-2.5 py-1 text-[0.55rem] font-medium uppercase tracking-[0.12em] text-gold animate-pulse">{t("landing_unsaved", "Unsaved")}</span>}
+            {unsaved && <span className="shrink-0 rounded-full bg-gold/10 px-2.5 py-1 text-xs font-medium uppercase tracking-[0.12em] text-accent animate-pulse">{t("landing_unsaved", "Unsaved")}</span>}
           </div>
           <div className="flex w-full min-w-0 flex-wrap items-center justify-end gap-2 sm:w-auto sm:shrink-0">
-            <span className={`hidden rounded-full border px-2.5 py-1 text-[0.55rem] font-semibold uppercase tracking-[0.14em] sm:inline-flex ${status === "published" ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-400" : "border-gold/20 bg-gold/5 text-gold"}`}>
+            <span className={`hidden rounded-full border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.08em] sm:inline-flex ${status === "published" ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-700" : "border-gold/20 bg-gold/5 text-accent"}`}>
               <span className={`me-1.5 inline-block h-1.5 w-1.5 rounded-full ${status === "published" ? "bg-emerald-400" : "bg-gold"}`} />
               {status === "published" ? t("landing_published", "Published") : t("landing_draft", "Draft")}
             </span>
-            <button data-testid="landing-save-draft" onClick={handleSave} disabled={saving} className="btn-primary-sm h-9 px-4 text-[0.55rem] max-sm:w-full">{saving ? t("landing_saving", "Saving...") : t("landing_save_draft", "Save Draft")}</button>
-            <button onClick={handlePublish} disabled={publishing || saving} className="btn-gold h-9 px-5 text-[0.55rem] max-sm:w-full">{publishing ? t("landing_publishing", "Publishing...") : t("landing_publish", "Publish")}</button>
-            <a href="/" target="_blank" rel="noreferrer" className="btn-secondary h-9 px-4 text-[0.55rem] max-sm:!hidden sm:!inline-flex">{t("landing_view_site", "View Site")}</a>
+            <button data-testid="landing-save-draft" onClick={handleSave} disabled={saving} className="btn-primary-sm h-9 px-4 text-xs max-sm:w-full">{saving ? t("landing_saving", "Saving...") : t("landing_save_draft", "Save Draft")}</button>
+            <button onClick={handlePublish} disabled={publishing || saving} className="btn-gold h-9 px-5 text-xs max-sm:w-full">{publishing ? t("landing_publishing", "Publishing...") : t("landing_publish", "Publish")}</button>
+            <a href="/" target="_blank" rel="noreferrer" className="btn-secondary h-9 px-4 text-xs max-sm:!hidden sm:!inline-flex">{t("landing_view_site", "View Site")}</a>
           </div>
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
@@ -396,22 +399,22 @@ export function LandingCMS({ configId, landingData, featuredEntries, allCollecti
       {/* ── VERSION HISTORY MODAL ── */}
       {showVersions && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm" onClick={() => setShowVersions(false)}>
-          <div className="w-full max-w-lg rounded-2xl border border-white/[0.06] bg-[#171717] shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
-              <h3 className="text-sm font-medium text-white">{t("landing_version_history", "Version History")}</h3>
-              <button onClick={() => setShowVersions(false)} className="text-white/40 hover:text-white text-lg">&times;</button>
+          <div className="w-full max-w-lg rounded-2xl border border-line bg-surface shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between border-b border-line px-6 py-4">
+              <h3 className="text-sm font-medium text-foreground">{t("landing_version_history", "Version History")}</h3>
+              <button onClick={() => setShowVersions(false)} className="text-secondary hover:text-foreground text-lg">&times;</button>
             </div>
             <div className="max-h-[60vh] overflow-y-auto p-4 space-y-2">
-              {versions.length === 0 && <p className="text-sm text-white/40 text-center py-8">{t("landing_no_versions", "No versions saved yet")}</p>}
+              {versions.length === 0 && <p className="text-sm text-secondary text-center py-8">{t("landing_no_versions", "No versions saved yet")}</p>}
               {versions.map((v) => (
-                <div key={v.id} className="flex items-center justify-between rounded-xl border border-white/[0.06] bg-surface/50 px-4 py-3">
+                <div key={v.id} className="flex items-center justify-between rounded-xl border border-line bg-surface/50 px-4 py-3">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-white">v{v.version}</span>
-                      <span className={`text-[0.5rem] font-medium uppercase tracking-[0.1em] px-1.5 py-0.5 rounded ${v.status === "published" ? "bg-emerald-400/10 text-emerald-400" : "bg-gold/10 text-gold"}`}>{v.status}</span>
+                      <span className="text-sm font-medium text-foreground">v{v.version}</span>
+                      <span className={`text-xs font-medium uppercase tracking-[0.1em] px-1.5 py-0.5 rounded ${v.status === "published" ? "bg-emerald-400/10 text-emerald-700" : "bg-gold/10 text-accent"}`}>{v.status}</span>
                     </div>
-                    <p className="text-[0.65rem] text-white/35 mt-0.5">{v.label} — by {v.createdBy}</p>
-                    <p className="text-[0.55rem] text-white/20">{new Date(v.createdAt).toLocaleString()}</p>
+                    <p className="text-xs text-secondary mt-0.5">{v.label} — by {v.createdBy}</p>
+                    <p className="text-xs text-secondary">{new Date(v.createdAt).toLocaleString()}</p>
                   </div>
                   <button
                     onClick={async () => {
@@ -422,7 +425,7 @@ export function LandingCMS({ configId, landingData, featuredEntries, allCollecti
                         router.refresh();
                       } catch { toast.error(t("landing_restore_failed", "Failed to restore")); }
                     }}
-                    className="btn-primary-sm h-7 px-3 text-[0.5rem]"
+                    className="btn-primary-sm h-7 px-3 text-xs"
                   >{t("landing_restore", "Restore")}</button>
                 </div>
               ))}
@@ -450,8 +453,8 @@ function SectionSettings({ data, onChange }: { data: Record<string, unknown>; on
     <SectionCard title={t("section_settings", "Section Settings")} icon="⚙">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         <div>
-          <label className="text-[0.65rem] font-medium uppercase tracking-[0.12em] text-white/50 block mb-1.5">{t("background", "Background")}</label>
-          <select value={(layout.bgVariant as string) || "default"} onChange={(e) => patch({ bgVariant: e.target.value })} className="input-premium w-full">
+          <label className="text-xs font-medium uppercase tracking-[0.12em] text-secondary block mb-1.5">{t("background", "Background")}</label>
+          <select aria-label={t("background", "Background")} value={(layout.bgVariant as string) || "default"} onChange={(e) => patch({ bgVariant: e.target.value })} className="input-premium w-full">
             <option value="default">{t("bg_default", "Default")}</option>
             <option value="surface">{t("bg_surface", "Surface")}</option>
             <option value="burgundy">{t("bg_burgundy", "Burgundy")}</option>
@@ -465,16 +468,16 @@ function SectionSettings({ data, onChange }: { data: Record<string, unknown>; on
           )}
         </div>
         <div>
-          <label className="text-[0.65rem] font-medium uppercase tracking-[0.12em] text-white/50 block mb-1.5">{t("max_width", "Max Width")}</label>
-          <select value={(layout.maxWidth as string) || "1400"} onChange={(e) => patch({ maxWidth: e.target.value })} className="input-premium w-full">
+          <label className="text-xs font-medium uppercase tracking-[0.12em] text-secondary block mb-1.5">{t("max_width", "Max Width")}</label>
+          <select aria-label={t("max_width", "Max width")} value={(layout.maxWidth as string) || "1400"} onChange={(e) => patch({ maxWidth: e.target.value })} className="input-premium w-full">
             <option value="1400">{t("mw_standard", "Standard (1400px)")}</option>
             <option value="1600">{t("mw_wide", "Wide (1600px)")}</option>
             <option value="full">{t("mw_full", "Full Width")}</option>
           </select>
         </div>
         <div>
-          <label className="text-[0.65rem] font-medium uppercase tracking-[0.12em] text-white/50 block mb-1.5">{t("padding_top", "Padding Top")}</label>
-          <select value={(layout.pt as string) || "16"} onChange={(e) => patch({ pt: e.target.value })} className="input-premium w-full">
+          <label className="text-xs font-medium uppercase tracking-[0.12em] text-secondary block mb-1.5">{t("padding_top", "Padding Top")}</label>
+          <select aria-label={t("padding_top", "Padding top")} value={(layout.pt as string) || "16"} onChange={(e) => patch({ pt: e.target.value })} className="input-premium w-full">
             <option value="12">{t("padding_small", "Small (py-12)")}</option>
             <option value="16">{t("padding_medium", "Medium (py-16)")}</option>
             <option value="20">{t("padding_large", "Large (py-20)")}</option>
@@ -483,8 +486,8 @@ function SectionSettings({ data, onChange }: { data: Record<string, unknown>; on
           </select>
         </div>
         <div>
-          <label className="text-[0.65rem] font-medium uppercase tracking-[0.12em] text-white/50 block mb-1.5">{t("padding_bottom", "Padding Bottom")}</label>
-          <select value={(layout.pb as string) || "16"} onChange={(e) => patch({ pb: e.target.value })} className="input-premium w-full">
+          <label className="text-xs font-medium uppercase tracking-[0.12em] text-secondary block mb-1.5">{t("padding_bottom", "Padding Bottom")}</label>
+          <select aria-label={t("padding_bottom", "Padding bottom")} value={(layout.pb as string) || "16"} onChange={(e) => patch({ pb: e.target.value })} className="input-premium w-full">
             <option value="12">{t("padding_small", "Small (py-12)")}</option>
             <option value="16">{t("padding_medium", "Medium (py-16)")}</option>
             <option value="20">{t("padding_large", "Large (py-20)")}</option>
@@ -493,8 +496,8 @@ function SectionSettings({ data, onChange }: { data: Record<string, unknown>; on
           </select>
         </div>
         <div>
-          <label className="text-[0.65rem] font-medium uppercase tracking-[0.12em] text-white/50 block mb-1.5">{t("border_radius", "Border Radius")}</label>
-          <select value={(layout.radius as string) || "none"} onChange={(e) => patch({ radius: e.target.value })} className="input-premium w-full">
+          <label className="text-xs font-medium uppercase tracking-[0.12em] text-secondary block mb-1.5">{t("border_radius", "Border Radius")}</label>
+          <select aria-label={t("border_radius", "Border radius")} value={(layout.radius as string) || "none"} onChange={(e) => patch({ radius: e.target.value })} className="input-premium w-full">
             <option value="none">{t("padding_none", "None")}</option>
             <option value="sm">{t("radius_small", "Small")}</option>
             <option value="md">{t("radius_medium", "Medium")}</option>
@@ -504,8 +507,8 @@ function SectionSettings({ data, onChange }: { data: Record<string, unknown>; on
           </select>
         </div>
         <div>
-          <label className="text-[0.65rem] font-medium uppercase tracking-[0.12em] text-white/50 block mb-1.5">{t("animation", "Animation")}</label>
-          <select value={(layout.animation as string) || "fade-up"} onChange={(e) => patch({ animation: e.target.value })} className="input-premium w-full">
+          <label className="text-xs font-medium uppercase tracking-[0.12em] text-secondary block mb-1.5">{t("animation", "Animation")}</label>
+          <select aria-label={t("animation", "Animation")} value={(layout.animation as string) || "fade-up"} onChange={(e) => patch({ animation: e.target.value })} className="input-premium w-full">
             <option value="none">{t("padding_none", "None")}</option>
             <option value="fade-up">{t("anim_fade_up", "Fade Up")}</option>
             <option value="fade-in">{t("anim_fade_in", "Fade In")}</option>
@@ -540,23 +543,23 @@ function HeroEditor({ data, onChange }: { data: Record<string, unknown>; onChang
         </div>
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
           <div>
-            <label className="text-[0.65rem] font-medium uppercase tracking-[0.12em] text-white/50 block mb-1.5">{t("target", "Target")}</label>
-            <select value={(data.ctaTarget as string) || "_self"} onChange={(e) => onChange({ ctaTarget: e.target.value })} className="input-premium w-full">
+            <label className="text-xs font-medium uppercase tracking-[0.12em] text-secondary block mb-1.5">{t("target", "Target")}</label>
+            <select aria-label={t("target", "Target")} value={(data.ctaTarget as string) || "_self"} onChange={(e) => onChange({ ctaTarget: e.target.value })} className="input-premium w-full">
               <option value="_self">{t("same_tab", "Same tab")}</option>
               <option value="_blank">{t("new_tab", "New tab")}</option>
             </select>
           </div>
           <div>
-            <label className="text-[0.65rem] font-medium uppercase tracking-[0.12em] text-white/50 block mb-1.5">{t("variant", "Variant")}</label>
-            <select value={(data.ctaVariant as string) || "primary"} onChange={(e) => onChange({ ctaVariant: e.target.value })} className="input-premium w-full">
+            <label className="text-xs font-medium uppercase tracking-[0.12em] text-secondary block mb-1.5">{t("variant", "Variant")}</label>
+            <select aria-label={t("variant", "Variant")} value={(data.ctaVariant as string) || "primary"} onChange={(e) => onChange({ ctaVariant: e.target.value })} className="input-premium w-full">
               <option value="primary">{t("primary_gold", "Primary (Gold)")}</option>
               <option value="secondary">{t("outline", "Outline")}</option>
               <option value="burgundy">{t("bg_burgundy", "Burgundy")}</option>
             </select>
           </div>
           <div>
-            <label className="text-[0.65rem] font-medium uppercase tracking-[0.12em] text-white/50 block mb-1.5">{t("alignment", "Alignment")}</label>
-            <select value={(data.alignment as string) || "left"} onChange={(e) => onChange({ alignment: e.target.value })} className="input-premium w-full">
+            <label className="text-xs font-medium uppercase tracking-[0.12em] text-secondary block mb-1.5">{t("alignment", "Alignment")}</label>
+            <select aria-label={t("alignment", "Alignment")} value={(data.alignment as string) || "left"} onChange={(e) => onChange({ alignment: e.target.value })} className="input-premium w-full">
               <option value="left">{t("align_left", "Left")}</option>
               <option value="center">{t("align_center", "Center")}</option>
               <option value="right">{t("align_right", "Right")}</option>
@@ -664,6 +667,7 @@ function FeaturedEditor({ data, localFeaturedEntries, setLocalFeaturedEntries, i
   }, [setLocalFeaturedEntries, markUnsaved]);
 
   const handleSaveFeatured = async () => {
+    if (localFeaturedEntries.length !== 4) return;
     setSaving(true);
     try {
       const productIds = localFeaturedEntries.map(e => e.productId).join(",");
@@ -672,10 +676,10 @@ function FeaturedEditor({ data, localFeaturedEntries, setLocalFeaturedEntries, i
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ configId, sectionType: "featured", data: { productIds } })
       });
-      
+
       const responseData = await res.json();
       if (!res.ok) throw new Error(responseData.error || t("landing_failed_save", "Failed to save"));
-      
+
       toast.success(t("landing.featured_saved", "Featured products updated successfully."));
       setSaving(false);
       router.refresh();
@@ -695,7 +699,7 @@ function FeaturedEditor({ data, localFeaturedEntries, setLocalFeaturedEntries, i
       <SectionCard title={t("visibility", "Visibility")} icon="👁">
         <Toggle label={t("landing_show_on_homepage", "Show on homepage")} checked={data.enabled as boolean} onChange={(v) => onChange({ enabled: v })} />
       </SectionCard>
-      
+
       <SectionCard title={t("landing_section_header", "Section Header")} icon="□">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <Input label={t("title", "Title")} name="title" value={(data.title as string) || ""} onChange={(v) => onChange({ title: v })} placeholder={t("ph_featured", "Featured")} />
@@ -708,27 +712,27 @@ function FeaturedEditor({ data, localFeaturedEntries, setLocalFeaturedEntries, i
       </SectionCard>
 
       <SectionCard title={t("products", "Products")} icon="⊞">
-        <div className="mb-5 flex flex-col gap-4 border-b border-white/[0.06] pb-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mb-5 flex flex-col gap-4 border-b border-line pb-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm text-white/90">{t("selected_products_count", "Selected Products")} <span className="ms-2 rounded-full bg-gold/10 px-2 py-0.5 text-[0.65rem] font-medium tracking-wider text-gold">{localFeaturedEntries.length} / 4 {t("selected", "Selected")}</span></p>
-            {isMaxReached && <p className="text-[0.6rem] text-burgundy mt-1">{t("max_4_featured", "Maximum 4 featured products.")}</p>}
+            <p className="text-sm text-secondary">{t("selected_products_count", "Selected Products")} <span className="ms-2 rounded-full bg-gold/10 px-2 py-0.5 text-xs font-medium tracking-wider text-accent">{localFeaturedEntries.length} / 4 {t("selected", "Selected")}</span></p>
+            {isMaxReached && <p className="text-xs text-burgundy mt-1">{t("max_4_featured", "Maximum 4 featured products.")}</p>}
           </div>
           <div className="flex flex-wrap items-center gap-2">
             {isDirty && (
-              <button 
-                type="button" 
-                onClick={handleDiscard} 
+              <button
+                type="button"
+                onClick={handleDiscard}
                 disabled={saving}
-                className="btn-secondary h-10 px-4 text-[0.6rem] disabled:opacity-50"
+                className="btn-secondary h-10 px-4 text-xs disabled:opacity-50"
               >
                 {t("discard_changes", "Discard Changes")}
               </button>
             )}
-            <button 
-              type="button" 
-              onClick={handleSaveFeatured} 
-              disabled={!isDirty || saving}
-              className="btn-primary flex h-10 items-center gap-2 px-4 text-[0.6rem] disabled:opacity-50"
+            <button
+              type="button"
+              onClick={handleSaveFeatured}
+              disabled={!isDirty || saving || localFeaturedEntries.length !== 4}
+              className="btn-primary flex h-10 items-center gap-2 px-4 text-xs disabled:opacity-50"
             >
               {saving ? t("landing_saving", "Saving...") : t("save_featured_products", "Save Featured Products")}
             </button>
@@ -736,49 +740,49 @@ function FeaturedEditor({ data, localFeaturedEntries, setLocalFeaturedEntries, i
         </div>
 
         <div className="mb-4">
-          <button 
+          <button
             type="button"
-            onClick={() => setShowAdd(!showAdd)} 
+            onClick={() => setShowAdd(!showAdd)}
             disabled={saving}
-            className="btn-secondary h-10 w-full px-5 text-[0.65rem] disabled:opacity-50 sm:w-auto"
+            className="btn-secondary h-10 w-full px-5 text-xs disabled:opacity-50 sm:w-auto"
           >
             {showAdd ? t("close_search", "Close Search") : t("search_add_products", "Search & Add Products")}
           </button>
         </div>
 
         {showAdd && (
-          <div className="mb-6 border-y border-white/[0.06] py-4">
-            <input 
-              type="text" 
-              value={searchQuery} 
-              onChange={(e) => handleSearch(e.target.value)} 
-              placeholder={t("landing_search_products", "Search products by name, SKU, or category...")} 
-              className="input-premium w-full mb-3 bg-surface" 
+          <div className="mb-6 border-y border-line py-4">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => handleSearch(e.target.value)}
+              placeholder={t("landing_search_products", "Search products by name, SKU, or category...")}
+              className="input-premium w-full mb-3 bg-surface"
             />
             {searchResults.length > 0 && (
               <div className="max-h-64 space-y-2 overflow-y-auto pe-2">
                 {searchResults.map((p) => {
                   const isSelected = localFeaturedEntries.some(e => e.productId === p.id);
                   return (
-                    <div key={p.id} className="flex items-center gap-3 rounded-lg border border-white/[0.04] bg-black/25 p-2.5 transition-colors hover:border-white/[0.1] sm:gap-4">
-                      <div className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-md bg-white/5">
-                        {p.image ? <SafeImage src={p.image} alt={p.name} fill className="object-cover" sizes="40px" /> : <span className="text-[0.5rem] text-white/30">{t("img", "IMG")}</span>}
+                    <div key={p.id} className="flex items-center gap-3 rounded-lg border border-line bg-surface p-2.5 transition-colors hover:border-line sm:gap-4">
+                      <div className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-md bg-surface">
+                        {p.image ? <SafeImage src={p.image} alt={p.name} fill className="object-cover" sizes="40px" /> : <span className="text-xs text-secondary">{t("img", "IMG")}</span>}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm text-white truncate">{p.name}</p>
+                        <p className="text-sm text-foreground truncate">{p.name}</p>
                         <div className="flex items-center gap-2 mt-0.5">
-                          <p className="text-[0.6rem] text-gold">{p.price}</p>
-                          {p.category && <span className="text-[0.55rem] text-white/40 uppercase tracking-wider">• {p.category.name}</span>}
+                          <p className="text-xs text-accent">{p.price}</p>
+                          {p.category && <span className="text-xs text-secondary uppercase tracking-wider">• {p.category.name}</span>}
                         </div>
                       </div>
-                      <button 
-                        type="button" 
-                        onClick={() => handleAdd(p)} 
+                      <button
+                        type="button"
+                        onClick={() => handleAdd(p)}
                         disabled={isSelected || (isMaxReached && !isSelected) || saving}
-                        className={`inline-flex h-9 min-w-[72px] items-center justify-center rounded px-3 text-center text-[0.6rem] font-medium uppercase transition-all duration-200 ${
-                          isSelected 
-                            ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30" 
-                            : "bg-white/10 text-white hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed"
+                        className={`inline-flex h-9 min-w-[72px] items-center justify-center rounded px-3 text-center text-xs font-medium uppercase transition-all duration-200 ${
+                          isSelected
+                            ? "bg-emerald-500/20 text-emerald-700 border border-emerald-500/30"
+                            : "bg-surface text-foreground hover:bg-surface disabled:opacity-30 disabled:cursor-not-allowed"
                         }`}
                       >
                         {isSelected ? "✔ Selected" : "Add"}
@@ -792,31 +796,31 @@ function FeaturedEditor({ data, localFeaturedEntries, setLocalFeaturedEntries, i
         )}
 
         <div className="space-y-1">
-          <p className="text-[0.55rem] text-white/30 uppercase tracking-[0.1em] mb-2 px-1">{t("selected_order_drag", "Selected Order (Drag to reorder)")}</p>
+          <p className="text-xs text-secondary uppercase tracking-[0.1em] mb-2 px-1">{t("selected_order_drag", "Selected Order (Drag to reorder)")}</p>
           {localFeaturedEntries.length > 0 ? (
             <Reorder.Group axis="y" values={localFeaturedEntries} onReorder={handleDragEnd} className="space-y-2">
               {localFeaturedEntries.map((entry) => (
                 <Reorder.Item key={entry.id} value={entry} className="cursor-grab active:cursor-grabbing">
-                  <div className={`flex min-h-[72px] items-center gap-3 rounded-lg border ${saving ? 'opacity-50' : ''} border-white/[0.08] bg-black/20 p-3 transition-colors hover:border-gold/30 sm:gap-4`}>
-                    <div className="text-white/20 hover:text-white/40 cursor-grab px-1">
+                  <div className={`flex min-h-[72px] items-center gap-3 rounded-lg border ${saving ? 'opacity-50' : ''} border-line bg-surface p-3 transition-colors hover:border-gold/30 sm:gap-4`}>
+                    <div className="text-secondary hover:text-secondary cursor-grab px-1">
                       <svg width="12" height="20" viewBox="0 0 12 20" fill="currentColor"><path d="M4 4C4 5.10457 3.10457 6 2 6C0.89543 6 0 5.10457 0 4C0 2.89543 0.89543 2 2 2C3.10457 2 4 2.89543 4 4ZM4 10C4 11.1046 3.10457 12 2 12C0.89543 12 0 11.1046 0 10C0 8.89543 0.89543 8 2 8C3.10457 8 4 8.89543 4 10ZM4 16C4 17.1046 3.10457 18 2 18C0.89543 18 0 17.1046 0 16C0 14.8954 0.89543 14 2 14C3.10457 14 4 14.8954 4 16ZM12 4C12 5.10457 11.1046 6 10 6C8.89543 6 8 5.10457 8 4C8 2.89543 8.89543 2 10 2C11.1046 2 12 2.89543 12 4ZM12 10C12 11.1046 11.1046 12 10 12C8.89543 12 8 11.1046 8 10C8 8.89543 8.89543 8 10 8C11.1046 8 12 8.89543 12 10ZM12 16C12 17.1046 11.1046 18 10 18C8.89543 18 8 17.1046 8 16C8 14.8954 8.89543 14 10 14C11.1046 14 12 14.8954 12 16Z"/></svg>
                     </div>
-                    
-                    <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg border border-white/[0.04] bg-black/50">
-                      {entry.product?.image ? <SafeImage src={entry.product.image} alt={entry.product?.name || ""} fill className="object-cover" sizes="48px" /> : <span className="flex h-full items-center justify-center text-[0.5rem] text-white/20">{t("img", "IMG")}</span>}
+
+                    <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg border border-line bg-surface">
+                      {entry.product?.image ? <SafeImage src={entry.product.image} alt={entry.product?.name || ""} fill className="object-cover" sizes="48px" /> : <span className="flex h-full items-center justify-center text-xs text-secondary">{t("img", "IMG")}</span>}
                     </div>
-                    
+
                     <div className="flex-1 min-w-0">
-                      <p className="text-[0.85rem] font-medium text-white truncate">{entry.product?.name || "Unknown"}</p>
-                      <p className="text-[0.65rem] text-gold mt-0.5">{entry.product?.price}</p>
+                      <p className="text-sm font-medium text-foreground truncate">{entry.product?.name || "Unknown"}</p>
+                      <p className="text-xs text-accent mt-0.5">{entry.product?.price}</p>
                     </div>
-                    
-                    <button 
-                      type="button" 
-                      onClick={() => handleRemove(entry.productId)} 
+
+                    <button
+                      type="button"
+                      onClick={() => handleRemove(entry.productId)}
                       disabled={saving}
                       aria-label={`Remove ${entry.product?.name}`}
-                      className="text-[0.6rem] text-white/50 hover:text-burgundy hover:bg-burgundy/10 font-medium uppercase px-3 py-2 rounded-md transition-all duration-200"
+                      className="text-xs text-secondary hover:text-burgundy hover:bg-burgundy/10 font-medium uppercase px-3 py-2 rounded-md transition-all duration-200"
                     >
                       Remove
                     </button>
@@ -825,10 +829,10 @@ function FeaturedEditor({ data, localFeaturedEntries, setLocalFeaturedEntries, i
               ))}
             </Reorder.Group>
           ) : (
-            <div className="py-12 border border-dashed border-white/[0.1] rounded-xl flex flex-col items-center justify-center bg-surface/30">
+            <div className="py-12 border border-dashed border-line rounded-xl flex flex-col items-center justify-center bg-surface/30">
               <span className="text-2xl mb-2 opacity-20">⊞</span>
-              <p className="text-sm text-white/40">{t("no_products_selected", "No products selected.")}</p>
-              <p className="text-[0.6rem] text-white/30 mt-1">{t("no_products_selected_desc", "Search and add products to feature them on the landing page.")}</p>
+              <p className="text-sm text-secondary">{t("no_products_selected", "No products selected.")}</p>
+              <p className="text-xs text-secondary mt-1">{t("no_products_selected_desc", "Search and add products to feature them on the landing page.")}</p>
             </div>
           )}
         </div>
@@ -941,46 +945,46 @@ function CollectionsEditor({ configId, data, allCollections, onChange, localSele
         </div>
       </SectionCard>
       <SectionCard title={t("collections", "Collections")} icon="⊞">
-        <div className="mb-5 flex flex-col gap-4 border-b border-white/[0.06] pb-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mb-5 flex flex-col gap-4 border-b border-line pb-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm text-white/90">{t("selected_collections_count", "Selected Collections")} <span className="ms-2 rounded-full bg-gold/10 px-2 py-0.5 text-[0.65rem] font-medium tracking-wider text-gold">{selectedCollectionIds.length} / 4 {t("selected", "Selected")}</span></p>
-            {isMaxReached && <p className="text-[0.6rem] text-burgundy mt-1">{t("max_4_collections", "Maximum 4 collections.")}</p>}
+            <p className="text-sm text-secondary">{t("selected_collections_count", "Selected Collections")} <span className="ms-2 rounded-full bg-gold/10 px-2 py-0.5 text-xs font-medium tracking-wider text-accent">{selectedCollectionIds.length} / 4 {t("selected", "Selected")}</span></p>
+            {isMaxReached && <p className="text-xs text-burgundy mt-1">{t("max_4_collections", "Maximum 4 collections.")}</p>}
           </div>
           <div className="flex flex-wrap items-center gap-2">
             {isDirty && (
-              <button type="button" onClick={handleDiscard} disabled={saving} className="btn-secondary h-10 px-4 text-[0.6rem] disabled:opacity-50">
+              <button type="button" onClick={handleDiscard} disabled={saving} className="btn-secondary h-10 px-4 text-xs disabled:opacity-50">
                 {t("discard_changes", "Discard Changes")}
               </button>
             )}
-            <button type="button" onClick={handleSave} disabled={!isDirty || saving} className="btn-primary flex h-10 items-center gap-2 px-4 text-[0.6rem] disabled:opacity-50">
+            <button type="button" onClick={handleSave} disabled={!isDirty || saving} className="btn-primary flex h-10 items-center gap-2 px-4 text-xs disabled:opacity-50">
               {saving ? t("landing_saving", "Saving...") : t("save_collections", "Save Collections")}
             </button>
           </div>
         </div>
 
         <div className="mb-4">
-          <button type="button" onClick={() => setShowAdd(!showAdd)} disabled={saving} className="btn-secondary h-10 w-full px-5 text-[0.65rem] disabled:opacity-50 sm:w-auto">
+          <button type="button" onClick={() => setShowAdd(!showAdd)} disabled={saving} className="btn-secondary h-10 w-full px-5 text-xs disabled:opacity-50 sm:w-auto">
             {showAdd ? t("close_search", "Close Search") : t("search_add_collections", "Search & Add Collections")}
           </button>
         </div>
 
         {showAdd && (
-          <div className="mb-6 border-y border-white/[0.06] py-4">
+          <div className="mb-6 border-y border-line py-4">
             <input type="text" value={searchQuery} onChange={(e) => handleSearch(e.target.value)} placeholder={t("landing_search_collections", "Search collections by name or slug...")} className="input-premium w-full mb-3 bg-surface" />
             {searchResults.length > 0 && (
               <div className="max-h-64 space-y-2 overflow-y-auto pe-2">
                 {searchResults.map((c) => {
                   const isSelected = localSelectedCollectionIds.includes(c.id);
                   return (
-                    <div key={c.id} className="flex items-center gap-3 rounded-lg border border-white/[0.04] bg-black/25 p-2.5 transition-colors hover:border-white/[0.1] sm:gap-4">
-                      <div className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-md bg-white/5">
-                        {c.image ? <SafeImage src={c.image} alt={c.name} fill className="object-cover" sizes="40px" /> : <span className="text-[0.5rem] text-white/30">{t("img", "IMG")}</span>}
+                    <div key={c.id} className="flex items-center gap-3 rounded-lg border border-line bg-surface p-2.5 transition-colors hover:border-line sm:gap-4">
+                      <div className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-md bg-surface">
+                        {c.image ? <SafeImage src={c.image} alt={c.name} fill className="object-cover" sizes="40px" /> : <span className="text-xs text-secondary">{t("img", "IMG")}</span>}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm text-white truncate">{c.name}</p>
-                        <p className="text-[0.6rem] text-white/40 mt-0.5">/{c.slug}</p>
+                        <p className="text-sm text-foreground truncate">{c.name}</p>
+                        <p className="text-xs text-secondary mt-0.5">/{c.slug}</p>
                       </div>
-                      <button type="button" onClick={() => handleAdd(c)} disabled={isSelected || (isMaxReached && !isSelected) || saving} className={`inline-flex h-9 min-w-[72px] items-center justify-center rounded px-3 text-center text-[0.6rem] font-medium uppercase transition-all duration-200 ${isSelected ? "border border-emerald-500/30 bg-emerald-500/20 text-emerald-400" : "bg-white/10 text-white hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-30"}`}>
+                      <button type="button" onClick={() => handleAdd(c)} disabled={isSelected || (isMaxReached && !isSelected) || saving} className={`inline-flex h-9 min-w-[72px] items-center justify-center rounded px-3 text-center text-xs font-medium uppercase transition-all duration-200 ${isSelected ? "border border-emerald-500/30 bg-emerald-500/20 text-emerald-700" : "bg-surface text-foreground hover:bg-surface disabled:cursor-not-allowed disabled:opacity-30"}`}>
                         {isSelected ? "✔ Selected" : "Add"}
                       </button>
                     </div>
@@ -992,7 +996,7 @@ function CollectionsEditor({ configId, data, allCollections, onChange, localSele
         )}
 
         <div className="space-y-1">
-          <p className="text-[0.55rem] text-white/30 uppercase tracking-[0.1em] mb-2 px-1">{t("selected_order_drag", "Selected Order (Drag to reorder)")}</p>
+          <p className="text-xs text-secondary uppercase tracking-[0.1em] mb-2 px-1">{t("selected_order_drag", "Selected Order (Drag to reorder)")}</p>
           {selectedCollections.length > 0 ? (
             <Reorder.Group axis="y" values={localSelectedCollectionIds} onReorder={handleDragEnd} className="space-y-2">
               {localSelectedCollectionIds.map((id) => {
@@ -1000,18 +1004,18 @@ function CollectionsEditor({ configId, data, allCollections, onChange, localSele
                 if (!col) return null;
                 return (
                   <Reorder.Item key={id} value={id} className="cursor-grab active:cursor-grabbing">
-                    <div className={`flex min-h-[72px] items-center gap-3 rounded-lg border ${saving ? 'opacity-50' : ''} border-white/[0.08] bg-black/20 p-3 transition-colors hover:border-gold/30 sm:gap-4`}>
-                      <div className="text-white/20 hover:text-white/40 cursor-grab px-1">
+                    <div className={`flex min-h-[72px] items-center gap-3 rounded-lg border ${saving ? 'opacity-50' : ''} border-line bg-surface p-3 transition-colors hover:border-gold/30 sm:gap-4`}>
+                      <div className="text-secondary hover:text-secondary cursor-grab px-1">
                         <svg width="12" height="20" viewBox="0 0 12 20" fill="currentColor"><path d="M4 4C4 5.10457 3.10457 6 2 6C0.89543 6 0 5.10457 0 4C0 2.89543 0.89543 2 2 2C3.10457 2 4 2.89543 4 4ZM4 10C4 11.1046 3.10457 12 2 12C0.89543 12 0 11.1046 0 10C0 8.89543 0.89543 8 2 8C3.10457 8 4 8.89543 4 10ZM4 16C4 17.1046 3.10457 18 2 18C0.89543 18 0 17.1046 0 16C0 14.8954 0.89543 14 2 14C3.10457 14 4 14.8954 4 16ZM12 4C12 5.10457 11.1046 6 10 6C8.89543 6 8 5.10457 8 4C8 2.89543 8.89543 2 10 2C11.1046 2 12 2.89543 12 4ZM12 10C12 11.1046 11.1046 12 10 12C8.89543 12 8 11.1046 8 10C8 8.89543 8.89543 8 10 8C11.1046 8 12 8.89543 12 10ZM12 16C12 17.1046 11.1046 18 10 18C8.89543 18 8 17.1046 8 16C8 14.8954 8.89543 14 10 14C11.1046 14 12 14.8954 12 16Z"/></svg>
                       </div>
-                      <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg border border-white/[0.04] bg-black/50">
-                        {col.image ? <SafeImage src={col.image} alt={col.name} fill className="object-cover" sizes="48px" /> : <span className="flex h-full items-center justify-center text-[0.5rem] text-white/20">{t("img", "IMG")}</span>}
+                      <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg border border-line bg-surface">
+                        {col.image ? <SafeImage src={col.image} alt={col.name} fill className="object-cover" sizes="48px" /> : <span className="flex h-full items-center justify-center text-xs text-secondary">{t("img", "IMG")}</span>}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-[0.85rem] font-medium text-white truncate">{col.name}</p>
-                        <p className="text-[0.65rem] text-white/40 mt-0.5">/{col.slug}</p>
+                        <p className="text-sm font-medium text-foreground truncate">{col.name}</p>
+                        <p className="text-xs text-secondary mt-0.5">/{col.slug}</p>
                       </div>
-                      <button type="button" onClick={() => handleRemove(id)} disabled={saving} aria-label={`Remove ${col.name}`} className="text-[0.6rem] text-white/50 hover:text-burgundy hover:bg-burgundy/10 font-medium uppercase px-3 py-2 rounded-md transition-all duration-200">
+                      <button type="button" onClick={() => handleRemove(id)} disabled={saving} aria-label={`Remove ${col.name}`} className="text-xs text-secondary hover:text-burgundy hover:bg-burgundy/10 font-medium uppercase px-3 py-2 rounded-md transition-all duration-200">
                         Remove
                       </button>
                     </div>
@@ -1020,10 +1024,10 @@ function CollectionsEditor({ configId, data, allCollections, onChange, localSele
               })}
             </Reorder.Group>
           ) : (
-            <div className="py-12 border border-dashed border-white/[0.1] rounded-xl flex flex-col items-center justify-center bg-surface/30">
+            <div className="py-12 border border-dashed border-line rounded-xl flex flex-col items-center justify-center bg-surface/30">
               <span className="text-2xl mb-2 opacity-20">⊞</span>
-              <p className="text-sm text-white/40">{t("no_collections_selected", "No collections selected.")}</p>
-              <p className="text-[0.6rem] text-white/30 mt-1">{t("no_collections_selected_desc", "Search and add collections to feature them on the landing page.")}</p>
+              <p className="text-sm text-secondary">{t("no_collections_selected", "No collections selected.")}</p>
+              <p className="text-xs text-secondary mt-1">{t("no_collections_selected_desc", "Search and add collections to feature them on the landing page.")}</p>
             </div>
           )}
         </div>
@@ -1052,8 +1056,8 @@ function TestimonialsEditor({ data, onChange, onManage }: { data: Record<string,
       </SectionCard>
       {onManage && (
         <SectionCard title={t("manage_testimonials", "Manage Testimonials")} icon="♢">
-          <p className="text-[0.65rem] text-white/45 mb-3">{t("testimonials_desc", "Create, edit, delete, and reorder testimonials shown on the homepage.")}</p>
-          <button type="button" onClick={onManage} className="btn-primary text-[0.6rem]">{t("manage_testimonials", "Manage Testimonials")}</button>
+          <p className="text-xs text-secondary mb-3">{t("testimonials_desc", "Create, edit, delete, and reorder testimonials shown on the homepage.")}</p>
+          <button type="button" onClick={onManage} className="btn-primary text-xs">{t("manage_testimonials", "Manage Testimonials")}</button>
         </SectionCard>
       )}
     </div>
@@ -1132,9 +1136,9 @@ function SeoEditor({ data, onChange }: { data: Record<string, string>; onChange:
     <div className="mx-auto w-full max-w-6xl space-y-6">
       <SectionCard title={t("search_engine", "Search Engine")} icon="🔍">
         <Input label={t("page_title", "Page Title")} name="title" value={data.title || ""} onChange={(v) => onChange({ title: v })} placeholder={t("ph_seo_title_default", "MONADATY — Premium Moroccan Beverages")} maxLength={70} />
-        <p className="text-[0.55rem] text-white/25 mt-1">{(data.title || "").length}/70 {t("characters", "characters")}</p>
+        <p className="text-xs text-secondary mt-1">{(data.title || "").length}/70 {t("characters", "characters")}</p>
         <Input label={t("meta_description", "Meta Description")} name="metaDescription" value={data.metaDescription || ""} onChange={(v) => onChange({ metaDescription: v })} rows={2} placeholder={t("ph_seo_desc_default", "Premium Moroccan beverages, crafted with intention...")} maxLength={160} />
-        <p className="text-[0.55rem] text-white/25">{(data.metaDescription || "").length}/160 {t("characters", "characters")}</p>
+        <p className="text-xs text-secondary">{(data.metaDescription || "").length}/160 {t("characters", "characters")}</p>
       </SectionCard>
       <SectionCard title={t("open_graph", "Open Graph (Facebook, LinkedIn)")} icon="📱">
         <Input label={t("og_title", "OG Title")} name="ogTitle" value={data.ogTitle || ""} onChange={(v) => onChange({ ogTitle: v })} placeholder={t("ph_seo_title_default", "MONADATY — Premium Moroccan Beverages")} />

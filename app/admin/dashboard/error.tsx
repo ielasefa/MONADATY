@@ -17,7 +17,7 @@ export default function AdminDashboardError({
   return (
     <div className="flex min-h-[60vh] items-center justify-center px-6 py-16">
       <div className="max-w-md text-center">
-        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-gold/30 bg-gold/10 text-gold">
+        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-gold/30 bg-gold/10 text-accent">
           <svg
             aria-hidden="true"
             viewBox="0 0 24 24"
@@ -33,25 +33,25 @@ export default function AdminDashboardError({
             />
          </svg>
        </div>
-        <h2 className="font-display text-2xl text-white">Dashboard failed</h2>
-        <p className="mt-3 text-sm text-white/55">
+        <h2 className="font-display text-2xl text-foreground">Dashboard failed</h2>
+        <p className="mt-3 text-sm text-secondary">
           We couldn&apos;t load your dashboard data. This is usually a temporary connection issue.
        </p>
         {error.digest ? (
-          <p className="mt-3 font-mono text-[0.65rem] text-white/30">
+          <p className="mt-3 font-mono text-xs text-secondary">
             Error ref: {error.digest}
          </p>
         ) : null}
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <button
             onClick={reset}
-            className="btn-primary h-11 rounded-lg bg-gold px-6 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-black transition hover:bg-gold/90"
+            className="btn-primary h-11 rounded-lg bg-gold px-6 text-xs font-semibold uppercase tracking-[0.08em] text-black transition hover:bg-gold/90"
           >
             Try again
          </button>
           <Link
             href="/admin/dashboard"
-            className="btn-secondary h-11 rounded-lg border border-white/[0.06] bg-card px-6 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-white/70 transition hover:bg-surface hover:text-white"
+            className="btn-secondary h-11 rounded-lg border border-line bg-card px-6 text-xs font-semibold uppercase tracking-[0.08em] text-secondary transition hover:bg-surface hover:text-foreground"
           >
             Reload page
          </Link>

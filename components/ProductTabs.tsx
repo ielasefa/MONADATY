@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useTranslation } from "@/hooks/useTranslation";
 import { PREMIUM_EASE } from "@/lib/motion";
 
@@ -34,7 +35,7 @@ export function ProductTabs({ description, ingredients, nutrition }: ProductTabs
   if (sections.length === 1) {
     return (
       <div>
-        <p className="max-w-3xl whitespace-pre-line text-[0.95rem] leading-[1.9] text-white/55">
+        <p className="max-w-3xl whitespace-pre-line text-[0.95rem] leading-[1.9] text-secondary">
           {sections[0].content}
         </p>
       </div>
@@ -49,7 +50,7 @@ export function ProductTabs({ description, ingredients, nutrition }: ProductTabs
       <div
         role="tablist"
         aria-label="Product details"
-        className="flex gap-10 overflow-x-auto border-b border-white/[0.08] md:gap-14"
+        className="flex gap-10 overflow-x-auto border-b border-line md:gap-14"
       >
         {sections.map((section) => {
           const isActive = section.id === activeId;
@@ -61,8 +62,8 @@ export function ProductTabs({ description, ingredients, nutrition }: ProductTabs
               aria-selected={isActive}
               aria-controls={`panel-${section.id}`}
               onClick={() => setActiveId(section.id)}
-              className={`relative -mb-px shrink-0 py-5 text-[0.72rem] font-medium uppercase tracking-[0.24em] transition-colors duration-300 focus-visible:outline-none md:py-6 ${
-                isActive ? "text-white" : "text-white/35 hover:text-white/70"
+              className={`relative -mb-px shrink-0 py-5 text-sm font-medium uppercase tracking-[0.08em] transition-colors duration-300 focus-visible:outline-none md:py-6 ${
+                isActive ? "text-foreground" : "text-secondary hover:text-secondary"
               }`}
             >
               {section.label}
@@ -91,7 +92,7 @@ export function ProductTabs({ description, ingredients, nutrition }: ProductTabs
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: shouldReduceMotion ? 0 : 0.25, ease: PREMIUM_EASE }}
           >
-            <p className="max-w-3xl whitespace-pre-line text-[0.95rem] leading-[1.9] text-white/55">
+            <p className="max-w-3xl whitespace-pre-line text-[0.95rem] leading-[1.9] text-secondary">
               {activeSection.content}
             </p>
           </motion.div>

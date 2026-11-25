@@ -1,7 +1,8 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { MotionConfig, motion, useReducedMotion } from "framer-motion";
+import { MotionConfig, motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { usePathname } from "next/navigation";
 import { PREMIUM_EASE } from "@/lib/motion";
 

@@ -1,0 +1,120 @@
+{
+  "checks": [
+    {
+      "language": "fr",
+      "name": "cart",
+      "width": 360,
+      "overflow": false
+    },
+    {
+      "language": "fr",
+      "name": "cart",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "language": "fr",
+      "name": "cart",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "language": "fr",
+      "name": "cart",
+      "width": 1024,
+      "overflow": false
+    },
+    {
+      "language": "fr",
+      "name": "cart",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "language": "fr",
+      "name": "cart",
+      "width": 1920,
+      "overflow": false
+    },
+    {
+      "language": "ar",
+      "name": "cart",
+      "width": 360,
+      "overflow": false
+    },
+    {
+      "language": "ar",
+      "name": "cart",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "language": "ar",
+      "name": "cart",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "language": "ar",
+      "name": "cart",
+      "width": 1024,
+      "overflow": false
+    },
+    {
+      "language": "ar",
+      "name": "cart",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "language": "ar",
+      "name": "cart",
+      "width": 1920,
+      "overflow": false
+    },
+    {
+      "language": "ar",
+      "name": "checkout-populated",
+      "width": 360,
+      "overflow": false
+    },
+    {
+      "language": "ar",
+      "name": "checkout-populated",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "language": "ar",
+      "name": "checkout-populated",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "language": "ar",
+      "name": "checkout-populated",
+      "width": 1024,
+      "overflow": false
+    },
+    {
+      "language": "ar",
+      "name": "checkout-populated",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "language": "ar",
+      "name": "checkout-populated",
+      "width": 1920,
+      "overflow": false
+    }
+  ],
+  "accessibility": [
+    {
+      "language": "ar",
+      "name": "checkout-populated",
+      "violations": []
+    }
+  ],
+  "errors": []
+}

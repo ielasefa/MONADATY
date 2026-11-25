@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useTranslation } from "@/hooks/useTranslation";
 import { EASE, Panel, SectionHeading, EmptyState } from "./ui";
 import { IconLayers, IconAlert, IconCheck, IconChevronRight } from "./icons";
@@ -21,7 +22,7 @@ function ProgressBar({
 }) {
   const pct = max > 0 ? (value / max) * 100 : 0;
   return (
-    <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/[0.05]">
+    <div className="h-1.5 w-full overflow-hidden rounded-full bg-surface">
       <motion.div
         className={`h-full rounded-full ${tone}`}
         initial={{ width: 0 }}
@@ -52,14 +53,14 @@ export function ShowcaseHealth({
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {/* Collection showcase */}
         <Panel className="lg:col-span-2">
-          <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
+          <div className="flex items-center justify-between border-b border-line px-6 py-4">
             <div className="flex items-center gap-2.5">
-              <IconLayers className="h-4 w-4 text-gold" />
-              <h3 className="text-sm font-semibold text-white">{t("collection_showcase", "Collection Showcase")}</h3>
+              <IconLayers className="h-4 w-4 text-accent" />
+              <h3 className="text-sm font-semibold text-foreground">{t("collection_showcase", "Collection Showcase")}</h3>
             </div>
             <Link
               href="/admin/collections-showcase"
-              className="inline-flex items-center gap-1 text-[0.64rem] font-semibold uppercase tracking-[0.16em] text-gold transition-colors hover:text-gold/80"
+              className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-[0.08em] text-accent transition-colors hover:text-accent"
             >
               {t("manage_products", "Manage")}
               <IconChevronRight className="h-3 w-3 rtl:rotate-180" />
@@ -70,12 +71,12 @@ export function ShowcaseHealth({
             <div className="space-y-5">
               <div>
                 <div className="flex items-baseline justify-between">
-                  <p className="text-[0.64rem] font-semibold uppercase tracking-[0.16em] text-white/45">
+                  <p className="text-xs font-semibold uppercase tracking-[0.08em] text-secondary">
                     {t("configured_collections", "Configured Collections")}
                   </p>
-                  <p className="font-display text-2xl font-semibold text-gold">
+                  <p className="font-display text-2xl font-semibold text-accent">
                     {showcaseStats.configuredCollections}
-                    <span className="text-sm font-normal text-white/35"> / {showcaseStats.totalCollections}</span>
+                    <span className="text-sm font-normal text-secondary"> / {showcaseStats.totalCollections}</span>
                   </p>
                 </div>
                 <div className="mt-2">
@@ -91,16 +92,16 @@ export function ShowcaseHealth({
 
               <div>
                 <div className="flex items-baseline justify-between">
-                  <p className="text-[0.64rem] font-semibold uppercase tracking-[0.16em] text-white/45">
+                  <p className="text-xs font-semibold uppercase tracking-[0.08em] text-secondary">
                     {t("featured_products", "Featured Products")}
                   </p>
-                  <p className="font-display text-2xl font-semibold text-white">{showcaseStats.configuredProducts}</p>
+                  <p className="font-display text-2xl font-semibold text-foreground">{showcaseStats.configuredProducts}</p>
                 </div>
                 <div className="mt-2">
                   <ProgressBar
                     value={showcaseStats.configuredProducts}
                     max={showcaseStats.totalCollections * 3}
-                    tone="bg-white/20"
+                    tone="bg-surface"
                     delay={0.3}
                     reduce={reduce}
                   />
@@ -108,10 +109,10 @@ export function ShowcaseHealth({
               </div>
 
               <span
-                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.14em] ${
+                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] ${
                   allConfigured
-                    ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
-                    : "border-amber-500/20 bg-amber-500/10 text-amber-400"
+                    ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-700"
+                    : "border-amber-500/20 bg-amber-500/10 text-amber-700"
                 }`}
               >
                 {allConfigured ? <IconCheck className="h-3 w-3" /> : <IconAlert className="h-3 w-3" />}
@@ -135,16 +136,16 @@ export function ShowcaseHealth({
                 >
                   <Link
                     href="/admin/collections-showcase"
-                    className="flex items-center justify-between gap-3 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-2.5 transition-colors duration-200 hover:border-gold/25"
+                    className="flex items-center justify-between gap-3 rounded-lg border border-line bg-surface px-4 py-2.5 transition-colors duration-200 hover:border-gold/25"
                   >
-                    <span className="truncate text-[0.8rem] font-medium text-white">{c.name}</span>
+                    <span className="truncate text-sm font-medium text-foreground">{c.name}</span>
                     <span
-                      className={`inline-flex shrink-0 items-center rounded-full px-2 py-0.5 text-[0.6rem] font-semibold uppercase tracking-[0.12em] ${
+                      className={`inline-flex shrink-0 items-center rounded-full px-2 py-0.5 text-xs font-semibold uppercase tracking-[0.12em] ${
                         c.configured === 3
-                          ? "bg-emerald-500/10 text-emerald-400"
+                          ? "bg-emerald-500/10 text-emerald-700"
                           : c.configured > 0
-                            ? "bg-amber-500/10 text-amber-400"
-                            : "bg-white/[0.05] text-white/40"
+                            ? "bg-amber-500/10 text-amber-700"
+                            : "bg-surface text-secondary"
                       }`}
                     >
                       {c.configured} / 3
@@ -158,9 +159,9 @@ export function ShowcaseHealth({
 
         {/* Low stock */}
         <Panel>
-          <div className="flex items-center gap-2.5 border-b border-white/[0.06] px-6 py-4">
+          <div className="flex items-center gap-2.5 border-b border-line px-6 py-4">
             <IconAlert className="h-4 w-4 text-[var(--rouge)]" />
-            <h3 className="text-sm font-semibold text-white">{t("low_stock_products", "Low Stock")}</h3>
+            <h3 className="text-sm font-semibold text-foreground">{t("low_stock_products", "Low Stock")}</h3>
           </div>
 
           <div className="p-6">
@@ -184,7 +185,7 @@ export function ShowcaseHealth({
                         className="flex items-center justify-between gap-3"
                       >
                         <div className="min-w-0">
-                          <p className="truncate text-[0.8rem] font-medium text-white">{p.name}</p>
+                          <p className="truncate text-sm font-medium text-foreground">{p.name}</p>
                           <div className="mt-1.5 w-28">
                             <ProgressBar
                               value={Math.min(stock, 5)}
@@ -196,12 +197,12 @@ export function ShowcaseHealth({
                           </div>
                         </div>
                         <span
-                          className={`inline-flex shrink-0 items-center rounded-full px-2.5 py-1 text-[0.62rem] font-bold ${
+                          className={`inline-flex shrink-0 items-center rounded-full px-2.5 py-1 text-xs font-bold ${
                             critical
                               ? "bg-[rgba(110,31,42,0.15)] text-[var(--rouge)]"
                               : stock <= 2
-                                ? "bg-amber-500/10 text-amber-400"
-                                : "bg-emerald-500/10 text-emerald-400"
+                                ? "bg-amber-500/10 text-amber-700"
+                                : "bg-emerald-500/10 text-emerald-700"
                           }`}
                         >
                           {stock} {t("left_label", "left")}
@@ -212,7 +213,7 @@ export function ShowcaseHealth({
                 </div>
                 <Link
                   href="/admin/products"
-                  className="mt-5 inline-flex items-center gap-1 text-[0.64rem] font-semibold uppercase tracking-[0.16em] text-gold transition-colors hover:text-gold/80"
+                  className="mt-5 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-[0.08em] text-accent transition-colors hover:text-accent"
                 >
                   {t("restock_products", "Restock products")}
                   <IconChevronRight className="h-3 w-3 rtl:rotate-180" />

@@ -32,10 +32,10 @@ export function ShopForm({ products, categories, collections, saveProduct }: Pro
     <div>
       <div className="mb-10 flex items-center justify-between">
         <div>
-          <h1 className="font-display text-3xl font-semibold tracking-tight text-white">{t("products")}</h1>
+          <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground">{t("products")}</h1>
           <p className="mt-1 text-sm text-muted">{t("products_found_plural", { count: String(visibleProducts.length) })}</p>
         </div>
-          <button onClick={() => setEditingId("__new__")} className="btn-secondary h-12 rounded-button px-5 text-sm font-medium uppercase tracking-[0.08em] text-white transition hover:bg-secondary/90">
+          <button onClick={() => setEditingId("__new__")} className="btn-secondary h-12 rounded-button px-5 text-sm font-medium uppercase tracking-[0.08em] text-foreground transition hover:bg-secondary/90">
             {tc("new_product")}
           </button>
       </div>
@@ -55,8 +55,8 @@ export function ShopForm({ products, categories, collections, saveProduct }: Pro
   const stockStatus = p.stock <= 0 ? "out" : p.stock <= (p.lowStockThreshold ?? 5) ? "low" : "in";
   const statusStyles = {
   out: "border-burgundy/30 bg-burgundy/10 text-burgundy",
-  low: "border-gold/30 bg-gold/10 text-gold",
-  in: "border-white/[0.06] bg-white/[0.04] text-white/60",
+  low: "border-gold/30 bg-gold/10 text-accent",
+  in: "border-line bg-surface text-secondary",
 };
           const statusIcons = {
             out: "\u274C",
@@ -69,23 +69,23 @@ export function ShopForm({ products, categories, collections, saveProduct }: Pro
             in: t("in_stock_label"),
           };
           return (
-          <div key={p.id} className="luxury-card flex items-center gap-4 rounded-card border border-white/[0.06] bg-card p-5 transition-all duration-300 hover:bg-card">
+          <div key={p.id} className="luxury-card flex items-center gap-4 rounded-card border border-line bg-card p-5 transition-all duration-300 hover:bg-card">
             <div className="flex-1">
-              <p className="font-medium text-white">{p.name}</p>
+              <p className="font-medium text-foreground">{p.name}</p>
               <p className="mt-0.5 text-sm text-muted">{p.price} &middot; {p.category}</p>
             </div>
             <span
-              className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.1em] ${statusStyles[stockStatus]}`}
+              className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.1em] ${statusStyles[stockStatus]}`}
               title={`${statusLabels[stockStatus]}: ${p.stock} units remaining`}
               aria-label={`${statusLabels[stockStatus]}: ${p.stock} units remaining`}
             >
-              <span className="text-[0.5rem]">{statusIcons[stockStatus]}</span>
+              <span className="text-xs">{statusIcons[stockStatus]}</span>
               <span>{statusLabels[stockStatus]}</span>
               <span className="ml-0.5 opacity-70">({p.stock})</span>
             </span>
             <button
               onClick={() => setEditingId(p.id)}
-              className="text-sm text-gold hover:underline"
+              className="text-sm text-accent hover:underline"
               aria-label={`${t("edit")} ${p.name}`}
             >
               {t("edit")}
@@ -154,8 +154,8 @@ function ProductEditor({ product, categories, collections, onSave, onCancel }: {
   };
 
   return (
-        <div className="glass mb-8 rounded-card border border-white/[0.06] p-8">
-      <h2 className="font-display mb-6 text-lg font-semibold text-white">{isNew ? tc("new_product") : `${tc("edit_product")}: ${product.name}`}</h2>
+        <div className="glass mb-8 rounded-card border border-line p-8">
+      <h2 className="font-display mb-6 text-lg font-semibold text-foreground">{isNew ? tc("new_product") : `${tc("edit_product")}: ${product.name}`}</h2>
       <form onSubmit={handleSubmit} className="space-y-5">
         {!isNew && <input type="hidden" name="id" value={product.id} />}
         <div className="grid grid-cols-2 gap-4">
@@ -171,7 +171,7 @@ function ProductEditor({ product, categories, collections, onSave, onCancel }: {
           <Select label={t("category")} name="category" options={categories.map((c) => c.name)} defaultValue={product?.category} />
           <Select label={t("collection")} name="collection" options={collections.map((c) => c.slug)} defaultValue={product?.collection} />
           <div className="space-y-1.5">
-            <label className="luxury-label block text-[10px] text-muted">{tc("image_label")}</label>
+            <label className="luxury-label block text-xs text-muted">{tc("image_label")}</label>
             <input type="hidden" name="image" value={product?.image || ""} />
             <SingleImageUploader
               value={product?.image || ""}
@@ -184,7 +184,7 @@ function ProductEditor({ product, categories, collections, onSave, onCancel }: {
         </div>
         <div className="grid grid-cols-2 gap-4">
           <Select label={tc("visual_label")} name="visual" options={["", "can", "bottle", "glass"]} defaultValue={product?.visual} />
-          <Field label={tc("accent_color_label")} name="accent" defaultValue={product?.accent || "#D5B87D"} type="color" />
+          <Field label={tc("accent_color_label")} name="accent" defaultValue={product?.accent || "#8C6228"} type="color" />
         </div>
         <Field label={t("description_label")} name="description" defaultValue={product?.description} rows={3} />
         <div className="grid grid-cols-2 gap-4">
@@ -195,18 +195,18 @@ function ProductEditor({ product, categories, collections, onSave, onCancel }: {
         <div className="flex items-center gap-6">
           <label className="flex items-center gap-2 text-sm text-muted">
             <input type="hidden" name="featured" value="false" />
-            <input type="checkbox" name="featured" value="true" defaultChecked={product?.featured} className="h-4 w-4 rounded border-white/10 bg-surface text-gold focus:ring-gold/30" /> {tc("featured_label")}
+            <input type="checkbox" name="featured" value="true" defaultChecked={product?.featured} className="h-4 w-4 rounded border-line bg-surface text-accent focus:ring-gold/30" /> {tc("featured_label")}
           </label>
           <label className="flex items-center gap-2 text-sm text-muted">
             <input type="hidden" name="available" value="false" />
-            <input type="checkbox" name="available" value="true" defaultChecked={product?.available ?? true} className="h-4 w-4 rounded border-white/10 bg-surface text-gold focus:ring-gold/30" /> {tc("available_label")}
+            <input type="checkbox" name="available" value="true" defaultChecked={product?.available ?? true} className="h-4 w-4 rounded border-line bg-surface text-accent focus:ring-gold/30" /> {tc("available_label")}
           </label>
         </div>
         <div className="flex gap-3">
-          <button type="submit" disabled={isPending} className="btn-primary h-12 rounded-button bg-burgundy px-6 text-sm font-medium text-white transition hover:bg-burgundy/90 disabled:opacity-50">
+          <button type="submit" disabled={isPending} className="btn-primary h-12 rounded-button bg-burgundy px-6 text-sm font-medium text-foreground transition hover:bg-burgundy/90 disabled:opacity-50">
             {isPending ? tc("saving", "Saving...") : isNew ? tc("create_product", "Create Product") : tc("update_product", "Update Product")}
           </button>
-          <button type="button" onClick={onCancel} disabled={isPending} className="btn-secondary h-12 rounded-button border border-white/[0.06] bg-card px-6 text-sm text-muted transition hover:bg-surface hover:text-white disabled:opacity-50">{tc("cancel")}</button>
+          <button type="button" onClick={onCancel} disabled={isPending} className="btn-secondary h-12 rounded-button border border-line bg-card px-6 text-sm text-muted transition hover:bg-surface hover:text-foreground disabled:opacity-50">{tc("cancel")}</button>
         </div>
       </form>
     </div>
@@ -216,11 +216,11 @@ function ProductEditor({ product, categories, collections, onSave, onCancel }: {
 function Field({ label, name, defaultValue, type, rows }: { label: string; name: string; defaultValue?: string; type?: string; rows?: number }) {
   return (
     <div className="space-y-1.5">
-      <label className="luxury-label block text-[10px] text-muted">{label}</label>
+      <label className="luxury-label block text-xs text-muted">{label}</label>
       {rows ? (
-          <textarea name={name} defaultValue={defaultValue} rows={rows} className="input-premium h-12 w-full rounded-input border border-white/[0.06] bg-surface px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-gold/20" />
+          <textarea name={name} defaultValue={defaultValue} rows={rows} className="input-premium h-12 w-full rounded-input border border-line bg-surface px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-gold/20" />
         ) : (
-          <input name={name} type={type || "text"} defaultValue={defaultValue} className="input-premium h-12 w-full rounded-input border border-white/[0.06] bg-surface px-4 text-sm text-white outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-gold/20" />
+          <input name={name} type={type || "text"} defaultValue={defaultValue} className="input-premium h-12 w-full rounded-input border border-line bg-surface px-4 text-sm text-foreground outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-gold/20" />
       )}
     </div>
   );
@@ -229,8 +229,8 @@ function Field({ label, name, defaultValue, type, rows }: { label: string; name:
 function Select({ label, name, options, defaultValue }: { label: string; name: string; options: string[]; defaultValue?: string }) {
   return (
     <div className="space-y-1.5">
-      <label className="luxury-label block text-[10px] text-muted">{label}</label>
-      <select name={name} defaultValue={defaultValue} className="input-premium h-12 w-full rounded-input border border-white/[0.06] bg-surface px-4 text-sm text-white outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-gold/20">
+      <label className="luxury-label block text-xs text-muted">{label}</label>
+      <select name={name} defaultValue={defaultValue} className="input-premium h-12 w-full rounded-input border border-line bg-surface px-4 text-sm text-foreground outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-gold/20">
         {options.map((o) => <option key={o} value={o}>{o}</option>)}
       </select>
     </div>

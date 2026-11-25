@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useTranslation } from "@/hooks/useTranslation";
 import { ProductImage } from "@/components/ProductImage";
 import type { StoredOrder } from "@/types";
@@ -10,10 +11,10 @@ import { EASE, Panel, SectionHeading, StatusBadge, EmptyState } from "./ui";
 import { IconBag, IconTrophy, IconUser, IconChevronRight } from "./icons";
 
 const AVATAR_COLORS = [
-  "bg-gold/15 text-gold",
-  "bg-emerald-500/15 text-emerald-400",
-  "bg-blue-500/15 text-blue-400",
-  "bg-purple-500/15 text-purple-400",
+  "bg-gold/15 text-accent",
+  "bg-emerald-500/15 text-emerald-700",
+  "bg-blue-500/15 text-blue-700",
+  "bg-purple-500/15 text-purple-700",
   "bg-[rgba(110,31,42,0.15)] text-[var(--rouge)]",
 ];
 
@@ -53,21 +54,21 @@ export function OrdersActivity({
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {/* Latest orders */}
         <Panel className="lg:col-span-2">
-          <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
+          <div className="flex items-center justify-between border-b border-line px-6 py-4">
             <div className="flex items-center gap-2.5">
-              <IconBag className="h-4 w-4 text-gold" />
-              <h3 className="text-sm font-semibold text-white">{t("latest_orders", "Latest Orders")}</h3>
+              <IconBag className="h-4 w-4 text-accent" />
+              <h3 className="text-sm font-semibold text-foreground">{t("latest_orders", "Latest Orders")}</h3>
             </div>
             <Link
               href="/admin/orders"
-              className="inline-flex items-center gap-1 text-[0.64rem] font-semibold uppercase tracking-[0.16em] text-gold transition-colors hover:text-gold/80"
+              className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-[0.08em] text-accent transition-colors hover:text-accent"
             >
               {t("view_all", "View all")}
               <IconChevronRight className="h-3 w-3 rtl:rotate-180" />
             </Link>
           </div>
 
-          <div className="divide-y divide-white/[0.05]">
+          <div className="divide-y divide-line">
             {latestOrders.length === 0 && (
               <EmptyState
                 title={t("no_orders_yet", "No orders yet")}
@@ -83,22 +84,22 @@ export function OrdersActivity({
               >
                 <Link
                   href={`/admin/orders/${o.id}`}
-                  className="group flex items-center gap-4 px-6 py-3.5 transition-colors duration-200 hover:bg-white/[0.02]"
+                  className="group grid grid-cols-[36px_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 px-5 py-4 transition-colors duration-200 hover:bg-surface sm:flex sm:gap-4 sm:px-6"
                 >
                   <span
-                    className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[0.68rem] font-semibold ${avatarClass(o.customerName)}`}
+                    className={`row-span-2 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${avatarClass(o.customerName)}`}
                   >
                     {initials(o.customerName)}
                   </span>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-white group-hover:text-gold">
+                  <div className="col-start-2 row-start-1 min-w-0 flex-1">
+                    <p className="truncate text-sm font-medium text-foreground group-hover:text-accent">
                       {o.customerName}
                     </p>
-                    <p className="font-mono text-[0.68rem] text-muted">{o.orderNumber}</p>
+                    <p className="font-mono text-xs text-muted">{o.orderNumber}</p>
                   </div>
-                  <span className="hidden text-[0.68rem] text-muted sm:block">{fmtDate(o.createdAt)}</span>
-                  <StatusBadge status={o.orderStatus} label={t(`status_${o.orderStatus}`, o.orderStatus.replace(/_/g, " "))} />
-                  <p className="w-20 shrink-0 text-end text-sm font-semibold text-white">{o.total}</p>
+                  <span className="hidden text-xs text-muted sm:block">{fmtDate(o.createdAt)}</span>
+                  <span className="col-span-2 col-start-2 row-start-2 inline-flex"><StatusBadge status={o.orderStatus} label={t(`status_${o.orderStatus}`, o.orderStatus.replace(/_/g, " "))} /></span>
+                  <p className="col-start-3 row-start-1 shrink-0 text-end text-sm font-semibold text-foreground sm:w-20">{o.total}</p>
                 </Link>
               </motion.div>
             ))}
@@ -107,9 +108,9 @@ export function OrdersActivity({
 
         {/* Top products */}
         <Panel>
-          <div className="flex items-center gap-2.5 border-b border-white/[0.06] px-6 py-4">
-            <IconTrophy className="h-4 w-4 text-gold" />
-            <h3 className="text-sm font-semibold text-white">{t("top_selling_products", "Top Selling")}</h3>
+          <div className="flex items-center gap-2.5 border-b border-line px-6 py-4">
+            <IconTrophy className="h-4 w-4 text-accent" />
+            <h3 className="text-sm font-semibold text-foreground">{t("top_selling_products", "Top Selling")}</h3>
           </div>
 
           <div className="px-6 py-4">
@@ -133,13 +134,13 @@ export function OrdersActivity({
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex min-w-0 items-center gap-2.5">
                         <span
-                          className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-[0.64rem] font-bold ${
-                            i === 0 ? "bg-gold/20 text-gold" : "bg-white/[0.05] text-white/50"
+                          className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-xs font-bold ${
+                            i === 0 ? "bg-gold/20 text-accent" : "bg-surface text-secondary"
                           }`}
                         >
                           {i + 1}
                         </span>
-                        <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg border border-white/[0.06] bg-black/30">
+                        <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg border border-line bg-surface">
                           <ProductImage
                             product={p}
                             alt={p.name}
@@ -149,15 +150,15 @@ export function OrdersActivity({
                           />
                         </span>
                         <span className="min-w-0">
-                          <span className="block truncate text-[0.78rem] font-medium text-white">{p.name}</span>
-                          <span className="mt-0.5 block text-[0.6rem] text-white/35">{p.total.toFixed(2)} DH</span>
+                          <span className="block truncate text-sm font-medium text-foreground">{p.name}</span>
+                          <span className="mt-0.5 block text-xs text-secondary">{p.total.toFixed(2)} DH</span>
                         </span>
                       </div>
-                      <span className="shrink-0 text-[0.72rem] font-semibold text-muted">
+                      <span className="shrink-0 text-xs font-semibold text-muted">
                         {p.qty} {t("sold_label", "sold")}
                       </span>
                     </div>
-                    <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/[0.05]">
+                    <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-surface">
                       <motion.div
                         className="h-full rounded-full bg-gradient-to-r from-gold/70 to-gold"
                         initial={{ width: 0 }}
@@ -175,14 +176,14 @@ export function OrdersActivity({
 
       {/* Latest customers */}
       <Panel hover={false} className="overflow-hidden">
-        <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
+        <div className="flex items-center justify-between border-b border-line px-6 py-4">
           <div className="flex items-center gap-2.5">
-            <IconUser className="h-4 w-4 text-gold" />
-            <h3 className="text-sm font-semibold text-white">{t("latest_customers", "Latest Customers")}</h3>
+            <IconUser className="h-4 w-4 text-accent" />
+            <h3 className="text-sm font-semibold text-foreground">{t("latest_customers", "Latest Customers")}</h3>
           </div>
           <Link
             href="/admin/customers"
-            className="inline-flex items-center gap-1 text-[0.64rem] font-semibold uppercase tracking-[0.16em] text-gold transition-colors hover:text-gold/80"
+            className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-[0.08em] text-accent transition-colors hover:text-accent"
           >
             {t("view_all", "View all")}
             <IconChevronRight className="h-3 w-3 rtl:rotate-180" />
@@ -198,32 +199,32 @@ export function OrdersActivity({
           <div className="overflow-x-auto">
             <table className="w-full text-start">
               <thead>
-                <tr className="border-b border-white/[0.05] text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white/35">
+                <tr className="border-b border-line text-xs font-semibold uppercase tracking-[0.08em] text-secondary">
                   <th className="px-6 py-3 text-start font-semibold">{t("customer", "Customer")}</th>
                   <th className="hidden px-6 py-3 text-start font-semibold md:table-cell">{t("location", "Location")}</th>
                   <th className="px-6 py-3 text-end font-semibold">{t("orders_label", "Orders")}</th>
                   <th className="px-6 py-3 text-end font-semibold">{t("total_spent", "Total Spent")}</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/[0.05]">
+              <tbody className="divide-y divide-line">
                 {latestCustomers.map((c) => (
-                  <tr key={c.email} className="transition-colors duration-150 hover:bg-white/[0.02]">
+                  <tr key={c.email} className="transition-colors duration-150 hover:bg-surface">
                     <td className="px-6 py-3.5">
                       <div className="flex items-center gap-3">
                         <span
-                          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[0.68rem] font-semibold ${avatarClass(c.name)}`}
+                          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${avatarClass(c.name)}`}
                         >
                           {initials(c.name)}
                         </span>
                         <div className="min-w-0">
-                          <p className="truncate text-sm font-medium text-white">{c.name}</p>
-                          <p className="truncate text-[0.7rem] text-muted">{c.email}</p>
+                          <p className="truncate text-sm font-medium text-foreground">{c.name}</p>
+                          <p className="truncate text-xs text-muted">{c.email}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="hidden px-6 py-3.5 text-[0.78rem] text-muted md:table-cell">{c.city || "—"}</td>
-                    <td className="px-6 py-3.5 text-end text-[0.8rem] text-white/70">{c.totalOrders}</td>
-                    <td className="px-6 py-3.5 text-end text-sm font-semibold text-gold">
+                    <td className="hidden px-6 py-3.5 text-sm text-muted md:table-cell">{c.city || "—"}</td>
+                    <td className="px-6 py-3.5 text-end text-sm text-secondary">{c.totalOrders}</td>
+                    <td className="px-6 py-3.5 text-end text-sm font-semibold text-accent">
                       {c.totalSpent.toFixed(2)} DH
                     </td>
                   </tr>

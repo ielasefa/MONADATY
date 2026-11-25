@@ -166,13 +166,13 @@ export default function AdminTranslationsPage() {
 
   return (
     <div className="container-shell mx-auto px-6 py-10">
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="luxury-label mb-2">{t("content")}</p>
-          <h1 className="text-3xl font-semibold tracking-tight text-white">{t("translations")}</h1>
+          <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t("translations")}</h1>
           <p className="mt-1 text-sm text-muted">{t("translation_description")}</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <button onClick={() => setShowNew(!showNew)} className="btn-primary text-xs">{t("add_key")}</button>
           <button onClick={handleExport} className="btn-secondary text-xs">{t("export")}</button>
           <label className="btn-secondary inline-flex cursor-pointer items-center text-xs">
@@ -184,28 +184,28 @@ export default function AdminTranslationsPage() {
 
       {stats && (
         <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
-          <div className="rounded-card border border-white/[0.06] bg-card p-4">
-            <p className="text-[10px] text-muted">{t("total_keys")}</p>
-            <p className="mt-1 text-xl font-semibold text-white">{stats.total}</p>
+          <div className="rounded-card border border-line bg-card p-4">
+            <p className="text-xs text-muted">{t("total_keys")}</p>
+            <p className="mt-1 text-xl font-semibold text-foreground">{stats.total}</p>
           </div>
-          <div className="rounded-card border border-white/[0.06] bg-card p-4">
-            <p className="text-[10px] text-muted">{t("french")}</p>
-            <p className="mt-1 text-xl font-semibold text-white">{stats.fr.coverage}%</p>
-            <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+          <div className="rounded-card border border-line bg-card p-4">
+            <p className="text-xs text-muted">{t("french")}</p>
+            <p className="mt-1 text-xl font-semibold text-foreground">{stats.fr.coverage}%</p>
+            <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-surface">
               <div className="h-full rounded-full bg-gold" style={{ width: `${stats.fr.coverage}%` }} />
             </div>
           </div>
-          <div className="rounded-card border border-white/[0.06] bg-card p-4">
-            <p className="text-[10px] text-muted">{t("english")}</p>
-            <p className="mt-1 text-xl font-semibold text-white">{stats.en.coverage}%</p>
-            <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+          <div className="rounded-card border border-line bg-card p-4">
+            <p className="text-xs text-muted">{t("english")}</p>
+            <p className="mt-1 text-xl font-semibold text-foreground">{stats.en.coverage}%</p>
+            <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-surface">
               <div className="h-full rounded-full bg-gold" style={{ width: `${stats.en.coverage}%` }} />
             </div>
           </div>
-          <div className="rounded-card border border-white/[0.06] bg-card p-4">
-            <p className="text-[10px] text-muted">{t("arabic")}</p>
-            <p className="mt-1 text-xl font-semibold text-white">{stats.ar.coverage}%</p>
-            <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+          <div className="rounded-card border border-line bg-card p-4">
+            <p className="text-xs text-muted">{t("arabic")}</p>
+            <p className="mt-1 text-xl font-semibold text-foreground">{stats.ar.coverage}%</p>
+            <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-surface">
               <div className="h-full rounded-full bg-gold" style={{ width: `${stats.ar.coverage}%` }} />
             </div>
           </div>
@@ -213,17 +213,19 @@ export default function AdminTranslationsPage() {
       )}
 
       {showNew && (
-        <div className="mb-6 rounded-card border border-white/[0.06] bg-card p-5">
-          <h3 className="mb-3 text-sm font-semibold text-white">{t("create_translation_key")}</h3>
-          <div className="flex gap-3">
+        <div className="mb-6 rounded-card border border-line bg-card p-5">
+          <h3 className="mb-3 text-sm font-semibold text-foreground">{t("create_translation_key")}</h3>
+          <div className="grid min-w-0 gap-3 sm:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_auto_auto_auto]">
             <input
               value={newKey}
               onChange={e => setNewKey(e.target.value)}
               placeholder={t("translation_key_placeholder")}
-              className="input-premium flex-1 px-3 py-2 text-sm"
+              aria-label={t("key_label")}
+              className="input-premium min-w-0 px-3 py-2 text-sm"
             />
             <select
               value={newNamespace}
+              aria-label={t("namespace_label")}
               onChange={e => setNewNamespace(e.target.value)}
               className="input-premium px-3 py-2 text-sm"
             >
@@ -239,6 +241,7 @@ export default function AdminTranslationsPage() {
 
       <div className="mb-4 flex flex-wrap gap-3">
         <select
+          aria-label={t("namespace_label")}
           value={namespace}
           onChange={e => setNamespace(e.target.value)}
           className="input-premium px-3 py-1.5 text-xs"
@@ -250,9 +253,11 @@ export default function AdminTranslationsPage() {
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder={t("search_keys")}
-          className="input-premium flex-1 px-3 py-1.5 text-xs min-w-[200px]"
+          aria-label={t("search_keys")}
+          className="input-premium min-w-0 w-full px-3 py-1.5 text-sm sm:w-auto sm:flex-1"
         />
         <select
+          aria-label={t("status")}
           value={missing}
           onChange={e => setMissing(e.target.value)}
           className="input-premium px-3 py-1.5 text-xs"
@@ -265,11 +270,11 @@ export default function AdminTranslationsPage() {
         <button onClick={() => { fetchTranslations(); fetchStats(); }} className="btn-secondary text-xs">{t("refresh")}</button>
       </div>
 
-      {loading ? <div className="h-48 animate-pulse rounded-card bg-white/[0.04]" /> : (
-        <div className="overflow-x-auto rounded-card border border-white/[0.06]">
-          <table className="w-full text-left text-sm">
+      {loading ? <div className="h-48 animate-pulse rounded-card bg-surface" /> : (
+        <div className="overflow-x-auto rounded-card border border-line">
+          <table className="w-full text-start text-sm">
             <thead>
-              <tr className="border-b border-white/[0.06] bg-white/[0.02] text-xs text-muted">
+              <tr className="border-b border-line bg-surface text-xs text-muted">
                 <th className="px-4 py-3 font-medium">{t("key_label")}</th>
                 <th className="px-4 py-3 font-medium">{t("namespace_label")}</th>
                 <th className="px-4 py-3 font-medium">{t("french")}</th>
@@ -280,13 +285,14 @@ export default function AdminTranslationsPage() {
             </thead>
             <tbody>
               {translations.map((row) => (
-                <tr key={row.id} className="border-b border-white/[0.04] transition hover:bg-white/[0.02]">
+                <tr key={row.id} className="border-b border-line transition hover:bg-surface">
                   {editingId === row.id ? (
                     <>
-                      <td className="px-4 py-2 text-xs text-gold font-mono">{row.key}</td>
+                      <td className="px-4 py-2 text-xs text-accent font-mono">{row.key}</td>
                       <td className="px-4 py-2 text-xs text-muted">{row.namespace}</td>
                       <td className="px-4 py-2">
                         <input
+                          aria-label={`${t("french")} — ${row.key}`}
                           value={editValues.fr}
                           onChange={e => setEditValues(prev => ({ ...prev, fr: e.target.value }))}
                           className="input-premium w-full px-2 py-1 text-xs"
@@ -295,6 +301,7 @@ export default function AdminTranslationsPage() {
                       </td>
                       <td className="px-4 py-2">
                         <input
+                          aria-label={`${t("english")} — ${row.key}`}
                           value={editValues.en}
                           onChange={e => setEditValues(prev => ({ ...prev, en: e.target.value }))}
                           className="input-premium w-full px-2 py-1 text-xs"
@@ -303,6 +310,7 @@ export default function AdminTranslationsPage() {
                       </td>
                       <td className="px-4 py-2">
                         <input
+                          aria-label={`${t("arabic")} — ${row.key}`}
                           value={editValues.ar}
                           onChange={e => setEditValues(prev => ({ ...prev, ar: e.target.value }))}
                           className="input-premium w-full px-2 py-1 text-xs"
@@ -311,18 +319,18 @@ export default function AdminTranslationsPage() {
                       </td>
                       <td className="px-4 py-2">
                         <div className="flex gap-1">
-                          <button onClick={() => handleSave(row.id)} disabled={saving} className="text-xs font-semibold text-gold hover:text-gold/80">{t("save")}</button>
-                          <button onClick={() => setEditingId(null)} className="text-xs font-semibold text-muted hover:text-white">{t("cancel")}</button>
+                          <button onClick={() => handleSave(row.id)} disabled={saving} className="text-xs font-semibold text-accent hover:text-accent">{t("save")}</button>
+                          <button onClick={() => setEditingId(null)} className="text-xs font-semibold text-muted hover:text-foreground">{t("cancel")}</button>
                         </div>
                       </td>
                     </>
                   ) : (
                     <>
-                      <td className="px-4 py-2.5 text-xs text-gold font-mono">{row.key}</td>
+                      <td className="px-4 py-2.5 text-xs text-accent font-mono">{row.key}</td>
                       <td className="px-4 py-2.5 text-xs text-muted">{row.namespace}</td>
-                      <td className={`px-4 py-2.5 text-xs ${row.fr ? "text-white/80" : "text-burgundy/50 italic"}`}>{row.fr || "—"}</td>
-                      <td className={`px-4 py-2.5 text-xs ${row.en ? "text-white/80" : "text-burgundy/50 italic"}`}>{row.en || "—"}</td>
-                      <td className={`px-4 py-2.5 text-xs ${row.ar ? "text-white/80" : "text-burgundy/50 italic"}`} dir="rtl">{row.ar || "—"}</td>
+                      <td className={`px-4 py-2.5 text-xs ${row.fr ? "text-secondary" : "text-burgundy/50 italic"}`}>{row.fr || "—"}</td>
+                      <td className={`px-4 py-2.5 text-xs ${row.en ? "text-secondary" : "text-burgundy/50 italic"}`}>{row.en || "—"}</td>
+                      <td className={`px-4 py-2.5 text-xs ${row.ar ? "text-secondary" : "text-burgundy/50 italic"}`} dir="rtl">{row.ar || "—"}</td>
                       <td className="px-4 py-2.5">
                         <div className="flex gap-2">
                           <button
@@ -330,7 +338,7 @@ export default function AdminTranslationsPage() {
                               setEditingId(row.id);
                               setEditValues({ fr: row.fr, en: row.en, ar: row.ar });
                             }}
-                            className="text-xs font-semibold text-gold hover:text-gold/80"
+                            className="text-xs font-semibold text-accent hover:text-accent"
                           >
                             {t("edit")}
                           </button>

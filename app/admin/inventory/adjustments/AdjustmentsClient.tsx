@@ -115,16 +115,16 @@ export function AdjustmentsClient({
     <div>
       <div className="mb-8">
         <p className="luxury-label mb-2">{t("inventory", "Inventory")}</p>
-        <h1 className="text-3xl font-semibold tracking-tight text-white">{t("adjustments_title", "Stock Adjustments")}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t("adjustments_title", "Stock Adjustments")}</h1>
         <p className="mt-1 text-sm text-muted">{t("adjust_stock_manually", "Adjust stock levels manually")}</p>
       </div>
 
-      <div className="mb-10 luxury-card rounded-card border border-white/[0.06] bg-card p-6">
-        <p className="luxury-label mb-6 text-[10px] text-muted">{t("new_adjustment", "New Adjustment")}</p>
+      <div className="mb-10 luxury-card rounded-card border border-line bg-card p-6">
+        <p className="luxury-label mb-6 text-xs text-muted">{t("new_adjustment", "New Adjustment")}</p>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <div className="space-y-2">
-              <label className="luxury-label text-[10px] text-muted">{t("warehouse", "Warehouse")}</label>
+              <label className="luxury-label text-xs text-muted">{t("warehouse", "Warehouse")}</label>
               <select
                 value={selectedWarehouse}
                 onChange={(e) => setSelectedWarehouse(e.target.value)}
@@ -138,7 +138,7 @@ export function AdjustmentsClient({
               </select>
             </div>
             <div className="space-y-2">
-              <label className="luxury-label text-[10px] text-muted">{t("product", "Product")}</label>
+              <label className="luxury-label text-xs text-muted">{t("product", "Product")}</label>
               <input
                 type="text"
                 value={productQuery}
@@ -152,7 +152,7 @@ export function AdjustmentsClient({
               />
               {searching && <p className="text-xs text-muted">{t("searching", "Searching...")}</p>}
               {searchResults.length > 0 && !selectedProduct && (
-                <div className="mt-1 max-h-40 overflow-y-auto rounded-card border border-white/[0.06] bg-surface">
+                <div className="mt-1 max-h-40 overflow-y-auto rounded-card border border-line bg-surface">
                   {searchResults.map((p) => (
                     <button
                       key={p.id}
@@ -162,7 +162,7 @@ export function AdjustmentsClient({
                         setProductQuery(p.name);
                         setSearchResults([]);
                       }}
-                      className="w-full px-4 py-2 text-left text-sm text-white transition hover:bg-white/[0.04]"
+                      className="w-full px-4 py-2 text-start text-sm text-foreground transition hover:bg-surface"
                     >
                       {p.name}
                       <span className="ml-2 text-xs text-muted">SKU: {p.sku || "\u2014"} | Stock: {p.stock}</span>
@@ -172,7 +172,7 @@ export function AdjustmentsClient({
               )}
               {selectedProduct && (
                 <div className="mt-1 flex items-center gap-2 rounded-lg bg-emerald/10 px-3 py-2">
-                  <span className="text-sm text-gold">{selectedProduct.name}</span>
+                  <span className="text-sm text-accent">{selectedProduct.name}</span>
                   <button
                     type="button"
                     onClick={() => {
@@ -188,13 +188,13 @@ export function AdjustmentsClient({
               )}
             </div>
             <div className="space-y-2">
-              <label className="luxury-label text-[10px] text-muted">{t("current_stock", "Current Stock")}</label>
-              <div className="flex h-12 items-center rounded-button border border-white/[0.06] bg-surface px-4 text-sm text-white">
+              <label className="luxury-label text-xs text-muted">{t("current_stock", "Current Stock")}</label>
+              <div className="flex h-12 items-center rounded-button border border-line bg-surface px-4 text-sm text-foreground">
                 {currentStock !== null ? currentStock : "\u2014"}
               </div>
             </div>
             <div className="space-y-2">
-              <label className="luxury-label text-[10px] text-muted">{t("new_stock", "New Stock")}</label>
+              <label className="luxury-label text-xs text-muted">{t("new_stock", "New Stock")}</label>
               <input
                 type="number"
                 min={0}
@@ -204,13 +204,13 @@ export function AdjustmentsClient({
                 required
               />
               {currentStock !== null && newStock !== "" && (
-                <p className={`text-xs ${adjustment > 0 ? "text-gold" : adjustment < 0 ? "text-burgundy" : "text-muted"}`}>
+                <p className={`text-xs ${adjustment > 0 ? "text-accent" : adjustment < 0 ? "text-burgundy" : "text-muted"}`}>
                   {adjustment > 0 ? "+" : ""}{adjustment} unit{Math.abs(adjustment) !== 1 ? "s" : ""}
                 </p>
               )}
             </div>
             <div className="md:col-span-2 space-y-2">
-              <label className="luxury-label text-[10px] text-muted">{t("reason")}</label>
+              <label className="luxury-label text-xs text-muted">{t("reason")}</label>
               <select
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
@@ -235,22 +235,22 @@ export function AdjustmentsClient({
       </div>
 
       <div>
-        <p className="luxury-label mb-4 text-[10px] text-muted">{t("recent_adjustments", "Recent Adjustments")}</p>
-        <div className="glass overflow-hidden rounded-card border border-white/[0.06]">
+        <p className="luxury-label mb-4 text-xs text-muted">{t("recent_adjustments", "Recent Adjustments")}</p>
+        <div className="glass overflow-hidden rounded-card border border-line">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
+            <table className="w-full text-start text-sm">
               <thead>
-                <tr className="border-b border-white/[0.06] text-xs uppercase tracking-[0.1em] text-muted">
+                <tr className="border-b border-line text-xs uppercase tracking-[0.1em] text-muted">
                   <th className="px-5 py-4 font-medium">{t("date", "Date")}</th>
                   <th className="px-5 py-4 font-medium">{t("product", "Product")}</th>
                   <th className="px-5 py-4 font-medium">{t("warehouse", "Warehouse")}</th>
-                  <th className="px-5 py-4 font-medium text-right">{t("prev", "Prev")}</th>
-                  <th className="px-5 py-4 font-medium text-right">{t("new", "New")}</th>
-                  <th className="px-5 py-4 font-medium text-right">{t("change_col", "Change")}</th>
+                  <th className="px-5 py-4 font-medium text-end">{t("prev", "Prev")}</th>
+                  <th className="px-5 py-4 font-medium text-end">{t("new", "New")}</th>
+                  <th className="px-5 py-4 font-medium text-end">{t("change_col", "Change")}</th>
                   <th className="px-5 py-4 font-medium">{t("reason", "Reason")}</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/[0.06]">
+              <tbody className="divide-y divide-line">
                 {recentAdjustments.map((a, i) => (
                   <motion.tr
                     key={a.id}
@@ -258,16 +258,16 @@ export function AdjustmentsClient({
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.3, delay: i * 0.04 }}
-                    className="transition hover:bg-white/[0.02]"
+                    className="transition hover:bg-surface"
                   >
                     <td className="px-5 py-4 text-xs text-muted">
                       {new Date(a.createdAt).toLocaleDateString()}
                     </td>
-                    <td className="px-5 py-4 text-sm text-white">{a.productId.slice(0, 8)}...</td>
+                    <td className="px-5 py-4 text-sm text-foreground">{a.productId.slice(0, 8)}...</td>
                     <td className="px-5 py-4 text-muted">{a.warehouseName}</td>
-                    <td className="px-5 py-4 text-right text-muted">{a.previousStock}</td>
-                    <td className="px-5 py-4 text-right text-white">{a.newStock}</td>
-                    <td className={`px-5 py-4 text-right font-medium ${a.quantity > 0 ? "text-gold" : a.quantity < 0 ? "text-burgundy" : "text-muted"}`}>
+                    <td className="px-5 py-4 text-end text-muted">{a.previousStock}</td>
+                    <td className="px-5 py-4 text-end text-foreground">{a.newStock}</td>
+                    <td className={`px-5 py-4 text-end font-medium ${a.quantity > 0 ? "text-accent" : a.quantity < 0 ? "text-burgundy" : "text-muted"}`}>
                       {a.quantity > 0 ? `+${a.quantity}` : a.quantity}
                     </td>
                     <td className="px-5 py-4 text-muted">{a.reason || "\u2014"}</td>

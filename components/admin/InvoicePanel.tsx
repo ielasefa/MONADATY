@@ -110,8 +110,8 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
 
   const statusBadge = (status: string) => {
     const colors: Record<string, string> = {
-      Draft: "bg-white/10 text-white/50 border-white/[0.06]",
-      Issued: "bg-gold/10 text-gold border-gold/20",
+      Draft: "bg-surface text-secondary border-line",
+      Issued: "bg-gold/10 text-accent border-gold/20",
       Cancelled: "bg-burgundy/10 text-burgundy border-burgundy/20",
     };
     const labels: Record<string, string> = {
@@ -120,24 +120,24 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
       Cancelled: t("status_cancelled", "Cancelled"),
     };
     return (
-      <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[0.6rem] font-semibold uppercase tracking-[0.1em] ${colors[status] || colors.Draft}`}>
+      <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold uppercase tracking-[0.1em] ${colors[status] || colors.Draft}`}>
         {labels[status] || status}
       </span>
     );
   };
 
   return (
-    <section className="rounded-xl border border-white/[0.06] p-6">
-      <h2 className="luxury-label text-[10px] text-white/50">{t("invoice")}</h2>
+    <section className="rounded-xl border border-line p-6">
+      <h2 className="luxury-label text-xs text-secondary">{t("invoice")}</h2>
 
       {!invoice ? (
         <div className="mt-4">
-          <p className="text-sm text-white/50">{t("no_invoice")}</p>
+          <p className="text-sm text-secondary">{t("no_invoice")}</p>
           <button
             type="button"
             disabled={loading}
             onClick={handleCreate}
-            className="btn-secondary mt-4 h-12 rounded-button border border-white/[0.06] bg-surface px-5 text-sm font-medium text-white transition hover:bg-bg disabled:opacity-50"
+            className="btn-secondary mt-4 h-12 rounded-button border border-line bg-surface px-5 text-sm font-medium text-foreground transition hover:bg-canvas disabled:opacity-50"
             aria-label={t("create_invoice")}
           >
             {loading ? (
@@ -156,15 +156,15 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
         <div className="mt-4 space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs text-white/50">{t("invoice_number")}</p>
-              <p className="font-mono text-sm font-medium text-white">{invoice.invoiceNumber}</p>
+              <p className="text-xs text-secondary">{t("invoice_number")}</p>
+              <p className="font-mono text-sm font-medium text-foreground">{invoice.invoiceNumber}</p>
           </div>
             {statusBadge(invoice.status)}
         </div>
 
           <div>
-            <p className="text-xs text-white/50">{t("created")}</p>
-            <p className="text-sm text-white">
+            <p className="text-xs text-secondary">{t("created")}</p>
+            <p className="text-sm text-foreground">
               {new Date(invoice.createdAt).toLocaleDateString(lang === "ar" ? "ar-MA" : lang === "fr" ? "fr-FR" : "en-US", {
                 year: "numeric",
                 month: "long",
@@ -185,12 +185,12 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
                 type="button"
                 disabled={loading}
                 onClick={handleDownload}
-                className="btn-primary h-12 flex-1 rounded-button bg-burgundy px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-burgundy-dark disabled:opacity-50"
+                className="btn-primary h-12 flex-1 rounded-button bg-burgundy px-4 text-xs font-semibold uppercase tracking-[0.1em] text-foreground transition hover:bg-burgundy-dark disabled:opacity-50"
                 aria-label={t("download_invoice_aria", { number: invoice.invoiceNumber })}
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
-                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-line border-t-transparent" />
                     {t("loading")}
                   </span>
                 ) : (
@@ -208,7 +208,7 @@ export function InvoicePanel({ orderId, initialInvoice }: Props) {
                 type="button"
                 disabled={loading}
                 onClick={handlePrint}
-                className="btn-secondary h-12 flex-1 rounded-button border border-white/[0.06] bg-surface px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-bg disabled:opacity-50"
+                className="btn-secondary h-12 flex-1 rounded-button border border-line bg-surface px-4 text-xs font-semibold uppercase tracking-[0.1em] text-foreground transition hover:bg-canvas disabled:opacity-50"
                 aria-label={t("print_invoice_aria", { number: invoice.invoiceNumber })}
               >
                 <span className="flex items-center justify-center gap-2">

@@ -67,10 +67,10 @@ export function CategoryCreateModal({ open, onClose, onCreated }: Props) {
       aria-modal="true"
       aria-label={t("create_category")}
     >
-      <div className="w-full max-w-md rounded-xl border border-white/[0.06] bg-[#171717] p-6 shadow-2xl">
+      <div className="w-full max-w-md rounded-xl border border-line bg-surface p-6 shadow-2xl">
         <div className="mb-5 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-white">{t("create_category")}</h2>
-          <button onClick={onClose} className="text-white/50 transition hover:text-white" aria-label={t("close")}>
+          <h2 className="text-lg font-semibold text-foreground">{t("create_category")}</h2>
+          <button onClick={onClose} className="text-secondary transition hover:text-foreground" aria-label={t("close")}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M18 6 6 18M6 6l12 12" />
             </svg>
@@ -78,7 +78,7 @@ export function CategoryCreateModal({ open, onClose, onCreated }: Props) {
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="cat-name" className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
+            <label htmlFor="cat-name" className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-secondary">
               {t("name")}
             </label>
             <input
@@ -86,14 +86,14 @@ export function CategoryCreateModal({ open, onClose, onCreated }: Props) {
               type="text"
               value={name}
               onChange={(e) => handleNameChange(e.target.value)}
-              className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+              className="w-full rounded-md border border-line bg-surface px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
               placeholder={t("category_name_placeholder")}
               required
               autoFocus
             />
           </div>
           <div>
-            <label htmlFor="cat-slug" className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
+            <label htmlFor="cat-slug" className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-secondary">
               {t("slug")}
             </label>
             <input
@@ -101,7 +101,7 @@ export function CategoryCreateModal({ open, onClose, onCreated }: Props) {
               type="text"
               value={slug}
               onChange={(e) => setSlug(generateSlug(e.target.value))}
-              className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+              className="w-full rounded-md border border-line bg-surface px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
               placeholder={t("category_slug_placeholder")}
               required
             />

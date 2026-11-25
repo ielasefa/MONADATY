@@ -17,31 +17,31 @@ export default function ProfitReportPage() {
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
-  if (loading) return <div className="container-shell mx-auto px-6 py-10"><div className="h-32 animate-pulse rounded-card bg-white/[0.04]" /></div>;
+  if (loading) return <div className="container-shell mx-auto px-6 py-10"><div className="h-32 animate-pulse rounded-card bg-surface" /></div>;
 
   return (
     <div className="container-shell mx-auto px-6 py-10">
       <div className="mb-8">
         <p className="luxury-label mb-2">{t("reports")}</p>
-        <h1 className="text-3xl font-semibold tracking-tight text-white">{t("profit_report")}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t("profit_report")}</h1>
       </div>
 
       <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
-        <div className="rounded-card border border-white/[0.06] bg-card p-4">
-          <p className="text-[10px] text-muted">{t("total_revenue")}</p>
-          <p className="mt-1 text-xl font-semibold text-gold">{data.totalRevenue.toFixed(2)} DH</p>
+        <div className="rounded-card border border-line bg-card p-4">
+          <p className="text-xs text-muted">{t("total_revenue")}</p>
+          <p className="mt-1 text-xl font-semibold text-accent">{data.totalRevenue.toFixed(2)} DH</p>
         </div>
-        <div className="rounded-card border border-white/[0.06] bg-card p-4">
-          <p className="text-[10px] text-muted">{t("total_cost")}</p>
+        <div className="rounded-card border border-line bg-card p-4">
+          <p className="text-xs text-muted">{t("total_cost")}</p>
           <p className="mt-1 text-xl font-semibold text-burgundy">{data.totalCost.toFixed(2)} DH</p>
         </div>
-        <div className="rounded-card border border-white/[0.06] bg-card p-4">
-          <p className="text-[10px] text-muted">{t("net_profit", "Net Profit")}</p>
-          <p className={`mt-1 text-xl font-semibold ${data.profit >= 0 ? "text-gold" : "text-burgundy"}`}>{data.profit.toFixed(2)} DH</p>
+        <div className="rounded-card border border-line bg-card p-4">
+          <p className="text-xs text-muted">{t("net_profit", "Net Profit")}</p>
+          <p className={`mt-1 text-xl font-semibold ${data.profit >= 0 ? "text-accent" : "text-burgundy"}`}>{data.profit.toFixed(2)} DH</p>
         </div>
-        <div className="rounded-card border border-white/[0.06] bg-card p-4">
-          <p className="text-[10px] text-muted">{t("margin")}</p>
-          <p className={`mt-1 text-xl font-semibold ${data.margin >= 0 ? "text-gold" : "text-burgundy"}`}>{data.margin}%</p>
+        <div className="rounded-card border border-line bg-card p-4">
+          <p className="text-xs text-muted">{t("margin")}</p>
+          <p className={`mt-1 text-xl font-semibold ${data.margin >= 0 ? "text-accent" : "text-burgundy"}`}>{data.margin}%</p>
         </div>
       </div>
     </div>

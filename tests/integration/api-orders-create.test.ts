@@ -29,7 +29,7 @@ vi.mock("next/cache", () => ({
 }));
 
 vi.mock("@/lib/prisma", () => ({
-  prisma: { city: { findFirst: vi.fn(() => Promise.resolve({ id: "c1", name: "Casablanca" })) } },
+  prisma: { city: { findFirst: vi.fn(() => Promise.resolve({ id: "c1", name: "Rabat" })) } },
 }));
 
 import { POST } from "@/app/api/orders/create/route";
@@ -38,7 +38,7 @@ const validBody = {
   customerName: "Test Customer",
   customerEmail: "test@example.com",
   phone: "+212600112233",
-  city: "Casablanca",
+  city: "Rabat",
   address: "123 Test Street",
   items: [
     { productId: "p1", name: "Item", slug: "item", image: "", quantity: 2, unitPrice: "50.00 DH", totalPrice: "100.00 DH" },
@@ -49,7 +49,7 @@ const validBody = {
   shippingMethod: "delivery",
   tax: "8.00 DH",
   total: "108.00 DH",
-  postalCode: "20000",
+  postalCode: "10000",
 };
 
 function makeRequest(body: unknown, headers: Record<string, string> = {}): Request {
@@ -80,7 +80,7 @@ describe("POST /api/orders/create", () => {
       customerName: "Test Customer",
       customerEmail: "test@example.com",
       address: "123 Test Street",
-      city: "Casablanca",
+      city: "Rabat",
       items: [{ name: "Item", quantity: 2, unitPrice: "50.00 DH" }],
       replayed: false,
     });
@@ -112,6 +112,35 @@ describe("POST /api/orders/create", () => {
     expect(res.status).toBe(400);
   });
 
+  it.each([undefined, null, "", "   "])("accepts an optional email (%s) without sending a confirmation", async (email) => {
+    mockCreateOrder.mockResolvedValueOnce({
+      id: "order-no-email", orderNumber: "MON-NO-EMAIL", total: "108.00 DH",
+      orderStatus: "pending", paymentStatus: "pending", customerEmail: "", replayed: false,
+    });
+    const response = await POST(makeRequest({ ...validBody, customerEmail: email }));
+    expect(response.status).toBe(201);
+    expect(mockCreateOrder).toHaveBeenCalledWith(expect.objectContaining({ customerEmail: "" }));
+    expect(mockSendConfirmationEmail).not.toHaveBeenCalled();
+  });
+
+  it("trims an optional email when provided", async () => {
+    const response = await POST(makeRequest({ ...validBody, customerEmail: "  test@example.com  " }));
+    expect(response.status).toBe(201);
+    expect(mockCreateOrder).toHaveBeenCalledWith(expect.objectContaining({ customerEmail: "test@example.com" }));
+  });
+
+  it.each(["Casablanca", "Témara", "Sale", "", null, 42])("rejects cities outside the checkout service area (%s)", async (city) => {
+    const response = await POST(makeRequest({ ...validBody, city }));
+    expect(response.status).toBe(400);
+    expect(mockCreateOrder).not.toHaveBeenCalled();
+  });
+
+  it("accepts Salé as a delivery city", async () => {
+    const response = await POST(makeRequest({ ...validBody, city: "Salé" }));
+    expect(response.status).toBe(201);
+    expect(mockCreateOrder).toHaveBeenCalledWith(expect.objectContaining({ city: "Salé" }));
+  });
+
   it("rejects invalid Moroccan phone", async () => {
     const res = await POST(makeRequest({ ...validBody, phone: "12345" }) as never);
     expect(res.status).toBe(400);
@@ -137,7 +166,7 @@ describe("POST /api/orders/create", () => {
       customerName: "Test Customer",
       customerEmail: "test@example.com",
       address: "123 Test Street",
-      city: "Casablanca",
+      city: "Rabat",
       items: [{ name: "Item", quantity: 2, unitPrice: "50.00 DH" }],
       replayed: false,
     });
@@ -166,7 +195,7 @@ describe("POST /api/orders/create", () => {
       customerName: "Test Customer",
       customerEmail: "test@example.com",
       address: "123 Test Street",
-      city: "Casablanca",
+      city: "Rabat",
       items: [{ name: "Item", quantity: 2, unitPrice: "50.00 DH" }],
       replayed: true,
     });
@@ -188,7 +217,7 @@ describe("POST /api/orders/create", () => {
       customerName: "Test Customer",
       customerEmail: "test@example.com",
       address: "123 Test Street",
-      city: "Casablanca",
+      city: "Rabat",
       items: [],
       replayed: true,
     });

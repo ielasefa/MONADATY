@@ -23,10 +23,10 @@ function formatDate(value: string) {
 function CustomerBadge({ repeat, labels }: { repeat: boolean; labels: { newCustomer: string; returning: string } }) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-1 text-[0.58rem] font-semibold uppercase tracking-[0.1em] ${
+      className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-1 text-xs font-semibold uppercase tracking-[0.1em] ${
         repeat
-          ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
-          : "border-gold/20 bg-gold/10 text-gold"
+          ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-700"
+          : "border-gold/20 bg-gold/10 text-accent"
       }`}
     >
       <span className={`h-1.5 w-1.5 rounded-full ${repeat ? "bg-emerald-400" : "bg-gold"}`} aria-hidden />
@@ -38,13 +38,13 @@ function CustomerBadge({ repeat, labels }: { repeat: boolean; labels: { newCusto
 function OrderStatusBadge({ status }: { status: string }) {
   const tone =
     status === "delivered" || status === "completed"
-      ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
+      ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-700"
       : status === "cancelled" || status === "refunded"
-        ? "border-burgundy/30 bg-burgundy/15 text-red-300"
-        : "border-gold/20 bg-gold/10 text-gold";
+        ? "border-burgundy/30 bg-burgundy/15 text-red-700"
+        : "border-gold/20 bg-gold/10 text-accent";
 
   return (
-    <span className={`inline-flex rounded-full border px-2.5 py-1 text-[0.58rem] font-semibold uppercase tracking-[0.1em] ${tone}`}>
+    <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.1em] ${tone}`}>
       {status.replace(/_/g, " ")}
     </span>
   );
@@ -113,7 +113,7 @@ export function CustomersClient({ customers: initial }: { customers: CustomerInf
 
   function SortArrow({ field }: { field: SortField }) {
     return (
-      <span aria-hidden className={`text-[0.65rem] ${sortField === field ? "text-gold" : "text-white/25"}`}>
+      <span aria-hidden className={`text-xs ${sortField === field ? "text-accent" : "text-secondary"}`}>
         {sortField === field ? (sortDir === "desc" ? "↓" : "↑") : "↕"}
       </span>
     );
@@ -149,26 +149,26 @@ export function CustomersClient({ customers: initial }: { customers: CustomerInf
         <button
           type="button"
           onClick={() => setSelected(null)}
-          className="mb-5 inline-flex h-10 items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 text-xs font-semibold uppercase tracking-[0.12em] text-white/65 transition hover:border-gold/30 hover:text-gold"
+          className="mb-5 inline-flex h-10 items-center gap-2 rounded-lg border border-line bg-surface px-4 text-xs font-semibold uppercase tracking-[0.12em] text-secondary transition hover:border-gold/30 hover:text-accent"
         >
           <span aria-hidden>←</span>
           {t("back_to_customers", "Back to customers")}
         </button>
 
-        <header className="mb-6 flex flex-col gap-4 border-b border-white/[0.06] pb-6 sm:flex-row sm:items-end sm:justify-between">
+        <header className="mb-6 flex flex-col gap-4 border-b border-line pb-6 sm:flex-row sm:items-end sm:justify-between">
           <div className="min-w-0">
-            <p className="text-[0.6rem] font-semibold uppercase tracking-[0.22em] text-gold/70">{t("customer_profile", "Customer profile")}</p>
-            <h1 className="mt-2 truncate font-display text-3xl text-white sm:text-4xl">{selected.name}</h1>
-            <p className="mt-2 truncate text-sm text-white/45">{selected.email}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-accent">{t("customer_profile", "Customer profile")}</p>
+            <h1 className="mt-2 truncate font-display text-3xl text-foreground sm:text-4xl">{selected.name}</h1>
+            <p className="mt-2 truncate text-sm text-secondary">{selected.email}</p>
           </div>
           <CustomerBadge repeat={selected.totalOrders > 1} labels={labels} />
         </header>
 
-        <section className="mb-6 overflow-hidden rounded-xl border border-white/[0.07] bg-[#121211]">
-          <div className="border-b border-white/[0.06] px-5 py-4 sm:px-6">
-            <h2 className="text-xs font-semibold uppercase tracking-[0.15em] text-white/75">{t("customer_information", "Customer information")}</h2>
+        <section className="mb-6 overflow-hidden rounded-xl border border-line bg-card">
+          <div className="border-b border-line px-5 py-4 sm:px-6">
+            <h2 className="text-xs font-semibold uppercase tracking-[0.08em] text-secondary">{t("customer_information", "Customer information")}</h2>
           </div>
-          <div className="grid grid-cols-1 divide-y divide-white/[0.06] sm:grid-cols-2 sm:divide-x sm:divide-y-0 xl:grid-cols-5">
+          <div className="grid grid-cols-1 divide-y divide-line sm:grid-cols-2 sm:divide-x sm:divide-y-0 xl:grid-cols-5">
             {[
               [t("phone_header", "Phone"), selected.phone || "—"],
               [t("city", "City"), selected.city || "—"],
@@ -177,18 +177,18 @@ export function CustomersClient({ customers: initial }: { customers: CustomerInf
               [t("avg_order_value", "Average order"), `${selected.avgOrderValue.toFixed(2)} DH`],
             ].map(([label, value], index) => (
               <div key={label} className={`min-w-0 px-5 py-5 ${index === 4 ? "sm:col-span-2 xl:col-span-1" : ""}`}>
-                <p className="text-[0.6rem] font-semibold uppercase tracking-[0.14em] text-white/35">{label}</p>
-                <p className={`mt-2 truncate text-sm font-medium ${index >= 3 ? "text-gold" : "text-white/85"}`}>{value}</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.08em] text-secondary">{label}</p>
+                <p className={`mt-2 truncate text-sm font-medium ${index >= 3 ? "text-accent" : "text-secondary"}`}>{value}</p>
               </div>
             ))}
           </div>
         </section>
 
-        <section className="overflow-hidden rounded-xl border border-white/[0.07] bg-[#121211]">
-          <div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-4 sm:px-6">
+        <section className="overflow-hidden rounded-xl border border-line bg-card">
+          <div className="flex items-center justify-between border-b border-line px-5 py-4 sm:px-6">
             <div>
-              <h2 className="text-xs font-semibold uppercase tracking-[0.15em] text-white/75">{t("order_history", "Order history")}</h2>
-              <p className="mt-1 text-xs text-white/35">{t("customer_orders_description", "Orders associated with this email address")}</p>
+              <h2 className="text-xs font-semibold uppercase tracking-[0.08em] text-secondary">{t("order_history", "Order history")}</h2>
+              <p className="mt-1 text-xs text-secondary">{t("customer_orders_description", "Orders associated with this email address")}</p>
             </div>
             {!loading && !ordersError && <span className="badge-gold">{orders.length}</span>}
           </div>
@@ -196,31 +196,31 @@ export function CustomersClient({ customers: initial }: { customers: CustomerInf
           {loading ? (
             <div className="space-y-3 p-6" role="status">
               <span className="sr-only">{t("loading_orders", "Loading orders")}</span>
-              {[0, 1, 2].map((item) => <div key={item} className="h-16 animate-pulse rounded-lg bg-white/[0.04]" />)}
+              {[0, 1, 2].map((item) => <div key={item} className="h-16 animate-pulse rounded-lg bg-surface" />)}
             </div>
           ) : ordersError ? (
             <div className="flex flex-col items-center px-6 py-14 text-center">
               <span className="text-2xl text-burgundy" aria-hidden>!</span>
-              <p className="mt-3 text-sm font-medium text-white/80">{t("orders_load_failed", "Orders could not be loaded")}</p>
-              <button type="button" onClick={() => openHistory(selected)} className="mt-4 inline-flex h-9 items-center rounded-md bg-burgundy px-4 text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-white">
+              <p className="mt-3 text-sm font-medium text-secondary">{t("orders_load_failed", "Orders could not be loaded")}</p>
+              <button type="button" onClick={() => openHistory(selected)} className="mt-4 inline-flex h-9 items-center rounded-md bg-burgundy px-4 text-xs font-semibold uppercase tracking-[0.12em] text-foreground">
                 {t("retry", "Retry")}
               </button>
             </div>
           ) : orders.length === 0 ? (
             <div className="px-6 py-14 text-center">
-              <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.03] text-white/30" aria-hidden>□</div>
-              <p className="mt-3 text-sm font-medium text-white/75">{t("no_orders_found", "No orders found")}</p>
+              <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full border border-line bg-surface text-secondary" aria-hidden>□</div>
+              <p className="mt-3 text-sm font-medium text-secondary">{t("no_orders_found", "No orders found")}</p>
             </div>
           ) : (
-            <div className="divide-y divide-white/[0.06]">
+            <div className="divide-y divide-line">
               {orders.map((order) => (
-                <div key={order.id} className="grid min-h-[76px] grid-cols-1 gap-3 px-5 py-4 transition hover:bg-white/[0.02] sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center sm:px-6">
+                <div key={order.id} className="grid min-h-[76px] grid-cols-1 gap-3 px-5 py-4 transition hover:bg-surface sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center sm:px-6">
                   <div className="min-w-0">
-                    <p className="truncate font-mono text-sm font-medium text-white">{order.orderNumber}</p>
-                    <p className="mt-1 text-xs text-white/35">{formatDate(order.createdAt)}</p>
+                    <p className="truncate font-mono text-sm font-medium text-foreground">{order.orderNumber}</p>
+                    <p className="mt-1 text-xs text-secondary">{formatDate(order.createdAt)}</p>
                   </div>
                   <OrderStatusBadge status={order.orderStatus} />
-                  <p className="min-w-[100px] text-start text-sm font-semibold text-gold sm:text-end">{order.total}</p>
+                  <p className="min-w-[100px] text-start text-sm font-semibold text-accent sm:text-end">{order.total}</p>
                 </div>
               ))}
             </div>
@@ -232,17 +232,17 @@ export function CustomersClient({ customers: initial }: { customers: CustomerInf
 
   return (
     <div className="mx-auto w-full max-w-7xl">
-      <header className="mb-7 border-b border-white/[0.06] pb-7">
+      <header className="mb-7 border-b border-line pb-7">
         <div className="flex items-center gap-3">
           <span className="h-px w-8 bg-gold/50" />
-          <p className="text-[0.6rem] font-semibold uppercase tracking-[0.24em] text-gold/70">{t("customers_label", "Customers")}</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-accent">{t("customers_label", "Customers")}</p>
         </div>
         <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">{t("customers_heading", "Customer Management")}</h1>
-            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/45">{t("customers_description", "Review customer activity, purchase history, and lifetime value.")}</p>
+            <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">{t("customers_heading", "Customer Management")}</h1>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-secondary">{t("customers_description", "Review customer activity, purchase history, and lifetime value.")}</p>
           </div>
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/35">{initial.length} {t("customers_count", "customers")}</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-secondary">{initial.length} {t("customers_count", "customers")}</p>
         </div>
       </header>
 
@@ -253,17 +253,17 @@ export function CustomersClient({ customers: initial }: { customers: CustomerInf
           [t("returning_customers", "Returning customers"), String(returningCustomers)],
           [t("average_customer_value", "Average value"), `${averageValue.toFixed(2)} DH`],
         ].map(([label, value], index) => (
-          <div key={label} className="relative min-w-0 overflow-hidden rounded-xl border border-white/[0.06] bg-[#121211] p-4 sm:p-5">
-            <span className={`absolute inset-x-0 top-0 h-px ${index === 1 ? "bg-gold/70" : index === 2 ? "bg-burgundy/70" : "bg-white/10"}`} />
-            <p className="truncate text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-white/40">{label}</p>
-            <p className={`mt-2 truncate font-display text-xl sm:text-2xl ${index === 1 ? "text-gold" : "text-white"}`}>{value}</p>
+          <div key={label} className="relative min-w-0 overflow-hidden rounded-xl border border-line bg-card p-4 sm:p-5">
+            <span className={`absolute inset-x-0 top-0 h-px ${index === 1 ? "bg-gold/70" : index === 2 ? "bg-burgundy/70" : "bg-surface"}`} />
+            <p className="truncate text-xs font-semibold uppercase tracking-[0.08em] text-secondary">{label}</p>
+            <p className={`mt-2 truncate font-display text-xl sm:text-2xl ${index === 1 ? "text-accent" : "text-foreground"}`}>{value}</p>
           </div>
         ))}
       </section>
 
-      <section className="mb-5 flex flex-col gap-3 rounded-xl border border-white/[0.06] bg-[#121211] p-3 sm:flex-row sm:items-center">
+      <section className="mb-5 flex flex-col gap-3 rounded-xl border border-line bg-card p-3 sm:flex-row sm:items-center">
         <div className="relative min-w-0 flex-1">
-          <svg className="pointer-events-none absolute start-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
+          <svg className="pointer-events-none absolute start-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
             <circle cx="11" cy="11" r="7" />
             <path d="m20 20-4-4" />
           </svg>
@@ -272,14 +272,14 @@ export function CustomersClient({ customers: initial }: { customers: CustomerInf
             value={search}
             onChange={(event) => { setSearch(event.target.value); setPage(0); }}
             placeholder={t("search_customers", "Search name, email, or phone")}
-            className="input-premium h-11 w-full bg-[#0B0B0A] ps-10 pe-4"
+            className="input-premium h-11 w-full bg-canvas ps-10 pe-4"
             aria-label={t("search_customers_aria", "Search customers")}
           />
         </div>
         <select
           value={segment}
           onChange={(event) => { setSegment(event.target.value as CustomerSegment); setPage(0); }}
-          className="input-premium h-11 w-full bg-[#0B0B0A] sm:w-52"
+          className="input-premium h-11 w-full bg-canvas sm:w-52"
           aria-label={t("filter_customers", "Filter customers")}
         >
           <option value="all">{t("all_customers", "All customers")}</option>
@@ -287,23 +287,23 @@ export function CustomersClient({ customers: initial }: { customers: CustomerInf
           <option value="returning">{t("returning_customers", "Returning customers")}</option>
         </select>
         {(search || segment !== "all") && (
-          <button type="button" onClick={clearFilters} className="inline-flex h-11 shrink-0 items-center justify-center rounded-md px-4 text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-white/45 transition hover:bg-white/[0.04] hover:text-white">
+          <button type="button" onClick={clearFilters} className="inline-flex h-11 shrink-0 items-center justify-center rounded-md px-4 text-xs font-semibold uppercase tracking-[0.12em] text-secondary transition hover:bg-surface hover:text-foreground">
             {t("clear_filters", "Clear")}
           </button>
         )}
-        <span className="shrink-0 px-2 text-xs tabular-nums text-white/35">{filtered.length} {t("results", "results")}</span>
+        <span className="shrink-0 px-2 text-xs tabular-nums text-secondary">{filtered.length} {t("results", "results")}</span>
       </section>
 
       {paged.length === 0 ? (
-        <section className="rounded-xl border border-dashed border-white/[0.1] bg-[#121211] px-6 py-20 text-center">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.03] text-xl text-gold/60" aria-hidden>◇</div>
-          <h2 className="mt-4 text-sm font-semibold text-white/80">{initial.length === 0 ? t("no_customers", "No customers yet") : t("no_customers_found", "No customers found")}</h2>
-          <p className="mx-auto mt-2 max-w-sm text-xs leading-relaxed text-white/40">{initial.length === 0 ? t("no_customers_description", "Customers will appear here after their first order.") : t("adjust_customer_filters", "Try a different search or clear the current filter.")}</p>
-          {(search || segment !== "all") && <button type="button" onClick={clearFilters} className="mt-5 inline-flex h-10 items-center rounded-md border border-gold/25 px-4 text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-gold transition hover:bg-gold/10">{t("clear_filters", "Clear filters")}</button>}
+        <section className="rounded-xl border border-dashed border-line bg-card px-6 py-20 text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-line bg-surface text-xl text-accent" aria-hidden>◇</div>
+          <h2 className="mt-4 text-sm font-semibold text-secondary">{initial.length === 0 ? t("no_customers", "No customers yet") : t("no_customers_found", "No customers found")}</h2>
+          <p className="mx-auto mt-2 max-w-sm text-xs leading-relaxed text-secondary">{initial.length === 0 ? t("no_customers_description", "Customers will appear here after their first order.") : t("adjust_customer_filters", "Try a different search or clear the current filter.")}</p>
+          {(search || segment !== "all") && <button type="button" onClick={clearFilters} className="mt-5 inline-flex h-10 items-center rounded-md border border-gold/25 px-4 text-xs font-semibold uppercase tracking-[0.12em] text-accent transition hover:bg-gold/10">{t("clear_filters", "Clear filters")}</button>}
         </section>
       ) : (
         <>
-          <div className="hidden overflow-x-auto rounded-xl border border-white/[0.07] bg-[#121211] xl:block">
+          <div className="hidden overflow-x-auto rounded-xl border border-line bg-card xl:block">
             <table className="w-full min-w-[960px] table-fixed text-start text-sm">
               <colgroup>
                 <col className="w-[18%]" />
@@ -314,31 +314,31 @@ export function CustomersClient({ customers: initial }: { customers: CustomerInf
                 <col className="w-[13%]" />
                 <col className="w-[8%]" />
               </colgroup>
-              <thead className="bg-white/[0.015]">
-                <tr className="h-12 border-b border-white/[0.06] text-[0.6rem] uppercase tracking-[0.14em] text-white/40">
-                  <th scope="col" className="px-5 font-semibold"><button type="button" onClick={() => toggleSort("name")} className="inline-flex items-center gap-2 transition hover:text-white">{t("name_label", "Name")}<SortArrow field="name" /></button></th>
+              <thead className="bg-surface">
+                <tr className="h-12 border-b border-line text-xs uppercase tracking-[0.08em] text-secondary">
+                  <th scope="col" className="px-5 font-semibold"><button type="button" onClick={() => toggleSort("name")} className="inline-flex items-center gap-2 transition hover:text-foreground">{t("name_label", "Name")}<SortArrow field="name" /></button></th>
                   <th scope="col" className="px-5 font-semibold">{t("email_header", "Email")}</th>
                   <th scope="col" className="px-5 font-semibold">{t("phone_header", "Phone")}</th>
-                  <th scope="col" className="px-5 text-center font-semibold"><button type="button" onClick={() => toggleSort("totalOrders")} className="inline-flex items-center gap-2 transition hover:text-white">{t("total_orders", "Orders")}<SortArrow field="totalOrders" /></button></th>
-                  <th scope="col" className="px-5 text-end font-semibold"><button type="button" onClick={() => toggleSort("totalSpent")} className="inline-flex items-center gap-2 transition hover:text-white">{t("total_spent", "Total spent")}<SortArrow field="totalSpent" /></button></th>
-                  <th scope="col" className="px-5 font-semibold"><button type="button" onClick={() => toggleSort("lastOrderDate")} className="inline-flex items-center gap-2 transition hover:text-white">{t("last_order", "Last order")}<SortArrow field="lastOrderDate" /></button></th>
+                  <th scope="col" className="px-5 text-center font-semibold"><button type="button" onClick={() => toggleSort("totalOrders")} className="inline-flex items-center gap-2 transition hover:text-foreground">{t("total_orders", "Orders")}<SortArrow field="totalOrders" /></button></th>
+                  <th scope="col" className="px-5 text-end font-semibold"><button type="button" onClick={() => toggleSort("totalSpent")} className="inline-flex items-center gap-2 transition hover:text-foreground">{t("total_spent", "Total spent")}<SortArrow field="totalSpent" /></button></th>
+                  <th scope="col" className="px-5 font-semibold"><button type="button" onClick={() => toggleSort("lastOrderDate")} className="inline-flex items-center gap-2 transition hover:text-foreground">{t("last_order", "Last order")}<SortArrow field="lastOrderDate" /></button></th>
                   <th scope="col" className="px-5 text-end font-semibold">{t("actions_header", "Action")}</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/[0.06]">
+              <tbody className="divide-y divide-line">
                 {paged.map((customer) => (
-                  <tr key={customer.email} className="h-[76px] transition-colors hover:bg-white/[0.025]">
+                  <tr key={customer.email} className="h-[76px] transition-colors hover:bg-surface">
                     <td className="px-5">
-                      <p className="truncate font-medium text-white" title={customer.name}>{customer.name}</p>
+                      <p className="truncate font-medium text-foreground" title={customer.name}>{customer.name}</p>
                       <div className="mt-1.5"><CustomerBadge repeat={customer.totalOrders > 1} labels={labels} /></div>
                     </td>
-                    <td className="px-5"><p className="truncate text-white/55" title={customer.email}>{customer.email}</p></td>
-                    <td className="px-5"><p className="truncate text-white/55" title={customer.phone || undefined}>{customer.phone || "—"}</p></td>
-                    <td className="px-5 text-center"><span className="inline-flex min-w-8 items-center justify-center rounded-full bg-white/[0.05] px-2.5 py-1 text-xs font-semibold tabular-nums text-white/70">{customer.totalOrders}</span></td>
-                    <td className="px-5 text-end font-semibold tabular-nums text-gold">{customer.totalSpent.toFixed(2)} DH</td>
-                    <td className="px-5"><p className="truncate font-mono text-xs text-white/65">{customer.lastOrderNumber || "—"}</p><p className="mt-1 text-[0.68rem] text-white/35">{formatDate(customer.lastOrderDate)}</p></td>
+                    <td className="px-5"><p className="truncate text-secondary" title={customer.email}>{customer.email}</p></td>
+                    <td className="px-5"><p className="truncate text-secondary" title={customer.phone || undefined}>{customer.phone || "—"}</p></td>
+                    <td className="px-5 text-center"><span className="inline-flex min-w-8 items-center justify-center rounded-full bg-surface px-2.5 py-1 text-xs font-semibold tabular-nums text-secondary">{customer.totalOrders}</span></td>
+                    <td className="px-5 text-end font-semibold tabular-nums text-accent">{customer.totalSpent.toFixed(2)} DH</td>
+                    <td className="px-5"><p className="truncate font-mono text-xs text-secondary">{customer.lastOrderNumber || "—"}</p><p className="mt-1 text-xs text-secondary">{formatDate(customer.lastOrderDate)}</p></td>
                     <td className="px-5 text-end">
-                      <button type="button" onClick={() => openHistory(customer)} className="inline-flex h-8 items-center rounded-md border border-gold/20 px-3 text-[0.58rem] font-semibold uppercase tracking-[0.1em] text-gold transition hover:bg-gold/10" aria-label={`${t("view_history", "View history")} ${customer.name}`}>{t("view", "View")}</button>
+                      <button type="button" onClick={() => openHistory(customer)} className="inline-flex h-8 items-center rounded-md border border-gold/20 px-3 text-xs font-semibold uppercase tracking-[0.1em] text-accent transition hover:bg-gold/10" aria-label={`${t("view_history", "View history")} ${customer.name}`}>{t("view", "View")}</button>
                     </td>
                   </tr>
                 ))}
@@ -348,32 +348,32 @@ export function CustomersClient({ customers: initial }: { customers: CustomerInf
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:hidden">
             {paged.map((customer) => (
-              <article key={customer.email} className="min-w-0 rounded-xl border border-white/[0.07] bg-[#121211] p-4">
+              <article key={customer.email} className="min-w-0 rounded-xl border border-line bg-card p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <h2 className="truncate text-sm font-semibold text-white">{customer.name}</h2>
-                    <p className="mt-1 truncate text-xs text-white/40">{customer.email}</p>
+                    <h2 className="truncate text-sm font-semibold text-foreground">{customer.name}</h2>
+                    <p className="mt-1 truncate text-xs text-secondary">{customer.email}</p>
                   </div>
                   <CustomerBadge repeat={customer.totalOrders > 1} labels={labels} />
                 </div>
-                <div className="mt-4 grid grid-cols-2 gap-3 border-y border-white/[0.06] py-4">
-                  <div><p className="text-[0.58rem] uppercase tracking-[0.12em] text-white/35">{t("total_orders", "Orders")}</p><p className="mt-1 text-sm font-semibold text-white/80">{customer.totalOrders}</p></div>
-                  <div className="text-end"><p className="text-[0.58rem] uppercase tracking-[0.12em] text-white/35">{t("total_spent", "Total spent")}</p><p className="mt-1 text-sm font-semibold text-gold">{customer.totalSpent.toFixed(2)} DH</p></div>
+                <div className="mt-4 grid grid-cols-2 gap-3 border-y border-line py-4">
+                  <div><p className="text-xs uppercase tracking-[0.12em] text-secondary">{t("total_orders", "Orders")}</p><p className="mt-1 text-sm font-semibold text-secondary">{customer.totalOrders}</p></div>
+                  <div className="text-end"><p className="text-xs uppercase tracking-[0.12em] text-secondary">{t("total_spent", "Total spent")}</p><p className="mt-1 text-sm font-semibold text-accent">{customer.totalSpent.toFixed(2)} DH</p></div>
                 </div>
                 <div className="mt-4 flex items-center justify-between gap-3">
-                  <div className="min-w-0"><p className="truncate font-mono text-xs text-white/60">{customer.lastOrderNumber || "—"}</p><p className="mt-1 text-[0.65rem] text-white/30">{formatDate(customer.lastOrderDate)}</p></div>
-                  <button type="button" onClick={() => openHistory(customer)} className="inline-flex h-9 shrink-0 items-center rounded-md border border-gold/20 px-3 text-[0.58rem] font-semibold uppercase tracking-[0.1em] text-gold">{t("view", "View")}</button>
+                  <div className="min-w-0"><p className="truncate font-mono text-xs text-secondary">{customer.lastOrderNumber || "—"}</p><p className="mt-1 text-xs text-secondary">{formatDate(customer.lastOrderDate)}</p></div>
+                  <button type="button" onClick={() => openHistory(customer)} className="inline-flex h-9 shrink-0 items-center rounded-md border border-gold/20 px-3 text-xs font-semibold uppercase tracking-[0.1em] text-accent">{t("view", "View")}</button>
                 </div>
               </article>
             ))}
           </div>
 
-          <nav className="mt-5 flex flex-col gap-3 rounded-xl border border-white/[0.06] bg-[#121211] px-4 py-3 sm:flex-row sm:items-center sm:justify-between" aria-label={t("pagination", "Pagination")}>
-            <p className="text-xs tabular-nums text-white/40">{t("showing", "Showing")} {firstVisible}–{lastVisible} {t("of_label", "of")} {filtered.length}</p>
+          <nav className="mt-5 flex flex-col gap-3 rounded-xl border border-line bg-card px-4 py-3 sm:flex-row sm:items-center sm:justify-between" aria-label={t("pagination", "Pagination")}>
+            <p className="text-xs tabular-nums text-secondary">{t("showing", "Showing")} {firstVisible}–{lastVisible} {t("of_label", "of")} {filtered.length}</p>
             <div className="flex items-center justify-between gap-2 sm:justify-end">
-              <button type="button" disabled={currentPage === 0} onClick={() => setPage((value) => Math.max(value - 1, 0))} className="inline-flex h-9 items-center rounded-md border border-white/[0.08] px-3 text-[0.6rem] font-semibold uppercase tracking-[0.1em] text-white/55 transition hover:border-gold/25 hover:text-gold disabled:cursor-not-allowed disabled:opacity-30"><span className="rtl:rotate-180" aria-hidden>←</span> <span className="ms-1 hidden sm:inline">{t("previous", "Previous")}</span></button>
-              <span className="min-w-[92px] text-center text-xs tabular-nums text-white/50">{t("page_of", "Page")} {currentPage + 1} {t("of_label", "of")} {Math.max(totalPages, 1)}</span>
-              <button type="button" disabled={currentPage >= totalPages - 1} onClick={() => setPage((value) => Math.min(value + 1, totalPages - 1))} className="inline-flex h-9 items-center rounded-md border border-white/[0.08] px-3 text-[0.6rem] font-semibold uppercase tracking-[0.1em] text-white/55 transition hover:border-gold/25 hover:text-gold disabled:cursor-not-allowed disabled:opacity-30"><span className="me-1 hidden sm:inline">{t("next", "Next")}</span> <span className="rtl:rotate-180" aria-hidden>→</span></button>
+              <button type="button" disabled={currentPage === 0} onClick={() => setPage((value) => Math.max(value - 1, 0))} className="inline-flex h-9 items-center rounded-md border border-line px-3 text-xs font-semibold uppercase tracking-[0.1em] text-secondary transition hover:border-gold/25 hover:text-accent disabled:cursor-not-allowed disabled:opacity-30"><span className="rtl:rotate-180" aria-hidden>←</span> <span className="ms-1 hidden sm:inline">{t("previous", "Previous")}</span></button>
+              <span className="min-w-[92px] text-center text-xs tabular-nums text-secondary">{t("page_of", "Page")} {currentPage + 1} {t("of_label", "of")} {Math.max(totalPages, 1)}</span>
+              <button type="button" disabled={currentPage >= totalPages - 1} onClick={() => setPage((value) => Math.min(value + 1, totalPages - 1))} className="inline-flex h-9 items-center rounded-md border border-line px-3 text-xs font-semibold uppercase tracking-[0.1em] text-secondary transition hover:border-gold/25 hover:text-accent disabled:cursor-not-allowed disabled:opacity-30"><span className="me-1 hidden sm:inline">{t("next", "Next")}</span> <span className="rtl:rotate-180" aria-hidden>→</span></button>
             </div>
           </nav>
         </>

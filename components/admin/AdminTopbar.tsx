@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { NotificationBell } from "@/components/admin/NotificationBell";
 import type { AdminNotificationType } from "@/lib/admin-notifications";
 import { useTranslation } from "@/hooks/useTranslation";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 type Props = {
   initialNotifications: AdminNotificationType[];
@@ -26,6 +27,10 @@ const PAGE_CONTEXT = [
   { match: /^\/admin\/translations/, group: "Content", title: "Translations", description: "Manage localized interface content." },
   { match: /^\/admin\/settings/, group: "System", title: "Settings", description: "Configure store identity and contact details." },
   { match: /^\/admin\/admins/, group: "System", title: "Administrators", description: "Manage administrative access." },
+  { match: /^\/admin\/inventory/, group: "Operations", title: "Inventory", description: "Manage stock, suppliers and warehouses." },
+  { match: /^\/admin\/security/, group: "System", title: "Security", description: "Manage access and account security." },
+  { match: /^\/admin\/automation/, group: "System", title: "Automation", description: "Manage scheduled operations." },
+  { match: /^\/admin\/blog/, group: "Content", title: "Blog", description: "Manage your store articles." },
   { match: /^\/admin\/reports/, group: "Overview", title: "Reports", description: "Analyze store performance and operations." },
   { match: /^\/admin\/dashboard/, group: "Overview", title: "Dashboard", description: "Store performance and operational overview." },
 ] as const;
@@ -33,7 +38,6 @@ const PAGE_CONTEXT = [
 export function AdminTopbar({ initialNotifications, initialUnread }: Props) {
   const pathname = usePathname();
   const { t } = useTranslation("admin");
-  const isDashboard = pathname === "/admin/dashboard";
   const context = PAGE_CONTEXT.find((item) => item.match.test(pathname)) ?? {
     group: "Admin",
     title: "Control center",
@@ -41,30 +45,29 @@ export function AdminTopbar({ initialNotifications, initialUnread }: Props) {
   };
 
   return (
-    <header className="sticky top-0 z-40 flex h-16 min-w-0 items-center justify-between gap-3 border-b border-white/[0.08] bg-[#0B0B0A]/95 pe-4 ps-16 backdrop-blur-xl sm:px-5 lg:px-7">
+    <header className="admin-topbar">
       <div className="min-w-0">
-        <div className="flex min-w-0 items-center gap-2 text-[0.6rem] font-medium uppercase tracking-[0.15em] text-white/35">
+        <div className="admin-topbar-caption hidden min-w-0 items-center gap-2 sm:flex">
           <span className="hidden sm:inline">MONADATY</span>
-          <span className="hidden text-white/20 sm:inline" aria-hidden>/</span>
-          <span className="truncate text-[#D6B35A]/80">{t(`nav_group_${context.group.toLowerCase()}`, context.group)}</span>
+          <span className="hidden text-secondary sm:inline" aria-hidden>/</span>
+          <span className="truncate">{t(`nav_group_${context.group.toLowerCase()}`, context.group)}</span>
         </div>
-        {!isDashboard && (
-          <div className="mt-0.5 flex min-w-0 items-baseline gap-3">
-            <p className="truncate text-sm font-semibold text-white sm:text-[0.94rem]">{t(`topbar_${context.title.toLowerCase().replace(/\s+/g, "_")}`, context.title)}</p>
-            <p className="hidden truncate text-xs text-white/35 xl:block">{t(`topbar_${context.title.toLowerCase().replace(/\s+/g, "_")}_description`, context.description)}</p>
+          <div className="flex min-w-0 items-baseline gap-3 sm:mt-0.5">
+            <p className="admin-topbar-title">{t(`topbar_${context.title.toLowerCase().replace(/\s+/g, "_")}`, context.title)}</p>
+            <p className="hidden truncate text-sm text-secondary 2xl:block">{t(`topbar_${context.title.toLowerCase().replace(/\s+/g, "_")}_description`, context.description)}</p>
           </div>
-        )}
       </div>
 
-      <div className="flex shrink-0 items-center gap-2.5">
+      <div className="admin-topbar-actions">
+        <LanguageSwitcher />
         <NotificationBell initialNotifications={initialNotifications} initialUnread={initialUnread} />
-        <div className="flex h-10 items-center gap-2.5 rounded-xl border border-white/[0.08] bg-[#151512] p-1 pe-1 sm:pe-3">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#6E1F2A] text-[0.68rem] font-semibold text-white" aria-hidden>
+        <div className="hidden h-11 items-center gap-2.5 border-s border-line ps-3 lg:flex">
+          <span className="admin-brand-badge" aria-hidden>
             M
           </span>
           <div className="hidden min-w-0 sm:block">
-            <p className="max-w-28 truncate text-[0.7rem] font-medium text-white">MONADATY</p>
-            <p className="text-[0.56rem] uppercase tracking-[0.12em] text-white/35">{t("admin_role", "Admin")}</p>
+            <p className="max-w-28 truncate text-sm font-medium text-foreground">MONADATY</p>
+            <p className="text-xs text-secondary">{t("admin_role", "Admin")}</p>
           </div>
         </div>
       </div>

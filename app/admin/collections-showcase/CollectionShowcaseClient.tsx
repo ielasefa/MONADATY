@@ -26,7 +26,7 @@ function ErrorMessage({ message }: { message: string }) {
 
 function Thumb({ src, alt }: { src: string; alt: string }) {
   return (
-    <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-white/[0.06] bg-white">
+    <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-line bg-white">
       <SafeImage
         src={src}
         alt={alt}
@@ -149,10 +149,10 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
 
   return (
     <div>
-      <header className="mb-6 flex flex-col gap-4 border-b border-white/[0.08] pb-6 md:flex-row md:items-end md:justify-between">
+      <header className="mb-6 flex flex-col gap-4 border-b border-line pb-6 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="luxury-label mb-2">{t("collection_showcase_breadcrumb", "Collection Showcase")}</p>
-          <h1 className="text-white">
+          <h1 className="text-foreground">
             {t("collection_showcase_title", "Collection Showcase Manager")}
           </h1>
           <p className="mt-1 text-sm text-muted">
@@ -161,14 +161,14 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div className="admin-panel min-w-0 px-4 py-3">
-            <p className="luxury-label text-[10px] text-muted">{t("configured_collections", "Configured Collections")}</p>
-            <p className="font-display text-xl font-semibold text-gold">
+            <p className="luxury-label text-xs text-muted">{t("configured_collections", "Configured Collections")}</p>
+            <p className="font-display text-xl font-semibold text-accent">
               {configuredCount} <span className="text-xs font-normal text-muted">/ {collections.length}</span>
             </p>
           </div>
           <div className="admin-panel min-w-0 px-4 py-3">
-            <p className="luxury-label text-[10px] text-muted">{t("featured_products", "Featured Products")}</p>
-            <p className="font-display text-xl font-semibold text-white">{featuredCount}</p>
+            <p className="luxury-label text-xs text-muted">{t("featured_products", "Featured Products")}</p>
+            <p className="font-display text-xl font-semibold text-foreground">{featuredCount}</p>
           </div>
         </div>
       </header>
@@ -176,7 +176,7 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
       {collections.length === 0 ? (
         <div className="luxury-card flex flex-col items-center gap-3 rounded-xl p-12 text-center">
           <span className="text-3xl">⊟</span>
-          <p className="font-medium text-white">{t("collection_showcase_empty", "No collections found")}</p>
+          <p className="font-medium text-foreground">{t("collection_showcase_empty", "No collections found")}</p>
           <p className="max-w-sm text-sm text-muted">
             {t("collection_showcase_empty_desc", "Create a collection first to start curating its featured products.")}
           </p>
@@ -201,18 +201,18 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
                 className={`admin-panel border p-5 text-start transition-[transform,border-color,box-shadow] duration-200 ${
                   isExpanded
                     ? "border-gold/40 shadow-gold shadow-lg"
-                    : "border-white/[0.06] hover:border-gold/25"
+                    : "border-line hover:border-gold/25"
                 }`}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="font-medium text-white">{c.name}</p>
+                    <p className="font-medium text-foreground">{c.name}</p>
                     <p className="mt-0.5 text-xs text-muted">{c.slug}</p>
                   </div>
                   <span
-                    className={`inline-flex shrink-0 items-center rounded-full px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.15em] ${
+                    className={`inline-flex shrink-0 items-center rounded-full px-2.5 py-0.5 text-xs font-semibold uppercase tracking-[0.08em] ${
                       complete
-                        ? "bg-emerald-500/10 text-emerald-400"
+                        ? "bg-emerald-500/10 text-emerald-700"
                         : "bg-burgundy/10 text-burgundy"
                     }`}
                   >
@@ -232,18 +232,18 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
                               fill
                               sizes="36px"
                               className="object-contain p-0.5"
-                              fallback={<span className="flex h-full w-full items-center justify-center text-[0.6rem] font-bold text-neutral-400">{p.name.charAt(0)}</span>}
+                              fallback={<span className="flex h-full w-full items-center justify-center text-xs font-bold text-neutral-400">{p.name.charAt(0)}</span>}
                             />
                           ) : null}
                         </div>
                       );
                     })}
                   </div>
-                  <span className="text-xs font-medium text-gold">
+                  <span className="text-xs font-medium text-accent">
                     {count > 0 ? (
                       <span>
                         {t("products_configured", "Products configured")}{" "}
-                        <span className="text-white/70">· {count} / 3</span>
+                        <span className="text-secondary">· {count} / 3</span>
                       </span>
                     ) : (
                       t("no_products_selected", "No products selected")
@@ -251,7 +251,7 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
                   </span>
                 </div>
                 <div className="mt-4 flex items-center justify-between">
-                  <span className="label-utility text-[0.6rem] tracking-[0.2em] text-gold/70">
+                  <span className="label-utility text-xs tracking-[0.08em] text-accent">
                     {isExpanded ? t("close", "Close") : t("manage_products", "Manage Products")}
                   </span>
                   <motion.span animate={{ rotate: isExpanded ? 90 : 0 }} className="text-muted">›</motion.span>
@@ -275,17 +275,17 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="luxury-label mb-1">{t("selected_products", "Selected Products")}</p>
-                <h2 className="text-xl font-semibold text-white">{expanded.name}</h2>
+                <h2 className="text-xl font-semibold text-foreground">{expanded.name}</h2>
               </div>
               <span className="text-xs text-muted">
                 {t("products_configured", "Products configured")} ·{" "}
-                <span className="text-white/70">{selectedIds.length} / 3</span>
+                <span className="text-secondary">{selectedIds.length} / 3</span>
               </span>
             </div>
 
             <div className="mt-6 space-y-3">
               {selectedIds.length === 0 && (
-                <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-white/[0.12] py-10 text-center">
+                <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-line py-10 text-center">
                   <span className="text-2xl text-muted">⊞</span>
                   <p className="text-sm text-muted">{t("no_products_selected", "No products selected")}</p>
                 </div>
@@ -300,15 +300,15 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 10 }}
-                    className="flex flex-wrap items-center gap-3 rounded-xl border border-white/[0.08] bg-[#1A1A16] p-3 sm:flex-nowrap sm:gap-4"
+                    className="flex flex-wrap items-center gap-3 rounded-xl border border-line bg-card p-3 sm:flex-nowrap sm:gap-4"
                   >
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gold/10 text-[0.65rem] font-bold text-gold">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gold/10 text-xs font-bold text-accent">
                       {index + 1}
                     </span>
                     <Thumb src={product.image} alt={product.name} />
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium text-white">{product.name}</p>
-                      <p className="text-xs text-gold">{product.price}</p>
+                      <p className="truncate text-sm font-medium text-foreground">{product.name}</p>
+                      <p className="text-xs text-accent">{product.price}</p>
                     </div>
                     <div className="ms-auto flex items-center gap-1">
                       <button
@@ -316,7 +316,7 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
                         onClick={() => move(index, -1)}
                         disabled={index === 0}
                         aria-label={t("move_up", "Move up")}
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.08] text-white/60 transition hover:border-gold/40 hover:text-gold disabled:pointer-events-none disabled:opacity-30"
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-line text-secondary transition hover:border-gold/40 hover:text-accent disabled:pointer-events-none disabled:opacity-30"
                       >
                         ↑
                       </button>
@@ -325,7 +325,7 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
                         onClick={() => move(index, 1)}
                         disabled={index === selectedIds.length - 1}
                         aria-label={t("move_down", "Move down")}
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.08] text-white/60 transition hover:border-gold/40 hover:text-gold disabled:pointer-events-none disabled:opacity-30"
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-line text-secondary transition hover:border-gold/40 hover:text-accent disabled:pointer-events-none disabled:opacity-30"
                       >
                         ↓
                       </button>
@@ -334,7 +334,7 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
                       type="button"
                       onClick={() => removeProduct(index)}
                       aria-label={`${t("remove_product", "Remove Product")} ${product.name}`}
-                      className="inline-flex h-9 items-center rounded-lg border border-red-500/20 bg-red-500/[0.06] px-3 text-[0.58rem] font-semibold uppercase tracking-[0.1em] text-red-300 transition hover:bg-red-500/10"
+                      className="inline-flex h-9 items-center rounded-lg border border-red-500/20 bg-red-500/[0.06] px-3 text-xs font-semibold uppercase tracking-[0.1em] text-red-700 transition hover:bg-red-500/10"
                     >
                       {t("remove_product", "Remove")}
                     </button>
@@ -346,7 +346,7 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
             {selectedIds.length < MAX_PRODUCTS && (
               <div className="mt-6">
                 {pickerId === expanded.id ? (
-                  <div className="rounded-xl border border-white/[0.08] bg-black-soft p-4">
+                  <div className="rounded-xl border border-line bg-black-soft p-4">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                       <input
                         type="search"
@@ -372,11 +372,11 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
                           key={p.id}
                           type="button"
                           onClick={() => addProduct(p.id)}
-                          className="flex items-center gap-3 rounded-lg border border-white/[0.06] bg-card p-3 text-left transition hover:border-gold/30"
+                          className="flex items-center gap-3 rounded-lg border border-line bg-card p-3 text-start transition hover:border-gold/30"
                         >
                           <Thumb src={p.image} alt={p.name} />
                           <div className="min-w-0">
-                            <p className="truncate text-sm text-white">{p.name}</p>
+                            <p className="truncate text-sm text-foreground">{p.name}</p>
                             <p className="text-xs text-muted">{p.price}</p>
                           </div>
                         </button>
@@ -389,7 +389,7 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
                     onClick={() => setPickerId(expanded.id)}
                     className="btn-secondary inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm"
                   >
-                    <span className="text-gold">+</span> {t("add_product", "Add Product")}
+                    <span className="text-accent">+</span> {t("add_product", "Add Product")}
                   </button>
                 )}
               </div>
@@ -403,7 +403,7 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
               </div>
             )}
 
-            <div className="mt-6 flex flex-col-reverse gap-3 border-t border-white/[0.08] pt-5 sm:flex-row sm:items-center sm:justify-end">
+            <div className="mt-6 flex flex-col-reverse gap-3 border-t border-line pt-5 sm:flex-row sm:items-center sm:justify-end">
               <Link href="/admin/collections" className="btn-secondary w-full px-4 sm:w-auto">
                 {t("edit_collections", "Edit Collections")}
               </Link>
@@ -414,7 +414,7 @@ export function CollectionShowcaseClient({ collections, saveCollectionShowcase }
                 className="btn-primary inline-flex w-full items-center gap-2 px-6 disabled:pointer-events-none disabled:opacity-50 sm:w-auto"
               >
                 {saving && (
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" aria-hidden />
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-line border-t-line" aria-hidden />
                 )}
                 {t("save", "Save")}
               </button>

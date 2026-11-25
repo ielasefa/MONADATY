@@ -19,8 +19,8 @@ export default function OrdersChart({ data }: Props) {
   const { t } = useTranslation("admin");
   if (data.length === 0) {
     return (
-      <div className="rounded-xl border border-white/[0.06] bg-surface p-6">
-        <p className="mb-4 text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-white/50">
+      <div className="rounded-xl border border-line bg-card p-6">
+        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.08em] text-secondary">
           {t("orders_30d", "Orders (30 days)")}
         </p>
         <div className="flex h-48 items-center justify-center">
@@ -31,34 +31,34 @@ export default function OrdersChart({ data }: Props) {
   }
 
   return (
-    <div className="rounded-xl border border-white/[0.06] bg-surface p-6">
-      <p className="mb-4 text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-white/50">
+    <div className="rounded-xl border border-line bg-card p-6">
+      <p className="mb-4 text-xs font-semibold uppercase tracking-[0.08em] text-secondary">
         {t("orders_30d", "Orders (30 days)")}
       </p>
       <div className="h-48">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} margin={{ top: 4, right: 4, left: -16, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(69,4,7,0.08)" />
   <XAxis
     dataKey="date"
-    tick={{ fill: "#969087", fontSize: 10 }}
+    tick={{ fill: "#6B6560", fontSize: 12 }}
     tickLine={false}
     axisLine={false}
     tickFormatter={(v) => v.slice(5)}
   />
   <YAxis
-    tick={{ fill: "#969087", fontSize: 10 }}
+    tick={{ fill: "#6B6560", fontSize: 12 }}
     tickLine={false}
     axisLine={false}
     allowDecimals={false}
   />
             <Tooltip
               contentStyle={{
-                background: "rgba(16,16,16,0.95)",
-                border: "1px solid rgba(255,255,255,0.08)",
+                background: "#FFFFFF",
+                border: "1px solid #E8E1D8",
                 borderRadius: "12px",
                 backdropFilter: "blur(16px)",
-                color: "#fff",
+                color: "#171717",
                 fontSize: "12px",
               }}
               formatter={(value) => [value, t("orders", "Orders")]}

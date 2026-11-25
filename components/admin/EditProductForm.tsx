@@ -162,8 +162,8 @@ export function EditProductForm({
 
   const inventoryStatus = (() => {
     if (form.stock <= 0) return { label: t("out_of_stock_label"), color: "text-burgundy", dot: "bg-burgundy" };
-    if (form.stock <= form.lowStockThreshold) return { label: t("low_stock"), color: "text-gold", dot: "bg-gold" };
-    return { label: t("in_stock_label"), color: "text-white/80", dot: "bg-white/20" };
+    if (form.stock <= form.lowStockThreshold) return { label: t("low_stock"), color: "text-accent", dot: "bg-gold" };
+    return { label: t("in_stock_label"), color: "text-secondary", dot: "bg-surface" };
   })();
 
   const profit = (() => {
@@ -196,6 +196,7 @@ export function EditProductForm({
     try {
       const payload = {
         ...form,
+        expectedStock: product.stock,
         regularPrice: formatPrice(form.regularPrice, form.currency),
         salePrice: form.salePrice ? formatPrice(form.salePrice, form.currency) : "",
         costPrice: form.costPrice ? formatPrice(form.costPrice, form.currency) : "",
@@ -224,7 +225,7 @@ export function EditProductForm({
 
       const data = await res.json();
       if (!res.ok) {
-        toast.error(data.error || t("failed_to_update_product", "Failed to update product"));
+        toast.error(data.code === "STOCK_CONFLICT" ? t("stock_changed_reload", "Stock changed. Reload the product before adjusting its quantity.") : data.error || t("failed_to_update_product", "Failed to update product"));
         setSaving(false);
         return;
       }
@@ -242,17 +243,17 @@ export function EditProductForm({
   const tabClass = (tab: string) =>
     `w-full rounded-md px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.08em] transition sm:w-auto sm:px-4 sm:tracking-[0.1em] ${
       activeTab === tab
-        ? "bg-gold/20 text-gold"
-        : "text-white/50 hover:text-white"
+        ? "bg-gold/20 text-accent"
+        : "text-secondary hover:text-foreground"
     }`;
 
    return (
      <form onSubmit={handleSubmit} className="space-y-6">
 
-      <div className="flex flex-col gap-4 border-b border-white/[0.06] pb-6 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-4 border-b border-line pb-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="font-display text-2xl text-white md:text-3xl">{t("edit_product", "Edit Product")}</h1>
-          <p className="mt-1 text-sm text-white/50">{product.name}</p>
+          <h1 className="font-display text-2xl text-foreground md:text-3xl">{t("edit_product", "Edit Product")}</h1>
+          <p className="mt-1 text-sm text-secondary">{product.name}</p>
         </div>
         <button
           type="submit"
@@ -264,7 +265,7 @@ export function EditProductForm({
       </div>
 
       {/* Tab Navigation */}
-        <div className="grid max-w-full grid-cols-2 gap-2 border-b border-white/[0.06] pb-2 sm:flex">
+        <div className="grid max-w-full grid-cols-2 gap-2 border-b border-line pb-2 sm:flex">
         <button type="button" onClick={() => setActiveTab("general")} className={tabClass("general")}>
           {t("general")}
         </button>
@@ -282,11 +283,11 @@ export function EditProductForm({
       {/* General Tab */}
       {activeTab === "general" && (
         <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-          <section className="rounded-xl border border-white/[0.07] bg-[#121211] p-5 sm:p-6 xl:col-span-2">
-            <h2 className="mb-5 text-base font-semibold text-white">{t("basic_information")}</h2>
+          <section className="rounded-xl border border-line bg-card p-5 sm:p-6 xl:col-span-2">
+            <h2 className="mb-5 text-base font-semibold text-foreground">{t("basic_information")}</h2>
             <div className="space-y-4">
               <div>
-                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
+                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-secondary">
                   {t("product_name", "Product Name")} <span className="text-burgundy">*</span>
                 </label>
                 <input
@@ -301,13 +302,13 @@ export function EditProductForm({
                       checkSlug(newSlug);
                     }
                   }}
-                  className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+                  className="w-full rounded-md border border-line bg-surface px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
                   placeholder={t("product_name_placeholder")}
                   required
                 />
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
+                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-secondary">
                   {t("slug", "Slug")}
                 </label>
                 <div className="relative">
@@ -315,7 +316,7 @@ export function EditProductForm({
                     type="text"
                     value={form.slug}
                     onChange={(e) => handleSlugChange(e.target.value)}
-                    className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 pe-10 text-sm text-white outline-none transition focus:border-gold/30"
+                    className="w-full rounded-md border border-line bg-surface px-4 py-2.5 pe-10 text-sm text-foreground outline-none transition focus:border-gold/30"
                     placeholder={t("product_slug_placeholder", "product-slug")}
                     required
                   />
@@ -335,51 +336,51 @@ export function EditProductForm({
                 </div>
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
+                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-secondary">
                   {t("short_description", "Short Description")}
                 </label>
                 <input
                   type="text"
                   value={form.shortDescription}
                   onChange={(e) => updateField("shortDescription", e.target.value)}
-                  className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+                  className="w-full rounded-md border border-line bg-surface px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
                   placeholder={t("product_desc_placeholder")}
                 />
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
+                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-secondary">
                   {t("full_description", "Full Description")}
                 </label>
                 <textarea
                   rows={4}
                   value={form.description}
                   onChange={(e) => updateField("description", e.target.value)}
-                  className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+                  className="w-full rounded-md border border-line bg-surface px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
                   placeholder={t("product_detail_placeholder")}
                 />
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
+                  <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-secondary">
                     {t("sku", "SKU")}
                   </label>
                   <input
                     type="text"
                     value={form.sku}
                     onChange={(e) => updateField("sku", e.target.value)}
-                    className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+                    className="w-full rounded-md border border-line bg-surface px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
                     placeholder={t("sku_placeholder")}
                   />
                 </div>
                 <div>
-                  <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
+                  <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-secondary">
                     {t("barcode", "Barcode")}
                   </label>
                   <input
                     type="text"
                     value={form.barcode}
                     onChange={(e) => updateField("barcode", e.target.value)}
-                    className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+                    className="w-full rounded-md border border-line bg-surface px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
                     placeholder={t("optional")}
                   />
                 </div>
@@ -387,11 +388,11 @@ export function EditProductForm({
             </div>
           </section>
 
-          <section className="rounded-xl border border-white/[0.07] bg-[#121211] p-5 sm:p-6 xl:col-span-2">
-            <h2 className="mb-5 text-base font-semibold text-white">{t("pricing")}</h2>
+          <section className="rounded-xl border border-line bg-card p-5 sm:p-6 xl:col-span-2">
+            <h2 className="mb-5 text-base font-semibold text-foreground">{t("pricing")}</h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <div>
-                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
+                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-secondary">
                   {t("regular_price", "Regular Price")} <span className="text-burgundy">*</span>
                 </label>
                 <div className="relative">
@@ -400,15 +401,15 @@ export function EditProductForm({
                     inputMode="decimal"
                     value={form.regularPrice}
                     onChange={(e) => handlePriceChange("regularPrice", e.target.value)}
-                    className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 pe-14 text-sm text-white outline-none transition focus:border-gold/30"
+                    className="w-full rounded-md border border-line bg-surface px-4 py-2.5 pe-14 text-sm text-foreground outline-none transition focus:border-gold/30"
                     placeholder={t("price_zero_placeholder", "0.00")}
                     required
                   />
-                  <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-white/50">{form.currency}</span>
+                  <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-secondary">{form.currency}</span>
                 </div>
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
+                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-secondary">
                   {t("sale_price")}
                 </label>
                 <div className="relative">
@@ -417,14 +418,14 @@ export function EditProductForm({
                     inputMode="decimal"
                     value={form.salePrice}
                     onChange={(e) => handlePriceChange("salePrice", e.target.value)}
-                    className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 pe-14 text-sm text-white outline-none transition focus:border-gold/30"
+                    className="w-full rounded-md border border-line bg-surface px-4 py-2.5 pe-14 text-sm text-foreground outline-none transition focus:border-gold/30"
                     placeholder={t("price_zero_placeholder", "0.00")}
                   />
-                  <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-white/50">{form.currency}</span>
+                  <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-secondary">{form.currency}</span>
                 </div>
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
+                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-secondary">
                   {t("cost_price")}
                 </label>
                 <div className="relative">
@@ -433,20 +434,20 @@ export function EditProductForm({
                     inputMode="decimal"
                     value={form.costPrice}
                     onChange={(e) => handlePriceChange("costPrice", e.target.value)}
-                    className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 pe-14 text-sm text-white outline-none transition focus:border-gold/30"
+                    className="w-full rounded-md border border-line bg-surface px-4 py-2.5 pe-14 text-sm text-foreground outline-none transition focus:border-gold/30"
                     placeholder={t("price_zero_placeholder", "0.00")}
                   />
-                  <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-white/50">{form.currency}</span>
+                  <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-secondary">{form.currency}</span>
                 </div>
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
+                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-secondary">
                   {t("currency")}
                 </label>
                 <select
                   value={form.currency}
                   onChange={(e) => updateField("currency", e.target.value)}
-                  className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+                  className="w-full rounded-md border border-line bg-surface px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
                 >
                   {CURRENCIES.map((c) => (
                     <option key={c} value={c}>{c}</option>
@@ -455,26 +456,26 @@ export function EditProductForm({
               </div>
             </div>
             <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
-              <div className="rounded-lg border border-white/[0.06] bg-[#171717] p-3">
-                <p className="text-xs text-white/50">{t("profit")}</p>
-                <p className={`mt-1 text-sm font-semibold ${profit >= 0 ? "text-white/80" : "text-burgundy"}`}>
+              <div className="rounded-lg border border-line bg-surface p-3">
+                <p className="text-xs text-secondary">{t("profit")}</p>
+                <p className={`mt-1 text-sm font-semibold ${profit >= 0 ? "text-secondary" : "text-burgundy"}`}>
                   {profit.toFixed(2)} {form.currency}
                 </p>
               </div>
-              <div className="rounded-lg border border-white/[0.06] bg-[#171717] p-3">
-                <p className="text-xs text-white/50">{t("margin")}</p>
-                <p className={`mt-1 text-sm font-semibold ${margin >= 0 ? "text-white/80" : "text-burgundy"}`}>
+              <div className="rounded-lg border border-line bg-surface p-3">
+                <p className="text-xs text-secondary">{t("margin")}</p>
+                <p className={`mt-1 text-sm font-semibold ${margin >= 0 ? "text-secondary" : "text-burgundy"}`}>
                   {margin.toFixed(1)}%
                 </p>
               </div>
             </div>
           </section>
 
-          <section className="rounded-xl border border-white/[0.07] bg-[#121211] p-5 sm:p-6">
-            <h2 className="mb-5 text-base font-semibold text-white">{t("inventory")}</h2>
+          <section className="rounded-xl border border-line bg-card p-5 sm:p-6">
+            <h2 className="mb-5 text-base font-semibold text-foreground">{t("inventory")}</h2>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
+                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-secondary">
                   {t("stock_qty")}
                 </label>
                 <input
@@ -482,11 +483,11 @@ export function EditProductForm({
                   min={0}
                   value={form.stock}
                   onChange={(e) => updateField("stock", Math.max(0, parseInt(e.target.value) || 0))}
-                  className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+                  className="w-full rounded-md border border-line bg-surface px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
                 />
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
+                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-secondary">
                   {t("low_stock_threshold")}
                 </label>
                 <input
@@ -494,7 +495,7 @@ export function EditProductForm({
                   min={1}
                   value={form.lowStockThreshold}
                   onChange={(e) => updateField("lowStockThreshold", Math.max(1, parseInt(e.target.value) || 1))}
-                  className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+                  className="w-full rounded-md border border-line bg-surface px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
                 />
               </div>
             </div>
@@ -504,17 +505,17 @@ export function EditProductForm({
             </div>
           </section>
 
-          <section className="rounded-xl border border-white/[0.07] bg-[#121211] p-5 sm:p-6">
-            <h2 className="mb-5 text-base font-semibold text-white">{t("organization")}</h2>
+          <section className="rounded-xl border border-line bg-card p-5 sm:p-6">
+            <h2 className="mb-5 text-base font-semibold text-foreground">{t("organization")}</h2>
             <div className="grid gap-4 sm:grid-cols-3">
               <div>
-                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
+                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-secondary">
                   {t("category")}
                 </label>
                 <select
                   value={form.categoryId}
                   onChange={(e) => updateField("categoryId", e.target.value)}
-                  className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+                  className="w-full rounded-md border border-line bg-surface px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
                 >
                   <option value="">{t("no_category")}</option>
                   {categories.map((cat) => (
@@ -523,13 +524,13 @@ export function EditProductForm({
                 </select>
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
+                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-secondary">
                   {t("collection")}
                 </label>
                 <select
                   value={form.collectionId}
                   onChange={(e) => updateField("collectionId", e.target.value)}
-                  className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+                  className="w-full rounded-md border border-line bg-surface px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
                 >
                   <option value="">{t("no_collection")}</option>
                   {collections.map((col) => (
@@ -538,31 +539,31 @@ export function EditProductForm({
                 </select>
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
+                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-secondary">
                   {t("brand")}
                 </label>
                 <input
                   type="text"
                   value={form.brand}
                   onChange={(e) => updateField("brand", e.target.value)}
-                  className="w-full rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+                  className="w-full rounded-md border border-line bg-surface px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
                   placeholder={t("brand_placeholder")}
                 />
               </div>
             </div>
           </section>
 
-          <section className="rounded-xl border border-white/[0.07] bg-[#121211] p-5 sm:p-6 xl:col-span-2">
-            <h2 className="mb-5 text-base font-semibold text-white">{t("status_and_flags")}</h2>
+          <section className="rounded-xl border border-line bg-card p-5 sm:p-6 xl:col-span-2">
+            <h2 className="mb-5 text-base font-semibold text-foreground">{t("status_and_flags")}</h2>
             <div className="flex flex-wrap items-center gap-6">
               <div>
-                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-white/50">
+                <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-secondary">
                   {t("status")}
                 </label>
                 <select
                   value={form.status}
                   onChange={(e) => updateField("status", e.target.value)}
-                  className="w-40 rounded-md border border-white/[0.06] bg-[#171717] px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+                  className="w-40 rounded-md border border-line bg-surface px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
                 >
                   <option value="Draft">{t("draft")}</option>
                   <option value="Active">{t("active")}</option>
@@ -575,18 +576,18 @@ export function EditProductForm({
                   type="checkbox"
                   checked={form.featured}
                   onChange={(e) => updateField("featured", e.target.checked)}
-                  className="h-4 w-4 rounded border-white/20 bg-white/5 accent-gold"
+                  className="h-4 w-4 rounded border-line bg-surface accent-gold"
                 />
-                <span className="text-sm text-white">{t("featured")}</span>
+                <span className="text-sm text-foreground">{t("featured")}</span>
               </label>
               <label className="flex cursor-pointer items-center gap-3 pt-5">
                 <input
                   type="checkbox"
                   checked={form.isBestSeller}
                   onChange={(e) => updateField("isBestSeller", e.target.checked)}
-                  className="h-4 w-4 rounded border-white/20 bg-white/5 accent-gold"
+                  className="h-4 w-4 rounded border-line bg-surface accent-gold"
                 />
-                <span className="text-sm text-white">{t("best_seller")}</span>
+                <span className="text-sm text-foreground">{t("best_seller")}</span>
               </label>
             </div>
           </section>
@@ -595,8 +596,8 @@ export function EditProductForm({
 
       {/* Images Tab */}
       {activeTab === "images" && (
-        <section className="rounded-xl border border-white/[0.07] bg-[#121211] p-5 sm:p-6">
-          <h2 className="mb-5 text-base font-semibold text-white">{t("images")}</h2>
+        <section className="rounded-xl border border-line bg-card p-5 sm:p-6">
+          <h2 className="mb-5 text-base font-semibold text-foreground">{t("images")}</h2>
           <ImageUploader
             images={images}
             onChange={handleImageChange}
@@ -606,8 +607,8 @@ export function EditProductForm({
 
       {/* Variants Tab */}
       {activeTab === "variants" && (
-        <section className="rounded-xl border border-white/[0.07] bg-[#121211] p-5 sm:p-6">
-          <h2 className="mb-5 text-base font-semibold text-white">{t("variants")}</h2>
+        <section className="rounded-xl border border-line bg-card p-5 sm:p-6">
+          <h2 className="mb-5 text-base font-semibold text-foreground">{t("variants")}</h2>
           <VariantManager
             productId={product.id}
             variants={variants}
@@ -619,8 +620,8 @@ export function EditProductForm({
 
       {/* History Tab */}
       {activeTab === "history" && (
-        <section className="rounded-xl border border-white/[0.07] bg-[#121211] p-5 sm:p-6">
-          <h2 className="mb-5 text-base font-semibold text-white">{t("version_history")}</h2>
+        <section className="rounded-xl border border-line bg-card p-5 sm:p-6">
+          <h2 className="mb-5 text-base font-semibold text-foreground">{t("version_history")}</h2>
           <ProductHistory key={historyKey} productId={product.id} />
         </section>
       )}

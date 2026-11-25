@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import crypto from "crypto";
+import { Prisma } from "@/generated/prisma/client";
+import { allocateStockChange, restoreOrderAllocations } from "./stock-allocation";
 import { logError } from "./logger";
 import { formatMoney, parseMoney } from "./money";
 import { resolveDatabaseProductImage } from "./product-images";
@@ -99,7 +101,7 @@ export type OrderCreateResult =
     }
   | { error: string; code: OrderCreateErrorCode };
 
-class OrderValidationError extends Error {
+export class OrderValidationError extends Error {
   constructor(
     message: string,
     readonly code: OrderCreateErrorCode = "VALIDATION_ERROR",
@@ -324,7 +326,7 @@ export async function createOrder(input: OrderCreateInput): Promise<OrderCreateR
         include: { items: true },
       });
 
-      for (const item of normalizedItems) {
+      for (const item of [...normalizedItems].sort((a, b) => a.productId.localeCompare(b.productId))) {
         if (!item.productId) continue;
         const updateResult = await tx.product.updateMany({
           where: {
@@ -343,6 +345,8 @@ export async function createOrder(input: OrderCreateInput): Promise<OrderCreateR
             product && (!product.available || product.status !== "Active") ? "PRODUCT_UNAVAILABLE" : "OUT_OF_STOCK",
           );
         }
+        const remaining = await tx.product.findUniqueOrThrow({ where: { id: item.productId }, select: { stock: true } });
+        await allocateStockChange(tx, { productId: item.productId, previousStock: remaining.stock + item.quantity, delta: -item.quantity, reference: created.id, sale: true });
       }
 
       return created;
@@ -390,43 +394,42 @@ export async function updateOrderStatus(
   if (data.trackingNumber !== undefined) updateData.trackingNumber = data.trackingNumber;
   if (data.deliveryNotes !== undefined) updateData.deliveryNotes = data.deliveryNotes;
 
-  const restoresInventory = data.orderStatus === "cancelled" || data.orderStatus === "refunded";
-
   await prisma.$transaction(async (tx) => {
-    if (!restoresInventory) {
-      await tx.order.update({ where: { id: orderId }, data: updateData });
-      return;
-    }
-
+    await tx.$queryRaw(Prisma.sql`SELECT id FROM orders WHERE id = ${orderId} FOR UPDATE`);
     const order = await tx.order.findUnique({ where: { id: orderId }, include: { items: true } });
     if (!order) throw new OrderValidationError("Order not found");
-
-    // The conditional status transition is the idempotency guard for restocking. Concurrent
-    // cancellation/refund requests can only make this transition once.
-    const transitioned = await tx.order.updateMany({
-      where: { id: orderId, orderStatus: { notIn: ["cancelled", "refunded"] } },
-      data: updateData,
-    });
-
-    if (transitioned.count === 0) {
-      await tx.order.update({ where: { id: orderId }, data: updateData });
-      return;
+    const released = (status: string) => status === "cancelled" || status === "refunded";
+    const wasReleased = released(order.orderStatus);
+    const willBeReleased = released(data.orderStatus || order.orderStatus);
+    if (wasReleased !== willBeReleased) {
+      for (const item of [...order.items].sort((a, b) => (a.productId || "").localeCompare(b.productId || ""))) {
+        if (!item.productId) {
+          if (!willBeReleased) throw new OrderValidationError("A product in this order no longer exists", "PRODUCT_UNAVAILABLE");
+          continue;
+        }
+        if (willBeReleased) {
+          await tx.product.update({ where: { id: item.productId }, data: { stock: { increment: item.quantity } } });
+          await restoreOrderAllocations(tx, orderId, item.productId);
+        } else {
+          const changed = await tx.product.updateMany({ where: { id: item.productId, available: true, status: "Active", stock: { gte: item.quantity } }, data: { stock: { decrement: item.quantity } } });
+          if (changed.count !== 1) throw new OrderValidationError(`Insufficient stock to reopen the order for "${item.name}"`, "OUT_OF_STOCK");
+          const remaining = await tx.product.findUniqueOrThrow({ where: { id: item.productId }, select: { stock: true } });
+          await allocateStockChange(tx, { productId: item.productId, previousStock: remaining.stock + item.quantity, delta: -item.quantity, reference: orderId, sale: true });
+        }
+      }
+      if (order.couponCode) {
+        if (willBeReleased) {
+          await tx.coupon.updateMany({ where: { code: order.couponCode, usageCount: { gt: 0 } }, data: { usageCount: { decrement: 1 } } });
+        } else {
+          const coupon = await tx.coupon.findUnique({ where: { code: order.couponCode } });
+          if (coupon) {
+            const updated = await tx.coupon.updateMany({ where: { id: coupon.id, ...(coupon.maxUsage > 0 ? { usageCount: { lt: coupon.maxUsage } } : {}) }, data: { usageCount: { increment: 1 } } });
+            if (!updated.count) throw new OrderValidationError("Coupon usage limit reached", "COUPON_INVALID");
+          }
+        }
+      }
     }
-
-    for (const item of order.items) {
-      if (!item.productId) continue;
-      await tx.product.update({
-        where: { id: item.productId },
-        data: { stock: { increment: item.quantity } },
-      });
-    }
-
-    if (order.couponCode) {
-      await tx.coupon.updateMany({
-        where: { code: order.couponCode, usageCount: { gt: 0 } },
-        data: { usageCount: { decrement: 1 } },
-      });
-    }
+    await tx.order.update({ where: { id: orderId }, data: updateData });
   });
 }
 

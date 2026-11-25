@@ -1,0 +1,4 @@
+Checked compact header, filters and product actions: fr
+Checked compact header, filters and product actions: en
+Checked compact header, filters and product actions: ar
+{"checks":24,"audits":[{"lang":"fr","route":"shop","violations":[]},{"lang":"fr","route":"product","violations":[]},{"lang":"en","route":"shop","violations":[]},{"lang":"en","route":"product","violations":[]},{"lang":"ar","route":"shop","violations":[]},{"lang":"ar","route":"product","violations":[]}],"errors":[]}

@@ -44,6 +44,7 @@ function fillTemplate(template: string, order: OrderInfo, statusLabel: string, m
 }
 
 async function sendEmail(templateKey: string, order: OrderInfo, statusLabel: string, message: string): Promise<void> {
+  if (!order.customerEmail?.trim()) return;
   if (!resend || !FROM_EMAIL) {
     logInfo("Email: RESEND_API_KEY or EMAIL_FROM not set, skipping email for order " + order.orderNumber);
     return;

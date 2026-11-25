@@ -20,13 +20,13 @@ export default function ReportsIndexPage() {
     <div className="container-shell mx-auto px-6 py-10">
       <div className="mb-8">
         <p className="luxury-label mb-2">{t("analytics")}</p>
-        <h1 className="text-3xl font-semibold tracking-tight text-white">{t("reports_center")}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t("reports_center")}</h1>
         <p className="mt-1 text-sm text-muted">{t("reports_desc")}</p>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {reportLinks.map((r) => (
           <Link key={r.href} href={r.href} className="luxury-card group block p-6 transition hover:border-gold/30">
-            <h3 className="font-semibold text-white group-hover:text-gold">{r.label}</h3>
+            <h3 className="font-semibold text-foreground group-hover:text-accent">{r.label}</h3>
             <p className="mt-1 text-sm text-muted">{r.desc}</p>
           </Link>
         ))}

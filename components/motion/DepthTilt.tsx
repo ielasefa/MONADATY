@@ -1,12 +1,8 @@
 "use client";
 
 import { useEffect, useRef, type PointerEvent, type ReactNode } from "react";
-import {
-  motion,
-  useMotionValue,
-  useReducedMotion,
-  useSpring,
-} from "framer-motion";
+import { motion, useMotionValue, useSpring,  } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 type DepthTiltProps = {
   children: ReactNode;

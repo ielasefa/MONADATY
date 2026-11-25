@@ -1,0 +1,12 @@
+Initial add: fr 390 1 [ 'Produit ajouté au panier.' ] []
+Passed: fr 390
+Initial add: fr 1440 1 [ 'Produit ajouté au panier.' ] []
+Passed: fr 1440
+Initial add: en 390 1 [ 'Added to cart.' ] []
+Passed: en 390
+Initial add: en 1440 1 [ 'Added to cart.' ] []
+Passed: en 1440
+Initial add: ar 390 1 [ 'تمت إضافة المنتج إلى السلة.' ] []
+Passed: ar 390
+Initial add: ar 1440 1 [ 'تمت إضافة المنتج إلى السلة.' ] []
+Passed: ar 1440

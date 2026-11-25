@@ -17,6 +17,7 @@ export function LanguageSwitcher({ className = "" }: { className?: string }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -28,6 +29,15 @@ export function LanguageSwitcher({ className = "" }: { className?: string }) {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  useEffect(() => {
+    if (!open) return;
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") { setOpen(false); trigger.current?.focus(); }
+    };
+    document.addEventListener("keydown", escape);
+    return () => document.removeEventListener("keydown", escape);
+  }, [open]);
+
   const current = LANGUAGES.find((l) => l.code === lang) ?? LANGUAGES[0];
 
   const handleLanguageChange = (newLang: Language) => {
@@ -37,11 +47,13 @@ export function LanguageSwitcher({ className = "" }: { className?: string }) {
   };
 
   return (
-    <div ref={ref} className={`relative ${className}`}>
+    <div ref={ref} className={`language-switcher relative ${className}`}>
       <button
+        ref={trigger}
+        type="button"
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 rounded-md border border-ivory/[0.06] bg-ivory/[0.02] px-3 py-1.5 text-[0.65rem] font-medium text-ivory/60 transition-all duration-200 hover:border-ivory/[0.12] hover:text-ivory"
-        aria-label={t("select_language")}
+        className="flex min-h-11 items-center gap-2 rounded-md border border-line bg-ivory/[0.02] px-3 py-1.5 text-sm font-medium text-secondary transition-all duration-200 hover:border-line hover:text-foreground"
+        aria-label={t("select_language", { fr: "Choisir la langue", en: "Choose language", ar: "اختر اللغة" }[lang])}
         aria-expanded={open}
       >
         <span className="text-sm">{current.flag}</span>
@@ -60,15 +72,17 @@ export function LanguageSwitcher({ className = "" }: { className?: string }) {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full z-50 mt-1.5 w-44 overflow-hidden rounded-md border border-ivory/[0.06] bg-black-surface shadow-premium-lg">
+        <div className="language-menu absolute end-0 top-full z-50 mt-1.5 w-44 overflow-hidden rounded-md border border-line bg-card shadow-premium-lg">
           {LANGUAGES.map((l) => (
             <button
               key={l.code}
+              type="button"
+              aria-pressed={lang === l.code}
               onClick={() => handleLanguageChange(l.code)}
-              className={`flex w-full items-center gap-3 px-3.5 py-2.5 text-left text-sm transition-colors duration-150 ${
+              className={`flex w-full items-center gap-3 px-3.5 py-2.5 text-start text-sm transition-colors duration-150 ${
                 lang === l.code
-                  ? "bg-ivory/[0.04] text-ivory"
-                  : "text-ivory/50 hover:bg-ivory/[0.03] hover:text-ivory"
+                  ? "bg-ivory/[0.04] text-foreground"
+                  : "text-secondary hover:bg-ivory/[0.03] hover:text-foreground"
               }`}
             >
               <span className="text-base">{l.flag}</span>
@@ -77,7 +91,7 @@ export function LanguageSwitcher({ className = "" }: { className?: string }) {
                 <svg
                   width={24}
                   height={24}
-                  className="h-3.5 w-3.5 shrink-0 text-gold"
+                  className="h-3.5 w-3.5 shrink-0 text-accent"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"

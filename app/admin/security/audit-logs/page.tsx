@@ -38,43 +38,43 @@ export default function AuditLogsPage() {
     <div className="container-shell mx-auto px-6 py-10">
       <div className="mb-6">
         <p className="luxury-label mb-2">{t("security", "Security")}</p>
-        <h1 className="text-3xl font-semibold tracking-tight text-white">{t("audit_logs", "Audit Logs")}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t("audit_logs", "Audit Logs")}</h1>
         <div className="mt-4 flex flex-wrap gap-2">
           {actions.map(a => (
             <button
               key={a}
               onClick={() => setFilter(a)}
-              className={`inline-flex h-8 items-center rounded-button px-3 text-[11px] font-semibold uppercase tracking-[0.1em] transition ${
-                filter === a ? "bg-burgundy text-white" : "border border-white/[0.12] bg-white/5 text-muted hover:bg-white/10"
+              className={`inline-flex h-8 items-center rounded-button px-3 text-xs font-semibold uppercase tracking-[0.1em] transition ${
+                filter === a ? "bg-burgundy text-foreground" : "border border-line bg-surface text-muted hover:bg-surface"
               }`}
             >
-              {a || t("all")}
+              {a ? t(a, a.replace(/_/g, " ")) : t("all")}
             </button>
           ))}
         </div>
       </div>
 
-      {loading ? <div className="h-32 animate-pulse rounded-card bg-white/[0.04]" /> : (
-        <div className="rounded-card border border-white/[0.06] bg-card p-6">
+      {loading ? <div className="h-32 animate-pulse rounded-card bg-surface" /> : (
+        <div className="rounded-card border border-line bg-card p-6">
           <div className="max-h-[700px] space-y-2 overflow-y-auto">
             {logs.map((log, i) => (
-              <div key={i} className="flex items-start justify-between rounded border border-white/[0.04] px-3 py-2">
+              <div key={i} className="flex items-start justify-between rounded border border-line px-3 py-2">
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-medium text-gold">{log.adminName}</span>
-                    <span className="rounded bg-white/5 px-1.5 py-0.5 text-[10px] text-muted">{log.action}</span>
-                    <span className="text-xs text-white/60">{log.entity}</span>
+                    <span className="text-xs font-medium text-accent">{log.adminName}</span>
+                    <span className="rounded bg-surface px-1.5 py-0.5 text-xs text-muted">{log.action}</span>
+                    <span className="text-xs text-secondary">{log.entity}</span>
                   </div>
                   {(log.oldValue || log.newValue) && (
-                    <div className="mt-1 text-[10px] text-muted">
+                    <div className="mt-1 text-xs text-muted">
                       {log.oldValue && <span className="text-burgundy">Old: {log.oldValue}</span>}
                       {log.oldValue && log.newValue && <span className="mx-1">→</span>}
-                      {log.newValue && <span className="text-gold">New: {log.newValue}</span>}
+                      {log.newValue && <span className="text-accent">New: {log.newValue}</span>}
                     </div>
                   )}
-                  {log.browser && <p className="text-[10px] text-muted mt-0.5">{log.browser} | IP: {log.ip} | Duration: {log.duration}ms</p>}
+                  {log.browser && <p className="text-xs text-muted mt-0.5">{log.browser} | IP: {log.ip} | Duration: {log.duration}ms</p>}
                 </div>
-                <div className="shrink-0 text-right text-[10px] text-muted">
+                <div className="shrink-0 text-end text-xs text-muted">
                   {new Date(log.createdAt).toLocaleString()}
                 </div>
               </div>

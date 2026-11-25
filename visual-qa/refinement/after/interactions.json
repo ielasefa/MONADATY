@@ -1,0 +1,14 @@
+{
+  "passed": [
+    "Search updates catalogue and URL",
+    "Empty results",
+    "Price sorting",
+    "Mobile filters, keyboard focus and Escape",
+    "Favorites persist across navigation",
+    "Quantity, add to cart and drawer dismissal",
+    "Checkout invalid fields, no order submitted",
+    "Mobile navigation and Escape",
+    "Keyboard navigation"
+  ],
+  "errors": []
+}

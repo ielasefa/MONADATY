@@ -3,18 +3,18 @@ import { ProductCardSkeleton } from "./ProductCardSkeleton";
 
 export function ShopSkeleton() {
   return (
-    <div className="container-premium py-12">
-      <div className="mb-8 space-y-2">
+    <div className="storefront-container py-7">
+      <div className="mb-7 space-y-3">
         <Skeleton className="h-3 w-16" rounded="full" />
-        <Skeleton className="h-8 w-48" rounded="md" />
+        <Skeleton className="h-10 w-64" rounded="md" />
       </div>
-      <div className="mb-8 flex gap-3">
+      <div className="mb-5 flex flex-wrap gap-3">
         {Array.from({ length: 4 }).map((_, i) => (
           <Skeleton key={i} className="h-9 w-24" rounded="md" />
         ))}
       </div>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {Array.from({ length: 6 }).map((_, i) => (
+      <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
+        {Array.from({ length: 8 }).map((_, i) => (
           <ProductCardSkeleton key={i} />
         ))}
       </div>

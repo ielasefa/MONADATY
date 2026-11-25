@@ -31,7 +31,7 @@ export function QuickActions() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
     >
-      <p className="luxury-label mb-4 text-[10px] text-white/50">{t("quick_actions")}</p>
+      <p className="luxury-label mb-4 text-xs text-secondary">{t("quick_actions")}</p>
       <motion.div
         initial="hidden"
         animate="visible"
@@ -65,7 +65,7 @@ export function QuickActions() {
           >
             <Link
               href={action.href}
-              className="group relative overflow-hidden rounded-xl border border-white/[0.06] bg-card p-5 h-full transition-all duration-300 hover:border-gold/20 hover:shadow-lg hover:shadow-gold/5 flex flex-col"
+              className="group relative overflow-hidden rounded-xl border border-line bg-card p-5 h-full transition-all duration-300 hover:border-gold/20 hover:shadow-lg hover:shadow-gold/5 flex flex-col"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               <div className="relative z-10 flex flex-col h-full">
@@ -76,8 +76,8 @@ export function QuickActions() {
                 >
                   {action.icon}
                 </motion.span>
-                <p className="text-sm font-medium text-white">{action.label}</p>
-                <p className="mt-1 flex-1 text-[0.55rem] text-white/50">{action.desc}</p>
+                <p className="text-sm font-medium text-foreground">{action.label}</p>
+                <p className="mt-1 flex-1 text-xs text-secondary">{action.desc}</p>
               </div>
               <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-gold/[0.04] opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
             </Link>

@@ -49,11 +49,11 @@ export function CategoriesClient({
 
   return (
     <div className="min-w-0">
-      <header className="mb-6 flex flex-col gap-4 border-b border-white/[0.08] pb-6 sm:flex-row sm:items-end sm:justify-between">
+      <header className="mb-6 flex flex-col gap-4 border-b border-line pb-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="luxury-label text-[#D6B35A]/75">{t("catalog", "Catalog")}</p>
-          <h1 className="mt-2 text-white">{t("categories", "Categories")}</h1>
-          <p className="mt-1.5 text-sm text-white/45">{categories.length} {t("categories", "categories")}</p>
+          <p className="luxury-label text-accent">{t("catalog", "Catalog")}</p>
+          <h1 className="mt-2 text-foreground">{t("categories", "Categories")}</h1>
+          <p className="mt-1.5 text-sm text-secondary">{categories.length} {t("categories", "categories")}</p>
         </div>
         {!editorOpen ? (
           <button type="button" onClick={() => openEditor("__new__")} className="btn-primary w-full px-5 sm:w-auto">
@@ -65,12 +65,12 @@ export function CategoriesClient({
 
       {editorOpen ? (
         <section className="admin-panel mb-6 overflow-hidden">
-          <div className="flex items-center justify-between gap-4 border-b border-white/[0.08] px-5 py-4 sm:px-6">
+          <div className="flex items-center justify-between gap-4 border-b border-line px-5 py-4 sm:px-6">
             <div className="min-w-0">
-              <p className="luxury-label text-[#D6B35A]/75">{editingSlug === "__new__" ? t("new_category", "New category") : t("edit", "Edit category")}</p>
-              <h2 className="mt-1 truncate text-base font-semibold text-white">{editing?.name || t("create_category", "Create a category")}</h2>
+              <p className="luxury-label text-accent">{editingSlug === "__new__" ? t("new_category", "New category") : t("edit", "Edit category")}</p>
+              <h2 className="mt-1 truncate text-base font-semibold text-foreground">{editing?.name || t("create_category", "Create a category")}</h2>
             </div>
-            <button type="button" onClick={() => setEditingSlug(null)} className="inline-flex h-9 items-center rounded-lg px-3 text-xs text-white/45 transition hover:bg-white/[0.04] hover:text-white">
+            <button type="button" onClick={() => setEditingSlug(null)} className="inline-flex h-9 items-center rounded-lg px-3 text-xs text-secondary transition hover:bg-surface hover:text-foreground">
               {t("cancel", "Cancel")}
             </button>
           </div>
@@ -83,12 +83,12 @@ export function CategoriesClient({
                 <Field label={t("slug_label", "Slug")} name="slug" defaultValue={editing?.slug} />
               </div>
               <Field label={t("description_label", "Description")} name="description" defaultValue={editing?.description} rows={4} />
-              <div className="flex flex-col-reverse gap-3 border-t border-white/[0.08] pt-5 sm:flex-row sm:justify-end">
+              <div className="flex flex-col-reverse gap-3 border-t border-line pt-5 sm:flex-row sm:justify-end">
                 <button type="button" onClick={() => setEditingSlug(null)} className="btn-secondary px-5">{t("cancel", "Cancel")}</button>
                 <button type="submit" className="btn-primary px-5">{editingSlug === "__new__" ? t("add_button", "Create") : t("update_button", "Update")}</button>
               </div>
             </div>
-            <div className="min-w-0 border-t border-white/[0.08] pt-6 xl:border-s xl:border-t-0 xl:ps-6 xl:pt-0">
+            <div className="min-w-0 border-t border-line pt-6 xl:border-s xl:border-t-0 xl:ps-6 xl:pt-0">
               <SingleImageUploader
                 label={t("category_image", "Category image")}
                 value={image}
@@ -104,33 +104,33 @@ export function CategoriesClient({
 
       {categories.length === 0 ? (
         <section className="admin-panel border-dashed px-6 py-16 text-center">
-          <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.025] text-[#D6B35A]" aria-hidden>⊞</div>
-          <h2 className="mt-4 text-sm font-semibold text-white/85">{t("no_categories", "No categories yet")}</h2>
+          <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl border border-line bg-surface text-accent" aria-hidden>⊞</div>
+          <h2 className="mt-4 text-sm font-semibold text-secondary">{t("no_categories", "No categories yet")}</h2>
           <button type="button" onClick={() => openEditor("__new__")} className="btn-primary mt-5 px-5">{t("add_category", "Add category")}</button>
         </section>
       ) : (
         <section aria-label={t("categories", "Categories")}>
           <div className="mb-3 flex items-center justify-between">
             <h2 className="luxury-label">{t("category_list", "Category list")}</h2>
-            <span className="text-xs tabular-nums text-white/30">{categories.length}</span>
+            <span className="text-xs tabular-nums text-secondary">{categories.length}</span>
           </div>
           <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
             {categories.map((category) => (
               <article key={category.slug} className="admin-panel flex min-w-0 flex-col gap-4 p-4 transition-colors duration-200 hover:border-[#D6B35A]/20 sm:flex-row sm:items-center">
-                <div className="h-20 w-full shrink-0 overflow-hidden rounded-xl border border-white/[0.08] bg-[#0B0B0A] sm:w-24">
+                <div className="h-20 w-full shrink-0 overflow-hidden rounded-xl border border-line bg-canvas sm:w-24">
                   {category.image ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={category.image} alt={category.name} className="h-full w-full object-cover" />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center text-lg text-white/15" aria-hidden>⊞</div>
+                    <div className="flex h-full w-full items-center justify-center text-lg text-secondary" aria-hidden>⊞</div>
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h3 className="truncate text-sm font-semibold text-white">{category.name}</h3>
-                  <p className="mt-1 truncate font-mono text-xs text-white/35">/{category.slug}</p>
-                  <p className="mt-2 line-clamp-1 text-xs text-white/45">{category.description || t("no_description", "No description")}</p>
+                  <h3 className="truncate text-sm font-semibold text-foreground">{category.name}</h3>
+                  <p className="mt-1 truncate font-mono text-xs text-secondary">/{category.slug}</p>
+                  <p className="mt-2 line-clamp-1 text-xs text-secondary">{category.description || t("no_description", "No description")}</p>
                 </div>
-                <div className="flex min-w-0 flex-col gap-2 border-t border-white/[0.08] pt-3 sm:w-[248px] sm:border-s sm:border-t-0 sm:ps-4 sm:pt-0">
+                <div className="flex min-w-0 flex-col gap-2 border-t border-line pt-3 sm:w-[248px] sm:border-s sm:border-t-0 sm:ps-4 sm:pt-0">
                   <button type="button" onClick={() => openEditor(category.slug)} className="admin-secondary h-9 w-full px-3" aria-label={`${t("edit", "Edit")} ${category.name}`}>
                     {t("edit", "Edit")}
                   </button>
@@ -140,7 +140,7 @@ export function CategoriesClient({
                       <option value="">{t("delete_products_warning", "Delete products")}</option>
                       {categories.filter((item) => item.slug !== category.slug).map((item) => <option key={item.slug} value={item.slug}>{item.name}</option>)}
                     </select>
-                    <button type="submit" className="inline-flex h-[42px] items-center rounded-lg border border-red-500/20 bg-red-500/[0.06] px-3 text-[0.58rem] font-semibold uppercase tracking-[0.1em] text-red-300 transition hover:bg-red-500/10" aria-label={`${t("delete", "Delete")} ${category.name}`}>
+                    <button type="submit" className="inline-flex h-[42px] items-center rounded-lg border border-red-500/20 bg-red-500/[0.06] px-3 text-xs font-semibold uppercase tracking-[0.1em] text-red-700 transition hover:bg-red-500/10" aria-label={`${t("delete", "Delete")} ${category.name}`}>
                       {t("delete", "Delete")}
                     </button>
                   </form>

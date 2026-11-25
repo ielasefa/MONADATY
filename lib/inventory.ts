@@ -1,4 +1,6 @@
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@/generated/prisma/client";
+import { MAX_PRODUCT_STOCK, ProductStockError } from "@/lib/product-stock";
 
 // ─── Types ───────────────────────────────────────────────
 
@@ -42,198 +44,70 @@ export type StockMovementResult = {
 
 // ─── Stock Operations ────────────────────────────────────
 
-async function getCurrentStock(
-  warehouseId: string,
-  productId: string,
-  variantId = "",
-): Promise<number> {
-  const record = await prisma.productWarehouseStock.findUnique({
-    where: {
-      warehouseId_productId_variantId: { warehouseId, productId, variantId },
-    },
-    select: { stock: true },
-  });
-  return record?.stock ?? 0;
-}
-
 function generateRef(): string {
   return `INV-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
 }
 
-/**
- * Record a stock movement. Transaction-safe, immutable.
- * Adjusts ProductWarehouseStock.stock accordingly.
- */
-export async function recordMovement(params: {
-  productId: string;
-  variantId?: string;
-  warehouseId: string;
-  movementType: MovementType;
-  quantity: number;
-  reason?: string;
-  reference?: string;
-  adminId?: string;
-}): Promise<StockMovementResult> {
-  const {
-    productId,
-    variantId = "",
-    warehouseId,
-    movementType,
-    quantity,
-    reason = "",
-    reference = "",
-    adminId = "",
-  } = params;
+type MovementInput = { productId: string; variantId?: string; warehouseId: string; movementType: MovementType; quantity: number; reason?: string; reference?: string; adminId?: string };
 
-  if (quantity <= 0) {
-    throw new Error("Quantity must be positive");
+async function lockInventoryProduct(tx: Prisma.TransactionClient, productId: string) {
+  const found = await tx.$queryRaw<{ id: string }[]>(Prisma.sql`SELECT id FROM products WHERE id = ${productId} FOR UPDATE`);
+  if (!found.length) throw new ProductStockError("NOT_FOUND", "Product not found", 404);
+}
+
+async function warehouseMovement(tx: Prisma.TransactionClient, input: MovementInput, delta: number, syncAvailable: boolean): Promise<StockMovementResult> {
+  const { productId, variantId = "", warehouseId, movementType, reason = "", reference = "", adminId = "" } = input;
+  const warehouse = await tx.warehouse.findUnique({ where: { id: warehouseId }, select: { id: true } });
+  if (!warehouse) throw new ProductStockError("NOT_FOUND", "Warehouse not found", 404);
+  const key = { warehouseId, productId, variantId };
+  const existing = await tx.productWarehouseStock.findUnique({ where: { warehouseId_productId_variantId: key } });
+  const currentStock = existing?.stock ?? 0;
+  const newStock = currentStock + delta;
+  if (!Number.isSafeInteger(delta) || delta === 0) throw new ProductStockError("INVALID_ADJUSTMENT", "Quantity must be a nonzero integer", 400);
+  if (newStock < (existing?.reservedStock ?? 0)) throw new ProductStockError("OUT_OF_STOCK", "Insufficient unreserved warehouse stock");
+  if (newStock > MAX_PRODUCT_STOCK) throw new ProductStockError("STOCK_LIMIT", "Warehouse stock limit exceeded");
+  if (syncAvailable) {
+    const stock = delta < 0 ? { gte: -delta } : { lte: MAX_PRODUCT_STOCK - delta };
+    const changed = variantId
+      ? await tx.productVariant.updateMany({ where: { id: variantId, productId, stock }, data: { stock: { increment: delta } } })
+      : await tx.product.updateMany({ where: { id: productId, stock }, data: { stock: { increment: delta } } });
+    if (changed.count !== 1) throw new ProductStockError("OUT_OF_STOCK", "Available product stock cannot cover this movement");
   }
+  await tx.productWarehouseStock.upsert({ where: { warehouseId_productId_variantId: key }, create: { ...key, stock: newStock, reservedStock: 0 }, update: { stock: newStock } });
+  const movement = await tx.inventoryMovement.create({ data: { ...key, movementType, quantity: delta, previousStock: currentStock, newStock, reason, reference: reference || generateRef(), adminId } });
+  return { success: true, newStock, movement };
+}
 
-  return prisma.$transaction(async (tx) => {
-    const currentStock = await getCurrentStock(warehouseId, productId, variantId);
-
-    const isOutMovement =
-      movementType === "OUT" ||
-      movementType === "SALE" ||
-      movementType === "TRANSFER" ||
-      movementType === "DAMAGED" ||
-      movementType === "REFUND";
-
-    const delta = isOutMovement ? -quantity : quantity;
-    const newStock = Math.max(0, currentStock + delta);
-
-    if (newStock < 0) {
-      throw new Error(`Insufficient stock. Available: ${currentStock}, requested: ${quantity}`);
-    }
-
-    // Upsert stock record
-    await tx.productWarehouseStock.upsert({
-      where: {
-        warehouseId_productId_variantId: { warehouseId, productId, variantId },
-      },
-      create: {
-        warehouseId,
-        productId,
-        variantId,
-        stock: newStock,
-        reservedStock: 0,
-      },
-      update: { stock: newStock },
-    });
-
-    // Create movement record (immutable)
-    const movement = await tx.inventoryMovement.create({
-      data: {
-        productId,
-        variantId,
-        warehouseId,
-        movementType,
-        quantity: delta,
-        previousStock: currentStock,
-        newStock,
-        reason,
-        reference: reference || generateRef(),
-        adminId,
-      },
-    });
-
-    return {
-      success: true,
-      newStock,
-      movement: {
-        id: movement.id,
-        productId: movement.productId,
-        variantId: movement.variantId,
-        warehouseId: movement.warehouseId,
-        movementType: movement.movementType as MovementType,
-        quantity: movement.quantity,
-        previousStock: movement.previousStock,
-        newStock: movement.newStock,
-        reason: movement.reason,
-        reference: movement.reference,
-      },
-    };
+/** A warehouse movement and its available product stock change commit together. */
+export async function recordMovement(input: MovementInput): Promise<StockMovementResult> {
+  if (!Number.isSafeInteger(input.quantity) || input.quantity <= 0) throw new ProductStockError("INVALID_ADJUSTMENT", "Quantity must be a positive integer", 400);
+  if (input.movementType === "TRANSFER") throw new ProductStockError("INVALID_ADJUSTMENT", "Use an atomic warehouse transfer", 400);
+  const outgoing = ["OUT", "SALE", "DAMAGED"].includes(input.movementType);
+  return prisma.$transaction(async tx => {
+    await lockInventoryProduct(tx, input.productId);
+    return warehouseMovement(tx, input, outgoing ? -input.quantity : input.quantity, true);
   });
 }
 
-// ─── Warehouse Transfer ──────────────────────────────────
-
-export async function transferStock(params: {
-  productId: string;
-  variantId?: string;
-  fromWarehouseId: string;
-  toWarehouseId: string;
-  quantity: number;
-  reason?: string;
-  adminId?: string;
-}): Promise<{ success: boolean; outMovement: StockMovementResult; inMovement: StockMovementResult }> {
-  const { productId, variantId = "", fromWarehouseId, toWarehouseId, quantity, reason = "", adminId = "" } = params;
-
-  if (fromWarehouseId === toWarehouseId) {
-    throw new Error("Source and destination warehouses are the same");
-  }
-
-  const currentStock = await getCurrentStock(fromWarehouseId, productId, variantId);
-
-  if (currentStock < quantity) {
-    throw new Error(`Insufficient stock in source warehouse. Available: ${currentStock}, requested: ${quantity}`);
-  }
-
-  // OUT from source
-  const outResult = await recordMovement({
-    productId,
-    variantId,
-    warehouseId: fromWarehouseId,
-    movementType: "TRANSFER",
-    quantity,
-    reason: reason || `Transfer to warehouse ${toWarehouseId}`,
-    reference: `XFER-${fromWarehouseId.slice(0, 6)}-TO-${toWarehouseId.slice(0, 6)}`,
-    adminId,
+/** Both warehouse entries and audit movements commit atomically; total stock stays unchanged. */
+export async function transferStock(params: { productId: string; variantId?: string; fromWarehouseId: string; toWarehouseId: string; quantity: number; reason?: string; adminId?: string }): Promise<{ success: boolean; outMovement: StockMovementResult; inMovement: StockMovementResult }> {
+  if (params.fromWarehouseId === params.toWarehouseId || !Number.isSafeInteger(params.quantity) || params.quantity <= 0) throw new ProductStockError("INVALID_ADJUSTMENT", "Choose two different warehouses and a positive integer quantity", 400);
+  return prisma.$transaction(async tx => {
+    await lockInventoryProduct(tx, params.productId);
+    const reference = generateRef();
+    const base = { productId: params.productId, variantId: params.variantId, quantity: params.quantity, reason: params.reason || "Warehouse transfer", adminId: params.adminId, reference };
+    const outMovement = await warehouseMovement(tx, { ...base, warehouseId: params.fromWarehouseId, movementType: "TRANSFER" }, -params.quantity, false);
+    const inMovement = await warehouseMovement(tx, { ...base, warehouseId: params.toWarehouseId, movementType: "IN" }, params.quantity, false);
+    return { success: true, outMovement, inMovement };
   });
-
-  // IN to destination
-  const inResult = await recordMovement({
-    productId,
-    variantId,
-    warehouseId: toWarehouseId,
-    movementType: "IN",
-    quantity,
-    reason: reason || `Transfer from warehouse ${fromWarehouseId}`,
-    reference: outResult.movement.reference,
-    adminId,
-  });
-
-  return { success: true, outMovement: outResult, inMovement: inResult };
 }
 
-// ─── Stock Adjustment ────────────────────────────────────
-
-export async function adjustStock(params: {
-  productId: string;
-  variantId?: string;
-  warehouseId: string;
-  newStock: number;
-  reason: string;
-  adminId?: string;
-}): Promise<StockMovementResult> {
-  const { productId, variantId = "", warehouseId, newStock, reason, adminId = "" } = params;
-
-  const currentStock = await getCurrentStock(warehouseId, productId, variantId);
-  const difference = newStock - currentStock;
-
-  if (difference === 0) {
-    throw new Error("Stock is already at the target value");
-  }
-
-  return recordMovement({
-    productId,
-    variantId,
-    warehouseId,
-    movementType: "ADJUSTMENT",
-    quantity: Math.abs(difference),
-    reason: `Adjustment: ${reason}`,
-    reference: generateRef(),
-    adminId,
+export async function adjustStock(params: { productId: string; variantId?: string; warehouseId: string; newStock: number; reason: string; adminId?: string }): Promise<StockMovementResult> {
+  if (!Number.isSafeInteger(params.newStock) || params.newStock < 0 || params.newStock > MAX_PRODUCT_STOCK) throw new ProductStockError("INVALID_ADJUSTMENT", "Stock must be a nonnegative integer", 400);
+  return prisma.$transaction(async tx => {
+    await lockInventoryProduct(tx, params.productId);
+    const existing = await tx.productWarehouseStock.findUnique({ where: { warehouseId_productId_variantId: { warehouseId: params.warehouseId, productId: params.productId, variantId: params.variantId || "" } } });
+    return warehouseMovement(tx, { ...params, movementType: "ADJUSTMENT", quantity: Math.abs(params.newStock - (existing?.stock ?? 0)), reason: `Adjustment: ${params.reason}` }, params.newStock - (existing?.stock ?? 0), true);
   });
 }
 
@@ -475,7 +349,9 @@ export async function receivePurchaseOrder(
   receivedItems: { itemId: string; receivedQuantity: number }[],
   adminId = "",
 ) {
+  if (!Array.isArray(receivedItems) || !receivedItems.length || new Set(receivedItems.map(item => item.itemId)).size !== receivedItems.length || receivedItems.some(item => !Number.isSafeInteger(item.receivedQuantity) || item.receivedQuantity < 0)) throw new ProductStockError("INVALID_ADJUSTMENT", "Invalid received quantities", 400);
   return prisma.$transaction(async (tx) => {
+    await tx.$queryRaw(Prisma.sql`SELECT id FROM purchase_orders WHERE id = ${poId} FOR UPDATE`);
     const po = await tx.purchaseOrder.findUnique({
       where: { id: poId },
       include: { items: true },
@@ -484,12 +360,14 @@ export async function receivePurchaseOrder(
     if (!po) throw new Error("Purchase order not found");
     if (po.status !== "Ordered") throw new Error("PO must be in Ordered status to receive");
 
+    for (const productId of [...new Set(po.items.map(item => item.productId))].sort()) await lockInventoryProduct(tx, productId);
     for (const received of receivedItems) {
       const item = po.items.find((i) => i.id === received.itemId);
       if (!item) throw new Error(`Item ${received.itemId} not found`);
 
       const newReceived = item.receivedQuantity + received.receivedQuantity;
       const newRemaining = item.quantity - newReceived;
+      if (newRemaining < 0) throw new ProductStockError("INVALID_ADJUSTMENT", "Received quantity exceeds the remaining ordered quantity", 400);
 
       await tx.purchaseOrderItem.update({
         where: { id: item.id },
@@ -501,7 +379,7 @@ export async function receivePurchaseOrder(
 
       if (received.receivedQuantity > 0) {
         // Record PURCHASE movement
-        await recordMovement({
+        await warehouseMovement(tx, {
           productId: item.productId,
           variantId: item.variantId,
           warehouseId: po.warehouseId,
@@ -510,7 +388,7 @@ export async function receivePurchaseOrder(
           reason: `Purchase order ${po.orderNumber}`,
           reference: po.orderNumber,
           adminId,
-        });
+        }, received.receivedQuantity, true);
       }
     }
 

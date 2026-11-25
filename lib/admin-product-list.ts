@@ -12,7 +12,12 @@ export type AdminProductSort =
   | "stock-desc";
 
 export function normalizeProductSearch(value: string | null | undefined): string {
-  return (value ?? "").trim().replace(/\s+/g, " ");
+  return (value ?? "").trim().replace(/\s+/g, " ").slice(0, 200);
+}
+
+export function productSearchTerms(value: string | null | undefined): string[] {
+  return [...new Set(normalizeProductSearch(value).normalize("NFKD").replace(/[\p{M}\u0640]/gu, "").toLowerCase()
+    .split(/[\s\-–—/]+/u).map(term => term.replace(/[^\p{L}\p{N}]/gu, "")).filter(Boolean))].slice(0, 12);
 }
 
 function positiveInteger(value: string | null, fallback: number, maximum?: number): number {

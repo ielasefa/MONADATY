@@ -21,10 +21,10 @@ export function BlogClient({
 
   return (
     <div>
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="luxury-label mb-2">{t("content")}</p>
-          <h1 className="text-3xl font-semibold tracking-tight text-white">{t("blog")}</h1>
+          <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t("blog")}</h1>
           <p className="mt-1 text-sm text-muted">{articles.length} articles</p>
         </div>
         <button
@@ -42,12 +42,12 @@ export function BlogClient({
           </h2>
           <form action={saveArticle} className="space-y-5">
             {editing && <input type="hidden" name="id" value={editing.id} />}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Field label={t("title_label")} name="title" defaultValue={editing?.title} />
               <Field label={t("slug", "Slug")} name="slug" defaultValue={editing?.slug} />
             </div>
             <Field label={t("content", "Content")} name="content" defaultValue={editing?.content} rows={6} />
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <Field label={t("author", "Author")} name="author" defaultValue={editing?.author} />
               <SingleImageUploader label={t("cover_image", "Cover Image")} value={editing?.coverImage || ""} // eslint-disable-next-line @typescript-eslint/no-unused-vars
 onChange={(_url) => {}} folder="blog" />
@@ -55,14 +55,14 @@ onChange={(_url) => {}} folder="blog" />
               <Field label={t("publish_date", "Publish Date")} name="publishDate" type="date" defaultValue={editing?.publishDate?.slice(0, 10)} />
             </div>
             <Field label={t("tags_comma", "Tags (comma separated)")} name="tags" defaultValue={editing?.tags?.join(", ")} />
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <label className="flex items-center gap-3 cursor-pointer pt-6">
                 <input type="hidden" name="published" value="false" />
-                <input type="checkbox" name="published" value="true" defaultChecked={editing?.published} className="h-4 w-4 rounded border-white/20 accent-gold" /> <span className="text-sm text-muted">{t("published", "Published")}</span>
+                <input type="checkbox" name="published" value="true" defaultChecked={editing?.published} className="h-4 w-4 rounded border-line accent-gold" /> <span className="text-sm text-muted">{t("published", "Published")}</span>
               </label>
               <Field label={t("order_label")} name="order" type="number" defaultValue={editing?.order?.toString()} />
             </div>
-            <div className="flex gap-3 pt-2">
+            <div className="flex flex-wrap gap-3 pt-2">
               <button type="submit" className="btn-primary">
                 {editingId === "__new__" ? t("create_article", "Create Article") : t("update_article", "Update Article")}
               </button>
@@ -74,9 +74,9 @@ onChange={(_url) => {}} folder="blog" />
 
       <div className="space-y-3">
         {articles.map((a) => (
-          <div key={a.id} className="luxury-card flex items-center gap-4 p-5">
-            <div className="flex-1">
-              <p className="font-medium text-white">{a.title}</p>
+          <div key={a.id} className="luxury-card flex flex-wrap items-center gap-4 p-5">
+            <div className="min-w-0 flex-1 break-words">
+              <p className="font-medium text-foreground">{a.title}</p>
               <p className="text-sm text-muted">
                 {a.published ? <span className="badge-emerald mr-2">{t("published", "Published")}</span> : <span className="badge-red mr-2">{t("draft", "Draft")}</span>}
                 {a.author || t("no_author", "No author")} &middot; {a.publishDate?.slice(0, 10)}
@@ -84,14 +84,14 @@ onChange={(_url) => {}} folder="blog" />
             </div>
             <button
               onClick={() => setEditingId(a.id)}
-              className="text-sm font-medium text-gold hover:text-gold/80 transition-colors"
-              aria-label={`Edit ${a.title}`}
+              className="text-sm font-medium text-accent hover:text-accent transition-colors"
+              aria-label={`${t("edit")} ${a.title}`}
             >
-              Edit
+              {t("edit")}
             </button>
             <form action={deleteArticle}>
               <input type="hidden" name="id" value={a.id} />
-              <button type="submit" className="badge-red" aria-label={`Delete ${a.title}`}>{t("delete")}</button>
+              <button type="submit" className="badge-red" aria-label={`${t("delete")} ${a.title}`}>{t("delete")}</button>
             </form>
           </div>
         ))}
@@ -103,11 +103,11 @@ onChange={(_url) => {}} folder="blog" />
 function Field({ label, name, defaultValue, type, rows }: { label: string; name: string; defaultValue?: string; type?: string; rows?: number }) {
   return (
     <div className="space-y-2">
-      <label className="luxury-label">{label}</label>
+      <label htmlFor={`article-${name}`} className="luxury-label">{label}</label>
       {rows ? (
-        <textarea name={name} defaultValue={defaultValue} rows={rows} className="input-premium w-full px-4 py-3 min-h-[120px] resize-y" />
+        <textarea id={`article-${name}`} name={name} defaultValue={defaultValue} rows={rows} className="input-premium w-full px-4 py-3 min-h-[120px] resize-y" />
       ) : (
-        <input name={name} type={type || "text"} defaultValue={defaultValue} className="input-premium w-full px-4 py-2.5" />
+        <input id={`article-${name}`} name={name} type={type || "text"} defaultValue={defaultValue} className="input-premium w-full px-4 py-2.5" />
       )}
     </div>
   );

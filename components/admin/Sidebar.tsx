@@ -11,9 +11,19 @@ const GROUPS = [
   { key: "overview", hrefs: ["/admin/dashboard", "/admin/reports"] },
   { key: "catalog", hrefs: ["/admin/products", "/admin/categories", "/admin/collections", "/admin/collections-showcase"] },
   { key: "sales", hrefs: ["/admin/orders", "/admin/customers", "/admin/invoices"] },
-  { key: "content", hrefs: ["/admin/landing", "/admin/translations"] },
-  { key: "system", hrefs: ["/admin/settings", "/admin/admins"] },
+  { key: "operations", hrefs: ["/admin/inventory"] },
+  { key: "content", hrefs: ["/admin/landing", "/admin/blog", "/admin/translations"] },
+  { key: "system", hrefs: ["/admin/settings", "/admin/security", "/admin/automation", "/admin/admins"] },
 ] as const;
+
+const LABEL_KEYS: Record<string, string> = {
+  "/admin/dashboard": "dashboard", "/admin/reports": "reports", "/admin/products": "products",
+  "/admin/categories": "categories", "/admin/collections": "collections", "/admin/collections-showcase": "collections_showcase",
+  "/admin/orders": "orders", "/admin/customers": "customers", "/admin/invoices": "invoices",
+  "/admin/inventory": "inventory", "/admin/landing": "landing_page", "/admin/blog": "blog",
+  "/admin/translations": "translations", "/admin/settings": "settings", "/admin/security": "security",
+  "/admin/automation": "automation", "/admin/admins": "administrators",
+};
 
 function NavIcon({ href }: { href: string }) {
   const common = {
@@ -39,6 +49,10 @@ function NavIcon({ href }: { href: string }) {
     "/admin/reports": <svg {...common}><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" /></svg>,
     "/admin/landing": <svg {...common}><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18M9 9v12" /></svg>,
     "/admin/translations": <svg {...common}><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18" /></svg>,
+    "/admin/inventory": <svg {...common}><path d="m3 9 9-6 9 6v12H3V9Z" /><path d="M8 21v-9h8v9M8 16h8" /></svg>,
+    "/admin/blog": <svg {...common}><path d="M5 3h14v18H5zM8 7h8M8 11h8M8 15h5" /></svg>,
+    "/admin/security": <svg {...common}><path d="m12 3 8 3v6c0 4-4 7-8 9-4-2-8-5-8-9V6l8-3Z" /><path d="m8 12 3 3 5-6" /></svg>,
+    "/admin/automation": <svg {...common}><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>,
     "/admin/settings": <svg {...common}><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V21h-4v-.08A1.7 1.7 0 0 0 9 19.36a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.63 15 1.7 1.7 0 0 0 3.08 14H3v-4h.08A1.7 1.7 0 0 0 4.64 9a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.63 1.7 1.7 0 0 0 10 3.08V3h4v.08A1.7 1.7 0 0 0 15 4.64a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.37 9 1.7 1.7 0 0 0 20.92 10H21v4h-.08A1.7 1.7 0 0 0 19.4 15Z" /></svg>,
     "/admin/admins": <svg {...common}><path d="M12 3 5 6v5c0 4.7 2.9 8.2 7 10 4.1-1.8 7-5.3 7-10V6l-7-3Z" /><path d="m9 12 2 2 4-4" /></svg>,
   };
@@ -54,6 +68,8 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
   const signingOutRef = useRef(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const drawer = useRef<HTMLElement>(null);
+  const menuButton = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handler = (event: PageTransitionEvent) => {
@@ -68,12 +84,26 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
   }, [pathname]);
 
   useEffect(() => {
+    const query = window.matchMedia("(min-width: 640px)");
+    const resize = () => { if (query.matches) setMobileOpen(false); };
+    query.addEventListener("change", resize);
+    return () => query.removeEventListener("change", resize);
+  }, []);
+
+  useEffect(() => {
     if (!mobileOpen) return;
     const previousOverflow = document.body.style.overflow;
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMobileOpen(false);
+      if (event.key === "Escape") { setMobileOpen(false); menuButton.current?.focus(); }
+      if (event.key === "Tab") {
+        const nodes = Array.from(drawer.current?.querySelectorAll<HTMLElement>("a,button:not([disabled])") || []).filter(node => node.getClientRects().length);
+        const first = nodes[0], last = nodes[nodes.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+      }
     };
     document.body.style.overflow = "hidden";
+    drawer.current?.querySelector<HTMLElement>("button")?.focus();
     window.addEventListener("keydown", closeOnEscape);
     return () => {
       document.body.style.overflow = previousOverflow;
@@ -104,12 +134,13 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
   return (
     <>
       <button
+        ref={menuButton}
         type="button"
         onClick={() => setMobileOpen(true)}
         aria-label={t("open_admin_navigation", "Open admin navigation")}
         aria-controls="admin-sidebar"
         aria-expanded={mobileOpen}
-        className="fixed start-3 top-3 z-[60] flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.08] bg-[#151512] text-white/70 shadow-lg sm:hidden"
+        className="admin-menu-toggle admin-icon-button sm:hidden"
       >
         <svg aria-hidden className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round">
           <path d="M4 7h16M4 12h16M4 17h16" />
@@ -126,30 +157,35 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
       ) : null}
 
       <aside
+        ref={drawer}
         id="admin-sidebar"
-        className={`fixed inset-y-0 start-0 z-[70] flex h-dvh w-[min(18rem,calc(100vw-2rem))] shrink-0 flex-col border-e border-white/[0.08] bg-[#0A0A09] shadow-2xl transition-transform duration-200 sm:sticky sm:top-0 sm:z-auto sm:h-screen sm:w-16 sm:translate-x-0 sm:shadow-none lg:w-[232px] ${
+        data-open={mobileOpen}
+        role={mobileOpen ? "dialog" : undefined}
+        aria-modal={mobileOpen || undefined}
+        aria-label={t("admin_navigation", "Admin navigation")}
+        className={`admin-sidebar fixed inset-y-0 start-0 z-[70] flex h-dvh w-[min(18.5rem,calc(100vw-2rem))] shrink-0 flex-col transition-transform duration-200 sm:z-auto sm:w-[72px] sm:translate-x-0 sm:rtl:translate-x-0 lg:w-[248px] ${
           mobileOpen ? "translate-x-0" : "-translate-x-full rtl:translate-x-full"
         }`}
       >
-      <div className="flex h-16 shrink-0 items-center justify-center border-b border-white/[0.08] px-2 lg:justify-start lg:px-4">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#D6B35A]/20 bg-[#D6B35A]/[0.08] text-xs font-semibold text-[#D6B35A]">
+      <div className="admin-sidebar-brand">
+        <Link href="/admin/dashboard" className="admin-brand-badge" aria-label={t("dashboard", "Dashboard")}>
           M
-        </div>
-        <div className="ms-3 min-w-0 sm:hidden lg:block">
-          <p className="truncate text-[0.78rem] font-semibold tracking-[0.18em] text-white">{displayName}</p>
-          <p className="mt-0.5 text-[0.52rem] font-medium uppercase tracking-[0.16em] text-white/35">{t("control_center", "Control center")}</p>
+        </Link>
+        <div className="min-w-0 sm:hidden lg:block">
+          <p className="truncate text-sm font-semibold tracking-[0.08em] text-white">{displayName}</p>
+          <p className="mt-1 text-xs text-secondary">{t("administration", "Administration")}</p>
         </div>
         <button
           type="button"
           onClick={() => setMobileOpen(false)}
           aria-label={t("close_admin_navigation", "Close admin navigation")}
-          className="ms-auto flex h-10 w-10 items-center justify-center rounded-xl text-xl text-white/50 hover:bg-white/[0.05] hover:text-white sm:hidden"
+          className="ms-auto flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-xl text-secondary hover:bg-white/10 sm:hidden"
         >
           <span aria-hidden>&times;</span>
         </button>
       </div>
 
-      <nav aria-label={t("admin_navigation", "Admin navigation")} className="min-h-0 flex-1 overflow-y-auto px-2 py-3 lg:px-3 lg:py-4">
+      <nav tabIndex={0} aria-label={t("admin_navigation", "Admin navigation")} className="min-h-0 flex-1 overflow-y-auto px-2 py-5 lg:px-4">
         <div className="space-y-4 lg:space-y-5">
           {GROUPS.map((group) => {
             const groupItems = group.hrefs
@@ -158,7 +194,7 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
             if (groupItems.length === 0) return null;
             return (
               <section key={group.key}>
-                <p className="mb-1.5 px-3 text-[0.52rem] font-medium uppercase tracking-[0.2em] text-white/25 sm:hidden lg:block">
+                <p className="admin-sidebar-group sm:hidden lg:block">
                   {t(`nav_group_${group.key}`, group.key)}
                 </p>
                 <div className="space-y-1">
@@ -168,19 +204,15 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
                       <Link
                         key={item.href}
                         href={item.href}
-                        title={item.label}
+                        title={t(LABEL_KEYS[item.href] || item.label, item.label)}
+                        aria-current={active ? "page" : undefined}
                         onClick={() => setMobileOpen(false)}
-                        className={`group relative flex h-10 items-center justify-start gap-3 rounded-xl px-3 text-sm transition-[background-color,color,border-color] duration-200 sm:justify-center sm:gap-0 sm:px-0 lg:justify-start lg:gap-3 lg:px-3 ${
-                          active
-                            ? "bg-[#151512] text-white"
-                            : "text-white/[0.48] hover:bg-white/[0.035] hover:text-white/80"
-                        }`}
+                        className="admin-sidebar-link"
                       >
-                        {active ? <span className="absolute inset-y-2 start-0 w-0.5 rounded-full bg-[#D6B35A]" aria-hidden /> : null}
-                        <span className={`shrink-0 ${active ? "text-[#D6B35A]" : "text-white/40 group-hover:text-white/65"}`}>
+                        <span className="shrink-0">
                           <NavIcon href={item.href} />
                         </span>
-                        <span className="truncate text-[0.78rem] font-medium sm:hidden lg:block">{item.label}</span>
+                        <span className="truncate sm:hidden lg:block">{t(LABEL_KEYS[item.href] || item.label, item.label)}</span>
                       </Link>
                     );
                   })}
@@ -191,16 +223,20 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
         </div>
       </nav>
 
-      <div className="shrink-0 border-t border-white/[0.08] p-2 lg:p-3">
+      <div className="admin-sidebar-footer">
+        <Link href="/" className="admin-sidebar-link" title={t("view_store", "View store")}>
+          <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M3 10V6l2-3h14l2 3v4M3 10a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0M4 13v8h16v-8M9 21v-6h6v6" /></svg>
+          <span className="sm:hidden lg:block">{t("view_store", "View store")}</span>
+        </Link>
         <button
           type="button"
           onClick={handleSignOut}
           disabled={isSigningOut}
           title={t("sign_out", "Sign out")}
-          className="group flex h-10 w-full items-center justify-start gap-3 rounded-xl px-3 text-white/40 transition-colors duration-200 hover:bg-red-500/[0.06] hover:text-red-300 disabled:pointer-events-none disabled:opacity-40 sm:justify-center sm:gap-0 sm:px-0 lg:justify-start lg:gap-3 lg:px-3"
+          className="admin-sidebar-link w-full disabled:pointer-events-none disabled:opacity-50"
         >
           <svg aria-hidden className="h-[17px] w-[17px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M10 17l5-5-5-5M15 12H3" /><path d="M15 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4" /></svg>
-          <span className="text-[0.78rem] font-medium sm:hidden lg:block">{isSigningOut ? t("signing_out", "Signing out…") : t("sign_out", "Sign out")}</span>
+          <span className="text-sm font-medium sm:hidden lg:block">{isSigningOut ? t("signing_out", "Signing out…") : t("sign_out", "Sign out")}</span>
         </button>
       </div>
       </aside>

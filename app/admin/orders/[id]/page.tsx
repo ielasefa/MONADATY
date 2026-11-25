@@ -154,11 +154,11 @@ export default function AdminOrderDetailPage() {
 
   if (!order) {
     return (
-      <div className="min-h-screen bg-bg">
+      <div className="min-h-screen bg-canvas">
         <div className="container-shell mx-auto px-6 py-10">
-          <div className="glass rounded-card border border-white/[0.06] p-10 text-center">
+          <div className="glass rounded-card border border-line p-10 text-center">
             <p className="text-sm text-muted">{t("order_not_found_admin")}</p>
-            <Link href="/admin/orders" className="mt-4 inline-flex items-center text-sm text-gold hover:underline">
+            <Link href="/admin/orders" className="mt-4 inline-flex items-center text-sm text-accent hover:underline">
               {t("back_to_orders")}
             </Link>
           </div>
@@ -194,22 +194,22 @@ export default function AdminOrderDetailPage() {
   const paymentMethodLabel = getPaymentMethodLabel(order.paymentMethod);
 
   return (
-    <div className="min-h-screen bg-bg">
+    <div className="min-h-screen bg-canvas">
       <div className="container-shell mx-auto px-6 py-10">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <Link href="/admin/orders" className="text-sm text-muted transition hover:text-white">
+            <Link href="/admin/orders" className="text-sm text-muted transition hover:text-foreground">
               {t("back_to_orders")}
             </Link>
-            <h1 className="mt-1 font-display text-3xl font-semibold tracking-tight text-white">{order.orderNumber}</h1>
+            <h1 className="mt-1 font-display text-3xl font-semibold tracking-tight text-foreground">{order.orderNumber}</h1>
           </div>
           <div className="flex items-center gap-2">
-            <span className={`rounded-full px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.15em] ${STATUS_COLORS[order.orderStatus] || ""}`}>
+            <span className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] ${STATUS_COLORS[order.orderStatus] || ""}`}>
               {order.orderStatus.replace(/_/g, " ")}
             </span>
             <button
               onClick={refreshOrder}
-              className="btn-secondary h-12 rounded-button border border-white/[0.06] bg-card px-4 text-sm text-muted transition hover:bg-surface hover:text-white"
+              className="btn-secondary h-12 rounded-button border border-line bg-card px-4 text-sm text-muted transition hover:bg-surface hover:text-foreground"
               aria-label={t("refresh_data")}
             >
               {t("refresh")}
@@ -219,31 +219,31 @@ export default function AdminOrderDetailPage() {
 
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="space-y-6 lg:col-span-2">
-            <section className="glass rounded-card border border-white/[0.06] p-6">
-              <h2 className="luxury-label text-[10px] text-muted">{t("order_items")}</h2>
-              <div className="mt-4 divide-y divide-white/[0.06]">
+            <section className="glass rounded-card border border-line p-6">
+              <h2 className="luxury-label text-xs text-muted">{t("order_items")}</h2>
+              <div className="mt-4 divide-y divide-line">
                 {order.items.map((item, idx) => (
                   <div key={`${item.productId}-${idx}`} className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0">
                     <div className="flex items-center gap-3 min-w-0">
                       {item.image ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={item.image} alt={item.name} className="h-10 w-10 shrink-0 rounded-[12px] bg-white/5 object-cover" />
+                        <img src={item.image} alt={item.name} className="h-10 w-10 shrink-0 rounded-[12px] bg-surface object-cover" />
                       ) : (
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[12px] bg-white/5 text-[0.55rem] font-bold tracking-[0.15em] text-white/30">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[12px] bg-surface text-xs font-bold tracking-[0.08em] text-secondary">
                           {item.name.split(" ").slice(0, 2).map((s) => s[0]).join("")}
                         </div>
                       )}
                       <div className="min-w-0">
-                        <p className="truncate font-medium text-white">{item.name}</p>
+                        <p className="truncate font-medium text-foreground">{item.name}</p>
                         <p className="text-sm text-muted">{t("unit_label")} {item.quantity} \u00D7 {item.unitPrice}</p>
                       </div>
                     </div>
-                    <p className="shrink-0 font-medium text-white">{item.totalPrice}</p>
+                    <p className="shrink-0 font-medium text-foreground">{item.totalPrice}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-5 space-y-2 border-t border-white/[0.06] pt-5">
+              <div className="mt-5 space-y-2 border-t border-line pt-5">
                 <div className="flex items-center justify-between text-sm text-muted">
                   <span>{t("subtotal")}</span>
                   <span>{order.subtotal}</span>
@@ -252,47 +252,47 @@ export default function AdminOrderDetailPage() {
                   <span>{t("tax")}</span>
                   <span>{order.tax}</span>
                 </div>
-                <div className="divider-gold flex items-center justify-between border-t border-gold/20 pt-3 text-base font-medium text-white">
+                <div className="divider-gold flex items-center justify-between border-t border-gold/20 pt-3 text-base font-medium text-foreground">
                   <span>{t("total")}</span>
-                  <span className="font-display text-lg font-semibold text-gold">{order.total}</span>
+                  <span className="font-display text-lg font-semibold text-accent">{order.total}</span>
                 </div>
               </div>
             </section>
           </div>
 
           <div className="space-y-6">
-            <section className="glass rounded-card border border-white/[0.06] p-6">
-              <h2 className="luxury-label text-[10px] text-muted">{t("customer_section")}</h2>
+            <section className="glass rounded-card border border-line p-6">
+              <h2 className="luxury-label text-xs text-muted">{t("customer_section")}</h2>
               <div className="mt-3 space-y-3">
                 <div>
                   <p className="text-xs text-muted">{t("name_label")}</p>
-                  <p className="text-sm font-medium text-white">{order.customerName}</p>
+                  <p className="text-sm font-medium text-foreground">{order.customerName}</p>
                 </div>
                 <div>
                   <p className="text-xs text-muted">{t("email_label")}</p>
-                  <p className="text-sm text-white">{order.customerEmail}</p>
+                  <p className="text-sm text-foreground">{order.customerEmail}</p>
                 </div>
                 {order.phone ? (
                   <div>
                     <p className="text-xs text-muted">{t("phone_label_customer")}</p>
-                    <p className="text-sm text-white">{order.phone}</p>
+                    <p className="text-sm text-foreground">{order.phone}</p>
                   </div>
                 ) : null}
               </div>
             </section>
 
-            <section className="glass rounded-card border border-white/[0.06] p-6">
-              <h2 className="luxury-label text-[10px] text-muted">{t("shipping_section")}</h2>
+            <section className="glass rounded-card border border-line p-6">
+              <h2 className="luxury-label text-xs text-muted">{t("shipping_section")}</h2>
               <div className="mt-3 space-y-2">
-                <p className="text-sm text-white">{order.address || "\u2014"}</p>
+                <p className="text-sm text-foreground">{order.address || "\u2014"}</p>
                 <p className="text-sm text-muted">
                   {[order.city, order.postalCode, order.country].filter(Boolean).join(", ") || "\u2014"}
                 </p>
               </div>
             </section>
 
-            <section className="glass rounded-card border border-white/[0.06] p-6">
-              <h2 className="luxury-label text-[10px] text-muted">{t("status_section")}</h2>
+            <section className="glass rounded-card border border-line p-6">
+              <h2 className="luxury-label text-xs text-muted">{t("status_section")}</h2>
               <div className="mt-4 space-y-4">
                 <OrderStatusWorkflow
                   orderStatus={order.orderStatus}
@@ -308,10 +308,10 @@ export default function AdminOrderDetailPage() {
                         type="button"
                         disabled={updating || order.paymentStatus === s}
                         onClick={() => updateStatus("paymentStatus", s)}
-                        className={`rounded-full px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.15em] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 ${
+                        className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 ${
                           order.paymentStatus === s
                             ? `${STATUS_COLORS[s]} cursor-default`
-                            : "bg-white/5 text-muted hover:bg-white/10"
+                            : "bg-surface text-muted hover:bg-surface"
                         } disabled:opacity-50`}
                         aria-pressed={order.paymentStatus === s}
                         aria-label={`Set payment status to ${s}`}
@@ -324,8 +324,8 @@ export default function AdminOrderDetailPage() {
               </div>
             </section>
 
-            <section className="glass rounded-card border border-white/[0.06] p-6">
-              <h2 className="luxury-label text-[10px] text-muted">{t("delivery_tracking")}</h2>
+            <section className="glass rounded-card border border-line p-6">
+              <h2 className="luxury-label text-xs text-muted">{t("delivery_tracking")}</h2>
               <div className="mt-3 space-y-4">
                 <div>
                   <label htmlFor="tracking-number" className="text-xs text-muted">{t("tracking_number")}</label>
@@ -336,14 +336,14 @@ export default function AdminOrderDetailPage() {
                       value={trackingNumber}
                       onChange={(e) => setTrackingNumber(e.target.value)}
                       placeholder={t("tracking_placeholder")}
-                      className="input-premium h-12 flex-1 rounded-input border border-white/[0.06] bg-surface px-3 text-sm text-white outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-gold/20"
+                      className="input-premium h-12 flex-1 rounded-input border border-line bg-surface px-3 text-sm text-foreground outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-gold/20"
                       aria-label={t("tracking_number")}
                     />
                     <button
                       type="button"
                       disabled={updating || trackingNumber === (order.trackingNumber || "")}
                       onClick={() => saveDeliveryField("trackingNumber", trackingNumber)}
-                      className="btn-primary h-12 rounded-button bg-burgundy px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-burgundy/90 disabled:opacity-50"
+                      className="btn-primary h-12 rounded-button bg-burgundy px-4 text-xs font-semibold uppercase tracking-[0.1em] text-foreground transition hover:bg-burgundy/90 disabled:opacity-50"
                       aria-label={t("save")}
                     >
                       {t("save")}
@@ -359,14 +359,14 @@ export default function AdminOrderDetailPage() {
                       value={deliveryCompany}
                       onChange={(e) => setDeliveryCompany(e.target.value)}
                       placeholder={t("company_placeholder")}
-                      className="input-premium h-12 flex-1 rounded-input border border-white/[0.06] bg-surface px-3 text-sm text-white outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-gold/20"
+                      className="input-premium h-12 flex-1 rounded-input border border-line bg-surface px-3 text-sm text-foreground outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-gold/20"
                       aria-label={t("delivery_company")}
                     />
                     <button
                       type="button"
                       disabled={updating || deliveryCompany === (order.deliveryCompany || "")}
                       onClick={() => saveDeliveryField("deliveryCompany", deliveryCompany)}
-                      className="btn-primary h-12 rounded-button bg-burgundy px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-burgundy/90 disabled:opacity-50"
+                      className="btn-primary h-12 rounded-button bg-burgundy px-4 text-xs font-semibold uppercase tracking-[0.1em] text-foreground transition hover:bg-burgundy/90 disabled:opacity-50"
                       aria-label={t("save")}
                     >
                       {t("save")}
@@ -382,14 +382,14 @@ export default function AdminOrderDetailPage() {
                       value={deliveryNotes}
                       onChange={(e) => setDeliveryNotes(e.target.value)}
                       placeholder={t("notes_placeholder")}
-                      className="input-premium h-12 flex-1 rounded-input border border-white/[0.06] bg-surface px-3 text-sm text-white outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-gold/20"
+                      className="input-premium h-12 flex-1 rounded-input border border-line bg-surface px-3 text-sm text-foreground outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-gold/20"
                       aria-label={t("delivery_notes")}
                     />
                     <button
                       type="button"
                       disabled={updating || deliveryNotes === (order.deliveryNotes || "")}
                       onClick={() => saveDeliveryField("deliveryNotes", deliveryNotes)}
-                      className="btn-primary h-12 rounded-button bg-burgundy px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-burgundy/90 disabled:opacity-50"
+                      className="btn-primary h-12 rounded-button bg-burgundy px-4 text-xs font-semibold uppercase tracking-[0.1em] text-foreground transition hover:bg-burgundy/90 disabled:opacity-50"
                       aria-label={t("save")}
                     >
                       {t("save")}
@@ -404,14 +404,14 @@ export default function AdminOrderDetailPage() {
                       type="date"
                       value={actualDeliveryDate}
                       onChange={(e) => setActualDeliveryDate(e.target.value)}
-                      className="input-premium h-12 flex-1 rounded-input border border-white/[0.06] bg-surface px-3 text-sm text-white outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-gold/20"
+                      className="input-premium h-12 flex-1 rounded-input border border-line bg-surface px-3 text-sm text-foreground outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-gold/20"
                       aria-label={t("actual_delivery_date")}
                     />
                     <button
                       type="button"
                       disabled={updating || actualDeliveryDate === toDateInputValue(order.actualDeliveryDate)}
                       onClick={() => saveDeliveryField("actualDeliveryDate", actualDeliveryDate)}
-                      className="btn-primary h-12 rounded-button bg-burgundy px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-burgundy/90 disabled:opacity-50"
+                      className="btn-primary h-12 rounded-button bg-burgundy px-4 text-xs font-semibold uppercase tracking-[0.1em] text-foreground transition hover:bg-burgundy/90 disabled:opacity-50"
                       aria-label={t("save")}
                     >
                       {t("save")}
@@ -420,21 +420,21 @@ export default function AdminOrderDetailPage() {
                 </div>
               </div>
               {order.trackingNumber ? (
-                <div className="mt-3 rounded-[14px] bg-white/[0.03] p-3">
+                <div className="mt-3 rounded-[14px] bg-surface p-3">
                   <p className="text-xs text-muted">{t("current_tracking")}</p>
-                  <p className="text-sm font-medium text-white">{order.trackingNumber}</p>
+                  <p className="text-sm font-medium text-foreground">{order.trackingNumber}</p>
                   {order.deliveryCompany ? <p className="text-xs text-muted">{order.deliveryCompany}</p> : null}
                   {order.deliveryNotes ? <p className="mt-1 text-xs text-muted">{order.deliveryNotes}</p> : null}
                 </div>
               ) : null}
             </section>
 
-            <section className="glass rounded-card border border-white/[0.06] p-6">
-              <h2 className="luxury-label text-[10px] text-muted">{t("estimated_delivery")}</h2>
+            <section className="glass rounded-card border border-line p-6">
+              <h2 className="luxury-label text-xs text-muted">{t("estimated_delivery")}</h2>
               <div className="mt-3 space-y-3">
                 <div>
                   <p className="text-xs text-muted">{t("current")}</p>
-                  <p className="text-sm text-white">{estimatedDate}</p>
+                  <p className="text-sm text-foreground">{estimatedDate}</p>
                 </div>
                 <div>
                   <label htmlFor="delivery-date" className="text-xs text-muted">{t("update_date")}</label>
@@ -444,14 +444,14 @@ export default function AdminOrderDetailPage() {
                       type="date"
                       value={deliveryDate}
                       onChange={(e) => { setDeliveryDate(e.target.value); setDateSaved(false); }}
-                      className="input-premium h-12 flex-1 rounded-input border border-white/[0.06] bg-surface px-3 text-sm text-white outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-gold/20"
+                      className="input-premium h-12 flex-1 rounded-input border border-line bg-surface px-3 text-sm text-foreground outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-gold/20"
                       aria-label={t("estimated_delivery")}
                     />
                     <button
                       type="button"
                       disabled={updating || !deliveryDate}
                       onClick={saveDeliveryDate}
-                      className="btn-primary h-12 rounded-button bg-burgundy px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-burgundy/90 disabled:opacity-50"
+                      className="btn-primary h-12 rounded-button bg-burgundy px-4 text-xs font-semibold uppercase tracking-[0.1em] text-foreground transition hover:bg-burgundy/90 disabled:opacity-50"
                       aria-label={t("save")}
                     >
                       {dateSaved ? t("saved_label") : t("save")}
@@ -461,31 +461,31 @@ export default function AdminOrderDetailPage() {
               </div>
             </section>
 
-            <section className="glass rounded-card border border-white/[0.06] p-6">
-              <h2 className="luxury-label text-[10px] text-muted">{t("details")}</h2>
+            <section className="glass rounded-card border border-line p-6">
+              <h2 className="luxury-label text-xs text-muted">{t("details")}</h2>
               <div className="mt-3 space-y-3">
                 <div>
                   <p className="text-xs text-muted">{t("order_date")}</p>
-                  <p className="text-sm text-white">{orderDate}</p>
+                  <p className="text-sm text-foreground">{orderDate}</p>
                 </div>
                 <div>
                   <p className="text-xs text-muted">{t("payment_method")}</p>
-                  <p className="text-sm text-white">{paymentMethodLabel}</p>
+                  <p className="text-sm text-foreground">{paymentMethodLabel}</p>
                 </div>
                 <div>
                   <p className="text-xs text-muted">{t("actual_delivery")}</p>
-                  <p className="text-sm text-white">{actualDate}</p>
+                  <p className="text-sm text-foreground">{actualDate}</p>
                 </div>
                 <div>
                   <p className="text-xs text-muted">{t("currency")}</p>
-                  <p className="text-sm text-white">{order.currency}</p>
+                  <p className="text-sm text-foreground">{order.currency}</p>
                 </div>
               </div>
             </section>
 
             <InvoicePanel orderId={order.id} initialInvoice={invoice} />
 
-            <section className="glass rounded-card border border-white/[0.06] p-6">
+            <section className="glass rounded-card border border-line p-6">
               <OrderTimeline
                 orderStatus={order.orderStatus}
                 updatedAt={order.updatedAt}

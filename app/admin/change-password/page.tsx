@@ -57,20 +57,20 @@ export default function ChangePasswordPage() {
   }
 
   const inputClass =
-    "h-12 w-full rounded-input border border-white/[0.06] bg-surface px-4 pr-12 text-sm text-white outline-none transition placeholder:text-white/40 focus:border-gold/50 focus:ring-1 focus:ring-gold/20 disabled:opacity-50";
+    "h-12 w-full rounded-input border border-[#E8E1D8] bg-[#FAF8F5] px-4 pe-12 text-sm text-[#171717] outline-none transition placeholder:text-[#6B6560] focus:border-gold/50 focus:ring-1 focus:ring-gold/20 disabled:opacity-50";
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-bg px-4 py-10">
+    <div className="flex min-h-screen items-center justify-center market-auth px-4 py-10">
       <motion.div
         initial={{ opacity: 0, y: 32 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="glass w-full max-w-md rounded-card border border-white/[0.06] bg-card p-8 shadow-dark sm:p-10"
+        className="market-auth-card w-full max-w-md rounded-card p-8 sm:p-10"
       >
         <div className="mb-8 text-center">
           <AdminLogo />
-          <h1 className="mt-6 font-display text-2xl tracking-wide text-white">{t("change_password")}</h1>
-          <p className="mt-2 text-sm text-muted">
+          <h1 className="mt-6 font-display text-2xl tracking-wide text-[#780B10]">{t("change_password")}</h1>
+          <p className="mt-2 text-sm text-[#6B6560]">
             {t("change_password_desc")}
           </p>
         </div>
@@ -79,7 +79,7 @@ export default function ChangePasswordPage() {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="luxury-label mb-1.5 block text-xs text-muted">{t("current_password")}</label>
+            <label htmlFor="current-password" className="luxury-label mb-1.5 block text-xs text-[#6B6560]">{t("current_password")}</label>
             <div className="relative">
               <input
                 id="current-password"
@@ -96,7 +96,7 @@ export default function ChangePasswordPage() {
           </div>
 
           <div>
-            <label className="luxury-label mb-1.5 block text-xs text-muted">{t("new_password")}</label>
+            <label htmlFor="new-password" className="luxury-label mb-1.5 block text-xs text-[#6B6560]">{t("new_password")}</label>
             <div className="relative">
               <input
                 id="new-password"
@@ -111,11 +111,11 @@ export default function ChangePasswordPage() {
               />
               <ToggleButton on={showNew} onClick={() => setShowNew((s) => !s)} label={t("new_password_label", "new password")} />
             </div>
-            <p className="mt-1 text-xs text-muted">{t("min_chars")}</p>
+            <p className="mt-1 text-xs text-[#6B6560]">{t("min_chars")}</p>
           </div>
 
           <div>
-            <label className="luxury-label mb-1.5 block text-xs text-muted">{t("confirm_password")}</label>
+            <label htmlFor="confirm-password" className="luxury-label mb-1.5 block text-xs text-[#6B6560]">{t("confirm_password")}</label>
             <div className="relative">
               <input
                 id="confirm-password"
@@ -139,7 +139,7 @@ export default function ChangePasswordPage() {
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
-                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-line border-t-line" />
                 {t("changing")}
               </span>
             ) : (
@@ -159,7 +159,7 @@ function ToggleButton({ on, onClick, label }: { on: boolean; onClick: () => void
       onClick={onClick}
       aria-label={on ? `Hide ${label}` : `Show ${label}`}
       aria-pressed={on}
-      className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-muted transition hover:bg-white/5 hover:text-white focus:outline-none focus-visible:ring-1 focus-visible:ring-burgundy/30"
+      className="absolute end-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-lg text-[#6B6560] transition hover:bg-[#FAF8F5] hover:text-[#780B10] focus:outline-none focus-visible:ring-1 focus-visible:ring-burgundy/30"
     >
       {on ? (
         <svg aria-hidden="true" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">

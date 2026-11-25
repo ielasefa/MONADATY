@@ -30,9 +30,9 @@ const typeColors: Record<string, string> = {
   SALE: "bg-burgundy/10 text-burgundy border border-burgundy/20",
   RETURN: "badge-emerald",
   ADJUSTMENT: "badge-gold",
-  TRANSFER: "bg-gold/30 text-gold border border-blue-500/20",
-  PURCHASE: "bg-gold/10 text-gold border border-emerald/20",
-  REFUND: "bg-amber-500/10 text-amber-400 border border-amber-500/20",
+  TRANSFER: "bg-gold/30 text-accent border border-blue-500/20",
+  PURCHASE: "bg-gold/10 text-accent border border-emerald/20",
+  REFUND: "bg-amber-500/10 text-amber-700 border border-amber-500/20",
   DAMAGED: "badge-red",
 };
 
@@ -94,7 +94,7 @@ export function AuditLogClient({
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="luxury-label mb-2">{t("inventory", "Inventory")}</p>
-          <h1 className="text-3xl font-semibold tracking-tight text-white">{t("audit_log", "Audit Log")}</h1>
+          <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t("audit_log", "Audit Log")}</h1>
           <p className="mt-1 text-sm text-muted">{filtered.length} movements</p>
         </div>
         <button
@@ -149,21 +149,21 @@ export function AuditLogClient({
         </div>
       </div>
 
-      <div className="glass overflow-hidden rounded-card border border-white/[0.06]">
+      <div className="glass overflow-hidden rounded-card border border-line">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
+          <table className="w-full text-start text-sm">
             <thead>
-              <tr className="border-b border-white/[0.06] text-xs uppercase tracking-[0.1em] text-muted">
+              <tr className="border-b border-line text-xs uppercase tracking-[0.1em] text-muted">
                 <th className="px-5 py-4 font-medium">{t("date", "Date")}</th>
                 <th className="px-5 py-4 font-medium">{t("product", "Product")}</th>
                 <th className="px-5 py-4 font-medium">{t("warehouse", "Warehouse")}</th>
                 <th className="px-5 py-4 font-medium">{t("type", "Type")}</th>
-                <th className="px-5 py-4 font-medium text-right">{t("qty_label", "Qty")}</th>
+                <th className="px-5 py-4 font-medium text-end">{t("qty_label", "Qty")}</th>
                 <th className="px-5 py-4 font-medium">{t("reason", "Reason")}</th>
                 <th className="px-5 py-4 font-medium">{t("audit_log_reference", "Reference")}</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/[0.06]">
+            <tbody className="divide-y divide-line">
               {paged.map((m, i) => (
                 <motion.tr
                   key={m.id}
@@ -171,21 +171,21 @@ export function AuditLogClient({
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.3, delay: i * 0.04 }}
-                  className="transition hover:bg-white/[0.02]"
+                  className="transition hover:bg-surface"
                 >
                   <td className="px-5 py-4 whitespace-nowrap text-xs text-muted">
                     {new Date(m.createdAt).toLocaleDateString("en-US", {
                       month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit",
                     })}
                   </td>
-                  <td className="px-5 py-4 font-mono text-xs text-white">{m.productId.slice(0, 8)}...</td>
+                  <td className="px-5 py-4 font-mono text-xs text-foreground">{m.productId.slice(0, 8)}...</td>
                   <td className="px-5 py-4 text-muted">{m.warehouseName}</td>
                   <td className="px-5 py-4">
-                    <span className={`inline-flex rounded-full px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.15em] ${typeColors[m.movementType] || "bg-white/10 text-white/60"}`}>
+                    <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold uppercase tracking-[0.08em] ${typeColors[m.movementType] || "bg-surface text-secondary"}`}>
                       {m.movementType}
                     </span>
                   </td>
-                  <td className={`px-5 py-4 text-right font-medium ${m.quantity > 0 ? "text-gold" : m.quantity < 0 ? "text-burgundy" : "text-muted"}`}>
+                  <td className={`px-5 py-4 text-end font-medium ${m.quantity > 0 ? "text-accent" : m.quantity < 0 ? "text-burgundy" : "text-muted"}`}>
                     {m.quantity > 0 ? `+${m.quantity}` : m.quantity}
                   </td>
                   <td className="px-5 py-4 text-muted max-w-[160px] truncate" title={m.reason}>
@@ -214,7 +214,7 @@ export function AuditLogClient({
             type="button"
             disabled={page === 0}
             onClick={() => setPage((p) => p - 1)}
-            className="btn-secondary h-10 rounded-button border border-white/[0.06] bg-card px-4 text-sm text-muted transition hover:bg-surface hover:text-white disabled:opacity-30"
+            className="btn-secondary h-10 rounded-button border border-line bg-card px-4 text-sm text-muted transition hover:bg-surface hover:text-foreground disabled:opacity-30"
           >
             Previous
           </button>
@@ -225,7 +225,7 @@ export function AuditLogClient({
             type="button"
             disabled={page >= totalPages - 1}
             onClick={() => setPage((p) => p + 1)}
-            className="btn-secondary h-10 rounded-button border border-white/[0.06] bg-card px-4 text-sm text-muted transition hover:bg-surface hover:text-white disabled:opacity-30"
+            className="btn-secondary h-10 rounded-button border border-line bg-card px-4 text-sm text-muted transition hover:bg-surface hover:text-foreground disabled:opacity-30"
           >
             Next
           </button>

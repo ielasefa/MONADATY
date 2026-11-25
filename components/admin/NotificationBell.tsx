@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useId } from "react";
 import Link from "next/link";
 import type { AdminNotificationType } from "@/lib/admin-notifications";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -16,6 +16,17 @@ export function NotificationBell({ initialNotifications, initialUnread }: Props)
   const [notifications, setNotifications] = useState(initialNotifications);
   const [unread, setUnread] = useState(initialUnread);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const id = useId();
+
+  useEffect(() => {
+    if (!open) return;
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") { setOpen(false); trigger.current?.focus(); }
+    };
+    document.addEventListener("keydown", escape);
+    return () => document.removeEventListener("keydown", escape);
+  }, [open]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -54,18 +65,20 @@ export function NotificationBell({ initialNotifications, initialUnread }: Props)
   return (
     <div ref={dropdownRef} className="relative">
       <button
+        ref={trigger}
+        type="button"
         onClick={() => setOpen(!open)}
-        className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.06] bg-surface text-lg text-white/50 transition hover:border-white/20 hover:text-white"
+        className="admin-icon-button relative"
         aria-label={unread > 0 ? t("notifications_unread", { count: unread }) : t("notifications")}
         aria-expanded={open}
-        aria-haspopup="true"
+        aria-controls={open ? id : undefined}
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
           <path d="M13.73 21a2 2 0 0 1-3.46 0" />
         </svg>
         {unread > 0 && (
-          <span className="absolute -right-0.5 -top-0.5 flex h-4.5 min-w-[18px] items-center justify-center rounded-full bg-burgundy px-1 text-[0.6rem] font-bold text-white shadow-lg shadow-burgundy/30">
+          <span className="absolute -right-0.5 -top-0.5 flex h-4.5 min-w-[18px] items-center justify-center rounded-full bg-burgundy px-1 text-xs font-bold text-foreground shadow-lg shadow-burgundy/30">
             {unread > 9 ? "9+" : unread}
           </span>
         )}
@@ -73,16 +86,17 @@ export function NotificationBell({ initialNotifications, initialUnread }: Props)
 
       {open && (
         <div
-          className="absolute end-0 top-full z-50 mt-2 w-[min(380px,calc(100vw-5.5rem))] overflow-hidden rounded-xl border border-white/[0.08] bg-[#1A1A16] shadow-2xl animate-fade-in"
-          role="menu"
+          id={id}
+          className="admin-notifications absolute end-0 top-full z-50 mt-2 animate-fade-in"
+          role="region"
           aria-label={t("notifications")}
         >
-          <div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-3">
-            <span className="text-sm font-semibold text-white">{t("notifications")}</span>
+          <div className="flex items-center justify-between border-b border-line px-5 py-3">
+            <span className="text-sm font-semibold text-foreground">{t("notifications")}</span>
             {unread > 0 && (
               <button
                 onClick={handleMarkAllRead}
-                className="text-[0.65rem] font-medium uppercase tracking-widest text-white/50 transition hover:text-gold"
+                className="text-xs font-medium uppercase tracking-widest text-secondary transition hover:text-accent"
               >
                 {t("mark_all_read")}
               </button>
@@ -92,18 +106,18 @@ export function NotificationBell({ initialNotifications, initialUnread }: Props)
           <div className="max-h-[400px] overflow-y-auto">
             {notifications.length === 0 ? (
               <div className="flex flex-col items-center py-10 text-center">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="mb-3 text-white/30">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="mb-3 text-secondary">
                   <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
                   <path d="M13.73 21a2 2 0 0 1-3.46 0" />
                 </svg>
-                <p className="text-sm text-white/50">{t("no_notifications")}</p>
+                <p className="text-sm text-secondary">{t("no_notifications")}</p>
               </div>
             ) : (
               notifications.map((n) => (
                 <div
                   key={n.id}
-                  className={`group border-b border-white/[0.03] transition ${
-                    !n.read ? "bg-white/[0.02]" : ""
+                  className={`group border-b border-line transition ${
+                    !n.read ? "bg-surface" : ""
                   }`}
                 >
                   <Link
@@ -112,17 +126,17 @@ export function NotificationBell({ initialNotifications, initialUnread }: Props)
                       if (!n.read) handleMarkRead(n.id);
                       setOpen(false);
                     }}
-                    className={`flex gap-3 px-5 py-3 transition hover:bg-white/[0.02] ${
+                    className={`flex gap-3 px-5 py-3 transition hover:bg-surface ${
                       !n.read ? "border-s-2 border-s-gold/60" : "border-s-2 border-s-transparent"
                     }`}
                   >
                     <span className="mt-0.5 text-base leading-none">{typeIcon[n.type] || "\uD83D\uDD14"}</span>
                     <div className="flex-1 min-w-0">
-                      <p className={`text-sm ${!n.read ? "font-medium text-white" : "text-white/50"}`}>
+                      <p className={`text-sm ${!n.read ? "font-medium text-foreground" : "text-secondary"}`}>
                         {n.title}
                       </p>
-                      <p className="mt-0.5 truncate text-xs text-white/40">{n.message}</p>
-                      <p className="mt-1 text-[0.6rem] text-white/30">
+                      <p className="mt-0.5 truncate text-xs text-secondary">{n.message}</p>
+                      <p className="mt-1 text-xs text-secondary">
                         {formatTimeAgo(n.createdAt, t)}
                       </p>
                     </div>

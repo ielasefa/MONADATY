@@ -9,16 +9,23 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        foreground: "rgb(var(--color-foreground) / <alpha-value>)",
+        secondary: "rgb(var(--color-secondary) / <alpha-value>)",
+        accent: "rgb(var(--color-accent) / <alpha-value>)",
+        canvas: "rgb(var(--color-canvas) / <alpha-value>)",
+        line: "rgb(var(--color-line) / <alpha-value>)",
+        brand: "rgb(var(--color-brand) / <alpha-value>)",
+        "brand-dark": "#450407",
         black: "#0B0B0A",
         "black-soft": "rgb(var(--color-surface) / <alpha-value>)",
         "black-surface": "rgb(var(--color-elevated) / <alpha-value>)",
         bg: "#0B0B0A",
         surface: "rgb(var(--color-surface) / <alpha-value>)",
         card: "rgb(var(--color-elevated) / <alpha-value>)",
-        burgundy: "#6E1F2A",
-        "burgundy-dark": "#5A1822",
+        burgundy: "rgb(var(--color-brand) / <alpha-value>)",
+        "burgundy-dark": "#450407",
         "burgundy-light": "rgb(var(--color-burgundy-hover) / <alpha-value>)",
-        rouge: "#6E1F2A",
+        rouge: "rgb(var(--color-brand) / <alpha-value>)",
         "rouge-hover": "rgb(var(--color-burgundy-hover) / <alpha-value>)",
         "rouge-dark": "#5A1822",
         gold: "rgb(var(--color-gold) / <alpha-value>)",
@@ -29,8 +36,9 @@ const config: Config = {
         muted: "rgb(var(--color-muted) / <alpha-value>)",
       },
       fontFamily: {
-        display: ["DM Serif Display", "Georgia", "ui-serif", "serif"],
-        body: ["DM Sans", "ui-sans-serif", "system-ui"],
+        sans: ["var(--font-ui)"],
+        display: ["var(--font-editorial)"],
+        body: ["var(--font-ui)"],
       },
       fontSize: {
         "display-3xl": ["6.5rem", { lineHeight: "0.85", letterSpacing: "-0.05em", fontWeight: "400" }],

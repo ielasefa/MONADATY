@@ -41,7 +41,7 @@ export function AnalyticsSection({
       <SectionHeading
         title={t("analytics", "Analytics")}
         action={
-          <span className="text-[0.64rem] uppercase tracking-[0.18em] text-white/30">
+          <span className="text-xs uppercase tracking-[0.08em] text-secondary">
             {t("last_30_days", "Last 30 days")}
           </span>
         }

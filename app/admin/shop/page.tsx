@@ -16,7 +16,7 @@ export default async function AdminShopPage() {
   const collections = await getCollections();
 
   return (
-    <div className="min-h-screen bg-bg">
+    <div className="min-h-screen bg-canvas">
       <div className="container-shell mx-auto px-6 py-10">
         <ShopForm
           products={products}

@@ -72,7 +72,7 @@ export function AdminManagement({ admins: initialAdmins }: { admins: AdminRecord
       <div className="mb-8 flex items-center justify-between">
         <div>
           <p className="luxury-label mb-2">{t("team_label")}</p>
-          <h1 className="text-3xl font-semibold tracking-tight text-white">{t("admin_management")}</h1>
+          <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t("admin_management")}</h1>
           <p className="mt-1 text-sm text-muted">{t("manage_admins_desc")}</p>
         </div>
         <button
@@ -147,7 +147,7 @@ export function AdminManagement({ admins: initialAdmins }: { admins: AdminRecord
       <div className="luxury-card overflow-hidden">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-white/[0.06] text-left">
+            <tr className="border-b border-line text-start">
               <th className="luxury-label px-6 py-4">{t("name_label")}</th>
               <th className="luxury-label px-6 py-4">{t("email_label")}</th>
               <th className="luxury-label px-6 py-4">{t("role_label")}</th>
@@ -158,21 +158,21 @@ export function AdminManagement({ admins: initialAdmins }: { admins: AdminRecord
           </thead>
           <tbody>
             {admins.map((a) => (
-              <tr key={a.id} className="border-b border-white/[0.06] text-sm">
-                <td className="px-6 py-4 font-medium text-white">{a.name}</td>
+              <tr key={a.id} className="border-b border-line text-sm">
+                <td className="px-6 py-4 font-medium text-foreground">{a.name}</td>
                 <td className="px-6 py-4 text-muted">{a.email}</td>
         <td className="px-6 py-4">
-  <span className={a.role === "SUPER_ADMIN" ? "badge-gold" : "inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.12em] border border-white/[0.06] bg-white/[0.04] text-white/70"}>
+  <span className={a.role === "SUPER_ADMIN" ? "badge-gold" : "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold uppercase tracking-[0.12em] border border-line bg-surface text-secondary"}>
     {a.role === "SUPER_ADMIN" ? t("super_admin") : t("admin_role")}
   </span>
 </td>
         <td className="px-6 py-4">
-  <span className={a.mustChangePassword ? "badge-red" : "inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.12em] border border-gold/20 bg-gold/[0.06] text-gold"}>
+  <span className={a.mustChangePassword ? "badge-red" : "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold uppercase tracking-[0.12em] border border-gold/20 bg-gold/[0.06] text-accent"}>
     {a.mustChangePassword ? t("must_change") : t("active_status")}
   </span>
 </td>
         <td className="px-6 py-4">
- <span className={a.lastLoginAt ? "text-sm font-medium text-white/60" : "text-sm font-bold tracking-wider uppercase text-burgundy"}>
+ <span className={a.lastLoginAt ? "text-sm font-medium text-secondary" : "text-sm font-bold tracking-wider uppercase text-burgundy"}>
   {a.lastLoginAt ? new Date(a.lastLoginAt).toLocaleDateString() : t("never_logged")}
  </span>
 </td>

@@ -1,8 +1,10 @@
 "use client";
 
+import { categoryLabel } from "@/lib/category-label";
 import { Component, useMemo, useState, useEffect, useRef, useCallback, type ErrorInfo, type ReactNode } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { ProductCard } from "@/components/ProductCard";
 import type { Product } from "@/types";
 import { FilterSidebar } from "@/components/FilterSidebar";
@@ -39,6 +41,8 @@ function parseParams(
     maxPrice: maxP,
     availabilityOnly: avail === "in-stock",
     sort,
+    brand: sp.get("brand") ?? "",
+    format: sp.get("format") ?? "",
   };
 }
 
@@ -49,6 +53,8 @@ function paramsToUrl(
   maxP: number | null,
   avail: boolean,
   sort: string,
+  brand: string,
+  format: string,
 ) {
   const sp = new URLSearchParams();
   const normalizedSearch = normalizeSearchValue(search);
@@ -60,6 +66,8 @@ function paramsToUrl(
   }
   if (avail) sp.set("availability", "in-stock");
   if (sort && sort !== "default") sp.set("sort", sort);
+  if (brand) sp.set("brand", brand);
+  if (format) sp.set("format", format);
   const qs = sp.toString();
   return qs ? `/shop?${qs}` : "/shop";
 }
@@ -87,10 +95,10 @@ class ShopErrorBoundary extends Component<
     if (this.state.hasError) {
       const fn = this.props.t ?? (k => k);
       return (
-        <div className="rounded-xl border border-white/[0.06] bg-card p-10 text-center">
+        <div className="rounded-xl border border-line bg-card p-10 text-center">
           <p className="label-utility">{fn("shop_unavailable")}</p>
-          <h3 className="font-display mt-3 text-2xl text-white">{fn("shop_unavailable_desc")}</h3>
-          <p className="mt-3 text-sm text-white/40">{fn("try_again")}</p>
+          <h3 className="font-display mt-3 text-2xl text-foreground">{fn("shop_unavailable_desc")}</h3>
+          <p className="mt-3 text-sm text-secondary">{fn("try_again")}</p>
         </div>
       );
     }
@@ -124,10 +132,10 @@ function FilterChip({
       type="button"
       aria-pressed={active}
       onClick={onClick}
-      className={`inline-flex h-10 shrink-0 items-center rounded-full px-5 text-[0.58rem] font-semibold uppercase tracking-[0.14em] transition-all duration-300 ${
+      className={`inline-flex h-11 shrink-0 items-center rounded-full px-5 text-sm font-semibold uppercase tracking-[0.08em] transition-all duration-300 ${
         active
-          ? "bg-burgundy text-white shadow-rouge"
-          : "border border-gold/[0.16] bg-card text-white/55 hover:border-gold/35 hover:text-white"
+          ? "bg-burgundy text-foreground"
+          : "border border-line bg-card text-secondary hover:border-line hover:text-foreground"
       }`}
     >
       {label}
@@ -145,13 +153,13 @@ function FilterPill({
   removeAriaLabel: string;
 }) {
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-gold/[0.16] bg-card px-3 py-1.5 text-[0.6rem] text-white/65">
+    <span className="inline-flex items-center gap-2 rounded-full border border-line bg-card px-3 py-1.5 text-sm text-secondary">
       {label}
       <button
         type="button"
         onClick={onClear}
         aria-label={removeAriaLabel}
-        className="flex h-4 w-4 items-center justify-center rounded-full text-white/40 transition-colors duration-200 hover:text-burgundy"
+        className="flex h-4 w-4 items-center justify-center rounded-full text-secondary transition-colors duration-200 hover:text-burgundy"
       >
         <svg aria-hidden="true" className="h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
           <path d="M6 6l12 12M6 18L18 6" strokeLinecap="round" strokeLinejoin="round" />
@@ -199,6 +207,8 @@ export function ProductFilters({
   const [minPrice, setMinPrice] = useState<number | null>(null);
   const [maxPrice, setMaxPrice] = useState<number | null>(null);
   const [availabilityOnly, setAvailabilityOnly] = useState(false);
+  const [brand, setBrand] = useState("");
+  const [format, setFormat] = useState("");
   const [sort, setSort] = useState("default");
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -210,6 +220,8 @@ export function ProductFilters({
     maxPrice: null as number | null,
     availability: false,
     sort: "default",
+    brand: "",
+    format: "",
   });
   const lastUrlStrRef = useRef<string>("");
   const mobileDrawerRef = useRef<HTMLElement | null>(null);
@@ -231,6 +243,8 @@ export function ProductFilters({
       maxPrice: parsed.maxPrice,
       availability: parsed.availabilityOnly,
       sort: parsed.sort ?? "default",
+      brand: parsed.brand,
+      format: parsed.format,
     };
 
     setQuery(parsed.query);
@@ -240,6 +254,8 @@ export function ProductFilters({
     setMaxPrice(parsed.maxPrice);
     setAvailabilityOnly(parsed.availabilityOnly);
     setSort(parsed.sort ?? "default");
+    setBrand(parsed.brand);
+    setFormat(parsed.format);
   }, [searchParams, CATEGORY_MAP]);
 
   // cleanup debounce
@@ -248,17 +264,38 @@ export function ProductFilters({
   }, []);
 
   // derived
+  const { brands, formats } = useMemo(() => {
+    const brandOptions = new Set<string>();
+    const formatOptions = new Set<string>();
+    for (const product of productsSafe) {
+      if (product.brand?.trim()) brandOptions.add(product.brand.trim());
+      if (product.visual) formatOptions.add(product.visual);
+    }
+    return {
+      brands: [...brandOptions].sort((first, second) => first.localeCompare(second, lang)),
+      formats: [...formatOptions],
+    };
+  }, [productsSafe, lang]);
+  const facetCopy = {
+    fr: { brand: "Marque", format: "Format", can: "Canette", bottle: "Bouteille", glass: "Verre" },
+    en: { brand: "Brand", format: "Format", can: "Can", bottle: "Bottle", glass: "Glass" },
+    ar: { brand: "العلامة التجارية", format: "الشكل", can: "علبة", bottle: "زجاجة", glass: "كأس" },
+  }[lang];
+  const formatLabel = (value: string) => facetCopy[value as "can" | "bottle" | "glass"] ?? value;
+
   const normalizedSearch = normalizeSearchTerm(query);
   const activeFilterCount = useMemo(() => {
     const count = [
       normalizedSearch,
+      brand,
+      format,
       collectionSlug,
       minPrice != null || maxPrice != null ? "price" : null,
       availabilityOnly,
       sort && sort !== "default" ? "sort" : null,
     ].filter(Boolean).length;
     return count;
-  }, [normalizedSearch, collectionSlug, minPrice, maxPrice, availabilityOnly, sort]);
+  }, [normalizedSearch, brand, format, collectionSlug, minPrice, maxPrice, availabilityOnly, sort]);
   const filtersActive = activeFilterCount > 0;
 
   // sort helper
@@ -301,6 +338,8 @@ export function ProductFilters({
       const name = product?.name ?? "";
       const category = product?.category ?? "";
       if (!name) return false;
+      if (brand && product.brand?.trim() !== brand) return false;
+      if (format && product.visual !== format) return false;
       if (!matchesProductSearch(product, normalizedSearch)) return false;
       if (collSlug) {
         const expectedName = catMap.get(collSlug);
@@ -311,16 +350,14 @@ export function ProductFilters({
         if (minPrice != null && numeric < minPrice) return false;
         if (maxPrice != null && maxPrice > 0 && numeric > maxPrice) return false;
       }
-      if (availabilityOnly) {
-        type Stocked = Product & { stock?: number };
-        const p = product as Stocked;
-        if (p.stock != null && p.stock <= 0) return false;
-      }
+      if (availabilityOnly && (product.available === false || (product.stock != null && product.stock <= 0))) return false;
       return true;
     });
     return sortProducts(list);
   }, [
     collectionSlug,
+    brand,
+    format,
     normalizedSearch,
     minPrice,
     maxPrice,
@@ -339,6 +376,8 @@ export function ProductFilters({
       maxPrice?: number | null;
       availability?: boolean;
       sort?: string;
+      brand?: string;
+      format?: string;
     }) => {
       const current = filterStateRef.current;
       const next = {
@@ -347,10 +386,12 @@ export function ProductFilters({
         minPrice: updates.minPrice !== undefined ? updates.minPrice : current.minPrice,
         maxPrice: updates.maxPrice !== undefined ? updates.maxPrice : current.maxPrice,
         availability: updates.availability !== undefined ? updates.availability : current.availability,
-        sort: updates.sort !== undefined ? updates.sort : current.sort,
+        sort: updates.sort ?? current.sort,
+        brand: updates.brand ?? current.brand,
+        format: updates.format ?? current.format,
       };
       filterStateRef.current = next;
-      const url = paramsToUrl(next.search, next.collection, next.minPrice, next.maxPrice, next.availability, next.sort);
+      const url = paramsToUrl(next.search, next.collection, next.minPrice, next.maxPrice, next.availability, next.sort, next.brand, next.format);
       const curUrl = `${window.location.pathname}${window.location.search}`;
       if (updates.search !== undefined) setQuery(updates.search);
       if (updates.collection !== undefined) {
@@ -361,6 +402,8 @@ export function ProductFilters({
       if (updates.maxPrice !== undefined) setMaxPrice(updates.maxPrice);
       if (updates.availability !== undefined) setAvailabilityOnly(updates.availability);
       if (updates.sort !== undefined) setSort(updates.sort);
+      if (updates.brand !== undefined) setBrand(updates.brand);
+      if (updates.format !== undefined) setFormat(updates.format);
       if (url === curUrl) return;
       router.replace(url, { scroll: false });
     },
@@ -396,7 +439,7 @@ export function ProductFilters({
 
   const handleClearAll = useCallback(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
-    updateUrl({ search: "", collection: null, minPrice: null, maxPrice: null, availability: false, sort: "default" });
+    updateUrl({ search: "", collection: null, minPrice: null, maxPrice: null, availability: false, sort: "default", brand: "", format: "" });
   }, [updateUrl]);
 
   const handleClearCollection = useCallback(() => {
@@ -415,10 +458,10 @@ export function ProductFilters({
     updateUrl({ sort: v });
   }, [updateUrl]);
 
-  function closeMobileDrawer() {
+  const closeMobileDrawer = useCallback(() => {
     filterButtonRef.current?.focus();
     setMobileOpen(false);
-  }
+  }, []);
 
   // focus trap for mobile drawer
   useEffect(() => {
@@ -434,6 +477,11 @@ export function ProductFilters({
     focusable?.[0]?.focus();
 
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeMobileDrawer();
+        return;
+      }
       if (event.key !== "Tab") return;
       const nodes = focusable ? Array.from(focusable) : [];
       if (nodes.length === 0) return;
@@ -453,16 +501,16 @@ export function ProductFilters({
       document.body.style.overflow = "";
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [mobileOpen]);
+  }, [mobileOpen, closeMobileDrawer]);
 
   // early return — no products
   if (productsSafe.length === 0) {
     return (
       <section className="space-y-8">
-        <div className="rounded-xl border border-white/[0.06] bg-card p-10 text-center">
+        <div className="rounded-xl border border-line bg-card p-10 text-center">
           <p className="label-utility">{t("no_inventory")}</p>
-          <h3 className="font-display mt-3 text-2xl text-white">{t("products_unavailable")}</h3>
-          <p className="mt-3 text-sm text-white/40">{t("check_back_shortly")}</p>
+          <h3 className="font-display mt-3 text-2xl text-foreground">{t("products_unavailable")}</h3>
+          <p className="mt-3 text-sm text-secondary">{t("check_back_shortly")}</p>
         </div>
       </section>
     );
@@ -475,16 +523,16 @@ export function ProductFilters({
     <ShopErrorBoundary
       t={k => (tErrors as unknown as Record<string, string>)[k] ?? k}
     >
-      <section className="space-y-8 md:space-y-10">
+      <section className="catalogue-filters space-y-8 md:space-y-10">
         {/* ── Category chips ─────────────────────────────────────────────── */}
-        <div className="flex max-w-full flex-wrap gap-2">
+        <div className="catalogue-category-list flex max-w-full gap-2 overflow-x-auto pb-2 md:flex-wrap md:overflow-visible">
           {["all", ...categories.map(c => c.name)].map(c => {
             const cat = categories.find(cat => cat.name === c);
             const slug = c === "all" ? null : cat?.slug ?? null;
             return (
               <FilterChip
                 key={c}
-                label={c === "all" ? allLabel : c}
+                label={c === "all" ? allLabel : categoryLabel(c, lang)}
                 active={activeCategorySlug === slug}
                 onClick={() => handleCategoryChange(c)}
               />
@@ -493,12 +541,12 @@ export function ProductFilters({
         </div>
 
         {/* ── Search + sort + filter button ─────────────────────────────── */}
-        <div className="flex flex-col gap-3 rounded-2xl border border-gold/[0.16] bg-surface p-3 sm:flex-row sm:items-center sm:gap-3 md:p-4">
+        <div className="catalogue-search-bar flex flex-col gap-3 rounded-2xl border border-line bg-surface p-3 sm:flex-row sm:items-center sm:gap-3 md:p-4">
           {/* Search */}
           <div className="relative flex-1">
             <svg
               aria-hidden="true"
-              className="pointer-events-none absolute start-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/25"
+              className="pointer-events-none absolute start-4 top-1/2 h-4 w-4 -translate-y-1/2 text-secondary"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -515,14 +563,13 @@ export function ProductFilters({
               aria-label={tShop("search_drinks", "Search drinks...")}
               data-testid="storefront-product-search"
               className="storefront-input ps-11 pe-10"
-              style={{ WebkitTextFillColor: "#FFFFFF" }}
             />
             {query && (
               <button
                 type="button"
                 onClick={handleClearSearch}
                 aria-label={tShop("clear_search")}
-                className="absolute end-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-white/25 transition-colors duration-200 hover:text-white"
+                className="absolute end-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-secondary transition-colors duration-200 hover:text-foreground"
               >
                 <svg
                   aria-hidden="true"
@@ -558,7 +605,7 @@ export function ProductFilters({
             </select>
             <svg
               aria-hidden="true"
-              className="pointer-events-none absolute end-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white/40"
+              className="pointer-events-none absolute end-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-secondary"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -573,7 +620,7 @@ export function ProductFilters({
             ref={filterButtonRef}
             type="button"
             onClick={() => setMobileOpen(true)}
-            className="inline-flex h-12 items-center justify-center gap-2.5 rounded-lg border border-gold/[0.16] bg-card px-5 text-[0.6rem] font-semibold uppercase tracking-[0.14em] text-white/60 transition-all duration-300 hover:border-gold/35 hover:text-white"
+            className="inline-flex h-12 items-center justify-center gap-2.5 rounded-lg border border-line bg-card px-5 text-sm font-semibold uppercase tracking-[0.08em] text-secondary transition-all duration-300 hover:border-line hover:text-foreground"
           >
             <svg
               aria-hidden="true"
@@ -591,7 +638,7 @@ export function ProductFilters({
             </svg>
             {tShop("filter", "Filters")}
             {activeFilterCount > 0 ? (
-              <span className="flex h-4 min-w-[0.8rem] items-center justify-center rounded-full bg-burgundy px-1 text-[0.48rem] font-bold text-white">
+              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-burgundy px-1 text-xs font-bold text-white">
                 {activeFilterCount}
               </span>
             ) : null}
@@ -629,6 +676,8 @@ export function ProductFilters({
                 onClear={() => updateUrl({ availability: false })}
               />
             )}
+            {brand && <FilterPill removeAriaLabel={t("remove_filter", "Remove filter")} label={brand} onClear={() => updateUrl({ brand: "" })} />}
+            {format && <FilterPill removeAriaLabel={t("remove_filter", "Remove filter")} label={formatLabel(format)} onClear={() => updateUrl({ format: "" })} />}
             {sort && sort !== "default" && (
               <FilterPill
                 removeAriaLabel={t("remove_filter", "Remove filter")}
@@ -641,7 +690,7 @@ export function ProductFilters({
             <button
               type="button"
               onClick={handleClearAll}
-              className="text-[0.6rem] font-semibold uppercase tracking-[0.14em] text-white/40 transition-colors duration-200 hover:text-burgundy"
+              className="text-sm font-semibold uppercase tracking-[0.08em] text-secondary transition-colors duration-200 hover:text-burgundy"
             >
               {tShop("clear_all", "Clear all")}
             </button>
@@ -674,8 +723,8 @@ export function ProductFilters({
               >
                 <div className="storefront-empty">
                   <p className="label-utility">{tShop("no_matches")}</p>
-                  <h3 className="font-display mt-3 text-2xl text-white">{tShop("no_matches_desc")}</h3>
-                  <p className="mt-3 text-sm text-white/40">{tShop("no_results")}</p>
+                  <h3 className="font-display mt-3 text-2xl text-foreground">{tShop("no_matches_desc")}</h3>
+                  <p className="mt-3 text-sm text-secondary">{tShop("no_results")}</p>
                   <button
                     type="button"
                     onClick={handleClearAll}
@@ -690,8 +739,8 @@ export function ProductFilters({
         </div>
 
         {/* ── Results bar ────────────────────────────────────────────────── */}
-        <div className="flex items-center justify-between border-t border-white/[0.06] pt-6">
-          <p className="text-[0.65rem] uppercase tracking-[0.15em] text-white/35">
+        <div className="flex items-center justify-between border-t border-line pt-6">
+          <p className="text-sm uppercase tracking-[0.08em] text-secondary">
             {filteredProducts.length === 1
               ? tShop("products_found", "1 product found")
               : tShop("products_found_plural", {
@@ -702,7 +751,7 @@ export function ProductFilters({
             <button
               type="button"
               onClick={handleClearAll}
-              className="text-[0.6rem] font-semibold uppercase tracking-[0.14em] text-burgundy transition-colors duration-200 hover:text-burgundy-dark"
+              className="text-sm font-semibold uppercase tracking-[0.08em] text-burgundy transition-colors duration-200 hover:text-burgundy-dark"
             >
               {tShop("reset_filters", "Reset filters")}
             </button>
@@ -712,7 +761,7 @@ export function ProductFilters({
         {/* ── Mobile filter drawer ────────────────────────────────────────── */}
         <AnimatePresence>
           {mobileOpen && (
-            <div className="fixed inset-0 z-50 flex">
+            <div className="fixed inset-0 z-[55] flex">
               <motion.div
                 aria-hidden="true"
                 initial={shouldReduceMotion ? false : { opacity: 0 }}
@@ -732,15 +781,15 @@ export function ProductFilters({
                 animate={{ x: 0 }}
                 exit={{ x: lang === "ar" ? "-100%" : "100%" }}
                 transition={{ duration: shouldReduceMotion ? 0 : 0.35, ease: PREMIUM_EASE }}
-                className="relative ms-auto flex h-full w-full max-w-sm flex-col border-s border-gold/[0.16] bg-surface shadow-premium-xl"
+                className="relative ms-auto flex h-full w-full max-w-sm flex-col border-s border-line bg-surface shadow-premium-xl"
               >
                 {/* Header */}
-                <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-5">
+                <div className="flex items-center justify-between border-b border-line px-6 py-5">
                   <div className="flex items-center gap-3">
                     <span className="h-px w-6 bg-gold/60" />
                     <h3
                       id="filter-title"
-                      className="font-display text-lg tracking-wide text-white"
+                      className="font-display text-lg tracking-wide text-foreground"
                     >
                       {tShop("filter", "Filters")}
                     </h3>
@@ -749,7 +798,7 @@ export function ProductFilters({
                     type="button"
                     onClick={closeMobileDrawer}
                     aria-label={tShop("close", "Close")}
-                    className="flex h-9 w-9 items-center justify-center rounded-lg text-white/50 transition-colors duration-200 hover:text-white hover:bg-white/5"
+                    className="flex h-11 w-11 items-center justify-center rounded-lg text-secondary transition-colors duration-200 hover:text-foreground hover:bg-white/5"
                   >
                     <svg
                       aria-hidden="true"
@@ -780,17 +829,27 @@ export function ProductFilters({
                     onAvailabilityChange={handleAvailabilityChange}
                     categories={categories}
                   />
+                  <div className="mt-6 space-y-4">
+                    {([{ key: "brand", options: brands, value: brand }, { key: "format", options: formats, value: format }] as const).map(({ key, options, value }) => options.length > 0 && (
+                      <label className="block text-sm font-semibold" key={key}>
+                        {facetCopy[key]}
+                        <select className="storefront-input mt-2" value={value} onChange={(event) => updateUrl({ [key]: event.target.value })}>
+                          <option value="">{allLabel}</option>
+                          {options.map((option) => <option key={option} value={option}>{key === "format" ? formatLabel(option) : option}</option>)}
+                        </select>
+                      </label>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Footer */}
-                <div className="border-t border-white/[0.06] p-5">
+                <div className="border-t border-line p-5">
                   <button
                     type="button"
                     onClick={closeMobileDrawer}
                     className="btn-primary h-12 w-full text-sm"
                   >
-                    {filteredProducts.length}{" "}
-                    {tShop("products_found", "results")}
+                    {tShop("show_results", { count: String(filteredProducts.length) })}
                   </button>
                 </div>
               </motion.aside>

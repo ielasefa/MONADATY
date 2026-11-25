@@ -30,8 +30,8 @@ export function CartDrawer() {
         closeDrawer();
       }
     }
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener("keydown", onKey, true);
+    return () => window.removeEventListener("keydown", onKey, true);
   }, [isDrawerOpen, closeDrawer]);
 
   useEffect(() => {
@@ -74,7 +74,7 @@ export function CartDrawer() {
     return;
   }, [isDrawerOpen]);
 
-  if (!rendered) return null;
+  if (!rendered && !isDrawerOpen) return null;
 
   return (
     <>
@@ -91,9 +91,10 @@ export function CartDrawer() {
         ref={drawerRef}
         tabIndex={-1}
         role="dialog"
-        aria-modal="true"
+        aria-modal={isDrawerOpen || undefined}
         aria-labelledby="cart-title"
-        className={`storefront-theme fixed end-0 top-0 z-[65] flex h-full w-full max-w-[28rem] flex-col border-s border-gold/[0.16] bg-surface/95 shadow-[0_0_80px_rgba(0,0,0,0.6)] backdrop-blur-xl transition-all duration-300 ease-out ${
+        inert={!isDrawerOpen}
+        className={`storefront-theme market-cart fixed end-0 top-0 z-[65] flex h-full w-full max-w-[28rem] flex-col border-s border-line backdrop-blur-xl transition-all duration-300 ease-out ${
           isDrawerOpen
             ? "translate-x-0 rtl:-translate-x-0 opacity-100"
             : "pointer-events-none translate-x-full rtl:-translate-x-full opacity-0"
@@ -103,9 +104,9 @@ export function CartDrawer() {
         <div className="px-5 pb-4 pt-5 sm:px-6">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-baseline gap-3">
-              <span className="label-utility text-gold/70">{t("your_box")}</span>
-              <h2 id="cart-title" className="text-base font-medium text-ivory">
-                {t("your_cart_title")}
+              <span className="label-utility text-accent">{t("your_box")}</span>
+              <h2 id="cart-title" className="text-base font-medium text-foreground">
+                {t("your_cart_title", { fr: "Votre panier", en: "Your cart", ar: "سلة المشتريات" }[lang])}
               </h2>
               {itemCount > 0 && (
                 <span className="label-utility rounded-input bg-burgundy/10 px-2 py-0.5 text-burgundy">
@@ -117,7 +118,7 @@ export function CartDrawer() {
 <button
         type="button"
         onClick={closeDrawer}
-        className="group flex h-10 w-10 items-center justify-center rounded-input border border-ivory/[0.04] bg-transparent text-ivory/20 transition-all duration-200 hover:border-ivory/[0.08] hover:text-ivory"
+        className="group flex h-11 w-11 items-center justify-center rounded-input border border-line bg-transparent text-secondary transition-all duration-200 hover:border-line hover:text-foreground"
         aria-label={t("close_cart")}
       >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
@@ -133,7 +134,7 @@ export function CartDrawer() {
         <div className="flex-1 overflow-y-auto px-5 py-2">
           {items.length === 0 ? (
             <div className="flex h-full min-h-[20rem] flex-col items-center justify-center px-6 text-center">
-                <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-gold/[0.16] bg-card">
+                <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-line bg-card">
                 <svg
                   width="24"
                   height="24"
@@ -143,15 +144,15 @@ export function CartDrawer() {
                   strokeWidth="1.2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                    className="text-gold/45"
+                    className="text-accent"
                 >
                   <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
                   <line x1="3" y1="6" x2="21" y2="6" />
                   <path d="M16 10a4 4 0 01-8 0" />
                 </svg>
               </div>
-              <p className="font-display text-lg text-ivory">{t("your_box_empty")}</p>
-              <p className="mt-3 max-w-[17rem] text-sm leading-relaxed text-white/58">
+              <p className="font-display text-lg text-foreground">{t("your_box_empty")}</p>
+              <p className="mt-3 max-w-[17rem] text-sm leading-relaxed text-secondary">
                 {copy.featured.description}
               </p>
               <Link
@@ -163,11 +164,11 @@ export function CartDrawer() {
               </Link>
             </div>
           ) : (
-            <div className="divide-y divide-gold/[0.12]">
+            <div className="divide-y divide-line">
               {items.map((item) => (
                 <div key={item.id} className="group flex gap-4 py-5 transition-all duration-200">
                   {/* Product image */}
-                  <div className="relative h-20 w-16 shrink-0 overflow-hidden rounded-lg border border-gold/[0.12] bg-black">
+                  <div className="relative h-20 w-16 shrink-0 overflow-hidden rounded-lg border border-line bg-[#FAF8F5]">
                     <ProductImage
                       product={item}
                       alt={item.name}
@@ -181,29 +182,29 @@ export function CartDrawer() {
                   <div className="flex min-w-0 flex-1 flex-col justify-between py-0.5">
                     <div className="min-w-0">
                       {item.category && (
-                        <p className="label-utility text-gold/60">{item.category}</p>
+                        <p className="label-utility text-accent">{item.category}</p>
                       )}
-                      <h3 className="mt-1 truncate font-display text-[0.82rem] text-ivory">{item.name}</h3>
-                      <p className="mt-1 text-[0.75rem] font-semibold text-gold">{item.price}</p>
+                      <h3 className="mt-1 truncate font-sans text-sm text-foreground">{item.name}</h3>
+                      <p className="mt-1 text-sm font-bold text-brand">{item.price}</p>
                     </div>
 
             <div className="mt-3 flex items-center justify-between">
-              <div className="flex items-center rounded-lg border border-gold/[0.16] bg-black/30">
+              <div className="flex items-center rounded-lg border border-line bg-[#FAF8F5]">
 <button
           type="button"
           onClick={() => updateQuantity(item.id, item.quantity - 1)}
-          className="flex h-9 w-9 items-center justify-center text-[0.7rem] text-white/55 transition-colors duration-150 hover:bg-white/[0.05] hover:text-white"
+          className="flex h-11 w-11 items-center justify-center text-sm text-secondary transition-colors duration-150 hover:bg-white/[0.05] hover:text-brand"
           aria-label={`${t("decrease_qty_item")} ${item.name}`}
         >
                   &minus;
                 </button>
-                <span className="min-w-[1.8rem] border-x border-gold/[0.12] text-center label-utility text-white">
+                <span className="min-w-[1.8rem] border-x border-line text-center label-utility text-foreground">
                   {item.quantity}
                 </span>
 <button
           type="button"
           onClick={() => updateQuantity(item.id, item.quantity + 1)}
-          className="flex h-9 w-9 items-center justify-center text-[0.7rem] text-white/55 transition-colors duration-150 hover:bg-white/[0.05] hover:text-white"
+          className="flex h-11 w-11 items-center justify-center text-sm text-secondary transition-colors duration-150 hover:bg-white/[0.05] hover:text-brand"
           aria-label={`${t("increase_qty_item")} ${item.name}`}
         >
                   +
@@ -213,7 +214,7 @@ export function CartDrawer() {
   <button
     type="button"
     onClick={() => removeItem(item.id)}
-    className="flex items-center gap-1.5 px-2 py-1.5 label-utility text-ivory/25 transition-colors duration-150 hover:text-burgundy"
+    className="flex min-h-11 items-center gap-1.5 px-2 py-1.5 label-utility text-secondary transition-colors duration-150 hover:text-burgundy"
                 aria-label={`${t("remove")} ${item.name}`}
               >
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -235,10 +236,10 @@ export function CartDrawer() {
           <div className="px-6 pb-6 pt-5">
             <div className="mb-5 h-px bg-gold/[0.16]" />
             <div className="flex items-baseline justify-between">
-              <span className="label-utility text-ivory/20">{t("cart_subtotal")}</span>
-              <span className="text-xl font-semibold text-ivory">{subtotal}</span>
+              <span className="label-utility text-secondary">{t("cart_subtotal")}</span>
+              <span className="text-xl font-semibold text-foreground">{subtotal}</span>
             </div>
-            <p className="mt-1 label-utility text-ivory/12">{t("taxes_shipping_note")}</p>
+            <p className="mt-1 label-utility text-secondary">{t("taxes_shipping_note")}</p>
 
             <div className="my-4 h-px bg-gold/[0.16]" />
 

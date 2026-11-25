@@ -1,0 +1,1881 @@
+{
+  "checks": [
+    {
+      "language": "fr",
+      "name": "home",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "home",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "home",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "home",
+      "width": 1024,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "home",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "home",
+      "width": 1920,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "catalogue",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "catalogue",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "catalogue",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "catalogue",
+      "width": 1024,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "catalogue",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "catalogue",
+      "width": 1920,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "emptyCatalogue",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "emptyCatalogue",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "emptyCatalogue",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "emptyCatalogue",
+      "width": 1024,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "emptyCatalogue",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "emptyCatalogue",
+      "width": 1920,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "product",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "product",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "product",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "product",
+      "width": 1024,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "product",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "product",
+      "width": 1920,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "collections",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "collections",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "collections",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "collections",
+      "width": 1024,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "collections",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "collections",
+      "width": 1920,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "favorites",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "favorites",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "favorites",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "favorites",
+      "width": 1024,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "favorites",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "favorites",
+      "width": 1920,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "about",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "about",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "about",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "about",
+      "width": 1024,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "about",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "about",
+      "width": 1920,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "checkout",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "checkout",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "checkout",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "checkout",
+      "width": 1024,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "checkout",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "checkout",
+      "width": 1920,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "confirmation",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "confirmation",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "confirmation",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "confirmation",
+      "width": 1024,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "confirmation",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "confirmation",
+      "width": 1920,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "login",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "login",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "login",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "login",
+      "width": 1024,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "login",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "login",
+      "width": 1920,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "offline",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "offline",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "offline",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "offline",
+      "width": 1024,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "offline",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "offline",
+      "width": 1920,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "error",
+      "width": 360,
+      "status": 404,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "error",
+      "width": 390,
+      "status": 404,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "error",
+      "width": 768,
+      "status": 404,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "error",
+      "width": 1024,
+      "status": 404,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "error",
+      "width": 1440,
+      "status": 404,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "error",
+      "width": 1920,
+      "status": 404,
+      "overflow": false,
+      "direction": "ltr",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "home",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "home",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "home",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "home",
+      "width": 1024,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "home",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "home",
+      "width": 1920,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "catalogue",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "catalogue",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "catalogue",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "catalogue",
+      "width": 1024,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "catalogue",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "catalogue",
+      "width": 1920,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "emptyCatalogue",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "emptyCatalogue",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "emptyCatalogue",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "emptyCatalogue",
+      "width": 1024,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "emptyCatalogue",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "emptyCatalogue",
+      "width": 1920,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "product",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "product",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "product",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "product",
+      "width": 1024,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "product",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "product",
+      "width": 1920,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "collections",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "collections",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "collections",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "collections",
+      "width": 1024,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "collections",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "collections",
+      "width": 1920,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "favorites",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "favorites",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "favorites",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "favorites",
+      "width": 1024,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "favorites",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "favorites",
+      "width": 1920,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "about",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "about",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "about",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "about",
+      "width": 1024,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "about",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "about",
+      "width": 1920,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "checkout",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "checkout",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "checkout",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "checkout",
+      "width": 1024,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "checkout",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "checkout",
+      "width": 1920,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "confirmation",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "confirmation",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "confirmation",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "confirmation",
+      "width": 1024,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "confirmation",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "confirmation",
+      "width": 1920,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "login",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "login",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "login",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "login",
+      "width": 1024,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "login",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "login",
+      "width": 1920,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "offline",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "offline",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "offline",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "offline",
+      "width": 1024,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "offline",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "offline",
+      "width": 1920,
+      "status": 200,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "error",
+      "width": 360,
+      "status": 404,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "error",
+      "width": 390,
+      "status": 404,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "error",
+      "width": 768,
+      "status": 404,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "error",
+      "width": 1024,
+      "status": 404,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "error",
+      "width": 1440,
+      "status": 404,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "ar",
+      "name": "error",
+      "width": 1920,
+      "status": 404,
+      "overflow": false,
+      "direction": "rtl",
+      "missingAlt": 0,
+      "rawKeys": [],
+      "unnamedFields": 0
+    },
+    {
+      "language": "fr",
+      "name": "checkout-populated",
+      "width": 360,
+      "overflow": false
+    },
+    {
+      "language": "fr",
+      "name": "checkout-populated",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "language": "fr",
+      "name": "checkout-populated",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "language": "fr",
+      "name": "checkout-populated",
+      "width": 1024,
+      "overflow": false
+    },
+    {
+      "language": "fr",
+      "name": "checkout-populated",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "language": "fr",
+      "name": "checkout-populated",
+      "width": 1920,
+      "overflow": false
+    }
+  ],
+  "cardChecks": [
+    {
+      "width": 360,
+      "count": 2,
+      "imageRatio": 1,
+      "actionOffset": 0
+    },
+    {
+      "width": 390,
+      "count": 2,
+      "imageRatio": 1,
+      "actionOffset": 0
+    },
+    {
+      "width": 768,
+      "count": 3,
+      "imageRatio": 1,
+      "actionOffset": 0
+    },
+    {
+      "width": 1024,
+      "count": 4,
+      "imageRatio": 1,
+      "actionOffset": 0
+    },
+    {
+      "width": 1440,
+      "count": 4,
+      "imageRatio": 1,
+      "actionOffset": 0
+    },
+    {
+      "width": 1920,
+      "count": 4,
+      "imageRatio": 1,
+      "actionOffset": 0
+    },
+    {
+      "width": 360,
+      "count": 2,
+      "imageRatio": 1,
+      "actionOffset": 0
+    },
+    {
+      "width": 390,
+      "count": 2,
+      "imageRatio": 1,
+      "actionOffset": 0
+    },
+    {
+      "width": 768,
+      "count": 3,
+      "imageRatio": 1,
+      "actionOffset": 0
+    },
+    {
+      "width": 1024,
+      "count": 4,
+      "imageRatio": 1,
+      "actionOffset": 0
+    },
+    {
+      "width": 1440,
+      "count": 4,
+      "imageRatio": 1,
+      "actionOffset": 0
+    },
+    {
+      "width": 1920,
+      "count": 4,
+      "imageRatio": 1,
+      "actionOffset": 0
+    }
+  ],
+  "accessibility": [
+    {
+      "language": "fr",
+      "name": "home",
+      "violations": []
+    },
+    {
+      "language": "fr",
+      "name": "catalogue",
+      "violations": []
+    },
+    {
+      "language": "fr",
+      "name": "emptyCatalogue",
+      "violations": []
+    },
+    {
+      "language": "fr",
+      "name": "product",
+      "violations": []
+    },
+    {
+      "language": "fr",
+      "name": "collections",
+      "violations": []
+    },
+    {
+      "language": "fr",
+      "name": "favorites",
+      "violations": []
+    },
+    {
+      "language": "fr",
+      "name": "about",
+      "violations": []
+    },
+    {
+      "language": "fr",
+      "name": "checkout",
+      "violations": []
+    },
+    {
+      "language": "fr",
+      "name": "confirmation",
+      "violations": []
+    },
+    {
+      "language": "fr",
+      "name": "login",
+      "violations": []
+    },
+    {
+      "language": "fr",
+      "name": "offline",
+      "violations": []
+    },
+    {
+      "language": "fr",
+      "name": "error",
+      "violations": []
+    },
+    {
+      "language": "ar",
+      "name": "home",
+      "violations": []
+    },
+    {
+      "language": "ar",
+      "name": "catalogue",
+      "violations": []
+    },
+    {
+      "language": "ar",
+      "name": "emptyCatalogue",
+      "violations": []
+    },
+    {
+      "language": "ar",
+      "name": "product",
+      "violations": []
+    },
+    {
+      "language": "ar",
+      "name": "collections",
+      "violations": []
+    },
+    {
+      "language": "ar",
+      "name": "favorites",
+      "violations": []
+    },
+    {
+      "language": "ar",
+      "name": "about",
+      "violations": []
+    },
+    {
+      "language": "ar",
+      "name": "checkout",
+      "violations": []
+    },
+    {
+      "language": "ar",
+      "name": "confirmation",
+      "violations": []
+    },
+    {
+      "language": "ar",
+      "name": "login",
+      "violations": []
+    },
+    {
+      "language": "ar",
+      "name": "offline",
+      "violations": []
+    },
+    {
+      "language": "ar",
+      "name": "error",
+      "violations": []
+    }
+  ],
+  "sticky": [
+    {
+      "width": 360,
+      "top": 8,
+      "radius": "20px"
+    },
+    {
+      "width": 390,
+      "top": 8,
+      "radius": "20px"
+    },
+    {
+      "width": 768,
+      "top": 9.203125,
+      "radius": "20px"
+    },
+    {
+      "width": 1024,
+      "top": 12.28125,
+      "radius": "20px"
+    },
+    {
+      "width": 1440,
+      "top": 17.265625,
+      "radius": "20px"
+    },
+    {
+      "width": 1920,
+      "top": 20,
+      "radius": "20px"
+    }
+  ],
+  "protectedRoutes": [
+    {
+      "route": "/admin/dashboard",
+      "redirectedToLogin": true
+    },
+    {
+      "route": "/admin/products",
+      "redirectedToLogin": true
+    },
+    {
+      "route": "/admin/orders",
+      "redirectedToLogin": true
+    },
+    {
+      "route": "/admin/customers",
+      "redirectedToLogin": true
+    },
+    {
+      "route": "/admin/landing",
+      "redirectedToLogin": true
+    },
+    {
+      "route": "/admin/settings",
+      "redirectedToLogin": true
+    }
+  ],
+  "bodyUnlocked": true,
+  "errors": [],
+  "failedImages": []
+}

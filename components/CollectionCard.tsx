@@ -20,13 +20,13 @@ export function CollectionCard({ collection, image }: CollectionCardProps) {
   return (
     <Link
       href={`/shop?collection=${collection.slug}`}
-      className="group block"
+      className="market-collection-card group block"
     >
       <motion.div
         initial={false}
         whileHover={{ y: -4, transition: { duration: 0.22, ease: EASE } }}
         transition={{ duration: 0.22, ease: EASE }}
-        className="relative aspect-[4/3] overflow-hidden"
+        className="relative aspect-[4/3] overflow-hidden rounded-xl"
       >
         {imageSource ? (
           <motion.div
@@ -45,11 +45,11 @@ export function CollectionCard({ collection, image }: CollectionCardProps) {
             />
           </motion.div>
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-black-soft">
+          <div className="flex h-full w-full items-center justify-center bg-[#450407]">
             <motion.span
               initial={false}
               whileHover={{ scale: 1.05 }}
-              className="font-display text-2xl font-light tracking-[0.15em] text-white/[0.06]"
+              className="font-display text-2xl font-light tracking-[0.08em] text-[#E8CD91]"
             >
               {collection.title.charAt(0)}
             </motion.span>
@@ -61,16 +61,16 @@ export function CollectionCard({ collection, image }: CollectionCardProps) {
         initial={false}
         whileHover={{ x: 2 }}
         transition={{ duration: 0.22, ease: EASE }}
-        className="mt-4 space-y-1.5"
+        className="mt-3 space-y-1.5"
       >
-        <p className="text-[0.38rem] font-semibold uppercase tracking-[0.35em] text-white/30">
+        <p className="text-xs font-semibold text-secondary">
           {t("collection")}
         </p>
-        <h3 className="font-display text-lg leading-[0.92] tracking-[-0.01em] text-gold transition-colors duration-300 group-hover:text-white">
+        <h3 className="font-display text-lg leading-[0.92] tracking-[-0.01em] text-brand transition-colors duration-300 group-hover:underline">
           {collection.title}
         </h3>
         {collection.description && (
-          <p className="line-clamp-2 text-[0.68rem] leading-relaxed text-white/40">
+          <p className="line-clamp-2 text-sm leading-relaxed text-secondary">
             {collection.description}
           </p>
         )}

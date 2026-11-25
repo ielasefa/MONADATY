@@ -18,7 +18,7 @@ export function RelatedProducts({ products }: { products: Product[] }) {
             <span className="h-px w-9 bg-gold" />
             {t("related_products")}
           </p>
-          <h2 className="mt-4 font-display text-3xl leading-none tracking-[-0.03em] text-white md:text-4xl">
+          <h2 className="mt-4 font-display text-3xl leading-none tracking-[-0.03em] text-foreground md:text-4xl">
             {t("you_may_also_like")}
           </h2>
         </div>

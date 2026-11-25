@@ -17,6 +17,12 @@ if check_port; then
   exit 0
 fi
 
+if [ -f "$DB_DIR/PG_VERSION" ]; then
+  echo "Starting PostgreSQL on $PG_HOST:$PG_PORT..."
+  pg_ctl -D "$DB_DIR" -l "$DB_DIR/server.log" -w start
+  exit 0
+fi
+
 PIDFILE="$DB_DIR/pglite.pid"
 if [ -f "$PIDFILE" ]; then
   PID=$(cat "$PIDFILE")

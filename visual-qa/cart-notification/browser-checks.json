@@ -1,0 +1,59 @@
+{
+  "checks": [
+    {
+      "lang": "fr",
+      "width": 390,
+      "catalogueAdd": "toast only",
+      "repeatedAdd": "timer renewed",
+      "productAdd": "toast only",
+      "manualCheckout": "works",
+      "quantity": 3
+    },
+    {
+      "lang": "fr",
+      "width": 1440,
+      "catalogueAdd": "toast only",
+      "repeatedAdd": "timer renewed",
+      "productAdd": "toast only",
+      "manualCheckout": "works",
+      "quantity": 3
+    },
+    {
+      "lang": "en",
+      "width": 390,
+      "catalogueAdd": "toast only",
+      "repeatedAdd": "timer renewed",
+      "productAdd": "toast only",
+      "manualCheckout": "works",
+      "quantity": 3
+    },
+    {
+      "lang": "en",
+      "width": 1440,
+      "catalogueAdd": "toast only",
+      "repeatedAdd": "timer renewed",
+      "productAdd": "toast only",
+      "manualCheckout": "works",
+      "quantity": 3
+    },
+    {
+      "lang": "ar",
+      "width": 390,
+      "catalogueAdd": "toast only",
+      "repeatedAdd": "timer renewed",
+      "productAdd": "toast only",
+      "manualCheckout": "works",
+      "quantity": 3
+    },
+    {
+      "lang": "ar",
+      "width": 1440,
+      "catalogueAdd": "toast only",
+      "repeatedAdd": "timer renewed",
+      "productAdd": "toast only",
+      "manualCheckout": "works",
+      "quantity": 3
+    }
+  ],
+  "errors": []
+}

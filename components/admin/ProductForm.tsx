@@ -176,8 +176,8 @@ export function ProductForm() {
 
   const inventoryStatus = (() => {
     if (form.stock <= 0) return { label: t("out_of_stock_label"), color: "text-burgundy", dot: "bg-burgundy" };
-    if (form.stock <= form.lowStockThreshold) return { label: t("low_stock"), color: "text-gold", dot: "bg-gold" };
-    return { label: t("in_stock_label"), color: "text-white/80", dot: "bg-white/20" };
+    if (form.stock <= form.lowStockThreshold) return { label: t("low_stock"), color: "text-accent", dot: "bg-gold" };
+    return { label: t("in_stock_label"), color: "text-secondary", dot: "bg-surface" };
   })();
 
   const profit = (() => {
@@ -256,7 +256,7 @@ export function ProductForm() {
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </div>
-          <h2 className="text-2xl font-semibold text-white">{t("product_created_success", "Product created successfully")}</h2>
+          <h2 className="text-2xl font-semibold text-foreground">{t("product_created_success", "Product created successfully")}</h2>
           <p className="mt-2 text-muted">{t("redirecting", "Redirecting to products list...")}</p>
         </div>
       </div>
@@ -266,9 +266,9 @@ export function ProductForm() {
   return (
     <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6 xl:grid-cols-2">
 
-      <div className="flex flex-col gap-4 border-b border-white/[0.06] pb-6 sm:flex-row sm:items-end sm:justify-between xl:col-span-2">
+      <div className="flex flex-col gap-4 border-b border-line pb-6 sm:flex-row sm:items-end sm:justify-between xl:col-span-2">
         <div>
-          <h1 className="font-display text-2xl text-white md:text-3xl">{t("add_product", "Add Product")}</h1>
+          <h1 className="font-display text-2xl text-foreground md:text-3xl">{t("add_product", "Add Product")}</h1>
           <p className="mt-1 text-sm text-muted">{t("product_create_desc")}</p>
         </div>
         <div className="flex flex-col-reverse gap-3 sm:flex-row">
@@ -291,7 +291,7 @@ export function ProductForm() {
 
       {/* Basic Information */}
       <section className="glass rounded-xl p-5 sm:p-6 xl:col-span-2">
-        <h2 className="mb-5 text-base font-semibold text-white">{t("basic_information")}</h2>
+        <h2 className="mb-5 text-base font-semibold text-foreground">{t("basic_information")}</h2>
         <div className="space-y-4">
           <div>
             <label htmlFor="p-name" className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-muted">
@@ -302,7 +302,7 @@ export function ProductForm() {
               type="text"
               value={form.name}
               onChange={(e) => handleNameChange(e.target.value)}
-              className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+              className="w-full rounded-button border border-line bg-canvas px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
               placeholder={t("product_name_placeholder")}
               required
             />
@@ -317,7 +317,7 @@ export function ProductForm() {
                 type="text"
                 value={form.slug}
                 onChange={(e) => handleSlugChange(e.target.value)}
-                className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 pe-10 text-sm text-white outline-none transition focus:border-gold/30"
+                className="w-full rounded-button border border-line bg-canvas px-4 py-2.5 pe-10 text-sm text-foreground outline-none transition focus:border-gold/30"
                 placeholder={t("product_slug_placeholder")}
                 required
               />
@@ -345,7 +345,7 @@ export function ProductForm() {
               type="text"
               value={form.shortDescription}
               onChange={(e) => updateField("shortDescription", e.target.value)}
-              className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+              className="w-full rounded-button border border-line bg-canvas px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
               placeholder={t("product_desc_placeholder")}
             />
           </div>
@@ -358,7 +358,7 @@ export function ProductForm() {
               rows={4}
               value={form.description}
               onChange={(e) => updateField("description", e.target.value)}
-              className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+              className="w-full rounded-button border border-line bg-canvas px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
               placeholder={t("product_detail_placeholder")}
             />
           </div>
@@ -372,7 +372,7 @@ export function ProductForm() {
                 type="text"
                 value={form.sku}
                 onChange={(e) => handleSkuChange(e.target.value)}
-                className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+                className="w-full rounded-button border border-line bg-canvas px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
                 placeholder={t("auto_generated")}
               />
             </div>
@@ -385,7 +385,7 @@ export function ProductForm() {
                 type="text"
                 value={form.barcode}
                 onChange={(e) => updateField("barcode", e.target.value)}
-                className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+                className="w-full rounded-button border border-line bg-canvas px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
                 placeholder={t("optional")}
               />
             </div>
@@ -395,7 +395,7 @@ export function ProductForm() {
 
       {/* Pricing */}
       <section className="glass rounded-xl p-5 sm:p-6 xl:col-span-2">
-        <h2 className="mb-5 text-base font-semibold text-white">{t("pricing")}</h2>
+        <h2 className="mb-5 text-base font-semibold text-foreground">{t("pricing")}</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <label htmlFor="p-regular" className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-muted">
@@ -408,7 +408,7 @@ export function ProductForm() {
                 inputMode="decimal"
                 value={form.regularPrice}
                 onChange={(e) => handlePriceChange("regularPrice", e.target.value)}
-                className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 pe-14 text-sm text-white outline-none transition focus:border-gold/30"
+                className="w-full rounded-button border border-line bg-canvas px-4 py-2.5 pe-14 text-sm text-foreground outline-none transition focus:border-gold/30"
                 placeholder={t("price_zero_placeholder", "0.00")}
                 required
               />
@@ -426,7 +426,7 @@ export function ProductForm() {
                 inputMode="decimal"
                 value={form.salePrice}
                 onChange={(e) => handlePriceChange("salePrice", e.target.value)}
-                className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 pe-14 text-sm text-white outline-none transition focus:border-gold/30"
+                className="w-full rounded-button border border-line bg-canvas px-4 py-2.5 pe-14 text-sm text-foreground outline-none transition focus:border-gold/30"
                 placeholder={t("price_zero_placeholder", "0.00")}
               />
               <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-muted">{form.currency}</span>
@@ -443,7 +443,7 @@ export function ProductForm() {
                 inputMode="decimal"
                 value={form.costPrice}
                 onChange={(e) => handlePriceChange("costPrice", e.target.value)}
-                className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 pe-14 text-sm text-white outline-none transition focus:border-gold/30"
+                className="w-full rounded-button border border-line bg-canvas px-4 py-2.5 pe-14 text-sm text-foreground outline-none transition focus:border-gold/30"
                 placeholder={t("price_zero_placeholder", "0.00")}
               />
               <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-muted">{form.currency}</span>
@@ -457,7 +457,7 @@ export function ProductForm() {
               id="p-currency"
               value={form.currency}
               onChange={(e) => updateField("currency", e.target.value)}
-              className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+              className="w-full rounded-button border border-line bg-canvas px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
             >
               {CURRENCIES.map((c) => (
                 <option key={c} value={c}>{c}</option>
@@ -466,15 +466,15 @@ export function ProductForm() {
           </div>
         </div>
         <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <div className="rounded-lg border border-white/[0.06] bg-bg p-3">
+          <div className="rounded-lg border border-line bg-canvas p-3">
             <p className="text-xs text-muted">{t("profit")}</p>
-            <p className={`mt-1 text-sm font-semibold ${profit >= 0 ? "text-white/80" : "text-burgundy"}`}>
+            <p className={`mt-1 text-sm font-semibold ${profit >= 0 ? "text-secondary" : "text-burgundy"}`}>
               {profit.toFixed(2)} {form.currency}
             </p>
           </div>
-          <div className="rounded-lg border border-white/[0.06] bg-bg p-3">
+          <div className="rounded-lg border border-line bg-canvas p-3">
             <p className="text-xs text-muted">{t("margin")}</p>
-            <p className={`mt-1 text-sm font-semibold ${margin >= 0 ? "text-white/80" : "text-burgundy"}`}>
+            <p className={`mt-1 text-sm font-semibold ${margin >= 0 ? "text-secondary" : "text-burgundy"}`}>
               {margin.toFixed(1)}%
             </p>
           </div>
@@ -483,7 +483,7 @@ export function ProductForm() {
 
       {/* Inventory */}
       <section className="glass rounded-xl p-5 sm:p-6">
-        <h2 className="mb-5 text-base font-semibold text-white">{t("inventory")}</h2>
+        <h2 className="mb-5 text-base font-semibold text-foreground">{t("inventory")}</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label htmlFor="p-stock" className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-muted">
@@ -495,7 +495,7 @@ export function ProductForm() {
               min={0}
               value={form.stock}
               onChange={(e) => updateField("stock", Math.max(0, parseInt(e.target.value) || 0))}
-              className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+              className="w-full rounded-button border border-line bg-canvas px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
             />
           </div>
           <div>
@@ -508,7 +508,7 @@ export function ProductForm() {
               min={1}
               value={form.lowStockThreshold}
               onChange={(e) => updateField("lowStockThreshold", Math.max(1, parseInt(e.target.value) || 1))}
-              className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+              className="w-full rounded-button border border-line bg-canvas px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
             />
           </div>
         </div>
@@ -520,7 +520,7 @@ export function ProductForm() {
 
       {/* Category / Collection / Brand */}
       <section className="glass rounded-xl p-5 sm:p-6">
-        <h2 className="mb-5 text-base font-semibold text-white">{t("organization")}</h2>
+        <h2 className="mb-5 text-base font-semibold text-foreground">{t("organization")}</h2>
         <div className="grid gap-4 sm:grid-cols-3">
           <div>
             <label htmlFor="p-category" className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-muted">
@@ -531,7 +531,7 @@ export function ProductForm() {
                 id="p-category"
                 value={form.categoryId}
                 onChange={(e) => updateField("categoryId", e.target.value)}
-                className="flex-1 rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+                className="flex-1 rounded-button border border-line bg-canvas px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
               >
                 <option value="">{t("no_category")}</option>
                 {categories.map((cat) => (
@@ -556,7 +556,7 @@ export function ProductForm() {
               id="p-collection"
               value={form.collectionId}
               onChange={(e) => updateField("collectionId", e.target.value)}
-              className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+              className="w-full rounded-button border border-line bg-canvas px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
             >
               <option value="">{t("no_collection")}</option>
               {collections.map((col) => (
@@ -573,7 +573,7 @@ export function ProductForm() {
               type="text"
               value={form.brand}
               onChange={(e) => updateField("brand", e.target.value)}
-              className="w-full rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+              className="w-full rounded-button border border-line bg-canvas px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
               placeholder={t("brand_placeholder")}
             />
           </div>
@@ -582,7 +582,7 @@ export function ProductForm() {
 
       {/* Status & Flags */}
       <section className="glass rounded-xl p-5 sm:p-6 xl:col-span-2">
-        <h2 className="mb-5 text-base font-semibold text-white">{t("status_and_flags")}</h2>
+        <h2 className="mb-5 text-base font-semibold text-foreground">{t("status_and_flags")}</h2>
         <div className="flex flex-wrap items-center gap-6">
           <div>
             <label htmlFor="p-status" className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-muted">
@@ -592,7 +592,7 @@ export function ProductForm() {
               id="p-status"
               value={form.status}
               onChange={(e) => updateField("status", e.target.value as ProductFormData["status"])}
-              className="w-40 rounded-button border border-white/[0.06] bg-bg px-4 py-2.5 text-sm text-white outline-none transition focus:border-gold/30"
+              className="w-40 rounded-button border border-line bg-canvas px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-gold/30"
             >
               <option value="Draft">{t("draft")}</option>
               <option value="Active">{t("active")}</option>
@@ -605,25 +605,25 @@ export function ProductForm() {
               type="checkbox"
               checked={form.featured}
               onChange={(e) => updateField("featured", e.target.checked)}
-              className="h-4 w-4 rounded border-white/20 bg-white/5 accent-gold"
+              className="h-4 w-4 rounded border-line bg-surface accent-gold"
             />
-            <span className="text-sm text-white">{t("featured")}</span>
+            <span className="text-sm text-foreground">{t("featured")}</span>
           </label>
           <label className="flex cursor-pointer items-center gap-3 pt-5">
             <input
               type="checkbox"
               checked={form.isBestSeller}
               onChange={(e) => updateField("isBestSeller", e.target.checked)}
-              className="h-4 w-4 rounded border-white/20 bg-white/5 accent-gold"
+              className="h-4 w-4 rounded border-line bg-surface accent-gold"
             />
-            <span className="text-sm text-white">{t("best_seller")}</span>
+            <span className="text-sm text-foreground">{t("best_seller")}</span>
           </label>
         </div>
       </section>
 
       {/* Images */}
       <section className="glass rounded-xl p-5 sm:p-6 xl:col-span-2">
-        <h2 className="mb-5 text-base font-semibold text-white">{t("images")}</h2>
+        <h2 className="mb-5 text-base font-semibold text-foreground">{t("images")}</h2>
         <ImageUploader
           images={form.images}
           onChange={(images) => updateField("images", images)}

@@ -26,14 +26,14 @@ export default function SalesReportPage() {
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
-  if (loading) return <div className="container-shell mx-auto px-6 py-10"><div className="h-32 animate-pulse rounded-card bg-white/[0.04]" /></div>;
+  if (loading) return <div className="container-shell mx-auto px-6 py-10"><div className="h-32 animate-pulse rounded-card bg-surface" /></div>;
 
   return (
     <div className="container-shell mx-auto px-6 py-10">
       <div className="mb-6">
         <p className="luxury-label mb-2">{t("reports")}</p>
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-semibold tracking-tight text-white">{t("sales_report")}</h1>
+          <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t("sales_report")}</h1>
           <select value={days} onChange={e => setDays(Number(e.target.value))} className="input-premium px-3 py-1.5 text-sm">
             <option value={7}>{t("days_7")}</option>
             <option value={30}>{t("days_30")}</option>
@@ -44,49 +44,49 @@ export default function SalesReportPage() {
       </div>
 
       <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
-        <div className="rounded-card border border-white/[0.06] bg-card p-4">
-          <p className="text-[10px] text-muted">{t("total_sales")}</p>
-          <p className="mt-1 text-xl font-semibold text-white">{summary.totalSales}</p>
+        <div className="rounded-card border border-line bg-card p-4">
+          <p className="text-xs text-muted">{t("total_sales")}</p>
+          <p className="mt-1 text-xl font-semibold text-foreground">{summary.totalSales}</p>
         </div>
-        <div className="rounded-card border border-white/[0.06] bg-card p-4">
-          <p className="text-[10px] text-muted">{t("total_revenue")}</p>
-          <p className="mt-1 text-xl font-semibold text-gold">{summary.totalRevenue.toFixed(2)} DH</p>
+        <div className="rounded-card border border-line bg-card p-4">
+          <p className="text-xs text-muted">{t("total_revenue")}</p>
+          <p className="mt-1 text-xl font-semibold text-accent">{summary.totalRevenue.toFixed(2)} DH</p>
         </div>
-        <div className="rounded-card border border-white/[0.06] bg-card p-4">
-          <p className="text-[10px] text-muted">{t("items_sold", "Items Sold")}</p>
-          <p className="mt-1 text-xl font-semibold text-white">{summary.totalItems}</p>
+        <div className="rounded-card border border-line bg-card p-4">
+          <p className="text-xs text-muted">{t("items_sold", "Items Sold")}</p>
+          <p className="mt-1 text-xl font-semibold text-foreground">{summary.totalItems}</p>
         </div>
-        <div className="rounded-card border border-white/[0.06] bg-card p-4">
-          <p className="text-[10px] text-muted">{t("avg_order_value", "Avg Order Value")}</p>
-          <p className="mt-1 text-xl font-semibold text-gold">{summary.avgOrderValue.toFixed(2)} DH</p>
+        <div className="rounded-card border border-line bg-card p-4">
+          <p className="text-xs text-muted">{t("avg_order_value", "Avg Order Value")}</p>
+          <p className="mt-1 text-xl font-semibold text-accent">{summary.avgOrderValue.toFixed(2)} DH</p>
         </div>
       </div>
 
-      <div className="mb-6 rounded-card border border-white/[0.06] bg-card p-6">
-        <h3 className="mb-4 text-sm font-semibold text-white">{t("daily_revenue", "Daily Revenue")}</h3>
+      <div className="mb-6 rounded-card border border-line bg-card p-6">
+        <h3 className="mb-4 text-sm font-semibold text-foreground">{t("daily_revenue", "Daily Revenue")}</h3>
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={data}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
               <XAxis dataKey="date" tick={{ fill: "#8B7355", fontSize: 11 }} />
               <YAxis tick={{ fill: "#8B7355", fontSize: 11 }} />
-              <Tooltip contentStyle={{ background: "#1a1a1a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8 }} />
-              <Area type="monotone" dataKey="revenue" stroke="#D5B87D" fill="rgba(213,184,125,0.1)" />
+              <Tooltip contentStyle={{ background: "#FFFFFF", border: "1px solid #E8E1D8", borderRadius: 8 }} />
+              <Area type="monotone" dataKey="revenue" stroke="#8C6228" fill="rgba(213,184,125,0.1)" />
             </AreaChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      <div className="rounded-card border border-white/[0.06] bg-card p-6">
-        <h3 className="mb-4 text-sm font-semibold text-white">{t("daily_orders", "Daily Orders")}</h3>
+      <div className="rounded-card border border-line bg-card p-6">
+        <h3 className="mb-4 text-sm font-semibold text-foreground">{t("daily_orders", "Daily Orders")}</h3>
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
               <XAxis dataKey="date" tick={{ fill: "#8B7355", fontSize: 11 }} />
               <YAxis tick={{ fill: "#8B7355", fontSize: 11 }} />
-              <Tooltip contentStyle={{ background: "#1a1a1a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8 }} />
-              <Bar dataKey="orders" fill="#D5B87D" radius={[4, 4, 0, 0]} />
+              <Tooltip contentStyle={{ background: "#FFFFFF", border: "1px solid #E8E1D8", borderRadius: 8 }} />
+              <Bar dataKey="orders" fill="#8C6228" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

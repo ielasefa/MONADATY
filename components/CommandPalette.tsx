@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Command } from "cmdk";
 import Link from "next/link";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useTranslation } from "@/hooks/useTranslation";
 import { PREMIUM_EASE } from "@/lib/motion";
 
@@ -24,7 +25,6 @@ export function CommandPalette({ open, onClose, brandName = "MONADATY" }: Comman
   const { t: tNavbar } = useTranslation("navbar");
   const { t: tWishlist } = useTranslation("wishlist");
   const { t: tCheckout } = useTranslation("checkout");
-  const { t: tAdmin } = useTranslation("admin");
   const { t: tErrors } = useTranslation("errors");
 
   useEffect(() => {
@@ -34,17 +34,6 @@ export function CommandPalette({ open, onClose, brandName = "MONADATY" }: Comman
       return () => clearTimeout(id);
     }
   }, [open]);
-
-  useEffect(() => {
-    function handleKey(e: KeyboardEvent) {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        onClose();
-      }
-    }
-    document.addEventListener("keydown", handleKey);
-    return () => document.removeEventListener("keydown", handleKey);
-  }, [onClose]);
 
   useEffect(() => {
     if (!open) return;
@@ -61,7 +50,6 @@ export function CommandPalette({ open, onClose, brandName = "MONADATY" }: Comman
     { group: tCommon("pages"), label: tNavbar("about"), href: "/about", icon: "scroll" },
     { group: tCommon("pages"), label: tWishlist("wishlist_title"), href: "/wishlist", icon: "heart" },
     { group: tCommon("pages"), label: tCheckout("checkout_title"), href: "/checkout", icon: "card" },
-    { group: tCommon("account"), label: tAdmin("dashboard"), href: "/admin/dashboard", icon: "gear" },
   ];
 
   const iconPaths: Record<string, React.ReactNode> = {
@@ -108,14 +96,14 @@ export function CommandPalette({ open, onClose, brandName = "MONADATY" }: Comman
               role="dialog"
               aria-modal="true"
               aria-label={tCommon("search_commands")}
-              className="w-full max-w-xl overflow-hidden rounded-md liquid-glass shadow-premium-xl"
+              className="w-full max-w-xl overflow-hidden rounded-2xl border border-[#E8E1D8] bg-white text-foreground shadow-premium-xl"
               loop
               onKeyDown={(e: React.KeyboardEvent) => {
                 if (e.key === "Escape") onClose();
               }}
             >
-              <div className="flex items-center gap-3 border-b border-ivory/[0.04] px-5">
-                <svg width={20} height={20} className="shrink-0 text-ivory/20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+              <div className="flex items-center gap-3 border-b border-[#E8E1D8] px-5">
+                <svg width={20} height={20} className="shrink-0 text-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                   <circle cx="11" cy="11" r="4" />
                   <path d="M21 21l-4.35-4.35" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
@@ -124,16 +112,16 @@ export function CommandPalette({ open, onClose, brandName = "MONADATY" }: Comman
                   value={search}
                   onValueChange={setSearch}
                   placeholder={tCommon("search_drinks_commands")}
-                  className="h-14 flex-1 bg-transparent text-[0.8rem] text-ivory outline-none placeholder:text-ivory/20 focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                  className="h-14 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-secondary focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                   aria-label={tCommon("search_commands")}
                 />
-                <kbd className="hidden rounded-md border border-ivory/[0.05] bg-ivory/[0.02] px-2 py-1 text-[0.55rem] font-medium text-ivory/25 sm:inline">
+                <kbd className="hidden rounded-md border border-line bg-ivory/[0.02] px-2 py-1 text-sm font-medium text-secondary sm:inline">
                   {tCommon("esc_key")}
                 </kbd>
               </div>
 
               <Command.List className="max-h-80 overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-ivory/10">
-                <Command.Empty className="py-12 text-center text-[0.75rem] text-ivory/25">
+                <Command.Empty className="py-12 text-center text-sm text-secondary">
                   {tCommon("no_results")}
                 </Command.Empty>
 
@@ -141,7 +129,7 @@ export function CommandPalette({ open, onClose, brandName = "MONADATY" }: Comman
                   <Command.Group
                     key={group}
                     heading={group}
-                    className="mb-2 [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-2 [&_[cmdk-group-heading]]:text-[0.5rem] [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-[0.22em] [&_[cmdk-group-heading]]:text-ivory/25"
+                    className="mb-2 [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-2 [&_[cmdk-group-heading]]:text-sm [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-[0.08em] [&_[cmdk-group-heading]]:text-secondary"
                   >
                     {filtered
                       .filter((item) => item.group === group)
@@ -153,23 +141,21 @@ export function CommandPalette({ open, onClose, brandName = "MONADATY" }: Comman
                             router.push(item.href);
                             onClose();
                           }}
-                          className="flex cursor-pointer items-center gap-3 rounded-md px-3 py-2.5 text-[0.75rem] text-ivory/40 transition-all duration-150 hover:translate-x-1 data-[selected=true]:bg-ivory/[0.04] data-[selected=true]:text-ivory"
+                          className="flex cursor-pointer items-center gap-3 rounded-md px-3 py-2.5 text-sm text-secondary transition-all duration-150 hover:translate-x-1 data-[selected=true]:bg-[#FAF8F5] data-[selected=true]:text-foreground"
                         >
-                          <svg aria-hidden="true" width={20} height={20} className="shrink-0 text-ivory/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                          <svg aria-hidden="true" width={20} height={20} className="shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
                             {iconPaths[item.icon]}
                           </svg>
                           <span>{item.label}</span>
-                          <span className="ml-auto text-[0.5rem] tracking-wider text-ivory/15">{item.group}</span>
                         </Command.Item>
                       ))}
                   </Command.Group>
                 ))}
 
-                <Command.Separator className="my-2 h-px bg-ivory/[0.04]" />
 
                 <Command.Group
                   heading={tCommon("quick_actions")}
-                  className="[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-2 [&_[cmdk-group-heading]]:text-[0.5rem] [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-[0.22em] [&_[cmdk-group-heading]]:text-burgundy/50"
+                  className="[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-2 [&_[cmdk-group-heading]]:text-sm [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-[0.08em] [&_[cmdk-group-heading]]:text-brand"
                 >
                   <Command.Item
                     value={tCommon("home")}
@@ -177,9 +163,9 @@ export function CommandPalette({ open, onClose, brandName = "MONADATY" }: Comman
                       router.push("/");
                       onClose();
                     }}
-                    className="flex cursor-pointer items-center gap-3 rounded-md px-3 py-2.5 text-[0.75rem] text-ivory/40 transition-all duration-150 hover:translate-x-1 data-[selected=true]:bg-ivory/[0.04] data-[selected=true]:text-ivory"
+                    className="flex cursor-pointer items-center gap-3 rounded-md px-3 py-2.5 text-sm text-secondary transition-all duration-150 hover:translate-x-1 data-[selected=true]:bg-[#FAF8F5] data-[selected=true]:text-foreground"
                   >
-                    <svg aria-hidden="true" width={20} height={20} className="shrink-0 text-burgundy/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                    <svg aria-hidden="true" width={20} height={20} className="shrink-0 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
                       {iconPaths.home}
                     </svg>
                     <span>{tErrors("go_home")}</span>
@@ -187,16 +173,16 @@ export function CommandPalette({ open, onClose, brandName = "MONADATY" }: Comman
                 </Command.Group>
               </Command.List>
 
-              <div className="flex items-center justify-between border-t border-ivory/[0.04] px-4 py-2.5">
-                <div className="flex items-center gap-3 text-[0.5rem] text-ivory/15">
+              <div className="flex items-center justify-between border-t border-[#E8E1D8] px-4 py-2.5">
+                <div className="flex items-center gap-3 text-sm text-secondary">
                   <span className="flex items-center gap-1">
-                    <kbd className="rounded border border-ivory/[0.05] bg-ivory/[0.02] px-1.5 py-0.5">↑↓</kbd> {tCommon("navigate")}
+                    <kbd className="rounded border border-line bg-ivory/[0.02] px-1.5 py-0.5">↑↓</kbd> {tCommon("navigate")}
                   </span>
                   <span className="flex items-center gap-1">
-                    <kbd className="rounded border border-ivory/[0.05] bg-ivory/[0.02] px-1.5 py-0.5">↵</kbd> {tCommon("select")}
+                    <kbd className="rounded border border-line bg-ivory/[0.02] px-1.5 py-0.5">↵</kbd> {tCommon("select")}
                   </span>
                 </div>
-                <Link href="/" onClick={onClose} className="text-[0.5rem] font-medium tracking-wider text-burgundy/40 hover:text-burgundy">
+                <Link href="/" onClick={onClose} className="text-sm font-medium tracking-wider text-brand hover:text-burgundy">
                   {brandName}
                 </Link>
               </div>

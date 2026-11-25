@@ -11,9 +11,9 @@ const MonthlyRevenueChart = lazy(() => import("./charts/MonthlyRevenueChart"));
 
 function ChartSkeleton() {
   return (
-    <div className="animate-pulse rounded-xl border border-white/[0.06] bg-card p-6">
-      <div className="mb-4 h-4 w-32 rounded bg-white/5" />
-      <div className="h-48 rounded bg-white/5" />
+    <div className="animate-pulse rounded-xl border border-line bg-card p-6">
+      <div className="mb-4 h-4 w-32 rounded bg-surface" />
+      <div className="h-48 rounded bg-surface" />
     </div>
   );
 }
@@ -32,7 +32,7 @@ export function ChartsSection({ revenueData, ordersData, topProducts, collection
   return (
     <div className="animate-fade-in">
       <div className="mb-6 flex items-center justify-between">
-        <p className="luxury-label text-[10px] text-white/50">{t("analytics", "Analytics")}</p>
+        <p className="luxury-label text-xs text-secondary">{t("analytics", "Analytics")}</p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">

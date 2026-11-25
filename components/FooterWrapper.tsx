@@ -9,15 +9,16 @@ export async function FooterWrapper() {
   } | null = null;
 
   try {
-    const [{ prisma }, { getSiteSettings }] = await Promise.all([
+    const [{ prisma }, { getSiteSettings, getProducts }] = await Promise.all([
       import("@/lib/prisma"),
       import("@/lib/db"),
     ]);
-    const [dbCollections, dbSettings] = await Promise.all([
+    const [dbCollections, dbSettings, products] = await Promise.all([
       prisma.collection.findMany({ orderBy: { order: "asc" }, select: { slug: true, name: true } }),
       getSiteSettings(),
+      getProducts(),
     ]);
-    collections = dbCollections;
+    collections = dbCollections.filter((collection) => products.some((product) => product.collection === collection.slug));
     settings = dbSettings;
   } catch {
     // DB unavailable (build time, etc.) — render footer with minimal defaults

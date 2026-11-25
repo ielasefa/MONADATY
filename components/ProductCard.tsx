@@ -1,7 +1,8 @@
 "use client";
 
-import { memo } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { memo, useState } from "react";
+import { motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import Link from "next/link";
 import type { Product } from "@/types";
 import { useCart } from "@/components/cart-context";
@@ -9,14 +10,17 @@ import { useWishlist } from "@/components/wishlist-context";
 import { ProductImage } from "@/components/ProductImage";
 import { resolveDatabaseProductImage } from "@/lib/product-images";
 import { useTranslation } from "@/hooks/useTranslation";
+import { parseMoney } from "@/lib/money";
 import { PREMIUM_EASE } from "@/lib/motion";
 
 type ProductCardProps = Pick<
   Product,
-  "id" | "slug" | "name" | "price" | "image" | "gallery" | "category" | "collection" | "brand" | "visual" | "accent"
+  "id" | "slug" | "name" | "price" | "image" | "gallery" | "category" | "collection" | "brand" | "visual" | "accent" | "stock" | "available" | "comparePrice"
 > & {
   shortDescription?: string;
   variant?: "default" | "editorial";
+  isBestSeller?: boolean;
+  badges?: string[];
 };
 
 export const ProductCard = memo(function ProductCard({
@@ -24,6 +28,7 @@ export const ProductCard = memo(function ProductCard({
   slug,
   name,
   price,
+  comparePrice,
   image,
   gallery,
   category,
@@ -31,11 +36,21 @@ export const ProductCard = memo(function ProductCard({
   brand,
   visual,
   accent,
+  stock,
+  available,
   shortDescription,
+  isBestSeller,
+  badges,
 }: ProductCardProps) {
   const { addItem } = useCart();
+  const hasOffer = Boolean(comparePrice && parseMoney(comparePrice) > parseMoney(price));
   const { contains, toggle } = useWishlist();
-  const { t } = useTranslation("products");
+  const { t, lang } = useTranslation("products");
+  const [quantity, setQuantity] = useState(1);
+  const maxQuantity = Math.max(1, Math.min(99, stock ?? 99));
+  const selectedQuantity = Math.min(quantity, maxQuantity);
+  const outOfStock = available === false || (stock != null && stock <= 0);
+  const quantityLabel = { fr: "Quantité", en: "Quantity", ar: "الكمية" }[lang];
   const shouldReduceMotion = useReducedMotion();
   const isWishlisted = contains(id);
   const imageSource = resolveDatabaseProductImage({ image, gallery });
@@ -45,10 +60,10 @@ export const ProductCard = memo(function ProductCard({
       initial={false}
       whileHover={shouldReduceMotion ? undefined : { y: -4 }}
       transition={{ duration: 0.36, ease: PREMIUM_EASE }}
-      className="group flex h-full min-w-0 flex-col rounded-2xl border border-white/[0.08] bg-[#171714] p-3 shadow-[0_18px_50px_rgba(0,0,0,0.18)] transition-[border-color,box-shadow] duration-300 hover:border-gold/25 hover:shadow-[0_24px_64px_rgba(0,0,0,0.32)] sm:p-4"
+      className="market-product group flex h-full min-w-0 flex-col rounded-2xl p-2 transition-[border-color,box-shadow] duration-300 hover:border-line sm:p-3"
     >
       <div
-        className="relative aspect-[4/5] w-full overflow-hidden rounded-xl border border-white/[0.07] bg-[#0B0B0A] transition-[border-color,box-shadow] duration-500 group-hover:border-gold/20 group-hover:shadow-[0_22px_60px_rgba(0,0,0,.25)]"
+        className="market-product-image relative aspect-square w-full overflow-hidden rounded-xl"
       >
         <Link
           href={`/product/${id}`}
@@ -64,9 +79,11 @@ export const ProductCard = memo(function ProductCard({
           />
         </Link>
 
-        <span className="pointer-events-none absolute start-3 top-3 z-20 rounded-full border border-white/[0.08] bg-black/55 px-2.5 py-1 text-[0.48rem] font-medium uppercase tracking-[0.18em] text-gold backdrop-blur-md">
-          {t("premium", "Popular")}
-        </span>
+        {(isBestSeller || badges?.[0]) && (
+          <span className="market-product-badge pointer-events-none absolute start-2 top-2 z-20 max-w-[calc(100%_-_3.25rem)] truncate rounded-full px-2 py-1 text-sm font-bold">
+            {isBestSeller ? t("best_seller", "Best seller") : badges?.[0]}
+          </span>
+        )}
 
         <button
           type="button"
@@ -81,11 +98,7 @@ export const ProductCard = memo(function ProductCard({
               : `${t("add_to_wishlist")} ${name}`
           }
           aria-pressed={isWishlisted}
-          className={`absolute end-3 top-3 z-30 inline-flex h-9 w-9 items-center justify-center rounded-full border backdrop-blur-md transition-all duration-300 ${
-            isWishlisted
-              ? "border-gold/35 bg-gold/15 text-gold"
-              : "border-white/10 bg-black/45 text-white/55 hover:border-gold/30 hover:text-gold"
-          }`}
+          className="market-product-favorite absolute end-1 top-1 z-30 inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors duration-200"
         >
           <motion.svg
             aria-hidden="true"
@@ -109,46 +122,67 @@ export const ProductCard = memo(function ProductCard({
       </div>
 
       <div className="flex flex-1 flex-col px-1 pb-1 pt-4">
-        <p className="line-clamp-1 h-4 text-[0.54rem] font-medium uppercase tracking-[0.2em] text-gold/75">
+        <p className="line-clamp-1 min-h-4 text-xs font-medium text-secondary">
           {shortDescription || category || "MONADATY"}
         </p>
-        <h3 className="mt-2 line-clamp-2 h-[2.8rem] overflow-hidden font-display text-base font-normal leading-[1.3] tracking-[-0.015em] text-white sm:h-[3rem] sm:text-lg">
-          <Link href={`/product/${id}`} className="transition-colors duration-300 hover:text-gold-light">
+        <h3 className="mt-2 line-clamp-2 h-12 overflow-hidden text-sm font-semibold leading-6 text-foreground sm:text-base">
+          <Link href={`/product/${id}`} className="transition-colors duration-300 hover:text-accent">
             {name}
           </Link>
         </h3>
-        <p className="mb-4 mt-2 h-6 origin-start font-display text-base font-normal text-gold transition-[color,transform] duration-300 group-hover:scale-[1.035] group-hover:text-gold-light motion-reduce:transition-none motion-reduce:group-hover:scale-100">{price}</p>
-        <motion.button
-          type="button"
-          onClick={() =>
-            addItem(
-              {
-                id,
-                slug,
-                name,
-                price,
-                image: imageSource,
-                category,
-                collection,
-                brand,
-                visual,
-                accent,
-                description: shortDescription ?? "",
-                gallery: gallery || [],
-              },
-              1,
-            )
-          }
-          className="btn-primary mt-auto h-11 w-full px-3 text-[0.54rem] sm:px-4 sm:text-[0.58rem]"
-          aria-label={`${t("add_to_cart")} ${name}`}
-          initial={false}
-          whileHover={shouldReduceMotion ? undefined : { y: -2, scale: 1.01 }}
-          whileTap={shouldReduceMotion ? undefined : { y: 0, scale: 0.98 }}
-          transition={{ duration: 0.24, ease: PREMIUM_EASE }}
-        >
-          <span>{t("add_to_cart")}</span>
-          <span aria-hidden="true" className="inline-block transition-transform duration-300 group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5">→</span>
-        </motion.button>
+        <div className="mb-3 mt-1 flex flex-wrap items-baseline gap-x-2">
+          <p className="market-product-price text-lg tabular-nums">{price}</p>
+          {hasOffer && <s className="text-xs text-secondary">{comparePrice}</s>}
+        </div>
+        {outOfStock && <p className="mb-2 text-xs font-semibold text-brand">{t("out_of_stock")}</p>}
+        <div className={`market-product-actions mt-auto grid items-center gap-2 ${outOfStock ? "grid-cols-1" : "grid-cols-[48px_minmax(0,1fr)]"}`}>
+          {!outOfStock && (
+            <input
+              type="number"
+              min={1}
+              max={maxQuantity}
+              step={1}
+              inputMode="numeric"
+              value={selectedQuantity}
+              aria-label={`${quantityLabel} · ${name}`}
+              onChange={(event) => setQuantity(Math.max(1, Math.floor(event.target.valueAsNumber || 1)))}
+              className="h-11 w-[3.75rem] rounded-lg border border-[#E8E1D8] px-2 text-center text-sm"
+            />
+          )}
+          <motion.button
+            type="button"
+            disabled={outOfStock}
+            onClick={() =>
+              addItem(
+                {
+                  id,
+                  slug,
+                  name,
+                  price,
+                  image: imageSource,
+                  category,
+                  collection,
+                  brand,
+                  visual,
+                  accent,
+                  stock,
+                  available,
+                  description: shortDescription ?? "",
+                  gallery: gallery || [],
+                },
+                selectedQuantity,
+              )
+            }
+            className="btn-primary min-h-11 min-w-0 px-2 disabled:cursor-not-allowed disabled:opacity-50"
+            aria-label={`${t("add_to_cart")} ${name}`}
+            initial={false}
+            whileHover={shouldReduceMotion ? undefined : { y: -2, scale: 1.01 }}
+            whileTap={shouldReduceMotion ? undefined : { y: 0, scale: 0.98 }}
+            transition={{ duration: 0.24, ease: PREMIUM_EASE }}
+          >
+            <span>{{ fr: "Ajouter", en: "Add", ar: "أضف" }[lang]}</span>
+          </motion.button>
+        </div>
       </div>
     </motion.article>
   );

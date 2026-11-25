@@ -11,17 +11,16 @@ export function ToastProvider() {
       visibleToasts={4}
       closeButton
       richColors={false}
-      theme="dark"
+      theme="light"
       toastOptions={{
         duration: 3000,
         style: {
-          background: "rgba(20,20,20,0.92)",
-          border: "1px solid rgba(255,255,255,0.08)",
-          backdropFilter: "blur(40px) saturate(180%)",
-          borderRadius: "20px",
+          background: "#FFFFFF",
+          border: "1px solid #E8E1D8",
+          borderRadius: "12px",
           padding: "14px 18px",
-          color: "white",
-          boxShadow: "0 20px 60px -12px rgba(0,0,0,0.6), 0 0 1px rgba(255,255,255,0.05)",
+          color: "#171717",
+          boxShadow: "0 8px 28px rgba(69,4,7,0.12)",
           fontSize: "0.875rem",
           lineHeight: "1.5",
         },

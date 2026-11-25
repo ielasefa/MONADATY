@@ -115,7 +115,8 @@ export async function POST(request: NextRequest) {
               price: product.price,
               salePrice: product.salePrice,
               costPrice: product.costPrice,
-              stock: product.stock,
+              // Duplicating catalogue content does not create physical inventory.
+              stock: 0,
               lowStockThreshold: product.lowStockThreshold,
               categoryId: product.categoryId,
               collectionId: product.collectionId,

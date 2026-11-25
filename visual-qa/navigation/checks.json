@@ -1,0 +1,405 @@
+{
+  "checks": [
+    {
+      "route": "admin/landing",
+      "language": "fr",
+      "width": 360,
+      "overflow": false
+    },
+    {
+      "route": "admin/landing",
+      "language": "fr",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "route": "admin/landing",
+      "language": "fr",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "route": "admin/landing",
+      "language": "fr",
+      "width": 1024,
+      "overflow": false
+    },
+    {
+      "route": "admin/landing",
+      "language": "fr",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "route": "admin/landing",
+      "language": "fr",
+      "width": 1920,
+      "overflow": false
+    },
+    {
+      "route": "home",
+      "language": "fr",
+      "width": 360,
+      "overflow": false
+    },
+    {
+      "route": "home",
+      "language": "fr",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "route": "home",
+      "language": "fr",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "route": "home",
+      "language": "fr",
+      "width": 1024,
+      "overflow": false
+    },
+    {
+      "route": "home",
+      "language": "fr",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "route": "home",
+      "language": "fr",
+      "width": 1920,
+      "overflow": false
+    },
+    {
+      "route": "admin/landing",
+      "language": "en",
+      "width": 360,
+      "overflow": false
+    },
+    {
+      "route": "admin/landing",
+      "language": "en",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "route": "admin/landing",
+      "language": "en",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "route": "admin/landing",
+      "language": "en",
+      "width": 1024,
+      "overflow": false
+    },
+    {
+      "route": "admin/landing",
+      "language": "en",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "route": "admin/landing",
+      "language": "en",
+      "width": 1920,
+      "overflow": false
+    },
+    {
+      "route": "home",
+      "language": "en",
+      "width": 360,
+      "overflow": false
+    },
+    {
+      "route": "home",
+      "language": "en",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "route": "home",
+      "language": "en",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "route": "home",
+      "language": "en",
+      "width": 1024,
+      "overflow": false
+    },
+    {
+      "route": "home",
+      "language": "en",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "route": "home",
+      "language": "en",
+      "width": 1920,
+      "overflow": false
+    },
+    {
+      "route": "admin/landing",
+      "language": "ar",
+      "width": 360,
+      "overflow": false
+    },
+    {
+      "route": "admin/landing",
+      "language": "ar",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "route": "admin/landing",
+      "language": "ar",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "route": "admin/landing",
+      "language": "ar",
+      "width": 1024,
+      "overflow": false
+    },
+    {
+      "route": "admin/landing",
+      "language": "ar",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "route": "admin/landing",
+      "language": "ar",
+      "width": 1920,
+      "overflow": false
+    },
+    {
+      "route": "home",
+      "language": "ar",
+      "width": 360,
+      "overflow": false
+    },
+    {
+      "route": "home",
+      "language": "ar",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "route": "home",
+      "language": "ar",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "route": "home",
+      "language": "ar",
+      "width": 1024,
+      "overflow": false
+    },
+    {
+      "route": "home",
+      "language": "ar",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "route": "home",
+      "language": "ar",
+      "width": 1920,
+      "overflow": false
+    },
+    {
+      "route": "admin/login",
+      "language": "fr",
+      "width": 360,
+      "overflow": false
+    },
+    {
+      "route": "admin/login",
+      "language": "fr",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "route": "admin/login",
+      "language": "fr",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "route": "admin/login",
+      "language": "fr",
+      "width": 1024,
+      "overflow": false
+    },
+    {
+      "route": "admin/login",
+      "language": "fr",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "route": "admin/login",
+      "language": "fr",
+      "width": 1920,
+      "overflow": false
+    },
+    {
+      "route": "admin/login",
+      "language": "en",
+      "width": 360,
+      "overflow": false
+    },
+    {
+      "route": "admin/login",
+      "language": "en",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "route": "admin/login",
+      "language": "en",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "route": "admin/login",
+      "language": "en",
+      "width": 1024,
+      "overflow": false
+    },
+    {
+      "route": "admin/login",
+      "language": "en",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "route": "admin/login",
+      "language": "en",
+      "width": 1920,
+      "overflow": false
+    },
+    {
+      "route": "admin/login",
+      "language": "ar",
+      "width": 360,
+      "overflow": false
+    },
+    {
+      "route": "admin/login",
+      "language": "ar",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "route": "admin/login",
+      "language": "ar",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "route": "admin/login",
+      "language": "ar",
+      "width": 1024,
+      "overflow": false
+    },
+    {
+      "route": "admin/login",
+      "language": "ar",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "route": "admin/login",
+      "language": "ar",
+      "width": 1920,
+      "overflow": false
+    }
+  ],
+  "accessibility": [
+    {
+      "route": "admin/landing",
+      "language": "fr",
+      "violations": []
+    },
+    {
+      "route": "home",
+      "language": "fr",
+      "violations": []
+    },
+    {
+      "route": "quick-search",
+      "language": "fr",
+      "violations": []
+    },
+    {
+      "route": "admin/landing",
+      "language": "en",
+      "violations": []
+    },
+    {
+      "route": "home",
+      "language": "en",
+      "violations": []
+    },
+    {
+      "route": "quick-search",
+      "language": "en",
+      "violations": []
+    },
+    {
+      "route": "admin/landing",
+      "language": "ar",
+      "violations": []
+    },
+    {
+      "route": "home",
+      "language": "ar",
+      "violations": []
+    },
+    {
+      "route": "quick-search",
+      "language": "ar",
+      "violations": []
+    },
+    {
+      "route": "admin/login",
+      "language": "fr",
+      "violations": []
+    },
+    {
+      "route": "admin/login",
+      "language": "en",
+      "violations": []
+    },
+    {
+      "route": "admin/login",
+      "language": "ar",
+      "violations": []
+    }
+  ],
+  "interactions": [
+    "Real browser sign-in confirms retained cookie and opens requested admin page",
+    "Authenticated sign-in and self-redirect URL open dashboard without a loop",
+    "Incomplete selection rejected without changes",
+    "Admin picks, saves and reloads four ordered products",
+    "fr category hover, click, keyboard, Escape, sticky and RTL",
+    "en category hover, click, keyboard, Escape, sticky and RTL",
+    "ar category hover, click, keyboard, Escape, sticky and RTL",
+    "Category link filters catalogue and closes disclosure",
+    "Quick search shortcut",
+    "fr localized sign-in errors and password visibility",
+    "en localized sign-in errors and password visibility",
+    "ar localized sign-in errors and password visibility"
+  ],
+  "errors": []
+}

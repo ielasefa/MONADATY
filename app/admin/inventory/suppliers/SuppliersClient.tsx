@@ -41,7 +41,7 @@ export function SuppliersClient({ suppliers: initial }: { suppliers: Supplier[] 
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="luxury-label mb-2">{t("inventory", "Inventory")}</p>
-          <h1 className="text-3xl font-semibold tracking-tight text-white">{t("suppliers", "Suppliers")}</h1>
+          <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t("suppliers", "Suppliers")}</h1>
           <p className="mt-1 text-sm text-muted">{suppliers.length} {t("suppliers_count", "suppliers")}</p>
         </div>
         <Link
@@ -65,20 +65,20 @@ export function SuppliersClient({ suppliers: initial }: { suppliers: Supplier[] 
         />
       </div>
 
-      <div className="glass overflow-hidden rounded-card border border-white/[0.06]">
+      <div className="glass overflow-hidden rounded-card border border-line">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
+          <table className="w-full text-start text-sm">
             <thead>
-              <tr className="border-b border-white/[0.06] text-xs uppercase tracking-[0.1em] text-muted">
+              <tr className="border-b border-line text-xs uppercase tracking-[0.1em] text-muted">
                 <th className="px-5 py-4 font-medium">{t("name", "Name")}</th>
                 <th className="px-5 py-4 font-medium">{t("company", "Company")}</th>
                 <th className="px-5 py-4 font-medium">{t("email", "Email")}</th>
                 <th className="px-5 py-4 font-medium">{t("phone", "Phone")}</th>
                 <th className="px-5 py-4 font-medium">{t("status", "Status")}</th>
-                <th className="px-5 py-4 font-medium text-right">{t("actions", "Actions")}</th>
+                <th className="px-5 py-4 font-medium text-end">{t("actions", "Actions")}</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/[0.06]">
+            <tbody className="divide-y divide-line">
               {filtered.map((s, i) => (
                 <motion.tr
                   key={s.id}
@@ -86,9 +86,9 @@ export function SuppliersClient({ suppliers: initial }: { suppliers: Supplier[] 
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.3, delay: i * 0.04 }}
-                  className="transition hover:bg-white/[0.02]"
+                  className="transition hover:bg-surface"
                 >
-                  <td className="px-5 py-4 font-medium text-white">{s.name}</td>
+                  <td className="px-5 py-4 font-medium text-foreground">{s.name}</td>
                   <td className="px-5 py-4 text-muted">{s.company || "\u2014"}</td>
                   <td className="px-5 py-4 text-muted">{s.email || "\u2014"}</td>
                   <td className="px-5 py-4 text-muted">{s.phone || "\u2014"}</td>
@@ -96,19 +96,19 @@ export function SuppliersClient({ suppliers: initial }: { suppliers: Supplier[] 
                     <button
                       aria-label={`${s.active ? t("deactivate", "Deactivate") : t("activate", "Activate")} ${s.name}`}
                       onClick={() => toggleStatus(s.id, s.active)}
-                      className={`inline-flex rounded-full px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.15em] transition-all ${
+                      className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold uppercase tracking-[0.08em] transition-all ${
                         s.active
-                          ? "badge-emerald bg-gold/10 text-gold border border-emerald/20"
+                          ? "badge-emerald bg-gold/10 text-accent border border-emerald/20"
                           : "badge-red bg-burgundy/10 text-burgundy border border-burgundy/20"
                       }`}
                     >
                       {s.active ? t("active", "Active") : t("inactive", "Inactive")}
                     </button>
                   </td>
-                  <td className="px-5 py-4 text-right">
+                  <td className="px-5 py-4 text-end">
                     <Link
                       href={`/admin/inventory/suppliers/${s.id}`}
-                      className="rounded-button px-3 py-1.5 text-sm font-medium text-gold transition hover:bg-gold/10"
+                      className="rounded-button px-3 py-1.5 text-sm font-medium text-accent transition hover:bg-gold/10"
                     >
                       Edit
                     </Link>

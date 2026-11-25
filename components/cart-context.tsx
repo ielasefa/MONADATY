@@ -2,7 +2,8 @@
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import type { Product } from "@/types";
 import { formatMoney, parseMoney } from "@/lib/money";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -52,6 +53,7 @@ export function CartProvider({ children }: Readonly<{ children: React.ReactNode 
   const [items, setItems] = useState<CartItem[]>([]);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [toastVersion, setToastVersion] = useState(0);
   const [hasMounted, setHasMounted] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
@@ -86,7 +88,12 @@ export function CartProvider({ children }: Readonly<{ children: React.ReactNode 
 
     const timeout = window.setTimeout(() => setToastMessage(null), 2400);
     return () => window.clearTimeout(timeout);
-  }, [toastMessage]);
+  }, [toastMessage, toastVersion]);
+
+  function notify(message: string) {
+    setToastMessage(message);
+    setToastVersion((version) => version + 1);
+  }
 
   const itemCount = useMemo(
     () => items.reduce((total, item) => total + item.quantity, 0),
@@ -106,7 +113,7 @@ export function CartProvider({ children }: Readonly<{ children: React.ReactNode 
     const isAvailable = typeof product.available === "boolean" ? product.available : true;
 
     if (!isAvailable || availableStock <= 0) {
-      setToastMessage(t("out_of_stock", "Out of stock"));
+      notify(t("out_of_stock", "Out of stock"));
       return;
     }
 
@@ -114,7 +121,7 @@ export function CartProvider({ children }: Readonly<{ children: React.ReactNode 
       items.find((item) => item.id === product.id)?.quantity ?? 0;
 
     if (currentInCart + safeQuantity > availableStock) {
-      setToastMessage(t("product_unavailable", "This product is unavailable"));
+      notify(t("product_unavailable", "This product is unavailable"));
       return;
     }
 
@@ -159,8 +166,7 @@ export function CartProvider({ children }: Readonly<{ children: React.ReactNode 
       ];
     });
 
-    setDrawerOpen(true);
-    setToastMessage(t("added_to_box", "{name} added to box").replace("{name}", product.name));
+    notify(t("cart_item_added", "Added to cart."));
   }
 
   function updateQuantity(id: string, quantity: number) {
@@ -177,7 +183,7 @@ export function CartProvider({ children }: Readonly<{ children: React.ReactNode 
 
   function removeItem(id: string) {
     setItems((currentItems) => currentItems.filter((item) => item.id !== id));
-    setToastMessage(t("item_removed", "Item removed from box"));
+    notify(t("item_removed", "Item removed from box"));
   }
 
   function clearCart() {
@@ -205,10 +211,10 @@ export function CartProvider({ children }: Readonly<{ children: React.ReactNode 
       {children}
       <CartDrawer />
 
-      <AnimatePresence initial={false}>
+      <AnimatePresence initial={false} mode="wait">
         {toastMessage ? (
           <motion.div
-            key={toastMessage}
+            key={toastVersion}
             role="status"
             aria-live="polite"
             aria-atomic="true"
@@ -216,7 +222,7 @@ export function CartProvider({ children }: Readonly<{ children: React.ReactNode 
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 6, scale: 0.99 }}
             transition={{ duration: shouldReduceMotion ? 0 : 0.34, ease: PREMIUM_EASE }}
-            className="fixed inset-x-0 bottom-6 z-[70] mx-auto w-[min(92vw,26rem)] rounded-md border border-ivory/[0.06] bg-black-surface px-5 py-3 text-sm text-ivory shadow-2xl backdrop-blur-xl"
+            className="market-toast fixed inset-x-0 bottom-6 z-[70] mx-auto w-[min(92vw,26rem)] rounded-md border border-line bg-card px-5 py-3 text-sm text-foreground "
           >
             {toastMessage}
           </motion.div>

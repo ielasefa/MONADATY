@@ -82,16 +82,16 @@ export default async function SuccessPage({ searchParams }: Props) {
     return (
       <div className="container-premium flex min-h-[calc(100vh-10rem)] items-center justify-center py-16 md:py-24">
         <FadeIn>
-          <section className="w-full max-w-xl rounded-2xl border border-white/[0.07] bg-card px-6 py-14 text-center shadow-2xl shadow-black/20 sm:px-10">
+          <section className="w-full max-w-xl rounded-2xl border border-line bg-card px-6 py-14 text-center shadow-2xl shadow-black/20 sm:px-10">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-rouge/25 bg-rouge/10 text-rouge">
               <svg aria-hidden="true" viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="1.8">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
               </svg>
             </div>
-            <h1 className="mt-7 font-display text-3xl text-white md:text-4xl">
+            <h1 className="mt-7 font-display text-3xl text-foreground md:text-4xl">
               {translated("order_not_found_title", copy.notFoundTitle)}
             </h1>
-            <p className="mx-auto mt-4 max-w-md text-sm leading-7 text-white/55">
+            <p className="mx-auto mt-4 max-w-md text-sm leading-7 text-secondary">
               {translated("order_not_found_desc", copy.notFoundDescription)}
             </p>
             <Link href="/" className="btn-primary mt-8 inline-flex h-12 items-center justify-center px-8">
@@ -117,41 +117,41 @@ export default async function SuccessPage({ searchParams }: Props) {
   return (
     <div className="container-premium flex min-h-[calc(100vh-8rem)] items-center justify-center py-14 md:py-24">
       <FadeIn>
-        <section className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-gold/[0.16] bg-card px-6 py-12 text-center shadow-2xl shadow-black/30 sm:px-10 md:py-16">
+        <section className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-line bg-card px-6 py-12 text-center shadow-2xl shadow-black/30 sm:px-10 md:py-16">
           <div className="pointer-events-none absolute inset-x-16 top-0 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
 
           <SuccessClient />
 
-          <p className="mt-7 text-[0.55rem] font-semibold uppercase tracking-[0.3em] text-gold/70">
+          <p className="mt-7 text-sm font-semibold uppercase tracking-[0.08em] text-accent">
             MONADATY
           </p>
-          <h1 className="mx-auto mt-4 max-w-xl font-display text-[clamp(2rem,5vw,3.3rem)] leading-[1.02] tracking-[-0.025em] text-white">
+          <h1 className="mx-auto mt-4 max-w-xl font-display text-[clamp(2rem,5vw,3.3rem)] leading-[1.02] tracking-[-0.025em] text-foreground">
             {translated("order_confirmed_title", copy.title)}
           </h1>
-          <p className="mx-auto mt-5 max-w-md text-sm leading-7 text-white/58">
+          <p className="mx-auto mt-5 max-w-md text-sm leading-7 text-secondary">
             {translated("order_confirmed_desc", copy.description)}
           </p>
 
-          <div className="mx-auto mt-9 grid max-w-lg overflow-hidden rounded-xl border border-white/[0.07] bg-black/25 text-start sm:grid-cols-3">
-            <div className="border-b border-white/[0.07] px-5 py-4 sm:border-b-0 sm:border-e">
-              <p className="text-[0.52rem] uppercase tracking-[0.18em] text-white/35">
+          <div className="mx-auto mt-9 grid max-w-lg overflow-hidden rounded-xl border border-line bg-card text-start sm:grid-cols-3">
+            <div className="border-b border-line px-5 py-4 sm:border-b-0 sm:border-e">
+              <p className="text-sm uppercase tracking-[0.08em] text-secondary">
                 {translated("order_number", copy.orderNumber)}
               </p>
-              <p className="mt-2 break-all font-mono text-[0.78rem] font-semibold text-white">{order.orderNumber}</p>
+              <p className="mt-2 break-all font-mono text-sm font-semibold text-foreground">{order.orderNumber}</p>
             </div>
-            <div className="border-b border-white/[0.07] px-5 py-4 sm:border-b-0 sm:border-e">
-              <p className="text-[0.52rem] uppercase tracking-[0.18em] text-white/35">
+            <div className="border-b border-line px-5 py-4 sm:border-b-0 sm:border-e">
+              <p className="text-sm uppercase tracking-[0.08em] text-secondary">
                 {translated("total", copy.total)}
               </p>
-              <p className="mt-2 text-sm font-semibold text-gold">{order.total}</p>
+              <p className="mt-2 text-sm font-semibold text-accent">{order.total}</p>
             </div>
             <div className="px-5 py-4">
-              <p className="text-[0.52rem] uppercase tracking-[0.18em] text-white/35">{copy.status}</p>
-              <p className="mt-2 text-sm font-semibold text-white">{copy[statusKey]}</p>
+              <p className="text-sm uppercase tracking-[0.08em] text-secondary">{copy.status}</p>
+              <p className="mt-2 text-sm font-semibold text-foreground">{copy[statusKey]}</p>
             </div>
           </div>
 
-          <p className="mx-auto mt-6 max-w-lg text-[0.68rem] leading-6 text-white/42">{copy.note}</p>
+          <p className="mx-auto mt-6 max-w-lg text-sm leading-6 text-secondary">{copy.note}</p>
 
           <div className="mt-9 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
             <Link href="/shop" className="btn-primary inline-flex h-12 items-center justify-center px-8">

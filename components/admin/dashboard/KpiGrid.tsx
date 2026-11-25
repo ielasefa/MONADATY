@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import type { ReactNode } from "react";
 import { AnimatedNumber, EASE, Sparkline, TrendPill } from "./ui";
 
@@ -30,18 +31,15 @@ function KpiCard({ kpi, index }: { kpi: Kpi; index: number }) {
     >
       <Link
         href={kpi.href}
-        className={`group relative flex h-full flex-col overflow-hidden rounded-xl border p-5 transition-all duration-300 hover:-translate-y-0.5 ${
-          kpi.accent
-            ? "border-gold/25 bg-gradient-to-b from-gold/[0.06] to-transparent hover:border-gold/40"
-            : "border-white/[0.06] bg-surface hover:border-gold/20"
-        }`}
+        data-accent={kpi.accent || undefined}
+        className="admin-kpi-card group relative flex h-full flex-col overflow-hidden p-5 transition-colors duration-200"
       >
         <div className="flex items-center justify-between">
           <span
             className={`flex h-9 w-9 items-center justify-center rounded-lg ${
               kpi.accent
-                ? "bg-gold/15 text-gold"
-                : "bg-white/[0.04] text-white/60"
+                ? "bg-gold/15 text-accent"
+                : "bg-surface text-secondary"
             }`}
           >
             {kpi.icon}
@@ -49,7 +47,7 @@ function KpiCard({ kpi, index }: { kpi: Kpi; index: number }) {
           {kpi.spark ? (
             <Sparkline
               data={kpi.spark}
-              className="h-7 w-24 opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+              className="h-7 w-12 shrink-0 opacity-60 transition-opacity duration-300 group-hover:opacity-100 sm:w-24"
               color={kpi.accent ? "currentColor" : "#7A7670"}
             />
           ) : (
@@ -57,13 +55,11 @@ function KpiCard({ kpi, index }: { kpi: Kpi; index: number }) {
           )}
         </div>
 
-        <p className="mt-4 text-[0.66rem] font-semibold uppercase tracking-[0.18em] text-muted">
+        <p className="admin-kpi-label mt-4 text-sm font-medium text-secondary">
           {kpi.label}
         </p>
         <p
-          className={`mt-1.5 font-display text-[1.85rem] font-semibold leading-none tracking-tight ${
-            kpi.accent ? "text-gold" : "text-white"
-          }`}
+          className="admin-kpi-value mt-2 leading-tight tracking-tight"
         >
           <AnimatedNumber value={kpi.value} format={kpi.format} />
         </p>
@@ -73,7 +69,7 @@ function KpiCard({ kpi, index }: { kpi: Kpi; index: number }) {
             <TrendPill value={kpi.trendValue} suffix={kpi.trendSuffix} positive={kpi.trendPositive} />
           )}
           {kpi.trendLabel && (
-            <span className="text-[0.66rem] text-white/35">{kpi.trendLabel}</span>
+            <span className="text-xs text-secondary">{kpi.trendLabel}</span>
           )}
         </div>
 
@@ -85,7 +81,7 @@ function KpiCard({ kpi, index }: { kpi: Kpi; index: number }) {
 
 export function KpiGrid({ kpis }: { kpis: Kpi[] }) {
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
       {kpis.map((kpi, i) => (
         <KpiCard key={kpi.key} kpi={kpi} index={i} />
       ))}

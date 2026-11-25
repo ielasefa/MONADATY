@@ -4,7 +4,7 @@ export function CartDrawerSkeleton() {
   return (
     <div className="space-y-4 px-6 py-6">
       {Array.from({ length: 3 }).map((_, i) => (
-        <div key={i} className="flex gap-4 rounded-md border border-ivory/[0.06] bg-black-surface p-3">
+        <div key={i} className="flex gap-4 rounded-md border border-line bg-card p-3">
           <Skeleton className="h-24 w-20 shrink-0" rounded="md" />
           <div className="flex flex-1 flex-col justify-between py-1">
             <div className="space-y-2">

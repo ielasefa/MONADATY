@@ -1,5 +1,6 @@
 import React from "react";
 import { Hero } from "@/components/Hero";
+import { MarketDepartments } from "@/components/MarketDepartments";
 import {
   FeaturedProducts,
   CollectionsShowcase,
@@ -8,18 +9,20 @@ import {
   MoroccanMoment,
   FinalCTA,
 } from "@/components/HomepageCommerce";
-import { getLandingFeaturedProducts, getTestimonials, getLandingCollections, getLandingContent, getCollectionShowcase } from "@/lib/db";
+import { getLandingFeaturedProducts, getTestimonials, getLandingCollections, getLandingContent, getCollectionShowcase, getCategories, getProducts } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [content, testimonialRows, landingProducts, landingCollections, collectionShowcase] =
+  const [content, testimonialRows, landingProducts, landingCollections, collectionShowcase, categories, products] =
     await Promise.all([
       getLandingContent(),
       getTestimonials(),
       getLandingFeaturedProducts(),
       getLandingCollections(),
       getCollectionShowcase(),
+      getCategories(),
+      getProducts(),
     ]);
 
   // Apply SEO overrides
@@ -38,38 +41,38 @@ export default async function HomePage() {
     ? content.sectionOrder
     : ["hero", "featured", "collections", "about", "testimonials", "moroccan_moment", "final_cta"];
 
+  const showsCollections = landingCollections.length > 0 && content.collectionsSection.enabled;
   const firstProduct = landingProducts[0];
-  const heroFallbackImage = firstProduct?.image?.trim() || firstProduct?.gallery?.[0]?.trim() || undefined;
+  const departments = <MarketDepartments categories={categories.filter((category) => products.some((product) => product.category === category.name)).map(({ slug, name, image }) => {
+    const productImage = products.find((product) => product.category === name && product.image)?.image;
+    return { slug, name, image: image || productImage, productImage: !image && Boolean(productImage) };
+  })} />;
 
   return (
     <>
-      {seoTitle && <meta property="og:title" content={seoTitle} />}
       {seoDesc && <meta name="description" content={seoDesc} />}
       {seoTitle && <meta property="og:title" content={seoTitle} />}
       {seoDesc && <meta property="og:description" content={seoDesc} />}
       {ogImage && <meta property="og:image" content={ogImage} />}
-      <div className="home-premium overflow-x-clip bg-[#0B0B0A] [--home-gold:#D6B35A] [--home-gold-hover:#E6CC88] [--home-gold-dark:#A7893F]">
+      <div className="home-premium overflow-x-clip">
+        {(!content.hero.enabled || !sectionOrder.includes("hero")) && departments}
         {(() => {
           const map: Record<string, React.ReactNode> = {};
 
           if (content.hero.enabled) {
-            map.hero = <Hero settings={{
-              title: content.hero.title,
-              subtitle: content.hero.subtitle,
-              description: content.hero.description,
-              ctaText: content.hero.ctaText,
-              ctaLink: content.hero.ctaLink,
-              media: content.hero.media,
-            }}
-              fallbackImage={heroFallbackImage}
-            />;
+            map.hero = (
+              <>
+                <Hero settings={content.hero} fallbackImage={firstProduct?.image} collectionsHref={showsCollections && sectionOrder.includes("collections") ? "#collections" : "/collections"} />
+                {departments}
+              </>
+            );
           }
 
           if (landingProducts.length > 0 && content.featuredProducts.enabled) {
-  map.featured = <FeaturedProducts products={landingProducts} />;
-}
+            map.featured = <FeaturedProducts products={landingProducts} />;
+          }
 
-          if (landingCollections.length > 0 && content.collectionsSection.enabled) {
+          if (showsCollections) {
             map.collections = <CollectionsShowcase collections={landingCollections} showcase={collectionShowcase} />;
           }
 
@@ -78,7 +81,7 @@ export default async function HomePage() {
               <BrandStory
                 title={content.aboutSection.title}
                 description={content.aboutSection.description}
-                image={content.aboutSection.image}
+                image={content.aboutSection.image || content.hero.media[0] || landingCollections.find((collection) => collection.image)?.image || firstProduct?.image || ""}
               />
             );
           }
@@ -104,6 +107,7 @@ export default async function HomePage() {
           return sectionOrder.map((k) => <React.Fragment key={k}>{map[k]}</React.Fragment>).filter(Boolean);
         })()}
       </div>
+
     </>
   );
 }

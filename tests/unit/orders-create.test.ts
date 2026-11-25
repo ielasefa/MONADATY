@@ -24,7 +24,7 @@ const {
 
 const tx = {
   order: { findUnique: orderFindUnique, create: orderCreate },
-  product: { findMany: productFindMany, findUnique: productFindUnique, updateMany: productUpdateMany },
+  product: { findMany: productFindMany, findUnique: productFindUnique, findUniqueOrThrow: productFindUnique, updateMany: productUpdateMany },
   coupon: { findUnique: couponFindUnique, updateMany: couponUpdateMany },
 };
 
@@ -36,6 +36,7 @@ vi.mock("@/lib/prisma", () => ({
 }));
 
 vi.mock("@/lib/logger", () => ({ logError: vi.fn() }));
+vi.mock("@/lib/stock-allocation", () => ({ allocateStockChange: vi.fn(), restoreOrderAllocations: vi.fn() }));
 
 import { createOrder, type OrderCreateInput } from "@/lib/orders";
 

@@ -82,9 +82,9 @@ export function OrderStatusWorkflow({ orderStatus, updating, onUpdateStatus }: O
 
   return (
     <div className="space-y-2">
-      <p className="luxury-label text-[10px] text-white/50 uppercase tracking-[0.2em]">{t("order_status_workflow")}</p>
+      <p className="luxury-label text-xs text-secondary uppercase tracking-[0.08em]">{t("order_status_workflow")}</p>
       <div className="relative">
-        <div className="absolute left-[1.125rem] top-3 bottom-3 w-px bg-white/[0.06]" />
+        <div className="absolute left-[1.125rem] top-3 bottom-3 w-px bg-surface" />
 
         {ORDER_STATUS_WORKFLOW.map((step, idx) => {
           const done = idx <= activeIdx && !showTerminal;
@@ -100,7 +100,7 @@ export function OrderStatusWorkflow({ orderStatus, updating, onUpdateStatus }: O
               initial={{ opacity: 0, x: -12 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4, ease, delay: idx * 0.05 }}
-              className="relative flex w-full gap-4 pb-5 last:pb-0 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-lg"
+              className="relative flex w-full gap-4 pb-5 last:pb-0 text-start focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-lg"
             >
               <div className="relative z-10 flex shrink-0 items-start pt-0.5">
                 <motion.div
@@ -112,8 +112,8 @@ export function OrderStatusWorkflow({ orderStatus, updating, onUpdateStatus }: O
                       : current
                         ? `${step.iconBg} ${step.dotColor.replace("bg-", "ring-2 ring-")}/40 border-transparent cursor-pointer hover:brightness-125`
                         : canGoForward
-                          ? "bg-white/[0.03] border-white/[0.08] text-white/20 cursor-pointer hover:bg-white/[0.06] hover:border-white/[0.12]"
-                          : "bg-white/[0.02] border-white/[0.04] text-white/10 cursor-not-allowed"
+                          ? "bg-surface border-line text-secondary cursor-pointer hover:bg-surface hover:border-line"
+                          : "bg-surface border-line text-secondary cursor-not-allowed"
                   }`}
                 >
                   {done ? (
@@ -127,7 +127,7 @@ export function OrderStatusWorkflow({ orderStatus, updating, onUpdateStatus }: O
                       className={`h-3 w-3 rounded-full ${step.dotColor}`}
                     />
                   ) : (
-                    <span className="h-2.5 w-2.5 rounded-full bg-white/[0.08]" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-surface" />
                   )}
                 </motion.div>
               </div>
@@ -136,7 +136,7 @@ export function OrderStatusWorkflow({ orderStatus, updating, onUpdateStatus }: O
                 <div className="flex items-center gap-2">
                   <span
                     className={`text-sm font-semibold tracking-wide transition-colors duration-300 ${
-                      done || current ? "text-white" : canGoForward ? "text-white/40 hover:text-white/60" : "text-white/20"
+                      done || current ? "text-foreground" : canGoForward ? "text-secondary hover:text-secondary" : "text-secondary"
                     }`}
                   >
                     {step.label}
@@ -146,23 +146,23 @@ export function OrderStatusWorkflow({ orderStatus, updating, onUpdateStatus }: O
                       initial={{ opacity: 0, scale: 0 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.3, ease }}
-                      className={`rounded-full px-2 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.15em] ${step.badgeColor}`}
+                      className={`rounded-full px-2 py-0.5 text-xs font-semibold uppercase tracking-[0.08em] ${step.badgeColor}`}
                     >
                       {t("active_badge")}
                     </motion.span>
                   )}
                   {done && !current && (
-                    <span className="rounded-full px-2 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.15em] bg-white/[0.06] text-white/40">
+                    <span className="rounded-full px-2 py-0.5 text-xs font-semibold uppercase tracking-[0.08em] bg-surface text-secondary">
                       {t("done_badge")}
                     </span>
                   )}
                   {canGoForward && !current && (
-                    <span className="rounded-full px-2 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.15em] bg-white/[0.03] text-white/20">
+                    <span className="rounded-full px-2 py-0.5 text-xs font-semibold uppercase tracking-[0.08em] bg-surface text-secondary">
                       {t("set_badge")}
                     </span>
                   )}
                 </div>
-                <p className={`mt-0.5 text-xs leading-relaxed ${done || current ? "text-white/50" : "text-white/20"}`}>
+                <p className={`mt-0.5 text-xs leading-relaxed ${done || current ? "text-secondary" : "text-secondary"}`}>
                   {step.description}
                 </p>
               </div>
@@ -174,11 +174,11 @@ export function OrderStatusWorkflow({ orderStatus, updating, onUpdateStatus }: O
         <div className="relative flex gap-4 pt-3 pb-5">
           <div className="relative z-10 flex shrink-0 items-start pt-0.5">
             <div className="h-9 w-9 flex items-center justify-center">
-              <div className="h-px w-6 bg-white/[0.06]" />
+              <div className="h-px w-6 bg-surface" />
             </div>
           </div>
           <div className="min-w-0 flex-1 pt-2">
-            <p className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-white/20">{t("terminal_states")}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-secondary">{t("terminal_states")}</p>
           </div>
         </div>
 
@@ -193,7 +193,7 @@ export function OrderStatusWorkflow({ orderStatus, updating, onUpdateStatus }: O
               initial={{ opacity: 0, x: -12 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4, ease }}
-              className="relative flex w-full gap-4 pb-5 last:pb-0 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-lg"
+              className="relative flex w-full gap-4 pb-5 last:pb-0 text-start focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-lg"
             >
               <div className="relative z-10 flex shrink-0 items-start pt-0.5">
                 <motion.div
@@ -206,7 +206,7 @@ export function OrderStatusWorkflow({ orderStatus, updating, onUpdateStatus }: O
                   className={`flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold transition-all duration-300 ${
                     isActive
                       ? `${term.iconBg} ring-2 ${term.dotColor.replace("bg-", "ring-")}/40`
-                      : "bg-white/[0.03] border border-white/[0.08] text-white/20 cursor-pointer hover:bg-white/[0.06] hover:border-white/[0.12]"
+                      : "bg-surface border border-line text-secondary cursor-pointer hover:bg-surface hover:border-line"
                   }`}
                 >
                   <StatusIcon status={term.status} className="h-4 w-4" />
@@ -217,19 +217,19 @@ export function OrderStatusWorkflow({ orderStatus, updating, onUpdateStatus }: O
                   <span
                     className={`text-sm font-semibold tracking-wide transition-colors duration-300 ${
                       isActive
-                        ? term.status === "cancelled" ? "text-burgundy" : "text-gold"
-                        : "text-white/40 hover:text-white/60"
+                        ? term.status === "cancelled" ? "text-burgundy" : "text-accent"
+                        : "text-secondary hover:text-secondary"
                     }`}
                   >
                     {term.label}
                   </span>
                   {isActive && (
-                    <span className={`rounded-full px-2 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.15em] ${term.badgeColor}`}>
+                    <span className={`rounded-full px-2 py-0.5 text-xs font-semibold uppercase tracking-[0.08em] ${term.badgeColor}`}>
                       {t("active_badge")}
                     </span>
                   )}
                 </div>
-                <p className={`mt-0.5 text-xs leading-relaxed ${isActive ? "text-white/50" : "text-white/20"}`}>
+                <p className={`mt-0.5 text-xs leading-relaxed ${isActive ? "text-secondary" : "text-secondary"}`}>
                   {term.description}
                 </p>
               </div>

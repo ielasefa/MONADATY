@@ -1,0 +1,28 @@
+npm notice run monadaty@1.0.0 npx
+npm notice run 'tsx' tests/db/product-stock-qa.mts
+PASS Manual decrement preserves unallocated units
+PASS Manual stock and warehouse allocations move atomically
+PASS Ten simultaneous retries deduct once
+PASS Only one buyer can remove the final unit
+PASS Invalid and excessive adjustments cannot change stock
+PASS A one-unit order deducts one catalogue and warehouse unit
+PASS Order retry does not deduct again
+PASS Concurrent cancellations return stock once
+PASS Refund after cancellation does not inflate stock
+PASS Reopening consumes stock; cancelling restores the same allocations
+PASS Sold-out order cannot be reopened
+PASS Warehouse absolute decrease subtracts instead of adding
+PASS Warehouse zero target is valid and overselling is rejected
+PASS Receipt and return increase both stock counters
+PASS Internal transfer preserves global stock and failure rolls back both warehouses
+PASS Purchase receipt is atomic and cannot exceed ordered units
+(node:57279) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+PASS Search: qaprobe petillante
+PASS Search: coca cola 25cl
+PASS Search: ete stock
+PASS Search: مِيَاه
+PASS Search: 9998811001122
+PASS Punctuation and SQL-like input cannot become wildcards or commands
+PASS Filters, stock sorting and pagination compose
+{"passed":23}

@@ -14,15 +14,15 @@ type Props = {
 function AnalyticsPlaceholder() {
   return (
     <section className="space-y-4" aria-label="Analytics" aria-busy="true">
-      <div className="h-5 w-32 animate-pulse rounded bg-white/[0.04]" />
+      <div className="h-5 w-32 animate-pulse rounded bg-surface" />
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {[0, 1].map((item) => (
-          <div key={item} className="h-72 animate-pulse rounded-xl border border-white/[0.06] bg-white/[0.02]" />
+          <div key={item} className="h-72 animate-pulse rounded-xl border border-line bg-surface" />
         ))}
       </div>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {[0, 1, 2].map((item) => (
-          <div key={item} className="h-64 animate-pulse rounded-xl border border-white/[0.06] bg-white/[0.02]" />
+          <div key={item} className="h-64 animate-pulse rounded-xl border border-line bg-surface" />
         ))}
       </div>
     </section>

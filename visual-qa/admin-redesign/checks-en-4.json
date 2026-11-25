@@ -1,0 +1,57 @@
+{
+  "checks": [
+    {
+      "route": "/admin/orders/5744c506-37c9-4c5c-a22d-1baa3c868341",
+      "language": "en",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "QA-UI-001",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/orders/5744c506-37c9-4c5c-a22d-1baa3c868341",
+      "language": "en",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "QA-UI-001",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/orders/5744c506-37c9-4c5c-a22d-1baa3c868341",
+      "language": "en",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "QA-UI-001",
+      "sidebarVisible": true,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/orders/5744c506-37c9-4c5c-a22d-1baa3c868341",
+      "language": "en",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "QA-UI-001",
+      "sidebarVisible": true,
+      "rawKeys": []
+    }
+  ],
+  "audits": [],
+  "errors": [],
+  "interactions": [
+    "Real browser login and authenticated dashboard"
+  ]
+}

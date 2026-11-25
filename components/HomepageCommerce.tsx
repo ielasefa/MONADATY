@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
 import { SafeImage } from "@/components/SafeImage";
@@ -64,7 +64,7 @@ function ProductImageOrFallback({
       <>{fallback}</>
     ) : (
       <div className="flex h-full w-full items-center justify-center">
-        <span className="font-display text-[2.5rem] font-light tracking-[0.08em] text-white/[0.06]">
+        <span className="font-display text-[2.5rem] font-light tracking-[0.08em] text-secondary">
           {alt}
         </span>
       </div>
@@ -80,7 +80,7 @@ function ProductImageOrFallback({
       fallback={
         fallback || (
           <div className="flex h-full w-full items-center justify-center">
-            <span className="font-display text-[2.5rem] font-light tracking-[0.08em] text-white/[0.06]">
+            <span className="font-display text-[2.5rem] font-light tracking-[0.08em] text-secondary">
               {alt}
             </span>
           </div>
@@ -98,13 +98,13 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 export function BrandStatement() {
   const { t } = useTranslation("home");
   return (
-    <section className="relative w-full overflow-hidden bg-black">
+    <section className="relative w-full overflow-hidden bg-canvas">
       <div className="mx-auto max-w-[1400px] px-6 py-20 md:px-10 md:py-24 lg:px-16 lg:py-28">
         <Reveal>
           <div className="flex flex-col items-start gap-5">
             <div className="flex items-center gap-3">
               <span className="h-px w-8 bg-gold" />
-              <span className="label-utility tracking-[0.55em] text-gold/60">
+              <span className="label-utility tracking-[0.08em] text-accent">
                 {t("brand_statement_eyebrow")}
               </span>
             </div>
@@ -112,11 +112,11 @@ export function BrandStatement() {
               initial={{ opacity: 0.6 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, ease: EASE, delay: 0.15 }}
-              className="max-w-[16ch] font-display text-[clamp(2rem,4.5vw,3.5rem)] leading-[0.92] tracking-[-0.04em] text-white whitespace-pre-line"
+              className="max-w-[16ch] font-display text-[clamp(2rem,4.5vw,3.5rem)] leading-[0.92] tracking-[-0.04em] text-foreground whitespace-pre-line"
             >
               {t("brand_statement_headline", "ROOTED IN MOROCCO.\nCRAFTED FOR TODAY.")}
             </motion.h2>
-            <p className="mt-2 max-w-lg text-[0.82rem] leading-[1.85] text-white/55">
+            <p className="mt-2 max-w-lg text-sm leading-[1.85] text-secondary">
               {t(
                 "brand_statement_desc",
                 "A modern Moroccan beverage brand built around exceptional ingredients, masterful craft, and the hospitality that makes Morocco extraordinary.",
@@ -135,53 +135,20 @@ export function BrandStatement() {
 export function FeaturedProducts({ products }: { products: ProductData[] }) {
   const { lang } = useTranslation("home");
   const copy = getLandingCopy(lang);
-  const displayProducts = products;
-  if (displayProducts.length === 0) return null;
+  if (products.length === 0) return null;
 
   return (
-    <section
-      className="relative w-full overflow-hidden border-y border-white/[0.04] bg-[#11110F]"
-      id="shop"
-    >
-      <div className="landing-section">
-        <Reveal>
-          <div className="flex items-end justify-between gap-8">
-            <div>
-              <div className="landing-eyebrow">{copy.featured.eyebrow}</div>
-              <h2 className="landing-title mt-5 max-w-[15ch]">
-                {copy.featured.title}
-              </h2>
-              <p className="landing-body mt-5 max-w-lg">
-                {copy.featured.description}
-              </p>
-            </div>
-            <Link
-              href="/shop"
-              className="group hidden items-center gap-3 border-b border-[#D6B35A]/40 pb-2 text-[0.62rem] font-medium uppercase tracking-[0.2em] text-white/55 transition-colors duration-300 hover:text-[#E6CC88] md:flex"
-            >
-              {copy.featured.cta}
-              <ArrowRight />
-            </Link>
-          </div>
-        </Reveal>
-
-        <div className="mt-10 grid grid-cols-2 gap-x-3 gap-y-10 sm:mt-12 sm:gap-x-5 md:grid-cols-4 md:gap-x-4 lg:mt-16 lg:gap-x-6 lg:gap-y-12 xl:gap-x-8">
-          {displayProducts.map((product, i) => (
-            <Reveal key={product.id} delay={0.07 * i} className="h-full">
-              <ProductCard {...product} variant="editorial" />
-            </Reveal>
-          ))}
-        </div>
-
-        <div className="mt-10 md:hidden">
-          <Link
-            href="/shop"
-            className="landing-secondary flex w-full items-center justify-center gap-2"
-          >
-            {copy.featured.cta}
-            <ArrowRight />
-          </Link>
-        </div>
+    <section className="market-featured market-container" id="shop">
+      <div className="market-section-heading">
+        <h2>{{ fr: "Produits populaires", en: "Popular products", ar: "المنتجات الرائجة" }[lang]}</h2>
+        <Link href="/shop">{copy.featured.cta}<ArrowRight /></Link>
+      </div>
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:gap-6">
+        {products.slice(0, 4).map((product, index) => (
+          <Reveal key={product.id} delay={0.05 * index} className="h-full">
+            <ProductCard {...product} variant="editorial" />
+          </Reveal>
+        ))}
       </div>
     </section>
   );
@@ -203,7 +170,7 @@ function ShowcaseProductCard({
 
   return (
     <article className="group flex flex-col">
-      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl border border-white/[0.07] bg-[#0B0B0A] transition-[transform,border-color,box-shadow] duration-300 group-hover:-translate-y-1 group-hover:border-[#D6B35A]/20 group-hover:shadow-[0_20px_50px_rgba(0,0,0,.3)]">
+      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl border border-line bg-canvas transition-[transform,border-color,box-shadow] duration-300 group-hover:-translate-y-1 group-hover:border-[#D6B35A]/20 group-hover:shadow-[var(--market-shadow)]">
         <Link
           href={`/product/${product.id}`}
           aria-label={`${t("view_flavor")} ${product.name}`}
@@ -226,29 +193,29 @@ function ShowcaseProductCard({
         </Link>
 
         {product.available === false ? (
-          <span className="absolute start-2.5 top-2.5 inline-flex items-center rounded-full bg-black/80 px-2.5 py-1 text-[0.5rem] font-semibold uppercase tracking-[0.18em] text-white/80 backdrop-blur">
+          <span className="market-image-caption absolute start-2.5 top-2.5 inline-flex items-center rounded-full bg-brand-dark/90 px-2.5 py-1 text-sm font-semibold uppercase tracking-[0.08em] text-secondary backdrop-blur">
             {t("out_of_stock")}
           </span>
         ) : (
-          <span className="absolute start-2.5 top-2.5 inline-flex items-center rounded-full bg-[#D6B35A]/[0.12] px-2.5 py-1 text-[0.5rem] font-medium uppercase tracking-[0.18em] text-[#A7893F] backdrop-blur">
+          <span className="absolute start-2.5 top-2.5 inline-flex items-center rounded-full bg-[#D6B35A]/[0.12] px-2.5 py-1 text-sm font-medium uppercase tracking-[0.08em] text-accent backdrop-blur">
             {collectionLabel}
           </span>
         )}
       </div>
 
       <div className="mt-4 flex flex-1 flex-col space-y-2">
-        <p className="line-clamp-1 text-[0.6rem] font-medium uppercase tracking-[0.2em] text-white/40">
+        <p className="line-clamp-1 text-sm font-medium uppercase tracking-[0.08em] text-secondary">
           {collectionLabel}
         </p>
-        <h3 className="line-clamp-2 min-h-[2.75rem] font-display text-base leading-snug tracking-[-0.015em] text-white">
+        <h3 className="line-clamp-2 min-h-[2.75rem] font-display text-base leading-snug tracking-[-0.015em] text-foreground">
           <Link
             href={`/product/${product.id}`}
-            className="transition-colors duration-300 hover:text-[#E6CC88]"
+            className="transition-colors duration-300 hover:text-accent"
           >
             {product.name}
           </Link>
         </h3>
-        <p className="font-display text-sm font-light text-[#D6B35A]">{product.price}</p>
+        <p className="font-display text-sm font-light text-accent">{product.price}</p>
         <div className="mt-auto flex gap-2 pt-2">
           <motion.button
             type="button"
@@ -282,7 +249,7 @@ function ShowcaseProductCard({
           </motion.button>
           <Link
             href={`/product/${product.id}`}
-            className="inline-flex h-9 flex-1 items-center justify-center rounded-lg border border-[#D6B35A]/40 px-4 text-[0.5rem] font-medium uppercase tracking-[0.18em] text-[#D6B35A] transition-all duration-300 hover:border-[#E6CC88]/60 hover:bg-[#D6B35A]/[0.06]"
+            className="inline-flex h-9 flex-1 items-center justify-center rounded-lg border border-[#D6B35A]/40 px-4 text-sm font-medium uppercase tracking-[0.08em] text-accent transition-all duration-300 hover:border-[#E6CC88]/60 hover:bg-[#D6B35A]/[0.06]"
           >
             {t("view_product", "View Product")}
           </Link>
@@ -317,7 +284,7 @@ export function CollectionsShowcase({
   const activeProducts = active?.products ?? [];
 
   return (
-    <section className="relative w-full overflow-hidden bg-[#0B0B0A]" id="collections">
+    <section className="relative w-full overflow-hidden bg-canvas" id="collections">
       <div className="landing-section">
         <Reveal>
           <div className="landing-eyebrow">{copy.collections.eyebrow}</div>
@@ -348,8 +315,8 @@ export function CollectionsShowcase({
                       initial={false}
                       className={`group relative h-[410px] w-full overflow-hidden rounded-2xl transition-[box-shadow,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] sm:h-[460px] md:h-[480px] lg:h-[540px] xl:h-[600px] ${
                         isActive
-                          ? "shadow-luxury ring-1 ring-[#D6B35A]/45"
-                          : "shadow-[0_18px_55px_rgba(0,0,0,.22)] ring-1 ring-white/[0.07] hover:shadow-[0_28px_72px_rgba(0,0,0,.36)] hover:ring-[#D6B35A]/20"
+                          ? "shadow-[var(--market-shadow)] ring-1 ring-[#D6B35A]/45"
+                          : "shadow-[var(--market-shadow)] ring-1 ring-white/[0.07] hover:shadow-[var(--market-shadow)] hover:ring-[#D6B35A]/20"
                       }`}
                     >
                       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
@@ -363,22 +330,22 @@ export function CollectionsShowcase({
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0A] via-black/25 to-transparent" />
                       <div className="absolute inset-0 bg-gradient-to-tr from-[#D6B35A]/[0.08] via-transparent to-transparent" />
-                      <div className="absolute inset-0 bg-black/15 opacity-0 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100 motion-reduce:transition-none" />
-                      <div dir="auto" className="absolute inset-x-0 bottom-0 flex flex-col justify-end p-6 sm:p-8 lg:p-10">
-                        <p className="text-[0.58rem] font-medium uppercase tracking-[0.25em] text-[#D6B35A]">
+                      <div className="absolute inset-0 bg-[rgb(0_0_0/.15)] opacity-0 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100 motion-reduce:transition-none" />
+                      <div dir="auto" className="market-image-caption market-collection-caption absolute inset-x-0 bottom-0 flex flex-col justify-end p-6 sm:p-8 lg:p-10">
+                        <p className="text-sm font-medium uppercase tracking-[0.08em] text-accent">
                           {col.previewLabel || copy.collections.label}
                         </p>
-                        <h3 className="mt-3 max-w-[14ch] translate-y-1 font-display text-[2rem] font-normal leading-[0.98] tracking-[-0.03em] text-white transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0 motion-reduce:transform-none motion-reduce:transition-none sm:text-[2.4rem] lg:text-[3rem]">
+                        <h3 className="mt-3 max-w-[14ch] translate-y-1 font-display text-[2rem] font-normal leading-[0.98] tracking-[-0.03em] text-foreground transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0 motion-reduce:transform-none motion-reduce:transition-none sm:text-[2.4rem] lg:text-[3rem]">
                           {col.title}
                         </h3>
                         {col.description && (
-                          <p className="mt-4 line-clamp-2 max-w-lg text-sm leading-[1.75] text-white/55">
+                          <p className="mt-4 line-clamp-2 max-w-lg text-sm leading-[1.75] text-secondary">
                             {col.description}
                           </p>
                         )}
                         <span aria-hidden="true" className="mt-5 h-px w-16 origin-left scale-x-[0.625] bg-[#D6B35A] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100 motion-reduce:transform-none motion-reduce:transition-none rtl:origin-right" />
                         {hasShowcase && (
-                          <span className="mt-4 inline-flex items-center gap-2 text-[0.62rem] font-medium uppercase tracking-[0.18em] text-[#D6B35A] transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none rtl:group-hover:-translate-x-1 lg:opacity-0 lg:group-hover:opacity-100 motion-reduce:lg:opacity-100">
+                          <span className="mt-4 inline-flex items-center gap-2 text-sm font-medium uppercase tracking-[0.08em] text-accent transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none rtl:group-hover:-translate-x-1 lg:opacity-0 lg:group-hover:opacity-100 motion-reduce:lg:opacity-100">
                             {isActive
                               ? copy.collections.close
                               : copy.collections.viewProducts}
@@ -395,7 +362,7 @@ export function CollectionsShowcase({
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
                           transition={{ duration: 0.25, ease: EASE }}
-                          className="absolute end-4 top-4 z-10 inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#D6B35A] text-black shadow-[0_0_0_4px_rgba(214,179,90,.12)]"
+                          className="absolute end-4 top-4 z-10 inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#D6B35A] text-black shadow-[var(--market-shadow)]"
                           aria-hidden
                         >
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -449,8 +416,8 @@ export function CollectionsShowcase({
                           initial={false}
                           className={`group relative h-[260px] w-full overflow-hidden rounded-2xl transition-[box-shadow,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:h-[230px] lg:h-[258px] xl:h-[288px] ${
                             isActive
-                              ? "shadow-luxury ring-1 ring-[#D6B35A]/45"
-                              : "shadow-[0_18px_55px_rgba(0,0,0,.22)] ring-1 ring-white/[0.07] hover:shadow-[0_28px_72px_rgba(0,0,0,.36)] hover:ring-[#D6B35A]/20"
+                              ? "shadow-[var(--market-shadow)] ring-1 ring-[#D6B35A]/45"
+                              : "shadow-[var(--market-shadow)] ring-1 ring-white/[0.07] hover:shadow-[var(--market-shadow)] hover:ring-[#D6B35A]/20"
                           }`}
                         >
                           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
@@ -464,17 +431,17 @@ export function CollectionsShowcase({
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0A] via-black/25 to-transparent" />
                           <div className="absolute inset-0 bg-gradient-to-tr from-[#D6B35A]/[0.08] via-transparent to-transparent" />
-                          <div className="absolute inset-0 bg-black/15 opacity-0 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100 motion-reduce:transition-none" />
-                          <div dir="auto" className="absolute inset-x-0 bottom-0 flex flex-col justify-end p-5 sm:p-6">
-                            <p className="text-[0.53rem] font-medium uppercase tracking-[0.22em] text-[#D6B35A]">
+                          <div className="absolute inset-0 bg-[rgb(0_0_0/.15)] opacity-0 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100 motion-reduce:transition-none" />
+                          <div dir="auto" className="market-image-caption market-collection-caption absolute inset-x-0 bottom-0 flex flex-col justify-end p-5 sm:p-6">
+                            <p className="text-sm font-medium uppercase tracking-[0.08em] text-accent">
                               {col.previewLabel || copy.collections.label}
                             </p>
-                            <h3 className="mt-2 translate-y-1 font-display text-[1.35rem] font-normal leading-[1.04] tracking-[-0.02em] text-white transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0 motion-reduce:transform-none motion-reduce:transition-none sm:text-[1.5rem] lg:text-[1.75rem]">
+                            <h3 className="mt-2 translate-y-1 font-display text-[1.35rem] font-normal leading-[1.04] tracking-[-0.02em] text-foreground transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0 motion-reduce:transform-none motion-reduce:transition-none sm:text-[1.5rem] lg:text-[1.75rem]">
                               {col.title}
                             </h3>
                             <span aria-hidden="true" className="mt-4 h-px w-12 origin-left scale-x-2/3 bg-[#D6B35A] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100 motion-reduce:transform-none motion-reduce:transition-none rtl:origin-right" />
                             {hasShowcase && (
-                              <span className="mt-3 inline-flex items-center gap-1.5 text-[0.56rem] font-medium uppercase tracking-[0.17em] text-[#D6B35A] transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none rtl:group-hover:-translate-x-1 lg:opacity-0 lg:group-hover:opacity-100 motion-reduce:lg:opacity-100">
+                              <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium uppercase tracking-[0.08em] text-accent transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none rtl:group-hover:-translate-x-1 lg:opacity-0 lg:group-hover:opacity-100 motion-reduce:lg:opacity-100">
                                 {isActive
                                   ? copy.collections.close
                                   : copy.collections.viewProducts}
@@ -491,7 +458,7 @@ export function CollectionsShowcase({
                               initial={{ scale: 0 }}
                               animate={{ scale: 1 }}
                               transition={{ duration: 0.25, ease: EASE }}
-                              className="absolute end-3 top-3 z-10 inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#D6B35A] text-black shadow-[0_0_0_4px_rgba(214,179,90,.12)]"
+                              className="absolute end-3 top-3 z-10 inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#D6B35A] text-black shadow-[var(--market-shadow)]"
                               aria-hidden
                             >
                               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -543,26 +510,26 @@ export function CollectionsShowcase({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.4, ease: EASE }}
-              className="relative mt-12 overflow-hidden rounded-2xl border border-white/[0.08] bg-black-soft/60 shadow-luxury"
+              className="relative mt-12 overflow-hidden rounded-2xl border border-line bg-black-soft/60 shadow-[var(--market-shadow)]"
             >
               <div className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#6E1F2A] via-[#D6B35A]/60 to-transparent" />
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
               <div className="px-4 py-8 sm:px-8 sm:py-10 lg:px-10">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                  <p className="text-[0.58rem] font-semibold uppercase tracking-[0.32em] text-[#D6B35A]">
+                  <p className="text-sm font-semibold uppercase tracking-[0.08em] text-accent">
                     {activeCollection.previewLabel || copy.collections.label}
                   </p>
-                  <h3 className="mt-2 font-display text-[clamp(1.375rem,3vw,2rem)] leading-[1.0] tracking-[-0.02em] text-white">
+                  <h3 className="mt-2 font-display text-[clamp(1.375rem,3vw,2rem)] leading-[1.0] tracking-[-0.02em] text-foreground">
                     {activeCollection.title}
                   </h3>
-                  <p className="mt-2 text-[0.72rem] text-white/40">
+                  <p className="mt-2 text-sm text-secondary">
                     {copy.collections.productCount}
                   </p>
                 </div>
                 <Link
                   href={`/shop?category=${activeCollection.slug}`}
-                  className="inline-flex items-center gap-2 text-[0.6rem] font-medium uppercase tracking-[0.18em] text-white/60 transition-colors duration-200 hover:text-[#E6CC88]"
+                  className="inline-flex items-center gap-2 text-sm font-medium uppercase tracking-[0.08em] text-secondary transition-colors duration-200 hover:text-accent"
                 >
                   {copy.collections.viewCollection}
                   <ArrowRight />
@@ -570,8 +537,8 @@ export function CollectionsShowcase({
               </div>
 
               {activeProducts.length === 0 ? (
-                <div className="mt-10 flex flex-col items-center gap-3 rounded-2xl border border-dashed border-white/[0.08] py-16 text-center">
-                  <p className="font-display text-lg text-white/70">
+                <div className="mt-10 flex flex-col items-center gap-3 rounded-2xl border border-dashed border-line py-16 text-center">
+                  <p className="font-display text-lg text-secondary">
                     {copy.collections.empty}
                   </p>
                   <Link
@@ -612,6 +579,8 @@ export function CollectionsShowcase({
    ============================================================ */
 export function BrandStory({
   image,
+  title,
+  description,
 }: {
   title: string;
   description: string;
@@ -626,30 +595,30 @@ export function BrandStory({
   });
 
   return (
-    <section className="relative w-full overflow-hidden border-y border-white/[0.04] bg-[#11110F]">
+    <section className="relative w-full overflow-hidden border-y border-line bg-surface">
       <div aria-hidden="true" className="absolute -start-48 top-1/4 h-96 w-96 rounded-full bg-[#6E1F2A]/[0.08] blur-[140px]" />
       <div className="landing-section">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-14 xl:gap-20">
           <Reveal className="lg:col-span-5">
             <div className="landing-eyebrow">{copy.value.eyebrow}</div>
             <h2 className="landing-title mt-6 max-w-[12ch]">
-              {copy.value.title}
+              {title && title !== "Our Story" ? title : copy.value.title}
             </h2>
-            <p className="landing-body mt-6 max-w-lg">{intro}</p>
+            <p className="landing-body mt-6 max-w-lg">{description || intro}</p>
 
-            <div className="mt-8 grid grid-cols-1 border-b border-white/[0.08] sm:grid-cols-2">
+            <div className="mt-8 grid grid-cols-1 border-b border-line sm:grid-cols-2">
               {benefits.map((benefit, index) => (
                 <div
                   key={benefit.title}
-                  className={`border-t border-white/[0.08] py-4 ${
+                  className={`border-t border-line py-4 ${
                     index % 2 === 0 ? "sm:pe-5" : "sm:border-s sm:ps-5"
                   }`}
                 >
-                  <p className="text-[0.6rem] font-medium uppercase tracking-[0.18em] text-[#D6B35A]">
+                  <p className="text-sm font-medium uppercase tracking-[0.08em] text-accent">
                     {benefit.title}
                   </p>
                   {benefit.description ? (
-                    <p className="mt-2 text-[0.78rem] font-normal leading-[1.7] text-white/45">
+                    <p className="mt-2 text-sm font-normal leading-[1.7] text-secondary">
                       {benefit.description}
                     </p>
                   ) : null}
@@ -664,7 +633,7 @@ export function BrandStory({
           </Reveal>
 
           <Reveal delay={0.12} className="lg:col-span-7">
-            <div className="group relative aspect-[4/5] w-full overflow-hidden rounded-2xl border border-white/[0.07] bg-[#0B0B0A] sm:aspect-[16/11] lg:aspect-[4/3]">
+            <div className="group relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-line bg-canvas">
               {image && image !== "/images/placeholder.svg" ? (
                 <ProductImageOrFallback
                   src={image}
@@ -674,14 +643,14 @@ export function BrandStory({
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center bg-[radial-gradient(circle_at_50%_35%,rgba(214,179,90,.1),transparent_55%)]">
-                  <span className="font-display text-[8rem] font-normal text-[#D6B35A]/15 sm:text-[11rem]">
+                  <span className="font-display text-[8rem] font-normal text-accent/15 sm:text-[11rem]">
                     {copy.value.title.charAt(0)}
                   </span>
                 </div>
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
-              <div className="absolute bottom-5 start-5 sm:bottom-7 sm:start-7">
-                <span className="text-[0.52rem] font-medium uppercase tracking-[0.3em] text-white/70">
+              <div className="market-image-caption absolute bottom-5 start-5 sm:bottom-7 sm:start-7">
+                <span className="text-sm font-medium uppercase tracking-[0.08em] text-secondary">
                   {copy.value.imageLabel}
                 </span>
               </div>
@@ -702,21 +671,21 @@ export function BestSellers({ products }: { products: ProductData[] }) {
   if (displayProducts.length === 0) return null;
 
   return (
-    <section className="relative w-full overflow-hidden bg-black">
+    <section className="relative w-full overflow-hidden bg-canvas">
       <div className="mx-auto max-w-[1400px] px-6 py-16 md:px-10 md:py-20 lg:px-16 lg:py-24">
         <Reveal>
           <div className="flex items-center gap-3">
             <span className="h-px w-8 bg-gold" />
-            <span className="label-utility tracking-[0.55em] text-gold/60">
+            <span className="label-utility tracking-[0.08em] text-accent">
               {t("bestsellers_eyebrow", "TOP PICKS")}
             </span>
           </div>
           <div className="mt-3 flex items-end justify-between gap-6">
             <div>
-              <h2 className="font-display text-[clamp(1.875rem,3.5vw,2.5rem)] leading-[0.95] tracking-[-0.03em] text-white">
+              <h2 className="font-display text-[clamp(1.875rem,3.5vw,2.5rem)] leading-[0.95] tracking-[-0.03em] text-foreground">
                 {t("bestsellers_title", "BEST SELLERS")}
               </h2>
-              <p className="mt-3 max-w-md text-[0.78rem] leading-[1.7] text-white/50">
+              <p className="mt-3 max-w-md text-sm leading-[1.7] text-secondary">
                 {t(
                   "bestsellers_desc",
                   "The products our customers keep coming back for.",
@@ -725,7 +694,7 @@ export function BestSellers({ products }: { products: ProductData[] }) {
             </div>
             <Link
               href="/shop"
-              className="hidden items-center gap-2 label-utility text-[0.42rem] tracking-[0.2em] text-white/30 transition-colors duration-200 hover:text-gold md:flex"
+              className="hidden items-center gap-2 label-utility text-sm tracking-[0.08em] text-secondary transition-colors duration-200 hover:text-accent md:flex"
             >
               {t("shop_the_range", "SHOP THE RANGE")}
               <ArrowRight />
@@ -770,18 +739,18 @@ export function BuildYourBox({ products }: { products: ProductData[] }) {
   };
 
   return (
-    <section className="relative w-full overflow-hidden bg-black-soft">
+    <section className="relative w-full overflow-hidden bg-surface">
       <div className="mx-auto max-w-[1400px] px-6 py-16 md:px-10 md:py-20 lg:px-16 lg:py-24">
         {/* Intro */}
         <div className="mx-auto max-w-2xl text-center">
           <div className="flex items-center justify-center gap-3">
             <span className="h-px w-8 bg-gold" />
-            <span className="label-utility tracking-[0.55em] text-gold/60">
+            <span className="label-utility tracking-[0.08em] text-accent">
               {t("bundle_eyebrow", "THE MONADATY EDIT")}
             </span>
             <span className="h-px w-8 bg-gold" />
           </div>
-          <p className="mx-auto mt-3 max-w-lg text-[0.82rem] leading-[1.85] text-white/40">
+          <p className="mx-auto mt-3 max-w-lg text-sm leading-[1.85] text-secondary">
             {t(
               "bundle_desc",
               "Choose your favorites, build your selection, and enjoy more of what you love.",
@@ -806,15 +775,15 @@ export function BuildYourBox({ products }: { products: ProductData[] }) {
               transition={{ duration: 0.18, ease: EASE }}
               className={`relative flex flex-col items-center gap-1 rounded-lg border px-5 py-3 transition-colors duration-200 ${
                 packSize === opt.size
-                  ? "border-gold/60 bg-gold/[0.04]"
-                  : "border-white/[0.08] bg-black-surface hover:border-white/15"
+                  ? "border-line bg-gold/[0.04]"
+                  : "border-line bg-card hover:border-line"
               }`}
             >
-              <span className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-white/50">
+              <span className="text-sm font-semibold uppercase tracking-[0.08em] text-secondary">
                 {opt.label}
               </span>
               {opt.discount && (
-                <span className="text-[0.5rem] font-bold uppercase tracking-[0.15em] text-rouge">
+                <span className="text-sm font-bold uppercase tracking-[0.08em] text-rouge">
                   {opt.discount}
                 </span>
               )}
@@ -842,8 +811,8 @@ export function BuildYourBox({ products }: { products: ProductData[] }) {
                       transition={{ duration: 0.13 }}
                       className={`group relative flex flex-col items-center rounded-xl border p-5 text-center transition-colors duration-200 ${
                         isSelected
-                          ? "border-gold/50 bg-gold/[0.03]"
-                          : "border-white/[0.08] bg-black-surface hover:border-white/15"
+                          ? "border-line bg-gold/[0.03]"
+                          : "border-line bg-card hover:border-line"
                       }`}
                     >
                       <div className="relative aspect-square w-full max-w-[120px]">
@@ -855,10 +824,10 @@ export function BuildYourBox({ products }: { products: ProductData[] }) {
                           className="object-contain p-3"
                         />
                       </div>
-                      <p className="mt-3 text-[0.6rem] font-medium text-white/40 line-clamp-2">
+                      <p className="mt-3 text-sm font-medium text-secondary line-clamp-2">
                         {product.name}
                       </p>
-                      <p className="mt-1 text-[0.65rem] font-light text-gold">
+                      <p className="mt-1 text-sm font-light text-accent">
                         {product.price}
                       </p>
                       <AnimatePresence>
@@ -868,7 +837,7 @@ export function BuildYourBox({ products }: { products: ProductData[] }) {
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0, opacity: 0 }}
                             transition={{ duration: 0.32, ease: EASE }}
-                            className="absolute -top-2 -end-2 flex h-5 w-5 items-center justify-center rounded-full bg-gold text-white"
+                            className="absolute -top-2 -end-2 flex h-5 w-5 items-center justify-center rounded-full bg-gold text-foreground"
                           >
                             <svg
                               width="8"
@@ -906,14 +875,14 @@ export function BuildYourBox({ products }: { products: ProductData[] }) {
               >
                 <div className="lg:sticky lg:top-24">
                   <Reveal>
-                    <div className="rounded-xl border border-gold/20 bg-black-surface p-6 shadow-premium">
+                    <div className="rounded-xl border border-line bg-card p-6 shadow-[var(--market-shadow)]">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-[0.6rem] uppercase tracking-[0.2em] text-white/40">
+                          <p className="text-sm uppercase tracking-[0.08em] text-secondary">
                             {t("bundle_selected", "SELECTED")} ·{" "}
                             {selected.size} / {packSize}
                           </p>
-                          <p className="mt-1 font-display text-lg text-white">
+                          <p className="mt-1 font-display text-lg text-foreground">
                             {t("bundle_savings", "SAVE UP TO 20%")}
                           </p>
                         </div>
@@ -952,7 +921,7 @@ export function HowItWorks() {
   ];
 
   return (
-    <section className="relative w-full overflow-hidden bg-black border-t border-white/[0.06]">
+    <section className="relative w-full overflow-hidden bg-canvas border-t border-line">
       <div className="mx-auto max-w-[1400px] px-6 py-16 md:px-10 md:py-20 lg:px-16 lg:py-24">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-8 lg:gap-14">
           {steps.map((step, i) => (
@@ -962,14 +931,14 @@ export function HowItWorks() {
                   initial={false}
                   whileHover={{ scale: 1.08, y: -2 }}
                   transition={{ duration: 0.22, ease: EASE }}
-                  className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full border border-gold/25 bg-gold/[0.04] font-display text-lg text-gold"
+                  className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full border border-line bg-gold/[0.04] font-display text-lg text-accent"
                 >
                   {step.num}
                 </motion.span>
-                <h3 className="mt-5 font-display text-lg leading-[0.95] tracking-[-0.01em] text-white">
+                <h3 className="mt-5 font-display text-lg leading-[0.95] tracking-[-0.01em] text-foreground">
                   {t(step.key + "_title", step.title)}
                 </h3>
-                <p className="mt-2 mx-auto max-w-xs text-[0.72rem] leading-[1.8] text-white/40">
+                <p className="mt-2 mx-auto max-w-xs text-sm leading-[1.8] text-secondary">
                   {t(step.key + "_desc", step.desc)}
                 </p>
               </div>
@@ -993,24 +962,23 @@ export function SocialProof({
 }) {
   const { lang } = useTranslation("home");
   const copy = getLandingCopy(lang);
-  const shouldReduceMotion = useReducedMotion();
   if (testimonials.length === 0) return null;
 
   const displayTestimonials = testimonials.slice(0, 3);
 
   return (
-    <section className="relative w-full overflow-hidden bg-[#0B0B0A]">
+    <section className="relative w-full overflow-hidden bg-canvas">
       <div aria-hidden="true" className="absolute end-[-10rem] top-[-8rem] h-[28rem] w-[28rem] rounded-full bg-[#D6B35A]/[0.04] blur-[140px]" />
-      <div className="mx-auto w-full max-w-[1520px] px-5 py-14 sm:px-8 md:px-10 md:py-16 lg:px-16 lg:py-20 xl:px-20">
+      <div className="landing-section">
         <Reveal>
           <div className="grid gap-5 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-8">
               <div className="landing-eyebrow">{copy.social.eyebrow}</div>
-              <h2 className="mt-4 max-w-[18ch] font-display text-[clamp(2.1rem,3.8vw,3.5rem)] font-normal leading-[0.98] tracking-[-0.035em] text-white">
+              <h2 className="mt-4 max-w-[18ch] font-display text-[clamp(2.1rem,3.8vw,3.5rem)] font-normal leading-[0.98] tracking-[-0.035em] text-foreground">
                 {copy.social.title}
               </h2>
             </div>
-            <p className="max-w-sm text-sm font-normal leading-[1.75] text-white/45 lg:col-span-4 lg:justify-self-end">
+            <p className="max-w-sm text-sm font-normal leading-[1.75] text-secondary lg:col-span-4 lg:justify-self-end">
               {copy.social.intro}
             </p>
           </div>
@@ -1023,31 +991,14 @@ export function SocialProof({
                 initial={false}
                 whileHover={{ y: -3 }}
                 transition={{ duration: 0.3, ease: EASE }}
-                className="relative flex h-full min-h-[220px] flex-col rounded-2xl border border-white/[0.08] bg-[#11110F] p-6 transition-[border-color,box-shadow] duration-300 hover:border-[#D6B35A]/20 hover:shadow-[0_20px_55px_rgba(0,0,0,.24)] sm:p-7"
+                className="relative flex h-full min-h-[220px] flex-col rounded-2xl border border-line bg-surface p-6 transition-[border-color,box-shadow] duration-300 hover:border-[#D6B35A]/20 hover:shadow-[var(--market-shadow)] sm:p-7"
               >
-                <span className="flex gap-0.5 text-[0.7rem] text-[#D6B35A]/80" aria-hidden="true">
-                  {Array.from({ length: 5 }).map((_, starIndex) => (
-                    <motion.span
-                      key={starIndex}
-                      initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.86 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true, amount: 0.8 }}
-                      transition={{
-                        duration: shouldReduceMotion ? 0 : 0.34,
-                        delay: shouldReduceMotion ? 0 : starIndex * 0.045,
-                        ease: EASE,
-                      }}
-                    >
-                      ★
-                    </motion.span>
-                  ))}
-                </span>
-                <p className="mt-5 line-clamp-4 font-display text-lg font-normal leading-[1.45] tracking-[-0.015em] text-white/82">
-                  “{copy.social.quotes[index] || item.content}”
+                <p className="mb-6 font-display text-lg font-normal leading-[1.45] tracking-[-0.015em] text-secondary">
+                  “{item.content}”
                 </p>
-                <footer className="mt-auto border-t border-white/[0.07] pt-5">
-                  <p className="text-sm font-medium text-white">{item.name}</p>
-                  {item.role ? <p className="mt-1 text-[0.62rem] uppercase tracking-[0.16em] text-[#D6B35A]/70">{item.role}</p> : null}
+                <footer className="mt-auto border-t border-line pt-5">
+                  <p className="text-sm font-medium text-foreground">{item.name}</p>
+                  {item.role ? <p className="mt-1 text-sm uppercase tracking-[0.08em] text-accent">{item.role}</p> : null}
                 </footer>
               </motion.blockquote>
             </Reveal>
@@ -1067,11 +1018,11 @@ export function MoroccanMoment({ product }: { product?: ProductData }) {
   const { t: tProducts } = useTranslation("products");
   const { addItem } = useCart();
   return (
-    <section className="relative w-full overflow-hidden border-y border-white/[0.04] bg-[#11110F]">
+    <section className="relative w-full overflow-hidden border-y border-line bg-surface">
       <div className="landing-section">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-12 xl:gap-16">
           <Reveal className="lg:col-span-7">
-            <div className="group relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-white/[0.07] bg-[#171714] sm:aspect-[16/11] lg:aspect-[6/5]">
+            <div className="group relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-line bg-card sm:aspect-[16/11] lg:aspect-[6/5]">
               <div aria-hidden="true" className="absolute inset-[14%] rounded-full bg-[#D6B35A]/10 blur-[90px]" />
               {product ? (
                 <ProductImage
@@ -1083,11 +1034,11 @@ export function MoroccanMoment({ product }: { product?: ProductData }) {
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center">
-                  <span className="font-display text-[8rem] text-[#D6B35A]/15 sm:text-[12rem]">M</span>
+                  <span className="font-display text-[8rem] text-accent/15 sm:text-[12rem]">M</span>
                 </div>
               )}
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-[#6E1F2A]/10 via-transparent to-[#D6B35A]/[0.06]" />
-              <span className="absolute bottom-5 start-5 rounded-full border border-white/[0.09] bg-black/45 px-4 py-2 text-[0.52rem] font-medium uppercase tracking-[0.25em] text-white/60 backdrop-blur-md sm:bottom-7 sm:start-7">
+              <span className="market-image-caption absolute bottom-5 start-5 rounded-full border border-line bg-black/45 px-4 py-2 text-sm font-medium uppercase tracking-[0.08em] text-secondary backdrop-blur-md sm:bottom-7 sm:start-7">
                 {copy.discovery.visualLabel}
               </span>
             </div>
@@ -1100,7 +1051,7 @@ export function MoroccanMoment({ product }: { product?: ProductData }) {
             <p className="landing-body mt-6 max-w-lg">
               {copy.discovery.description}
             </p>
-            {product ? <p className="mt-6 font-display text-2xl font-normal text-[#D6B35A]">{product.price}</p> : null}
+            {product ? <p className="mt-6 font-display text-2xl font-normal text-accent">{product.price}</p> : null}
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
               {product && product.available !== false ? (
                 <motion.button
@@ -1141,14 +1092,14 @@ export function FAQSection({
 
   if (!faqs || faqs.length === 0) {
     return (
-      <section className="relative w-full overflow-hidden bg-black border-t border-white/[0.06]">
+      <section className="relative w-full overflow-hidden bg-canvas border-t border-line">
         <div className="mx-auto max-w-[1400px] px-6 py-16 md:px-10 md:py-20 lg:px-16 lg:py-24">
           <div className="mx-auto max-w-3xl">
             <Reveal>
-              <span className="label-utility tracking-[0.55em] text-gold/60">
+              <span className="label-utility tracking-[0.08em] text-accent">
                 {t("faq_title", "FAQ")}
               </span>
-              <h2 className="mt-3 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] leading-[0.95] tracking-[-0.03em] text-white">
+              <h2 className="mt-3 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] leading-[0.95] tracking-[-0.03em] text-foreground">
                 {t("faq_subtitle", "Frequently asked questions")}
               </h2>
             </Reveal>
@@ -1159,15 +1110,15 @@ export function FAQSection({
   }
 
   return (
-    <section className="relative w-full overflow-hidden bg-black border-t border-white/[0.06]">
+    <section className="relative w-full overflow-hidden bg-canvas border-t border-line">
       <div className="mx-auto max-w-[1400px] px-6 py-16 md:px-10 md:py-20 lg:px-16 lg:py-24">
         {/* Wide title wrapper */}
         <div className="mx-auto max-w-3xl text-center">
           <Reveal>
-            <span className="label-utility tracking-[0.55em] text-gold/60">
+            <span className="label-utility tracking-[0.08em] text-accent">
               {t("faq_title", "FAQ")}
             </span>
-            <h2 className="mt-3 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] leading-[0.95] tracking-[-0.03em] text-white">
+            <h2 className="mt-3 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] leading-[0.95] tracking-[-0.03em] text-foreground">
               {t("faq_subtitle", "Frequently asked questions")}
             </h2>
           </Reveal>
@@ -1205,22 +1156,22 @@ function FAQItem({
   const [open, setOpen] = useState(isFirst);
 
   return (
-    <div className={isFirst ? "" : "border-t border-white/[0.06]"}>
+    <div className={isFirst ? "" : "border-t border-line"}>
       <motion.button
         type="button"
         onClick={() => setOpen(!open)}
         whileTap={{ scale: 0.995 }}
         transition={{ duration: 0.13 }}
-        className="flex w-full items-center justify-between py-5 text-left transition-colors duration-200 hover:text-gold"
+        className="flex w-full items-center justify-between py-5 text-left transition-colors duration-200 hover:text-accent"
         aria-expanded={open}
       >
-        <span className="pr-6 text-[0.82rem] font-medium text-white">
+        <span className="pr-6 text-sm font-medium text-foreground">
           {question}
         </span>
         <motion.span
           animate={{ rotate: open ? 180 : 0 }}
           transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          className="shrink-0 text-white/25"
+          className="shrink-0 text-secondary"
         >
           <svg
             width="12"
@@ -1243,7 +1194,7 @@ function FAQItem({
             : { height: 0, opacity: 0 }
         }
         transition={{ duration: 0.3, ease: EASE }}
-        className="overflow-hidden text-[0.78rem] leading-[1.9] text-white/40"
+        className="overflow-hidden text-sm leading-[1.9] text-secondary"
       >
         <div className="pb-5">{answer}</div>
       </motion.div>
@@ -1258,7 +1209,7 @@ export function FinalCTA() {
   const { lang } = useTranslation("home");
   const copy = getLandingCopy(lang);
   return (
-    <section className="relative w-full overflow-hidden border-t border-white/[0.06] bg-[#0B0B0A]">
+    <section className="relative w-full overflow-hidden border-t border-line bg-canvas">
       <div aria-hidden="true" className="absolute inset-0">
         <div className="absolute left-1/2 top-1/2 h-[32rem] w-[58rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#6E1F2A]/[0.16] blur-[150px]" />
         <div className="absolute bottom-[-18rem] left-1/2 h-[28rem] w-[52rem] -translate-x-1/2 rounded-full bg-[#D6B35A]/[0.07] blur-[140px]" />
@@ -1267,14 +1218,14 @@ export function FinalCTA() {
       <div className="landing-section relative lg:py-32">
         <Reveal>
           <div className="mx-auto max-w-4xl text-center">
-            <div className="flex items-center justify-center gap-3 text-[0.6rem] font-medium uppercase tracking-[0.34em] text-[#D6B35A]">
+            <div className="flex items-center justify-center gap-3 text-sm font-medium uppercase tracking-[0.08em] text-accent">
               <span className="h-px w-9 bg-[#D6B35A]" aria-hidden="true" />
               <span>
                 {copy.finalCta.eyebrow}
               </span>
               <span className="h-px w-9 bg-[#D6B35A]" aria-hidden="true" />
             </div>
-            <h2 className="mx-auto mt-8 max-w-[16ch] font-display text-[clamp(2.5rem,5.2vw,5rem)] font-normal leading-[0.94] tracking-[-0.045em] text-white">
+            <h2 className="mx-auto mt-8 max-w-[16ch] font-display text-[clamp(2.5rem,5.2vw,5rem)] font-normal leading-[0.94] tracking-[-0.045em] text-foreground">
               {copy.finalCta.title}
             </h2>
             <p className="landing-body mx-auto mt-7 max-w-xl sm:text-base">

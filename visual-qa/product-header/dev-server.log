@@ -1,0 +1,119 @@
+npm notice run monadaty@1.0.0 dev
+npm notice run npm run db:start && bash scripts/run-local-db-command.sh next dev --hostname 127.0.0.1 --port 3000
+npm notice run monadaty@1.0.0 db:start
+npm notice run bash scripts/db-start.sh
+PostgreSQL is already running on 127.0.0.1:5432
+   ▲ Next.js 15.5.23
+   - Local:        http://127.0.0.1:3000
+   - Network:      http://127.0.0.1:3000
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · optimizePackageImports
+     · middlewareClientMaxBodySize: "12mb"
+
+ ✓ Starting...
+ ✓ Ready in 4.2s
+ ○ Compiling /shop ...
+ ✓ Compiled /shop in 20.6s (1846 modules)
+ GET /shop 200 in 25380ms
+ GET /shop 200 in 1361ms
+ ○ Compiling /api/translations ...
+ ✓ Compiled /api/translations in 6.5s (1800 modules)
+ GET /api/translations?namespace=home 200 in 6852ms
+ GET /api/translations?namespace=system 200 in 7140ms
+ GET /shop?search=coca 200 in 837ms
+ GET /shop 200 in 924ms
+ GET /shop?search=coca&sort=price-asc 200 in 217ms
+ ○ Compiling /product/[id] ...
+ ✓ Compiled /product/[id] in 1882ms (1840 modules)
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 200 in 5366ms
+ GET /shop 200 in 1573ms
+ GET /api/translations?namespace=system 200 in 586ms
+ GET /api/translations?namespace=home 200 in 87ms
+ GET /shop 200 in 820ms
+ GET /shop 200 in 897ms
+ GET /api/translations?namespace=system 200 in 63ms
+ GET /api/translations?namespace=home 200 in 65ms
+ GET /api/translations?namespace=home 200 in 295ms
+ GET /shop?search=coca 200 in 210ms
+ GET /shop?search=coca&sort=price-asc 200 in 169ms
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 200 in 832ms
+ GET /shop 200 in 1139ms
+ GET /api/translations?namespace=system 200 in 71ms
+ GET /api/translations?namespace=home 200 in 95ms
+ GET /api/translations?namespace=home 200 in 78ms
+ GET /shop 200 in 744ms
+ GET /shop 200 in 997ms
+ GET /api/translations?namespace=system 200 in 65ms
+ GET /api/translations?namespace=home 200 in 75ms
+ GET /shop?search=coca 200 in 284ms
+ GET /shop?search=coca&sort=price-asc 200 in 146ms
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 200 in 862ms
+ GET /shop 200 in 1220ms
+ GET /api/translations?namespace=system 200 in 125ms
+ GET /api/translations?namespace=home 200 in 353ms
+ ✓ Compiled in 1841ms (1826 modules)
+ ✓ Compiled in 2.3s (1840 modules)
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 200 in 1922ms
+ GET /shop 200 in 813ms
+ GET /api/translations?namespace=system 200 in 92ms
+ GET /api/translations?namespace=home 200 in 72ms
+ ✓ Compiled in 3.5s (1807 modules)
+ GET /product/e4e98f22-9970-4ab4-a311-850190a1e090 200 in 2533ms
+ GET /shop 200 in 1338ms
+ GET /shop 200 in 2230ms
+ ○ Compiling /api/translations ...
+ ✓ Compiled /api/translations in 1901ms (1033 modules)
+ GET /shop 200 in 1158ms
+ GET /shop 200 in 1081ms
+ GET /api/translations?namespace=system 200 in 105ms
+ GET /shop 200 in 483ms
+ GET /shop 200 in 803ms
+ GET /api/translations?namespace=system 200 in 56ms
+ GET /shop 200 in 543ms
+ GET /shop 200 in 797ms
+ GET /api/translations?namespace=system 200 in 99ms
+ GET /api/translations?namespace=home 200 in 62ms
+ ✓ Compiled in 3.1s (1840 modules)
+ GET /shop 200 in 1215ms
+ GET /shop 200 in 807ms
+ GET /shop 200 in 550ms
+ GET /shop 200 in 660ms
+ GET /api/translations?namespace=system 200 in 100ms
+ GET /api/translations?namespace=home 200 in 64ms
+ GET /api/translations?namespace=home 200 in 628ms
+ GET /shop 200 in 614ms
+ GET /shop 200 in 820ms
+ GET /api/translations?namespace=system 200 in 76ms
+ GET /shop 200 in 454ms
+ GET /shop 200 in 867ms
+ GET /api/translations?namespace=system 200 in 57ms
+ GET /api/translations?namespace=home 200 in 54ms
+ ○ Compiling / ...
+ ✓ Compiled / in 3.1s (1846 modules)
+ GET / 200 in 4291ms
+ ○ Compiling /about ...
+ GET /shop 200 in 1951ms
+ ✓ Compiled /about in 1957ms (1870 modules)
+ GET /about 200 in 3055ms
+ GET /shop 200 in 1045ms
+ ○ Compiling /collections ...
+ ✓ Compiled /collections in 1092ms (1864 modules)
+ GET /collections 200 in 3685ms
+ GET /shop 200 in 1573ms
+ ○ Compiling /wishlist ...
+ ✓ Compiled /wishlist in 2.8s (1873 modules)
+ GET /wishlist 200 in 3480ms
+ GET /shop 200 in 1758ms
+ ○ Compiling /checkout ...
+ ✓ Compiled /checkout in 1520ms (1887 modules)
+ GET /checkout 200 in 2854ms
+ GET /shop 200 in 92ms
+ ✓ Compiled in 6.8s (1838 modules)
+ GET /shop 200 in 2352ms
+ GET /shop 200 in 784ms
+ ○ Compiling /api/translations ...
+ ✓ Compiled /api/translations in 2.1s (1847 modules)
+ GET /manifest.webmanifest 200 in 2564ms
+ GET /api/translations?namespace=system 200 in 2513ms
+ GET /api/translations?namespace=home 200 in 2475ms

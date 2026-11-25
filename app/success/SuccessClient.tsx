@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { PREMIUM_EASE } from "@/lib/motion";
 
 export function SuccessClient() {
@@ -11,7 +12,7 @@ export function SuccessClient() {
       initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.88 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: shouldReduceMotion ? 0 : 0.55, ease: PREMIUM_EASE }}
-      className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-gold/25 bg-gold/[0.08] text-gold"
+      className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-line bg-gold/[0.08] text-accent"
     >
       <svg
         aria-hidden="true"

@@ -1,0 +1,258 @@
+{
+  "checks": [
+    {
+      "lang": "fr",
+      "route": "shop",
+      "width": 360,
+      "overflow": false,
+      "headerHeight": 234.578125,
+      "firstProductTop": 547.171875,
+      "headerFont": "30px"
+    },
+    {
+      "lang": "fr",
+      "route": "shop",
+      "width": 390,
+      "overflow": false,
+      "headerHeight": 234.578125,
+      "firstProductTop": 547.171875,
+      "headerFont": "30px"
+    },
+    {
+      "lang": "fr",
+      "route": "shop",
+      "width": 768,
+      "overflow": false,
+      "headerHeight": 194.078125,
+      "firstProductTop": 567.875,
+      "headerFont": "30px"
+    },
+    {
+      "lang": "fr",
+      "route": "shop",
+      "width": 1440,
+      "overflow": false,
+      "headerHeight": 177.125,
+      "firstProductTop": 528.390625,
+      "headerFont": "38px"
+    },
+    {
+      "lang": "fr",
+      "route": "product",
+      "width": 360,
+      "overflow": false,
+      "galleryHeight": 260,
+      "titleSize": "26px",
+      "priceSize": "28px"
+    },
+    {
+      "lang": "fr",
+      "route": "product",
+      "width": 390,
+      "overflow": false,
+      "galleryHeight": 260,
+      "titleSize": "26px",
+      "priceSize": "28px"
+    },
+    {
+      "lang": "fr",
+      "route": "product",
+      "width": 768,
+      "overflow": false,
+      "galleryHeight": 290.34375,
+      "titleSize": "26px",
+      "priceSize": "28px"
+    },
+    {
+      "lang": "fr",
+      "route": "product",
+      "width": 1440,
+      "overflow": false,
+      "galleryHeight": 400,
+      "titleSize": "34px",
+      "priceSize": "28px"
+    },
+    {
+      "lang": "en",
+      "route": "shop",
+      "width": 360,
+      "overflow": false,
+      "headerHeight": 260.96875,
+      "firstProductTop": 573.5625,
+      "headerFont": "30px"
+    },
+    {
+      "lang": "en",
+      "route": "shop",
+      "width": 390,
+      "overflow": false,
+      "headerHeight": 234.578125,
+      "firstProductTop": 547.171875,
+      "headerFont": "30px"
+    },
+    {
+      "lang": "en",
+      "route": "shop",
+      "width": 768,
+      "overflow": false,
+      "headerHeight": 194.078125,
+      "firstProductTop": 567.875,
+      "headerFont": "30px"
+    },
+    {
+      "lang": "en",
+      "route": "shop",
+      "width": 1440,
+      "overflow": false,
+      "headerHeight": 177.125,
+      "firstProductTop": 528.390625,
+      "headerFont": "38px"
+    },
+    {
+      "lang": "en",
+      "route": "product",
+      "width": 360,
+      "overflow": false,
+      "galleryHeight": 260,
+      "titleSize": "26px",
+      "priceSize": "28px"
+    },
+    {
+      "lang": "en",
+      "route": "product",
+      "width": 390,
+      "overflow": false,
+      "galleryHeight": 260,
+      "titleSize": "26px",
+      "priceSize": "28px"
+    },
+    {
+      "lang": "en",
+      "route": "product",
+      "width": 768,
+      "overflow": false,
+      "galleryHeight": 290.34375,
+      "titleSize": "26px",
+      "priceSize": "28px"
+    },
+    {
+      "lang": "en",
+      "route": "product",
+      "width": 1440,
+      "overflow": false,
+      "galleryHeight": 400,
+      "titleSize": "34px",
+      "priceSize": "28px"
+    },
+    {
+      "lang": "ar",
+      "route": "shop",
+      "width": 360,
+      "overflow": false,
+      "headerHeight": 245.671875,
+      "firstProductTop": 558.265625,
+      "headerFont": "30px"
+    },
+    {
+      "lang": "ar",
+      "route": "shop",
+      "width": 390,
+      "overflow": false,
+      "headerHeight": 245.671875,
+      "firstProductTop": 558.265625,
+      "headerFont": "30px"
+    },
+    {
+      "lang": "ar",
+      "route": "shop",
+      "width": 768,
+      "overflow": false,
+      "headerHeight": 178.78125,
+      "firstProductTop": 552.578125,
+      "headerFont": "30px"
+    },
+    {
+      "lang": "ar",
+      "route": "shop",
+      "width": 1440,
+      "overflow": false,
+      "headerHeight": 190.78125,
+      "firstProductTop": 542.046875,
+      "headerFont": "38px"
+    },
+    {
+      "lang": "ar",
+      "route": "product",
+      "width": 360,
+      "overflow": false,
+      "galleryHeight": 260,
+      "titleSize": "26px",
+      "priceSize": "28px"
+    },
+    {
+      "lang": "ar",
+      "route": "product",
+      "width": 390,
+      "overflow": false,
+      "galleryHeight": 260,
+      "titleSize": "26px",
+      "priceSize": "28px"
+    },
+    {
+      "lang": "ar",
+      "route": "product",
+      "width": 768,
+      "overflow": false,
+      "galleryHeight": 290.34375,
+      "titleSize": "26px",
+      "priceSize": "28px"
+    },
+    {
+      "lang": "ar",
+      "route": "product",
+      "width": 1440,
+      "overflow": false,
+      "galleryHeight": 400,
+      "titleSize": "34px",
+      "priceSize": "28px"
+    }
+  ],
+  "audits": [
+    {
+      "lang": "fr",
+      "route": "shop",
+      "violations": []
+    },
+    {
+      "lang": "fr",
+      "route": "product",
+      "violations": []
+    },
+    {
+      "lang": "en",
+      "route": "shop",
+      "violations": []
+    },
+    {
+      "lang": "en",
+      "route": "product",
+      "violations": []
+    },
+    {
+      "lang": "ar",
+      "route": "shop",
+      "violations": []
+    },
+    {
+      "lang": "ar",
+      "route": "product",
+      "violations": []
+    }
+  ],
+  "errors": [],
+  "bidiChecks": {
+    "heading": "rtl",
+    "price": "ltr",
+    "description": "auto"
+  }
+}

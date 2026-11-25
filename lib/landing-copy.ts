@@ -6,7 +6,7 @@ const LANDING_COPY = {
       eyebrow: "BOISSONS EN GROS POUR LES PROFESSIONNELS",
       title: "VOS BOISSONS EN GROS,\nLIVRÉES À VOTRE COMMERCE.",
       description:
-        "MONADATY simplifie l’approvisionnement de votre commerce avec un large choix de boissons en gros et un service pensé pour les professionnels.",
+        "Toutes vos boissons en gros, au même endroit. Commandez simplement pour votre commerce.",
       primaryCta: "VOIR LE CATALOGUE",
       secondaryCta: "EXPLORER LES COLLECTIONS",
       categories: "Sodas · eaux · jus",
@@ -48,11 +48,6 @@ const LANDING_COPY = {
       title: "LA SATISFACTION DE NOS CLIENTS.",
       intro:
         "Des avis partagés après chaque commande par des professionnels qui s’approvisionnent chez nous.",
-      quotes: [
-        "Je m’approvisionne pour mon épicerie ici : tout est simple, de la commande à la livraison.",
-        "Un large choix de boissons en gros et un service professionnel. Je recommanderai sans hésiter.",
-        "Une commande claire et une livraison jusqu’au magasin. Exactement ce qu’il me fallait.",
-      ],
     },
     discovery: {
       eyebrow: "LES INDISPENSABLES DU RAYON",
@@ -78,8 +73,8 @@ const LANDING_COPY = {
       secondary: "DÉCOUVRIR MONADATY",
     },
     shop: {
-      eyebrow: "TOUTES NOS BOISSONS EN GROS",
-      title: "COMMANDEZ VOS BOISSONS EN GROS",
+      eyebrow: "Le catalogue MONADATY",
+      title: "Nos boissons en gros",
       description: "Sodas, eaux, jus et plus — tout ce qu’il faut à votre commerce, au même endroit.",
     },
     wishlist: {
@@ -89,27 +84,67 @@ const LANDING_COPY = {
     },
     checkout: {
       eyebrow: "PAIEMENT SÉCURISÉ",
-      title: "FINALISEZ VOTRE COMMANDE",
-      description: "Renseignez vos informations de livraison, vérifiez votre panier et recevez votre commande directement à votre commerce.",
+      title: "La dernière étape, tout simplement.",
+      description: "Vos boissons livrées à votre commerce, à Rabat ou à Salé. Quelques informations suffisent, le paiement se fait à la livraison.",
     },
     about: {
-      eyebrow: "LE FOURNISSEUR DE BOISSONS DES PROFESSIONNELS",
-      title: "DU CHOIX. DES PRIX DE GROS. UNE COMMANDE SIMPLE.",
-      description: "MONADATY fournit épiceries, cafés, restaurants, snacks, hôtels et revendeurs en boissons : sodas, eaux, jus et grandes marques, avec un service simple et professionnel.",
-      storyEyebrow: "POUR CHAQUE COMMERCE",
-      storyTitle: "TOUT CE DONT VOTRE COMMERCE A BESOIN.",
-      storyDescription: "Du dépannage au réassort régulier, nous simplifions la commande de vos boissons en gros, du choix du catalogue jusqu’à la livraison.",
-      valuesEyebrow: "POURQUOI MONADATY",
-      valuesTitle: "UNE MEILLEURE FAÇON DE VOUS APPROVISIONNER.",
-      values: [
-        { title: "Large choix", description: "Sodas, eaux, jus et marques connues réunis dans un catalogue simple à parcourir." },
-        { title: "Prix de gros", description: "Des tarifs pensés pour l’achat en gros par les professionnels." },
-        { title: "Commande simple", description: "Trouvez et commandez vos boissons en quelques minutes, sur mobile comme sur ordinateur." },
-        { title: "Livraison jusqu’à vous", description: "Votre commande livrée directement à l’adresse de votre commerce." },
+      "metadataTitle": "À propos",
+      "eyebrow": "À propos de MONADATY",
+      "title": "Votre commerce avance.",
+      "titleAccent": "Nous l’approvisionnons.",
+      "description": "Épiceries, cafés, restaurants : nous simplifions votre approvisionnement en boissons, du choix du catalogue à la livraison à votre commerce.",
+      "imageAlt": "Une sélection de boissons : eau, sodas et jus.",
+      "imageCaption": "Les boissons du quotidien, réunies pour les professionnels.",
+      "services": [
+        "Pour les professionnels",
+        "Livraison à Rabat & Salé",
+        "Paiement à la livraison"
       ],
-      closingTitle: "PRÊT À APPROVISIONNER VOTRE COMMERCE ?",
-      closingDescription: "Parcourez notre catalogue et passez votre commande en gros en quelques étapes.",
-      cta: "COMMANDER DES BOISSONS",
+      "storyEyebrow": "Notre engagement",
+      "storyTitle": "Vous servir, au rythme de votre commerce.",
+      "storyDescription": "Un réassort prévu ou un besoin de dernière minute ? Retrouvez vos boissons dans un catalogue clair, choisissez vos quantités et passez commande simplement. Nous nous occupons de vous les livrer.",
+      "valuesEyebrow": "L’esprit MONADATY",
+      "valuesTitle": "Un quotidien plus simple pour les pros.",
+      "values": [
+        {
+          "title": "Le choix, au même endroit",
+          "description": "Eaux, sodas, jus et boissons énergétiques : retrouvez les références utiles à votre commerce."
+        },
+        {
+          "title": "Des prix de gros",
+          "description": "Des tarifs et des conditionnements pensés pour les achats des professionnels."
+        },
+        {
+          "title": "Une commande sans détour",
+          "description": "Un panier clair, les quantités de votre choix et un paiement à la réception."
+        },
+        {
+          "title": "Un service de proximité",
+          "description": "Nous livrons votre commande à l’adresse de votre commerce, à Rabat ou à Salé."
+        }
+      ],
+      "processEyebrow": "Du catalogue à votre porte",
+      "processTitle": "Vous commandez. On s’occupe de la suite.",
+      "steps": [
+        {
+          "title": "Choisissez vos boissons",
+          "description": "Parcourez les catégories et ajoutez vos références au panier."
+        },
+        {
+          "title": "Confirmez votre commande",
+          "description": "Ajustez les quantités et indiquez votre adresse de livraison."
+        },
+        {
+          "title": "Recevez à votre commerce",
+          "description": "Votre commande arrive chez vous. Vous réglez à la livraison."
+        }
+      ],
+      "deliveryEyebrow": "Proches de votre commerce",
+      "deliveryDescription": "Notre zone de livraison couvre Rabat et Salé. Indiquez simplement l’adresse de votre commerce lors de votre commande.",
+      "closingTitle": "Votre prochain réassort commence ici.",
+      "closingDescription": "Découvrez les boissons dont votre commerce a besoin et préparez votre prochaine commande.",
+      "cta": "Découvrir le catalogue",
+      "secondaryCta": "Notre engagement"
     },
     footer: {
       newsletterEyebrow: "NOUVEAUTÉS · ACTUALITÉS",
@@ -168,11 +203,6 @@ const LANDING_COPY = {
       title: "WHAT OUR CUSTOMERS SAY.",
       intro:
         "Feedback shared after every order by professionals who source their stock with us.",
-      quotes: [
-        "I supply my grocery store from here: everything is simple, from ordering to delivery.",
-        "A wide range of wholesale drinks and a professional service. I’ll definitely order again.",
-        "Clear ordering and delivery right to my shop. Exactly what I needed.",
-      ],
     },
     discovery: {
       eyebrow: "SHELF ESSENTIALS",
@@ -198,8 +228,8 @@ const LANDING_COPY = {
       secondary: "DISCOVER MONADATY",
     },
     shop: {
-      eyebrow: "ALL OUR WHOLESALE DRINKS",
-      title: "ORDER YOUR DRINKS IN BULK",
+      eyebrow: "MONADATY catalogue",
+      title: "Wholesale drinks",
       description: "Sodas, water, juices and more — everything your business needs, in one place.",
     },
     wishlist: {
@@ -209,27 +239,67 @@ const LANDING_COPY = {
     },
     checkout: {
       eyebrow: "SECURE CHECKOUT",
-      title: "COMPLETE YOUR ORDER",
-      description: "Add your delivery details, review your basket and receive your order right at your business.",
+      title: "One last step. We’ll take it from here.",
+      description: "Your drinks, delivered to your business in Rabat or Salé. Add your details and pay when your order arrives.",
     },
     about: {
-      eyebrow: "THE BEVERAGE SUPPLIER FOR PROFESSIONALS",
-      title: "MORE CHOICE. WHOLESALE PRICES. EASY ORDERING.",
-      description: "MONADATY supplies grocery stores, cafés, restaurants, snacks, hotels and resellers with beverages: soda, water, juice and leading brands, with a simple, professional service.",
-      storyEyebrow: "FOR EVERY BUSINESS",
-      storyTitle: "EVERYTHING YOUR BUSINESS NEEDS.",
-      storyDescription: "From a quick top-up to regular restocking, we make ordering wholesale beverages simple — from browsing the catalogue to delivery.",
-      valuesEyebrow: "WHY MONADATY",
-      valuesTitle: "A BETTER WAY TO STOCK YOUR BUSINESS.",
-      values: [
-        { title: "Wide selection", description: "Soda, water, juice and leading brands gathered in one easy-to-browse catalogue." },
-        { title: "Wholesale pricing", description: "Terms built for professional bulk buying." },
-        { title: "Easy ordering", description: "Find and order your drinks in minutes, on mobile or desktop." },
-        { title: "Delivery to you", description: "Your order delivered straight to your business address." },
+      "metadataTitle": "About us",
+      "eyebrow": "About MONADATY",
+      "title": "Your business moves.",
+      "titleAccent": "We keep it stocked.",
+      "description": "Grocers, cafés and restaurants: we make restocking drinks simple, from browsing the catalogue to delivery at your business.",
+      "imageAlt": "A selection of bottled water, soft drinks and juices.",
+      "imageCaption": "Everyday drinks, brought together for businesses.",
+      "services": [
+        "For professionals",
+        "Delivery in Rabat & Salé",
+        "Payment on delivery"
       ],
-      closingTitle: "READY TO STOCK YOUR BUSINESS?",
-      closingDescription: "Browse the catalogue and place your wholesale order in just a few steps.",
-      cta: "ORDER DRINKS",
+      "storyEyebrow": "Our commitment",
+      "storyTitle": "Here for the rhythm of your business.",
+      "storyDescription": "Planning your next restock or need a quick top-up? Find your drinks in a clear catalogue, choose your quantities and place your order. We take care of delivery.",
+      "valuesEyebrow": "The MONADATY approach",
+      "valuesTitle": "Making everyday business a little easier.",
+      "values": [
+        {
+          "title": "The choice, in one place",
+          "description": "Water, soft drinks, juices and energy drinks: find the products your business needs."
+        },
+        {
+          "title": "Wholesale prices",
+          "description": "Pricing and pack sizes designed for professional purchasing."
+        },
+        {
+          "title": "Straightforward ordering",
+          "description": "A clear basket, your chosen quantities and payment when your order arrives."
+        },
+        {
+          "title": "A local service",
+          "description": "We deliver your order to your business address in Rabat or Salé."
+        }
+      ],
+      "processEyebrow": "From the catalogue to your door",
+      "processTitle": "You place the order. We take it from there.",
+      "steps": [
+        {
+          "title": "Choose your drinks",
+          "description": "Browse the categories and add the products you need to your basket."
+        },
+        {
+          "title": "Confirm your order",
+          "description": "Adjust the quantities and tell us where to deliver."
+        },
+        {
+          "title": "Receive at your business",
+          "description": "Your order arrives at your door. You pay on delivery."
+        }
+      ],
+      "deliveryEyebrow": "Close to your business",
+      "deliveryDescription": "We deliver within Rabat and Salé. Simply enter your business address when placing your order.",
+      "closingTitle": "Your next restock starts here.",
+      "closingDescription": "Explore the drinks your business needs and prepare your next order.",
+      "cta": "Explore the catalogue",
+      "secondaryCta": "Our commitment"
     },
     footer: {
       newsletterEyebrow: "NEW ARRIVALS · UPDATES",
@@ -288,11 +358,6 @@ const LANDING_COPY = {
       title: "ماذا يقول عملاؤنا.",
       intro:
         "آراء يشاركها مهنيون يزودون مخزون محلاتهم من عندنا.",
-      quotes: [
-        "أزود بقالتي من هنا: كل شيء سهل، من الطلب إلى التوصيل.",
-        "تشكيلة واسعة من المشروبات بالجملة وخدمة مهنية. سأطلب من جديد بالتأكيد.",
-        "طلب واضح وتوصيل حتى المحل. هذا بالضبط ما كنت أبحث عنه.",
-      ],
     },
     discovery: {
       eyebrow: "أساسيات الرف",
@@ -317,8 +382,8 @@ const LANDING_COPY = {
       secondary: "اكتشف موناداتي",
     },
     shop: {
-      eyebrow: "جميع مشروباتنا بالجملة",
-      title: "اطلب مشروباتك بالجملة",
+      eyebrow: "كتالوج موناداتي",
+      title: "مشروباتنا بالجملة",
       description: "مشروبات غازية ومياه وعصائر وأكثر — كل ما يحتاجه محلك في مكان واحد.",
     },
     wishlist: {
@@ -328,27 +393,67 @@ const LANDING_COPY = {
     },
     checkout: {
       eyebrow: "دفع آمن",
-      title: "أكمل طلبك",
-      description: "أدخل معلومات التوصيل، راجع سلتك واستلم طلبك عند محلك.",
+      title: "خطوة أخيرة، والباقي علينا.",
+      description: "مشروباتك إلى باب متجرك في الرباط أو سلا. أضف معلومات التوصيل وادفع عند استلام طلبك.",
     },
     about: {
-      eyebrow: "موزع المشروبات للمهنيين",
-      title: "خيارات أكثر. أسعار الجملة. طلب سهل.",
-      description: "تزود موناداتي البقالات والمقاهي والمطاعم وسناكات والفنادق والتجار بالمشروبات: مشروبات غازية ومياه وعصائر وعلامات معروفة، مع خدمة بسيطة ومهنية.",
-      storyEyebrow: "لكل محل",
-      storyTitle: "كل ما يحتاجه محلك.",
-      storyDescription: "من التعبئة السريعة إلى إعادة التزويد الدورية، نسهّل عليك طلب المشروبات بالجملة، من اختيار الكاتالوج إلى التوصيل.",
-      valuesEyebrow: "لماذا موناداتي",
-      valuesTitle: "طريقة أفضل لتزويد محلك.",
-      values: [
-        { title: "تشكيلة واسعة", description: "مشروبات غازية ومياه وعصائر وعلامات معروفة ضمن كاتالوج سهل التصفح." },
-        { title: "أسعار الجملة", description: "أسعار مصممة للشراء بالجملة من طرف المهنيين." },
-        { title: "طلب سهل", description: "اعثر على مشروباتك واطلبها في دقائق، من الهاتف أو الحاسوب." },
-        { title: "توصيل حتى لعندك", description: "طلبك يوصل مباشرة إلى عنوان محلك." },
+      "metadataTitle": "من نحن",
+      "eyebrow": "عن موناداتي",
+      "title": "أنت تهتم بمتجرك.",
+      "titleAccent": "ونحن نهتم بمشروباتك.",
+      "description": "للبقالات والمقاهي والمطاعم: نسهّل تزويد متجرك بالمشروبات، من اختيار المنتجات في الكتالوج إلى توصيلها إلى باب محلك.",
+      "imageAlt": "تشكيلة من قنينات المياه والمشروبات الغازية والعصائر.",
+      "imageCaption": "مشروبات يومية، جمعناها لتلبية احتياجات المهنيين.",
+      "services": [
+        "خاص بالمهنيين",
+        "التوصيل إلى الرباط وسلا",
+        "الدفع عند الاستلام"
       ],
-      closingTitle: "جاهز لتزويد محلك؟",
-      closingDescription: "تصفح الكاتالوج وضع طلبك بالجملة في خطوات بسيطة.",
-      cta: "اطلب المشروبات",
+      "storyEyebrow": "التزامنا",
+      "storyTitle": "إلى جانبك، بإيقاع متجرك.",
+      "storyDescription": "تخطط لتجديد مخزونك أم تحتاج إلى تزويد سريع؟ اعثر على مشروباتك في كتالوج واضح، حدّد الكميات وأكّد طلبك بسهولة. ونحن نتكفل بالتوصيل.",
+      "valuesEyebrow": "روح موناداتي",
+      "valuesTitle": "لتصبح إدارة احتياجاتك اليومية أسهل.",
+      "values": [
+        {
+          "title": "خياراتك في مكان واحد",
+          "description": "مياه ومشروبات غازية وعصائر ومشروبات طاقة: تشكيلة تلبي احتياجات متجرك."
+        },
+        {
+          "title": "أسعار الجملة",
+          "description": "أسعار وعبوات مصممة لتناسب مشتريات المهنيين."
+        },
+        {
+          "title": "طلب بكل بساطة",
+          "description": "سلة واضحة، وكميات تختارها بنفسك، ودفع عند استلام الطلب."
+        },
+        {
+          "title": "خدمة قريبة منك",
+          "description": "نوصل طلبك إلى عنوان متجرك داخل مدينتي الرباط وسلا."
+        }
+      ],
+      "processEyebrow": "من الكتالوج إلى باب متجرك",
+      "processTitle": "اختر مشروباتك، واترك الباقي علينا.",
+      "steps": [
+        {
+          "title": "اختر مشروباتك",
+          "description": "تصفّح الفئات وأضف المنتجات التي تحتاجها إلى سلتك."
+        },
+        {
+          "title": "أكّد طلبك",
+          "description": "حدّد الكميات وأدخل عنوان توصيل الطلب."
+        },
+        {
+          "title": "استلم في متجرك",
+          "description": "تصلك الطلبية إلى باب محلك، وتدفع عند الاستلام."
+        }
+      ],
+      "deliveryEyebrow": "قريبون من متجرك",
+      "deliveryDescription": "تشمل منطقة التوصيل مدينتي الرباط وسلا. يكفي إدخال عنوان متجرك عند إتمام طلبك.",
+      "closingTitle": "تجديد مخزونك يبدأ من هنا.",
+      "closingDescription": "اكتشف المشروبات التي يحتاجها متجرك وجهّز طلبك المقبل.",
+      "cta": "تصفّح الكتالوج",
+      "secondaryCta": "التزامنا"
     },
     footer: {
       newsletterEyebrow: "منتجات جديدة · أخبار",

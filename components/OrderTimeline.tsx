@@ -45,7 +45,7 @@ export function OrderTimeline({ orderStatus, updatedAt, createdAt, actualDeliver
 
   return (
     <div className="space-y-2">
-      <p className="text-[0.55rem] font-semibold uppercase tracking-[0.2em] text-gold/70 text-ivory/50">{t("order_timeline", "Order Timeline")}</p>
+      <p className="text-sm font-semibold uppercase tracking-[0.08em] text-accent text-secondary">{t("order_timeline", "Order Timeline")}</p>
       <div className="relative">
         {/* Vertical line */}
         <div className="absolute left-[1.125rem] top-3 bottom-3 w-px bg-ivory/[0.06]" />
@@ -68,7 +68,7 @@ export function OrderTimeline({ orderStatus, updatedAt, createdAt, actualDeliver
                       ? `${step.iconBg} border-transparent ${step.dotColor.replace("bg-", "text-")}`
                       : current
 ? `${step.iconBg} ${step.dotColor.replace("bg-", "ring-2 ring-")}/30 border-transparent`
-  : "bg-ivory/[0.03] border-ivory/[0.06] text-ivory/35"
+  : "bg-ivory/[0.03] border-line text-secondary"
                   }`}
                 >
                   {done ? (
@@ -97,20 +97,20 @@ export function OrderTimeline({ orderStatus, updatedAt, createdAt, actualDeliver
                 <div className="flex items-center gap-2">
                   <p
                     className={`text-sm font-semibold tracking-wide ${
-                      done ? "text-ivory" : current ? "text-ivory" : "text-ivory/30"
+                      done ? "text-foreground" : current ? "text-foreground" : "text-secondary"
                     }`}
                   >
                     {step.label}
                   </p>
                   {current && (
                     <span
-                      className={`rounded-full px-2 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.15em] ${step.badgeColor}`}
+                      className={`rounded-full px-2 py-0.5 text-sm font-semibold uppercase tracking-[0.08em] ${step.badgeColor}`}
                     >
                       {t("current", "Current")}
                     </span>
                   )}
                 </div>
-                <p className={`mt-0.5 text-xs leading-relaxed ${done || current ? "text-ivory/50" : "text-ivory/35"}`}>
+                <p className={`mt-0.5 text-xs leading-relaxed ${done || current ? "text-secondary" : "text-secondary"}`}>
                   {current && !done ? `${step.description}` : done ? `${step.description}` : step.description}
                 </p>
                 {(() => {
@@ -118,7 +118,7 @@ export function OrderTimeline({ orderStatus, updatedAt, createdAt, actualDeliver
                   if (!date) return null;
                   return (
                     <p
-className="mt-1 text-[0.6rem] font-medium uppercase tracking-[0.15em] text-ivory/40"
+className="mt-1 text-sm font-medium uppercase tracking-[0.08em] text-secondary"
                     >
                       {date}
                     </p>
@@ -167,13 +167,13 @@ className="mt-1 text-[0.6rem] font-medium uppercase tracking-[0.15em] text-ivory
                 <p className={`text-sm font-semibold tracking-wide ${terminal.status === "cancelled" ? "text-red-400" : "text-orange-400"}`}>
                   {terminal.label}
                 </p>
-                <span className={`rounded-full px-2 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.15em] ${terminal.badgeColor}`}>
+                <span className={`rounded-full px-2 py-0.5 text-sm font-semibold uppercase tracking-[0.08em] ${terminal.badgeColor}`}>
                   {terminal.label}
                 </span>
               </div>
-              <p className="mt-0.5 text-xs leading-relaxed text-ivory/50">{terminal.description}</p>
+              <p className="mt-0.5 text-xs leading-relaxed text-secondary">{terminal.description}</p>
               <p
-                className="mt-1 text-[0.6rem] font-medium uppercase tracking-[0.15em] text-ivory/30"
+                className="mt-1 text-sm font-medium uppercase tracking-[0.08em] text-secondary"
               >
                 {formatStepDate(updatedAt)}
               </p>

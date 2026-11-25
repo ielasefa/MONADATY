@@ -1,0 +1,379 @@
+{
+  "checks": [
+    {
+      "lang": "fr",
+      "route": "dashboard",
+      "width": 390,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "fr",
+      "route": "dashboard",
+      "width": 1440,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "fr",
+      "route": "products",
+      "width": 390,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "fr",
+      "route": "products",
+      "width": 1440,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "fr",
+      "route": "orders",
+      "width": 390,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "fr",
+      "route": "orders",
+      "width": 1440,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "fr",
+      "route": "customers",
+      "width": 390,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "fr",
+      "route": "customers",
+      "width": 1440,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "fr",
+      "route": "inventory",
+      "width": 390,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "fr",
+      "route": "inventory",
+      "width": 1440,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "fr",
+      "route": "settings",
+      "width": 390,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "fr",
+      "route": "settings",
+      "width": 1440,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "en",
+      "route": "dashboard",
+      "width": 390,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "en",
+      "route": "dashboard",
+      "width": 1440,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "en",
+      "route": "products",
+      "width": 390,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "en",
+      "route": "products",
+      "width": 1440,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "en",
+      "route": "orders",
+      "width": 390,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "en",
+      "route": "orders",
+      "width": 1440,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "en",
+      "route": "customers",
+      "width": 390,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "en",
+      "route": "customers",
+      "width": 1440,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "en",
+      "route": "inventory",
+      "width": 390,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "en",
+      "route": "inventory",
+      "width": 1440,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "en",
+      "route": "settings",
+      "width": 390,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "en",
+      "route": "settings",
+      "width": 1440,
+      "font": "Inter, \"Inter Fallback\", Arial, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Playfair Display\", \"Playfair Display Fallback\", Georgia, serif"
+      ]
+    },
+    {
+      "lang": "ar",
+      "route": "dashboard",
+      "width": 390,
+      "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif"
+      ]
+    },
+    {
+      "lang": "ar",
+      "route": "dashboard",
+      "width": 1440,
+      "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif"
+      ]
+    },
+    {
+      "lang": "ar",
+      "route": "products",
+      "width": 390,
+      "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif"
+      ]
+    },
+    {
+      "lang": "ar",
+      "route": "products",
+      "width": 1440,
+      "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif"
+      ]
+    },
+    {
+      "lang": "ar",
+      "route": "orders",
+      "width": 390,
+      "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif"
+      ]
+    },
+    {
+      "lang": "ar",
+      "route": "orders",
+      "width": 1440,
+      "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif"
+      ]
+    },
+    {
+      "lang": "ar",
+      "route": "customers",
+      "width": 390,
+      "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif"
+      ]
+    },
+    {
+      "lang": "ar",
+      "route": "customers",
+      "width": 1440,
+      "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif"
+      ]
+    },
+    {
+      "lang": "ar",
+      "route": "inventory",
+      "width": 390,
+      "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif"
+      ]
+    },
+    {
+      "lang": "ar",
+      "route": "inventory",
+      "width": 1440,
+      "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif"
+      ]
+    },
+    {
+      "lang": "ar",
+      "route": "settings",
+      "width": 390,
+      "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif"
+      ]
+    },
+    {
+      "lang": "ar",
+      "route": "settings",
+      "width": 1440,
+      "font": "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif",
+      "overflow": false,
+      "h1": [
+        "\"Noto Sans Arabic\", \"Noto Sans Arabic Fallback\", Tahoma, sans-serif"
+      ]
+    }
+  ],
+  "audits": [
+    {
+      "lang": "fr",
+      "violations": []
+    },
+    {
+      "lang": "en",
+      "violations": []
+    },
+    {
+      "lang": "ar",
+      "violations": []
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,28 @@
+Checking public route: fr about
+Checking public route: fr home
+Checking public route: fr shop
+Checking public route: fr product
+Checking public route: fr collections
+Checking public route: fr checkout
+Checking public route: fr wishlist
+Checking public route: fr login
+Checked public pages: fr
+Checking public route: en about
+Checking public route: en home
+Checking public route: en shop
+Checking public route: en product
+Checking public route: en collections
+Checking public route: en checkout
+Checking public route: en wishlist
+Checking public route: en login
+Checked public pages: en
+Checking public route: ar about
+Checking public route: ar home
+Checking public route: ar shop
+Checking public route: ar product
+Checking public route: ar collections
+Checking public route: ar checkout
+Checking public route: ar wishlist
+Checking public route: ar login
+Checked public pages: ar
+{"checks":99,"overflows":[],"audits":[{"lang":"fr","page":"about","violations":[]},{"lang":"en","page":"about","violations":[]},{"lang":"ar","page":"about","violations":[]}],"errors":[]}

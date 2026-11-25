@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/skeletons/Skeleton";
 export default function SuccessLoading() {
   return (
     <div className="container-premium flex min-h-[60vh] items-center justify-center py-20">
-      <div className="border border-ivory/[0.06] bg-black-surface rounded-md px-12 py-16 max-w-lg text-center">
+      <div className="border border-line bg-card rounded-md px-12 py-16 max-w-lg text-center">
         <Skeleton className="mx-auto h-16 w-16" rounded="sm" />
         <Skeleton className="mx-auto mt-6 h-8 w-48" rounded="lg" />
         <Skeleton className="mx-auto mt-4 h-4 w-64" rounded="md" />

@@ -66,7 +66,7 @@ export function SettingsForm({ settings, saveSettingsAction }: Props) {
               />
               <input type="hidden" name="logo" defaultValue={settings.logo} />
             </div>
-            <div className="border-t border-white/[0.08] pt-5">
+            <div className="border-t border-line pt-5">
               <SingleImageUploader
                 label={t("favicon_label", "Favicon")}
                 value={settings.favicon}
@@ -83,8 +83,8 @@ export function SettingsForm({ settings, saveSettingsAction }: Props) {
           </div>
         </aside>
 
-        <div className="flex flex-col gap-3 border-t border-white/[0.08] pt-5 sm:flex-row sm:items-center sm:justify-end xl:col-span-2">
-          <p className="text-xs text-white/35 sm:me-auto">{t("settings_save_hint", "Changes are applied after saving.")}</p>
+        <div className="flex flex-col gap-3 border-t border-line pt-5 sm:flex-row sm:items-center sm:justify-end xl:col-span-2">
+          <p className="text-xs text-secondary sm:me-auto">{t("settings_save_hint", "Changes are applied after saving.")}</p>
           <button type="submit" className="btn-primary w-full px-6 sm:w-auto">{t("save_settings", "Save settings")}</button>
         </div>
       </form>
@@ -94,9 +94,9 @@ export function SettingsForm({ settings, saveSettingsAction }: Props) {
 
 function SectionHeader({ title, description }: { title: string; description: string }) {
   return (
-    <div className="border-b border-white/[0.08] pb-4">
-      <h2 className="text-sm font-semibold text-white">{title}</h2>
-      <p className="mt-1 text-xs leading-relaxed text-white/40">{description}</p>
+    <div className="border-b border-line pb-4">
+      <h2 className="text-sm font-semibold text-foreground">{title}</h2>
+      <p className="mt-1 text-xs leading-relaxed text-secondary">{description}</p>
     </div>
   );
 }

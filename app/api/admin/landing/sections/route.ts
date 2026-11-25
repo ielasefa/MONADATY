@@ -22,8 +22,8 @@ export async function PUT(request: Request) {
 
     if (sectionType === "featured" && data.productIds !== undefined) {
       const ids = typeof data.productIds === "string" ? data.productIds.split(",").filter(Boolean) : [];
-      if (ids.length > 4) {
-        return NextResponse.json({ error: "Maximum 4 products allowed" }, { status: 400 });
+      if (ids.length !== 4) {
+        return NextResponse.json({ error: "Choose exactly 4 different products" }, { status: 400 });
       }
       if (ids.length > 0) {
         const count = await prisma.product.count({ where: { id: { in: ids } } });

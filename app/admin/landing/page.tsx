@@ -9,6 +9,8 @@ import {
   getVersions,
 } from "@/lib/landing-cms";
 import { LandingCMS } from "./LandingCMS";
+import { HomepageProductSelection } from "@/components/admin/HomepageProductSelection";
+import { isMissingCmsTable, loadLegacyFeaturedSelection } from "@/lib/featured-selection";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +25,13 @@ export default async function AdminLandingPage() {
   const admin = await getAuthenticatedAdmin();
   if (!admin) redirect("/admin/login");
 
-  const configId = await getLatestLandingConfigId();
+  let configId: string;
+  try {
+    configId = await getLatestLandingConfigId();
+  } catch (error) {
+    if (!isMissingCmsTable(error)) throw error;
+    return <HomepageProductSelection {...await loadLegacyFeaturedSelection()} />;
+  }
 
   const [landingData, featuredEntries, versions, allCollections] = await Promise.all([
     getAdminLanding(),

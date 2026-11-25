@@ -6,7 +6,7 @@ export default function GlobalError({ reset }: { error: Error & { digest?: strin
   const { t } = useTranslation("errors");
 return (
 <html lang="en">
-<body className="m-0 flex min-h-screen items-center justify-center bg-black p-8 text-ivory antialiased">
+<body className="m-0 flex min-h-screen items-center justify-center bg-canvas p-8 text-foreground antialiased">
   <div className="mx-auto max-w-md text-center">
     <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-burgundy/18 bg-burgundy/8">
     <svg
@@ -23,17 +23,17 @@ return (
     </svg>
     </div>
   <h2 className="mb-2 text-xl font-semibold">{t("critical_error")}</h2>
-  <p className="mx-auto mb-8 max-w-sm text-sm text-ivory/35">{t("critical_error_desc")}</p>
+  <p className="mx-auto mb-8 max-w-sm text-sm text-secondary">{t("critical_error_desc")}</p>
   <div className="flex flex-wrap items-center justify-center gap-4">
   <button
     onClick={reset}
-    className="h-12 rounded-btn bg-burgundy px-8 text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-ivory transition-all duration-300 hover:bg-burgundy-hover active:scale-[0.97]"
+    className="h-12 rounded-btn bg-burgundy px-8 text-sm font-semibold uppercase tracking-[0.08em] text-foreground transition-all duration-300 hover:bg-burgundy-hover active:scale-[0.97]"
   >
     {t("try_again")}
   </button>
   <button
     onClick={() => (window.location.href = "/")}
-    className="h-12 rounded-btn border border-gold/30 bg-transparent px-8 text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-gold transition-all duration-300 hover:bg-gold/[0.06] active:scale-[0.97]"
+    className="h-12 rounded-btn border border-line bg-transparent px-8 text-sm font-semibold uppercase tracking-[0.08em] text-accent transition-all duration-300 hover:bg-gold/[0.06] active:scale-[0.97]"
   >
     {t("go_home")}
   </button>

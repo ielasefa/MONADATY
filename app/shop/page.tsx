@@ -5,6 +5,7 @@ import { getCategories } from "@/lib/db";
 import { loadProducts } from "@/lib/data";
 import { getLandingCopy } from "@/lib/landing-copy";
 import { FadeIn } from "@/components/motion/FadeIn";
+import "./shop.css";
 
 export const dynamic = "force-dynamic";
 
@@ -23,44 +24,41 @@ export default async function ShopPage() {
   ]);
   const categoriesData = categories.map(c => ({ slug: c.slug, name: c.name }));
   const copy = getLandingCopy(lang);
+  const unitKey = products.length === 1 ? "drink_unit" : "drink_unit_plural";
+  const translatedUnit = t(translations, unitKey, lang);
+  const unitFallbacks = {
+    fr: { single: "boisson", plural: "boissons" },
+    en: { single: "drink", plural: "drinks" },
+    ar: { single: "مشروب", plural: "مشروبات" },
+  }[lang];
+  const unitFallback = products.length === 1 ? unitFallbacks.single : unitFallbacks.plural;
+  const unitLabel = translatedUnit === unitKey ? unitFallback : translatedUnit;
 
   return (
-    <div className="bg-black">
-      <section className="relative overflow-hidden border-b border-gold/[0.16] bg-surface">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_0%,rgba(214,179,90,0.09),transparent_36%)]" />
-        <div className="storefront-container storefront-section relative">
-          <FadeIn y={18} duration={0.62}>
-          <p className="storefront-eyebrow">
-            <span className="h-px w-9 bg-gold" />
-            {copy.shop.eyebrow}
-          </p>
-
-          <div className="mt-6 flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-2xl">
-              <h1 className="storefront-page-title">
-                {copy.shop.title}
-              </h1>
-              <p className="mt-5 max-w-xl text-sm leading-[1.85] text-white/58 sm:text-[0.95rem]">
-                {copy.shop.description}
-              </p>
+    <div className="market-catalogue bg-canvas">
+      <section className="catalogue-intro" aria-labelledby="catalogue-title">
+        <div className="storefront-container">
+          <FadeIn y={10} duration={0.4} className="catalogue-intro-layout">
+            <div className="catalogue-intro-copy">
+              <p className="storefront-eyebrow"><span />{copy.shop.eyebrow}</p>
+              <h1 id="catalogue-title" className="catalogue-title">{copy.shop.title}</h1>
+              <p className="catalogue-description">{copy.shop.description}</p>
             </div>
-
-            <p className="rounded-full border border-gold/[0.16] bg-black/30 px-4 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.2em] text-white/55">
-              {products.length} {products.length === 1 ? t(translations, "drink_unit", lang) : t(translations, "drink_unit_plural", lang)}
+            <p className="catalogue-count">
+              <svg aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"><path d="m12 3 9 5-9 5-9-5 9-5ZM3 8v9l9 5 9-5V8M12 13v9M7 5.8l9 5" /></svg>
+              <span>{products.length} {unitLabel}</span>
             </p>
-          </div>
           </FadeIn>
         </div>
       </section>
-
       <section className="relative">
-        <div className="storefront-container py-12 md:py-16 lg:py-20">
+        <div className="storefront-container catalogue-results">
           <Suspense
             fallback={
               <div className="flex items-center justify-center py-32">
                 <div className="text-center">
-                  <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-white/[0.06] border-t-gold/40" />
-                  <p className="label-utility tracking-[0.4em] text-white/30">
+                  <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-line border-t-gold/40" />
+                  <p className="label-utility tracking-[0.08em] text-secondary">
                     {t(translations, "loading_collection", lang)}
                   </p>
                 </div>

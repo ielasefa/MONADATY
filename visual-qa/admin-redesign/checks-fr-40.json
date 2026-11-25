@@ -1,0 +1,105 @@
+{
+  "checks": [
+    {
+      "route": "/admin/automation",
+      "language": "fr",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Centre d'automatisation",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/automation",
+      "language": "fr",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Centre d'automatisation",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/automation",
+      "language": "fr",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Centre d'automatisation",
+      "sidebarVisible": true,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/automation",
+      "language": "fr",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Centre d'automatisation",
+      "sidebarVisible": true,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/blog",
+      "language": "fr",
+      "width": 360,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Blog",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/blog",
+      "language": "fr",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Blog",
+      "sidebarVisible": false,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/blog",
+      "language": "fr",
+      "width": 768,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Blog",
+      "sidebarVisible": true,
+      "rawKeys": []
+    },
+    {
+      "route": "/admin/blog",
+      "language": "fr",
+      "width": 1440,
+      "status": 200,
+      "overflow": false,
+      "direction": "ltr",
+      "canvas": "rgb(250, 248, 245)",
+      "heading": "Blog",
+      "sidebarVisible": true,
+      "rawKeys": []
+    }
+  ],
+  "audits": [],
+  "errors": [],
+  "interactions": [
+    "Real browser login and authenticated dashboard"
+  ]
+}

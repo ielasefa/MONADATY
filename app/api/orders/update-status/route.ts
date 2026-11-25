@@ -1,6 +1,6 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
-import { updateOrderStatus, getOrderById } from "@/lib/orders";
+import { updateOrderStatus, getOrderById, OrderValidationError } from "@/lib/orders";
 import { requireAdmin } from "@/lib/auth-guard";
 import { requireOrigin } from "@/lib/csrf";
 import { getAuthenticatedAdmin } from "@/lib/auth";
@@ -115,6 +115,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ order: updated });
   } catch (e) {
+    if (e instanceof OrderValidationError) return NextResponse.json({ error: e.message, code: e.code }, { status: e.code === "VALIDATION_ERROR" ? 400 : 409 });
     logError(e, "ORDER_UPDATE_STATUS");
     return NextResponse.json({ error: "Failed to update order" }, { status: 500 });
   }

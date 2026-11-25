@@ -1,0 +1,28 @@
+{
+  "database": "isolated QA clone",
+  "checks": [
+    "Manual decrement preserves unallocated units",
+    "Manual stock and warehouse allocations move atomically",
+    "Ten simultaneous retries deduct once",
+    "Only one buyer can remove the final unit",
+    "Invalid and excessive adjustments cannot change stock",
+    "A one-unit order deducts one catalogue and warehouse unit",
+    "Order retry does not deduct again",
+    "Concurrent cancellations return stock once",
+    "Refund after cancellation does not inflate stock",
+    "Reopening consumes stock; cancelling restores the same allocations",
+    "Sold-out order cannot be reopened",
+    "Warehouse absolute decrease subtracts instead of adding",
+    "Warehouse zero target is valid and overselling is rejected",
+    "Receipt and return increase both stock counters",
+    "Internal transfer preserves global stock and failure rolls back both warehouses",
+    "Purchase receipt is atomic and cannot exceed ordered units",
+    "Search: qaprobe petillante",
+    "Search: coca cola 25cl",
+    "Search: ete stock",
+    "Search: مِيَاه",
+    "Search: 9998811001122",
+    "Punctuation and SQL-like input cannot become wildcards or commands",
+    "Filters, stock sorting and pagination compose"
+  ]
+}

@@ -1,819 +1,189 @@
 "use client";
 
-import type { FormEvent } from "react";
+import { categoryLabel } from "@/lib/category-label";
+import { Suspense, useCallback, useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
-import { useState, useRef, useEffect, useCallback, Suspense } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { useCart } from "@/components/cart-context";
 import { useWishlist } from "@/components/wishlist-context";
-import { usePathname, useRouter } from "next/navigation";
-import { CollectionCard } from "@/components/CollectionCard";
 import { CommandPalette } from "@/components/CommandPalette";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { MobileLanguageSwitcher } from "@/components/MobileLanguageSwitcher";
+import { MarketIcon } from "@/components/MarketIcon";
 import { useTranslation } from "@/hooks/useTranslation";
-import type { CollectionData } from "@/types";
+import type { Language } from "@/context/LanguageContext";
 
-export function Navbar({
-  collections,
-  websiteName,
-}: {
-  collections: CollectionData[];
-  websiteName: string;
-}) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isCollectionsOpen, setIsCollectionsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [search, setSearch] = useState("");
-  const [cmdOpen, setCmdOpen] = useState(false);
+type Category = { slug: string; name: string };
+const copy = {
+  fr: { home: "Accueil", shop: "Catalogue", categories: "Catégories", all: "Toutes les boissons", collections: "Collections", about: "À propos", search: "Rechercher une boisson ou une marque", menu: "Ouvrir le menu", close: "Fermer le menu", quickSearch: "Recherche rapide", wishlist: "Favoris", cart: "Panier", primary: "Navigation principale", brand: "ELASRI BUSINESS" },
+  en: { home: "Home", shop: "Catalogue", categories: "Categories", all: "All beverages", collections: "Collections", about: "About", search: "Search drinks or brands", menu: "Open menu", close: "Close menu", quickSearch: "Quick search", wishlist: "Favorites", cart: "Cart", primary: "Main navigation", brand: "ELASRI BUSINESS" },
+  ar: { home: "الرئيسية", shop: "الكتالوج", categories: "الفئات", all: "جميع المشروبات", collections: "المجموعات", about: "من نحن", search: "ابحث عن مشروب أو علامة تجارية", menu: "فتح القائمة", close: "إغلاق القائمة", quickSearch: "بحث سريع", wishlist: "المفضلة", cart: "السلة", primary: "التنقل الرئيسي", brand: "ELASRI BUSINESS" },
+};
 
-  const { itemCount, toggleDrawer } = useCart();
-  const { count: wishlistCount } = useWishlist();
-  const pathname = usePathname();
-  const router = useRouter();
+function Chevron({ open }: { open: boolean }) {
+  return <svg aria-hidden="true" className={"h-4 w-4 shrink-0 transition-transform " + (open ? "rotate-180" : "")} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="m5 7 5 5 5-5" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+}
 
-  const isShopPage = pathname === "/shop";
-  const isHomePage = pathname === "/";
-  const { t } = useTranslation("navbar");
-  const { t: tCommon } = useTranslation("common");
+function CategoryMenu({ categories, lang, mobile = false, onNavigate }: { categories: Category[]; lang: Language; mobile?: boolean; onNavigate?: () => void }) {
+  const [open, setOpen] = useState(false);
+  const id = useId();
+  const ref = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const pinned = useRef(false);
+  const delay = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const labels = copy[lang];
+  const clearDelay = () => { if (delay.current) clearTimeout(delay.current); };
+  const close = useCallback(() => { pinned.current = false; setOpen(false); }, []);
 
-  const collectionsRef = useRef<HTMLDivElement | null>(null);
-  const collectionsButtonRef = useRef<HTMLButtonElement | null>(null);
-  const openTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const mobileMenuRef = useRef<HTMLDivElement | null>(null);
-  const hamburgerRef = useRef<HTMLButtonElement | null>(null);
-
-  function clearTimeouts() {
-    if (openTimeoutRef.current) {
-      clearTimeout(openTimeoutRef.current);
-      openTimeoutRef.current = null;
-    }
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
-    }
-  }
-
-  const openDropdown = useCallback(() => {
-    clearTimeouts();
-    setIsCollectionsOpen(true);
-  }, []);
-
-  const closeDropdown = useCallback(() => {
-    clearTimeouts();
-    setIsCollectionsOpen(false);
-  }, []);
-
-  const openWithDelay = useCallback(() => {
-    clearTimeouts();
-    if (!isCollectionsOpen) {
-      openTimeoutRef.current = setTimeout(openDropdown, 60);
-    }
-  }, [isCollectionsOpen, openDropdown]);
-
-  const closeWithDelay = useCallback(() => {
-    clearTimeouts();
-    if (isCollectionsOpen) {
-      closeTimeoutRef.current = setTimeout(closeDropdown, 150);
-    }
-  }, [isCollectionsOpen, closeDropdown]);
-
-  useEffect(() => () => clearTimeouts(), []);
-
+  useEffect(() => () => { if (delay.current) clearTimeout(delay.current); }, []);
   useEffect(() => {
-    if (!isCollectionsOpen) return;
-    function handleClickOutside(event: MouseEvent) {
-      const target = event.target as Node;
-      if (
-        collectionsRef.current &&
-        !collectionsRef.current.contains(target) &&
-        collectionsButtonRef.current &&
-        !collectionsButtonRef.current.contains(target)
-      ) {
-        closeDropdown();
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isCollectionsOpen, closeDropdown]);
-
-  useEffect(() => {
-    if (!isCollectionsOpen) return;
-    function handleEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        closeDropdown();
-        collectionsButtonRef.current?.focus();
-      }
-    }
-    document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
-  }, [isCollectionsOpen, closeDropdown]);
-
-  useEffect(() => {
-    if (!isMenuOpen) return;
-    function handleEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setIsMenuOpen(false);
-        hamburgerRef.current?.focus();
-      }
-    }
-    document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
-  }, [isMenuOpen]);
-
-  useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
+    if (!open) return;
+    const outside = (event: PointerEvent) => { if (!ref.current?.contains(event.target as Node)) close(); };
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && ref.current?.getClientRects().length) { event.preventDefault(); event.stopPropagation(); close(); trigger.current?.focus(); }
     };
-  }, [isMenuOpen]);
+    document.addEventListener("pointerdown", outside);
+    document.addEventListener("keydown", escape, true);
+    return () => { document.removeEventListener("pointerdown", outside); document.removeEventListener("keydown", escape, true); };
+  }, [open, close]);
 
-  useEffect(() => {
-    if (!isMenuOpen || !mobileMenuRef.current) return;
-    const focusable = mobileMenuRef.current.querySelectorAll<HTMLElement>(
-      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
-    );
-    if (focusable.length > 0) focusable[0].focus();
-  }, [isMenuOpen]);
-
-  useEffect(() => {
-    function handleCmdK(e: KeyboardEvent) {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        setCmdOpen((prev) => !prev);
-      }
-    }
-    document.addEventListener("keydown", handleCmdK);
-    return () => document.removeEventListener("keydown", handleCmdK);
-  }, []);
-
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [pathname]);
-
-  useEffect(() => {
-    function handleScroll() {
-      setScrolled(window.scrollY > 20);
-    }
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  function handleSearchSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const trimmed = search.trim();
-    if (!trimmed) return;
-    router.push(`/shop?search=${encodeURIComponent(trimmed)}`);
-    setSearch("");
-  }
+  function navigate() { clearDelay(); close(); onNavigate?.(); }
 
   return (
-  <motion.header
-    initial={{ y: -24, opacity: 0 }}
-    animate={{ y: 0, opacity: 1 }}
-    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-    className={`storefront-theme ${isHomePage ? "fixed inset-x-0 top-0" : "sticky top-0"} z-50 border-b transition-[background-color,border-color,box-shadow,backdrop-filter] duration-500 will-change-transform ${
-      scrolled
-        ? isHomePage
-          ? "border-white/[0.08] bg-[#0B0B0A]/90 backdrop-blur-xl"
-          : "glass-elevated border-white/[0.06]"
-        : isHomePage
-          ? "border-transparent bg-gradient-to-b from-black/65 to-transparent"
-          : "border-transparent bg-black"
-    }`}
-      style={{
-        boxShadow: scrolled
-          ? isHomePage
-            ? "0 14px 46px rgba(0,0,0,.26)"
-            : "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 4px 16px rgba(0,0,0,0.22), 0 12px 40px -8px rgba(0,0,0,0.45)"
-          : "none",
-      }}
+    <div ref={ref} className={"market-category-menu " + (mobile ? "market-category-menu-mobile" : "")}
+      onMouseEnter={mobile ? undefined : () => { clearDelay(); delay.current = setTimeout(() => setOpen(true), 80); }}
+      onMouseLeave={mobile ? undefined : () => { clearDelay(); if (!pinned.current) delay.current = setTimeout(close, 160); }}
+      onBlur={(event) => { if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget as Node)) close(); }}
     >
-      <div className="mx-auto flex h-[4.5rem] max-w-[1520px] items-center justify-between gap-2 px-5 sm:px-8 md:h-[5.25rem] md:gap-4 md:px-10 lg:px-16 xl:px-20">
-        <Link
-          href="/"
-          className="group hidden shrink-0 font-display text-[0.82rem] font-normal uppercase tracking-[0.5em] text-gold transition-colors duration-300 hover:text-gold-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:ring-offset-4 focus-visible:ring-offset-black md:inline-block"
-          aria-label={`${websiteName} — ${t("home", "Home")}`}
-        >
-          <span>{websiteName}</span>
-        </Link>
+      <button ref={trigger} type="button" className="market-category-trigger" aria-expanded={open} aria-controls={open ? id : undefined}
+        onClick={() => { clearDelay(); if (pinned.current) close(); else { pinned.current = true; setOpen(true); } }}
+        onKeyDown={(event) => {
+          if (event.key === "ArrowDown") {
+            event.preventDefault(); pinned.current = true; setOpen(true);
+            requestAnimationFrame(() => ref.current?.querySelector<HTMLAnchorElement>("[data-category-panel] a")?.focus());
+          }
+        }}
+      >
+        <MarketIcon name="box" /><span>{labels.categories}</span><Chevron open={open} />
+      </button>
+      {open && (
+        <div id={id} data-category-panel className="market-category-dropdown">
+          <Link href="/shop" className="market-category-all" onClick={navigate}>{labels.all}</Link>
+          <ul className="market-category-options">
+            {categories.map(category => (
+              <li key={category.slug}><Link href={"/shop?category=" + encodeURIComponent(category.slug)} onClick={navigate}>{categoryLabel(category.name, lang)}</Link></li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
 
-        <Link
-          href="/"
-          className="group shrink-0 font-display text-[0.69rem] font-normal uppercase tracking-[0.42em] text-gold transition-colors duration-300 hover:text-gold-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:ring-offset-4 focus-visible:ring-offset-black md:hidden"
-          aria-label={`${websiteName} — ${t("home", "Home")}`}
-        >
-          <span>{websiteName}</span>
-        </Link>
+export function Navbar({ categories, websiteName }: { categories: Category[]; websiteName: string }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [cmdOpen, setCmdOpen] = useState(false);
+  const { itemCount, toggleDrawer } = useCart();
+  const { count: wishlistCount } = useWishlist();
+  const { lang } = useTranslation("navbar");
+  const labels = copy[lang];
+  const pathname = usePathname();
+  const hamburger = useRef<HTMLButtonElement>(null);
+  const mobileMenu = useRef<HTMLDivElement>(null);
+  const closeMenu = useCallback(() => setIsMenuOpen(false), []);
+  const links = [
+    { href: "/", label: labels.home },
+    { href: "/shop", label: labels.shop },
+    { href: "/collections", label: labels.collections },
+    { href: "/about", label: labels.about },
+  ];
 
-        <nav aria-label={t("primary", "Primary")} className="hidden lg:flex lg:flex-1 lg:justify-center">
-          <ul className="flex items-center gap-8 text-[0.54rem] font-semibold uppercase tracking-[0.25em] xl:gap-11">
-            <li>
-              <Link
-                href="/"
-                className={`relative py-2 transition-colors duration-300 hover:text-gold-light focus-visible:text-gold focus-visible:outline-none ${
-                  pathname === "/" ? "text-white" : "text-white/60"
-                }`}
-              >
-                {t("home")}
-                {pathname === "/" && (
-                  <motion.span
-                    layoutId="nav-indicator"
-                    className="absolute -bottom-1.5 left-1/2 h-px w-4 -translate-x-1/2 bg-gold"
-                    transition={{ type: "spring", stiffness: 380, damping: 28 }}
-                  />
-                )}
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/shop"
-                className={`relative py-2 transition-colors duration-300 hover:text-gold-light focus-visible:text-gold focus-visible:outline-none ${
-                  isShopPage ? "text-white" : "text-white/60"
-                }`}
-              >
-                {t("shop")}
-                {isShopPage && (
-                  <motion.span
-                    layoutId="nav-indicator"
-                    className="absolute -bottom-1.5 left-1/2 h-px w-4 -translate-x-1/2 bg-gold"
-                    transition={{ type: "spring", stiffness: 380, damping: 28 }}
-                  />
-                )}
-              </Link>
-            </li>
-            <li
-              className="relative"
-              onMouseEnter={openWithDelay}
-              onMouseLeave={closeWithDelay}
-            >
-              <button
-                ref={collectionsButtonRef}
-                type="button"
-                aria-haspopup="menu"
-                aria-expanded={isCollectionsOpen}
-                aria-controls="collections-dropdown"
-                onClick={() =>
-                  isCollectionsOpen ? closeDropdown() : openDropdown()
-                }
-                onMouseEnter={openWithDelay}
-                className={`relative inline-flex items-center gap-2 py-2 transition-colors duration-300 hover:text-white focus-visible:text-white focus-visible:outline-none ${
-                  isCollectionsOpen ? "text-white" : "text-white/50"
-                }`}
-              >
-                {t("collections")}
-                <svg
-                  aria-hidden="true"
-                  width={9}
-                  height={9}
-                  className={`shrink-0 opacity-30 transition-transform duration-250 ${
-                    isCollectionsOpen ? "rotate-180" : ""
-                  }`}
-                  viewBox="0 0 12 12"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                >
-                  <path
-                    d="M3 4.5L6 7.5L9 4.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                {isCollectionsOpen && (
-                  <motion.span
-                    layoutId="nav-indicator"
-                    className="absolute -bottom-1.5 left-1/2 h-px w-4 -translate-x-1/2 bg-gold"
-                    transition={{ type: "spring", stiffness: 380, damping: 28 }}
-                  />
-                )}
-              </button>
-              <AnimatePresence>
-                {isCollectionsOpen && (
-                  <motion.div
-                    id="collections-dropdown"
-                    ref={collectionsRef}
-                    role="menu"
-                    aria-label={t("collections")}
-                    onMouseEnter={openWithDelay}
-                    onMouseLeave={closeWithDelay}
-                    initial={{ opacity: 0, y: -6, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -4, scale: 0.98 }}
-                    transition={{
-                      duration: 0.22,
-                      ease: [0.16, 1, 0.3, 1],
-                    }}
-                    className="absolute left-1/2 top-full z-40 -translate-x-1/2 pt-5"
-                  >
-                    <div className="w-[680px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl border border-gold/[0.16] bg-[#0B0B0A]/95 shadow-premium backdrop-blur-xl">
-                      <div className="p-7">
-                        <p className="mb-5 label-utility tracking-[0.32em] text-white/40">
-                          {t("our_collections")}
-                        </p>
-                        <div className="grid grid-cols-3 gap-5">
-                          {collections.map((col) => (
-                            <div
-                              key={col.slug}
-                              className="max-w-[200px]"
-                              role="none"
-                            >
-                              <CollectionCard collection={col} />
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </li>
-            <li>
-              <Link
-                href="/about"
-                className={`relative py-2 transition-colors duration-300 hover:text-white focus-visible:text-white focus-visible:outline-none ${
-                  pathname === "/about" ? "text-white" : "text-white/50"
-                }`}
-              >
-                {t("about")}
-                {pathname === "/about" && (
-                  <motion.span
-                    layoutId="nav-indicator"
-                    className="absolute -bottom-1.5 left-1/2 h-px w-4 -translate-x-1/2 bg-gold"
-                    transition={{ type: "spring", stiffness: 380, damping: 28 }}
-                  />
-                )}
-              </Link>
-            </li>
+  useEffect(() => setIsMenuOpen(false), [pathname]);
+  useEffect(() => {
+    const scroll = () => setScrolled(window.scrollY > 20);
+    scroll(); window.addEventListener("scroll", scroll, { passive: true });
+    return () => window.removeEventListener("scroll", scroll);
+  }, []);
+  useEffect(() => {
+    const command = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key === "k") { event.preventDefault(); setCmdOpen(value => !value); }
+    };
+    document.addEventListener("keydown", command);
+    return () => document.removeEventListener("keydown", command);
+  }, []);
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const overflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    mobileMenu.current?.querySelector<HTMLElement>("a,button")?.focus();
+    const keyboard = (event: KeyboardEvent) => {
+      if (event.key === "Escape") { closeMenu(); hamburger.current?.focus(); return; }
+      if (event.key !== "Tab") return;
+      const nodes = Array.from(mobileMenu.current?.querySelectorAll<HTMLElement>("a,button") || []);
+      const first = nodes[0], last = nodes[nodes.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    };
+    const outside = (event: PointerEvent) => {
+      const target = event.target as Node;
+      if (!mobileMenu.current?.contains(target) && !hamburger.current?.contains(target)) closeMenu();
+    };
+    document.addEventListener("keydown", keyboard);
+    document.addEventListener("pointerdown", outside);
+    return () => {
+      document.body.style.overflow = overflow;
+      document.removeEventListener("keydown", keyboard);
+      document.removeEventListener("pointerdown", outside);
+    };
+  }, [isMenuOpen, closeMenu]);
+
+  return (
+    <header className="storefront-theme market-header z-50" data-scrolled={scrolled}>
+      <div className="market-header-main market-container">
+        <Link href="/" className="market-wordmark" aria-label={websiteName + " — " + labels.home}>
+          <svg width="56" height="25" viewBox="0 0 56 25" fill="none" aria-hidden="true">
+            <defs><linearGradient id="market-wordmark-metal" x1="0" y1="0" x2="56" y2="25" gradientUnits="userSpaceOnUse"><stop stopColor="#8C6228" /><stop offset=".5" stopColor="#E8CD91" /><stop offset="1" stopColor="#8C6228" /></linearGradient></defs>
+            <path d="M2 22C11 22 12 4 20 4s8 16 14 16S39 4 46 4s7 16 10 18" stroke="url(#market-wordmark-metal)" strokeWidth="6" />
+          </svg>
+          <span>{websiteName}</span><small>{labels.brand}</small>
+        </Link>
+        <nav aria-label={labels.primary} className="market-navigation">
+          <ul className="market-navigation-links">
+            {links.slice(0, 2).map(link => <li key={link.href}><Link href={link.href} aria-current={pathname === link.href ? "page" : undefined}>{link.label}</Link></li>)}
+            <li><CategoryMenu categories={categories} lang={lang} /></li>
+            {links.slice(2).map(link => <li key={link.href}><Link href={link.href} aria-current={pathname === link.href ? "page" : undefined}>{link.label}</Link></li>)}
           </ul>
         </nav>
-
-        <div className="flex shrink-0 items-center gap-0.5">
-          <LanguageSwitcher className="hidden lg:flex" />
-
-          <button
-            type="button"
-            onClick={() => setCmdOpen(true)}
-            className="hidden h-9 w-9 items-center justify-center rounded-lg text-white/55 transition-colors duration-300 hover:bg-white/[0.05] hover:text-gold-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-2 focus-visible:ring-offset-black lg:inline-flex"
-            aria-label={t("open_search")}
-          >
-            <svg
-              aria-hidden="true"
-              width={16}
-              height={16}
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-            >
-              <circle cx="11" cy="11" r="4" />
-              <path
-                d="M21 21l-4.35-4.35"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-
-          <Link
-            href="/admin/login"
-            className="hidden h-9 items-center rounded-lg border border-white/[0.08] bg-[#6E1F2A] px-3.5 text-[0.62rem] font-semibold uppercase tracking-[0.08em] text-white transition-all duration-300 hover:-translate-y-px hover:bg-[#842838] lg:inline-flex"
-          >
-            {t("admin_login", "Admin")}
+        <div className="market-header-actions">
+          <LanguageSwitcher className="market-language hidden lg:flex" />
+          <button type="button" onClick={() => setCmdOpen(true)} className="market-quick-search inline-flex" aria-label={labels.quickSearch}><MarketIcon name="search" /></button>
+          <Link href="/wishlist" aria-label={labels.wishlist + (wishlistCount ? " (" + wishlistCount + ")" : "")} className="market-wishlist-button relative hidden items-center justify-center rounded-lg lg:inline-flex">
+            <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill={wishlistCount ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.6"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 10-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z" /></svg>
+            {wishlistCount > 0 && <span className="absolute -end-1 -top-1 rounded-full px-1 text-xs">{wishlistCount}</span>}
           </Link>
-
-          <Link
-            href="/wishlist"
-            aria-label={`${t("wishlist", "Wishlist")}${
-              wishlistCount > 0
-                ? `, ${wishlistCount} ${wishlistCount !== 1 ? t("items", "items") : t("item", "item")}`
-                : ""
-            }`}
-            className={`relative hidden lg:inline-flex h-8 w-8 items-center justify-center rounded-input transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/10 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
-              wishlistCount > 0 ? "text-gold" : "text-white/50 hover:text-white"
-            }`}
-          >
-            <svg
-              aria-hidden="true"
-              width={16}
-              height={16}
-              viewBox="0 0 24 24"
-              fill={wishlistCount > 0 ? "currentColor" : "none"}
-              stroke="currentColor"
-              strokeWidth="1.5"
-            >
-              <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 10-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z" />
-            </svg>
-            {wishlistCount > 0 && (
-              <motion.span
-                key={`wish-${wishlistCount}`}
-                initial={{ scale: 0.6 }}
-                animate={{ scale: 1 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 500,
-                  damping: 20,
-                }}
-                className="absolute -end-1 -top-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-burgundy px-1 text-[0.44rem] font-bold text-white"
-              >
-                {wishlistCount}
-              </motion.span>
-            )}
-          </Link>
-
-          <button
-            type="button"
-            onClick={() => toggleDrawer()}
-            aria-label={`${t("open_cart", "Open drink box")}${
-              itemCount > 0
-                ? `, ${itemCount} ${itemCount !== 1 ? t("items", "items") : t("item", "item")}`
-                : ""
-            }`}
-            id="cart-button"
-            className={`relative hidden lg:inline-flex h-10 w-10 items-center justify-center rounded-input transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rouge/30 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
-              itemCount > 0 ? "text-gold" : "text-white/50 hover:text-white"
-            }`}
-          >
-            <svg
-              aria-hidden="true"
-              width={16}
-              height={16}
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <path d="M16 10a4 4 0 01-8 0" />
-            </svg>
-            {itemCount > 0 && (
-              <motion.span
-                key={`cart-${itemCount}`}
-                initial={{ scale: 0.6 }}
-                animate={{ scale: 1 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 500,
-                  damping: 20,
-                }}
-                className="absolute -end-1 -top-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-burgundy px-1 text-[0.44rem] font-bold text-white"
-              >
-                {itemCount}
-              </motion.span>
-            )}
+          <button type="button" id="cart-button" onClick={toggleDrawer} className="market-cart-button relative" aria-label={labels.cart + (itemCount ? " (" + itemCount + ")" : "")}>
+            <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h3l3 12h11l3-9H6 M9 20a1 1 0 1 0 2 0 1 1 0 0 0-2 0 M17 20a1 1 0 1 0 2 0 1 1 0 0 0-2 0" /></svg>
+            <span className="market-cart-label hidden xl:inline">{labels.cart}</span>
+            {itemCount > 0 && <span className="absolute -end-1 -top-1 rounded-full px-1 text-xs">{itemCount}</span>}
           </button>
-
-          {!isShopPage && (
-            <form
-              onSubmit={handleSearchSubmit}
-              className="hidden xl:flex xl:items-center"
-            >
-              <label htmlFor="global-search" className="sr-only">
-                {t("search_drinks")}
-              </label>
-              <input
-                id="global-search"
-                type="search"
-                placeholder={tCommon("search")}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="h-9 w-28 rounded-lg border border-gold/[0.16] bg-white/[0.045] px-3 pe-7 text-[0.62rem] text-white outline-none transition-all duration-300 placeholder:text-white/40 focus:w-36 focus:border-gold/45 focus:bg-white/[0.08]"
-                style={{ WebkitTextFillColor: "#FFFFFF", caretColor: "#FFFFFF" }}
-              />
-            </form>
-          )}
-
-          <button
-            ref={hamburgerRef}
-            type="button"
-            onClick={() => setIsMenuOpen((c) => !c)}
-            className="relative inline-flex h-8 w-8 items-center justify-center rounded-input text-white/50 transition-colors duration-300 hover:text-white lg:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/10 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-            aria-label={t("toggle_menu")}
-            aria-expanded={isMenuOpen}
-            aria-controls="mobile-menu"
-          >
-            <AnimatePresence mode="wait">
-              {isMenuOpen ? (
-                <motion.span
-                  key="close"
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="inline-flex"
-                >
-                  <svg
-                    aria-hidden="true"
-                    width={16}
-                    height={16}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  >
-                    <path d="M18 6L6 18" />
-                    <path d="M6 6l12 12" />
-                  </svg>
-                </motion.span>
-              ) : (
-                <motion.span
-                  key="open"
-                  initial={{ rotate: 90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: -90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="inline-flex"
-                >
-                  <svg
-                    aria-hidden="true"
-                    width={16}
-                    height={16}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  >
-                    <path d="M4 7h16" />
-                    <path d="M4 12h16" />
-                    <path d="M4 17h16" />
-                  </svg>
-                </motion.span>
-              )}
-            </AnimatePresence>
+          <button ref={hamburger} type="button" onClick={() => setIsMenuOpen(value => !value)} className="inline-flex items-center justify-center rounded-lg lg:hidden" aria-label={isMenuOpen ? labels.close : labels.menu} aria-expanded={isMenuOpen} aria-controls="mobile-menu">
+            <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">{isMenuOpen ? <path d="m6 6 12 12M6 18 18 6" /> : <path d="M4 6h16M4 12h16M4 18h16" />}</svg>
           </button>
         </div>
       </div>
-
-      <AnimatePresence>
-        {isMenuOpen && (
- <motion.div
- ref={mobileMenuRef}
- id="mobile-menu"
- role="dialog"
- aria-modal="true"
- aria-label={t("navigation_menu", "Navigation menu")}
- initial={{ opacity: 0, height: 0 }}
- animate={{ opacity: 1, height: "auto" }}
- exit={{ opacity: 0, height: 0 }}
- transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
- className="overflow-hidden border-t border-white/[0.06] bg-[#0B0B0A] lg:hidden"
- style={{
-   background: "rgba(11,11,10,0.98)",
-   backdropFilter: "blur(28px) saturate(1.3)",
-   borderTop: "1px solid rgba(255,255,255,0.06)",
- }}
->
- <div className="max-h-[85vh] overflow-y-auto">
- <div className="flex items-center justify-between px-6 pt-4 pb-2">
-<Link
-          href="/"
-          onClick={() => setIsMenuOpen(false)}
-          className="font-display text-[0.7rem] font-normal uppercase tracking-[0.5em] text-gold transition-colors duration-300"
-          aria-label={`${websiteName} — ${t("home", "Home")}`}
-        >
-     {websiteName}
-   </Link>
-   <button
-     type="button"
-     onClick={() => setIsMenuOpen(false)}
-     className="flex h-9 w-9 items-center justify-center rounded-input text-white/50 transition-colors duration-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/15"
-     aria-label={t("toggle_menu")}
-   >
-     <svg
-       aria-hidden="true"
-       width={16}
-       height={16}
-       viewBox="0 0 24 24"
-       fill="none"
-       stroke="currentColor"
-       strokeWidth="1.5"
-       strokeLinecap="round"
-     >
-       <path d="M18 6L6 18" />
-       <path d="M6 6l12 12" />
-     </svg>
-   </button>
- </div>
-
- <nav aria-label={t("mobile_primary", "Mobile primary")} className="px-4 pt-2 pb-6">
- <motion.div
-   initial={{ opacity: 0 }}
-   animate={{ opacity: 1 }}
-   transition={{ duration: 0.01 }}
-   className="flex flex-col gap-0"
- >
-   {[
-     { href: "/", label: t("home"), active: pathname === "/" },
-     { href: "/shop", label: t("shop"), active: isShopPage },
-     { href: "/about", label: t("about"), active: pathname === "/about" },
-   ].map((link, i) => (
-     <motion.div
-       key={link.href}
-       initial={{ opacity: 0, x: -12 }}
-       animate={{ opacity: 1, x: 0 }}
-       transition={{
-         duration: 0.4,
-         delay: 0.08 + i * 0.06,
-         ease: [0.22, 1, 0.36, 1],
-       }}
-     >
-       <Link
-         href={link.href}
-         onClick={() => setIsMenuOpen(false)}
-         className={`rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] transition-colors duration-200 hover:bg-white/[0.06] hover:text-white ${
-           link.active
-             ? "text-white bg-white/[0.06]"
-             : "text-white/50"
-         }`}
-       >
-         {link.label}
-       </Link>
-     </motion.div>
-   ))}
-
-   <motion.div
-     initial={{ opacity: 0, x: -12 }}
-     animate={{ opacity: 1, x: 0 }}
-     transition={{ duration: 0.4, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
-   >
-     <details className="group rounded-input">
-       <summary className="flex cursor-pointer items-center justify-between rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] text-white/50 transition-colors duration-200 hover:bg-white/[0.06] hover:text-white [&::-webkit-details-marker]:hidden [&::marker]:hidden">
-         {t("collections")}
-         <svg
-           aria-hidden="true"
-           width={12}
-           height={12}
-           className="h-3 w-3 shrink-0 opacity-40 transition-transform duration-250 group-open:rotate-180"
-           viewBox="0 0 12 12"
-           fill="none"
-           stroke="currentColor"
-           strokeWidth="1.5"
-         >
-           <path
-             d="M3 4.5L6 7.5L9 4.5"
-             strokeLinecap="round"
-             strokeLinejoin="round"
-           />
-         </svg>
-       </summary>
-       <div className="space-y-0.5 px-3 pb-2 pt-1">
-         {collections.map((col) => (
-           <Link
-             key={col.slug}
-             href={`/shop?collection=${col.slug}`}
-             onClick={() => setIsMenuOpen(false)}
-             className="block rounded-input px-5 py-3 text-[0.68rem] text-white/50 transition-colors duration-200 hover:bg-white/[0.06] hover:text-white"
-           >
-             {col.title}
-           </Link>
-         ))}
-       </div>
-     </details>
-   </motion.div>
-
-   <motion.div
-     initial={{ opacity: 0, x: -12 }}
-     animate={{ opacity: 1, x: 0 }}
-     transition={{ duration: 0.4, delay: 0.36, ease: [0.22, 1, 0.36, 1] }}
-   >
-     <Link
-       href="/about"
-       onClick={() => setIsMenuOpen(false)}
-       className={`rounded-input px-5 py-4 text-[0.75rem] font-medium uppercase tracking-[0.22em] transition-colors duration-200 hover:bg-white/[0.06] hover:text-white ${
-         pathname === "/about"
-           ? "text-white bg-white/[0.06]"
-           : "text-white/50"
-       }`}
-     >
-       {t("about")}
-     </Link>
-   </motion.div>
-
-   <motion.div
-     initial={{ opacity: 0, scale: 0.96 }}
-     animate={{ opacity: 1, scale: 1 }}
-     transition={{ duration: 0.4, delay: 0.44, ease: [0.22, 1, 0.36, 1] }}
-   >
-     <Link
-       href="/admin/login"
-       onClick={() => setIsMenuOpen(false)}
-       className="inline-flex h-10 w-full items-center justify-center rounded-btn bg-burgundy text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-white shadow-rouge transition-all duration-300 hover:bg-burgundy-dark active:translate-y-0"
-     >
-       {t("admin_login", "Connexion Admin")}
-     </Link>
-   </motion.div>
- </motion.div>
- </nav>
-
-              <div className="mx-5 my-5 h-px bg-white/[0.08]" />
-
-              <div className="flex flex-col gap-2.5 px-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    setCmdOpen(true);
-                  }}
-                  className="flex w-full items-center gap-3 rounded-input border border-white/[0.12] bg-white/[0.04] px-4 py-3.5 text-left text-[0.68rem] text-white/40 transition-colors duration-200 hover:border-white/[0.2] hover:text-white/50"
-                >
-                  <svg
-                    aria-hidden="true"
-                    width={14}
-                    height={14}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    className="shrink-0 text-white/20"
-                  >
-                    <circle cx="11" cy="11" r="4" />
-                    <path
-                      d="M21 21l-4.35-4.35"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                  <span>{t("open_search", "Search")}</span>
-                </button>
-
-                <div className="flex gap-2.5">
-                  <Link
-                    href="/wishlist"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex h-11 flex-1 items-center justify-center gap-2.5 rounded-input border border-white/[0.12] bg-white/[0.04] text-white/50 transition-colors duration-200 hover:border-white/[0.2] hover:text-gold"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      width={14}
-                      height={14}
-                      viewBox="0 0 24 24"
-                      fill={wishlistCount > 0 ? "currentColor" : "none"}
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                    >
-                      <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 10-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z" />
-                    </svg>
-                    <span className="text-[0.65rem] uppercase tracking-[0.18em]">
-                      {t("wishlist", "Wishlist")}
-                    </span>
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsMenuOpen(false);
-                      toggleDrawer();
-                    }}
-                    className="relative flex h-11 flex-1 items-center justify-center gap-2.5 rounded-input border border-white/[0.12] bg-white/[0.04] text-white/50 transition-colors duration-200 hover:border-white/[0.2] hover:text-gold"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      width={14}
-                      height={14}
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
-                      <line x1="3" y1="6" x2="21" y2="6" />
-                      <path d="M16 10a4 4 0 01-8 0" />
-                    </svg>
-                    <span className="text-[0.65rem] uppercase tracking-[0.18em]">
-                      {t("cart", "Cart")}
-                    </span>
-                    {itemCount > 0 && (
-                      <span className="absolute -end-1.5 -top-1.5 flex h-3.5 min-w-[0.8rem] items-center justify-center rounded-full bg-burgundy px-1 text-[0.42rem] font-bold text-white">
-                        {itemCount}
-                      </span>
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              <div className="mx-5 mt-5 h-px bg-white/[0.06]" />
-              <div className="mt-4 px-2">
-                <MobileLanguageSwitcher onSelect={() => setIsMenuOpen(false)} />
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <Suspense fallback={null}>
-        <CommandPalette open={cmdOpen} onClose={() => setCmdOpen(false)} />
-      </Suspense>
-    </motion.header>
+      {isMenuOpen && (
+        <div ref={mobileMenu} id="mobile-menu" className="bg-white p-4 lg:hidden">
+          <nav aria-label={labels.primary} className="market-mobile-navigation">
+            {links.slice(0, 2).map(link => <Link key={link.href} href={link.href} onClick={closeMenu} aria-current={pathname === link.href ? "page" : undefined}>{link.label}</Link>)}
+            <CategoryMenu categories={categories} lang={lang} mobile onNavigate={closeMenu} />
+            {links.slice(2).map(link => <Link key={link.href} href={link.href} onClick={closeMenu} aria-current={pathname === link.href ? "page" : undefined}>{link.label}</Link>)}
+            <Link href="/wishlist" onClick={closeMenu}>{labels.wishlist}</Link>
+          </nav>
+          <div className="mt-4 border-t border-line pt-4"><MobileLanguageSwitcher onSelect={closeMenu} /></div>
+        </div>
+      )}
+      <Suspense fallback={null}><CommandPalette open={cmdOpen} onClose={() => setCmdOpen(false)} brandName={websiteName} /></Suspense>
+    </header>
   );
 }

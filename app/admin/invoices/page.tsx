@@ -115,14 +115,14 @@ export default function AdminInvoicesPage() {
       Draft: "badge-gold",
       Cancelled: "bg-burgundy/10 text-burgundy",
     };
-    return `inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] ${map[status] || "bg-white/10 text-white/60"}`;
+    return `inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] ${map[status] || "bg-surface text-secondary"}`;
   };
 
   return (
     <div className="container-shell py-10">
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="font-display text-3xl text-white md:text-4xl">{t("invoices")}</h1>
+          <h1 className="font-display text-3xl text-foreground md:text-4xl">{t("invoices")}</h1>
           <p className="mt-1 text-sm text-muted">
             {data ? t("invoice_count", { count: data.total }) : t("loading")}
           </p>
@@ -169,60 +169,60 @@ export default function AdminInvoicesPage() {
       {/* Table */}
       <div className="glass overflow-hidden rounded-xl">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
+          <table className="w-full text-start text-sm">
             <thead>
-              <tr className="border-b border-white/[0.06] text-xs uppercase tracking-[0.1em] text-muted">
+              <tr className="border-b border-line text-xs uppercase tracking-[0.1em] text-muted">
                 <th className="w-10 px-4 py-3">
                   <input
                     type="checkbox"
                     aria-label={t("select_all")}
                     checked={data ? data.invoices.length > 0 && selected.size === data.invoices.length : false}
                     onChange={handleSelectAll}
-                    className="h-4 w-4 rounded border-white/20 bg-white/5 accent-gold"
+                    className="h-4 w-4 rounded border-line bg-surface accent-gold"
                   />
                 </th>
-                <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => toggleSort("invoiceNumber")}>
+                <th className="cursor-pointer px-4 py-3 hover:text-foreground" onClick={() => toggleSort("invoiceNumber")}>
                   {t("invoice_number")}{sortArrow("invoiceNumber")}
                 </th>
-                <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => toggleSort("status")}>
+                <th className="cursor-pointer px-4 py-3 hover:text-foreground" onClick={() => toggleSort("status")}>
                   {t("status")}{sortArrow("status")}
                 </th>
-                <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => toggleSort("orderNumber")}>
+                <th className="cursor-pointer px-4 py-3 hover:text-foreground" onClick={() => toggleSort("orderNumber")}>
                   {t("order")}{sortArrow("orderNumber")}
                 </th>
                 <th className="px-4 py-3">{t("customer")}</th>
-                <th className="cursor-pointer px-4 py-3 text-right hover:text-white" onClick={() => toggleSort("total")}>
+                <th className="cursor-pointer px-4 py-3 text-end hover:text-foreground" onClick={() => toggleSort("total")}>
                   {t("amount")}{sortArrow("total")}
                 </th>
-                <th className="cursor-pointer px-4 py-3 text-right hover:text-white" onClick={() => toggleSort("createdAt")}>
+                <th className="cursor-pointer px-4 py-3 text-end hover:text-foreground" onClick={() => toggleSort("createdAt")}>
                   {t("date")}{sortArrow("createdAt")}
                 </th>
-                <th className="px-4 py-3 text-right">{t("actions")}</th>
+                <th className="px-4 py-3 text-end">{t("actions")}</th>
               </tr>
             </thead>
             <tbody>
               {loading
                 ? Array.from({ length: 5 }).map((_, i) => (
-                    <tr key={i} className="border-b border-white/[0.04]">
+                    <tr key={i} className="border-b border-line">
                       {Array.from({ length: 8 }).map((_, j) => (
                         <td key={j} className="px-4 py-3">
-                          <div className="h-4 w-full animate-pulse rounded bg-white/5" />
+                          <div className="h-4 w-full animate-pulse rounded bg-surface" />
                         </td>
                       ))}
                     </tr>
                   ))
                 : data?.invoices.map((inv) => (
-                    <tr key={inv.id} className="border-b border-white/[0.04] transition hover:bg-white/[0.02]">
+                    <tr key={inv.id} className="border-b border-line transition hover:bg-surface">
                       <td className="px-4 py-3">
                         <input
                           type="checkbox"
                           checked={selected.has(inv.id)}
                           onChange={() => handleSelect(inv.id)}
-                          className="h-4 w-4 rounded border-white/20 bg-white/5 accent-gold"
+                          className="h-4 w-4 rounded border-line bg-surface accent-gold"
                         />
                       </td>
                       <td className="px-4 py-3">
-                        <span className="font-mono text-sm font-medium text-white">{inv.invoiceNumber}</span>
+                        <span className="font-mono text-sm font-medium text-foreground">{inv.invoiceNumber}</span>
                       </td>
                       <td className="px-4 py-3">
                         <span className={statusBadge(inv.status)}>{inv.status}</span>
@@ -230,27 +230,27 @@ export default function AdminInvoicesPage() {
                       <td className="px-4 py-3">
                         <Link
                           href={`/admin/orders/${inv.order?.orderNumber || "#"}`}
-                          className="font-mono text-sm text-gold transition hover:brightness-110"
+                          className="font-mono text-sm text-accent transition hover:brightness-110"
                         >
                           {inv.order?.orderNumber || "—"}
                         </Link>
                       </td>
                       <td className="px-4 py-3">
-                        <p className="text-white">{inv.order?.customerName || "—"}</p>
+                        <p className="text-foreground">{inv.order?.customerName || "—"}</p>
                         <p className="text-xs text-muted">{inv.order?.customerEmail}</p>
                       </td>
-                      <td className="px-4 py-3 text-right font-medium text-white">
+                      <td className="px-4 py-3 text-end font-medium text-foreground">
                         {inv.order?.total || "—"}
                       </td>
-                      <td className="px-4 py-3 text-right text-xs text-muted">
+                      <td className="px-4 py-3 text-end text-xs text-muted">
                         {new Date(inv.createdAt).toLocaleDateString()}
                       </td>
-                      <td className="px-4 py-3 text-right">
+                      <td className="px-4 py-3 text-end">
                         <div className="flex items-center justify-end gap-2">
                           {inv.status === "Issued" && inv.pdfPath && (
                             <a
                               href={`/api/admin/invoices/${inv.id}/download`}
-                              className="text-xs font-semibold uppercase tracking-[0.1em] text-gold transition hover:brightness-110"
+                              className="text-xs font-semibold uppercase tracking-[0.1em] text-accent transition hover:brightness-110"
                               target="_blank"
                               rel="noopener noreferrer"
                             >

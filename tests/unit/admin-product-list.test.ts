@@ -5,12 +5,17 @@ import {
   isLowStock,
   parseAdminProductPagination,
   parseAdminProductSort,
+  productSearchTerms,
 } from "@/lib/admin-product-list";
 import type { Prisma } from "@/generated/prisma/client";
 
 const thresholdRef = { _ref: "lowStockThreshold", _container: "Product" } as unknown as Prisma.IntFieldRefInput<"Product">;
 
 describe("admin product list filters", () => {
+  it("normalizes accents, hyphens, package punctuation and Arabic marks for search", () => {
+    expect(productSearchTerms("  COCA-Cola   Pétillante  25 cl ")).toEqual(["coca", "cola", "petillante", "25", "cl"]);
+    expect(productSearchTerms("مِيَاه 1,5L")).toEqual(["مياه", "15l"]);
+  });
   it("combines normalized search, category and per-product low stock", () => {
     const where = buildAdminProductWhere(
       new URLSearchParams("search=%20COCA+++COLA%20&categoryId=cat-1&stock=low"),

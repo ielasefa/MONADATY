@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import Link from "next/link";
 import { useTranslation } from "@/hooks/useTranslation";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
@@ -44,7 +45,7 @@ function SocialIcon({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={platform}
-      className="group relative inline-flex items-center justify-center text-white/40 transition-colors duration-300 hover:text-gold"
+      className="group relative inline-flex h-11 w-11 items-center justify-center text-secondary transition-colors duration-300 hover:text-accent"
       whileHover={shouldReduceMotion ? undefined : { scale: 1.08, y: -2 }}
       whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
       transition={{ duration: 0.25, ease: PREMIUM_EASE }}
@@ -57,7 +58,7 @@ function SocialIcon({
 
 export function Footer({
   settings,
-  collections: _collections = [],
+  collections = [],
   websiteName,
 }: FooterProps) {
   const { t, lang } = useTranslation("footer");
@@ -76,32 +77,25 @@ export function Footer({
   const shopLinks = [
     { label: t("all_drinks", "All Drinks"), href: "/shop" },
     { label: t("collections", "Collections"), href: "/collections" },
-    { label: t("best_sellers", "Best Sellers"), href: "/shop" },
+    { label: { fr: "Mes favoris", en: "My favorites", ar: "المفضلة" }[lang], href: "/wishlist" },
   ];
 
   const discoverLinks = [
     { label: t("about", "Our Story"), href: "/about" },
-    { label: t("journal", "Journal"), href: "#" },
     ...(contactEmail
       ? [{ label: t("contact_us", "Contact"), href: `mailto:${contactEmail}` }]
       : []),
   ];
 
-  const helpLinks = [
-    { label: t("faq", "FAQ"), href: "#" },
-    { label: t("shipping", "Shipping"), href: "#" },
-    { label: t("returns", "Returns"), href: "#" },
-  ];
-
-  const legalLinks = [
-    { label: t("privacy", "Privacy"), href: "#" },
-    { label: t("terms", "Terms"), href: "#" },
-  ];
+  const collectionLinks = collections.slice(0, 4).map((collection) => ({
+    label: collection.name,
+    href: `/shop?collection=${encodeURIComponent(collection.slug)}`,
+  }));
 
   const socialEntries = Object.entries(socialLinks).filter(([, value]) => value);
 
   return (
-    <footer className="storefront-theme relative w-full overflow-hidden bg-[#080807]">
+    <footer className="storefront-theme market-footer relative w-full overflow-hidden">
       {/* Top gold divider */}
  {/* Top gold divider — luxury shimmer reveal */}
  <motion.div
@@ -109,7 +103,7 @@ export function Footer({
    whileInView={{ opacity: 1, scaleX: 1 }}
    viewport={{ once: true, margin: "-100px" }}
    transition={{ duration: shouldReduceMotion ? 0 : 0.9, ease: PREMIUM_EASE }}
-   className="mx-auto max-w-[1520px] px-5 sm:px-8 md:px-10 lg:px-16 xl:px-20"
+   className="market-container"
  >
  <div className="relative h-px w-full overflow-hidden">
    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
@@ -134,7 +128,7 @@ export function Footer({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: shouldReduceMotion ? 0 : 0.65, ease: PREMIUM_EASE }}
-        className="mx-auto max-w-[1520px] px-5 sm:px-8 md:px-10 lg:px-16 xl:px-20"
+        className="market-container"
       >
         <div className="pb-14 pt-14 md:pb-16 md:pt-16 lg:pb-20 lg:pt-20">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-10">
@@ -154,12 +148,12 @@ export function Footer({
                 <motion.span
                   whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
                   transition={{ duration: 0.3, ease: PREMIUM_EASE }}
-                  className="block font-display text-[clamp(2rem,4vw,2.75rem)] font-normal leading-[0.9] tracking-[-0.04em] text-gold transition-colors duration-700 group-hover:text-gold/70"
+                  className="block font-display text-[clamp(2rem,4vw,2.75rem)] font-normal leading-[0.9] tracking-[-0.04em] text-accent transition-colors duration-700 group-hover:text-accent"
                 >
                   {websiteName || "MONADATY"}
                 </motion.span>
               </Link>
-              <p className="mt-5 max-w-sm text-sm leading-[1.8] text-white/55">
+              <p className="mt-5 max-w-sm text-sm leading-[1.8] text-secondary">
                 {copy.footer.brandDescription}
               </p>
               <div className="mt-6 flex items-center gap-5">
@@ -237,7 +231,7 @@ export function Footer({
    className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:col-span-7 lg:col-start-6 lg:gap-12"
  >
  <nav aria-label={t("shop", "Shop")}>
- <p className="text-[0.55rem] font-semibold uppercase tracking-[0.25em] text-white/40">
+ <p className="text-sm font-semibold uppercase tracking-[0.08em] text-secondary">
    {t("shop", "SHOP")}
  </p>
  <ul className="mt-5 space-y-3.5">
@@ -245,7 +239,7 @@ export function Footer({
      <li key={link.label} className="relative">
        <Link
          href={link.href}
-         className="relative text-[0.78rem] tracking-[0.03em] text-white/50 transition-all duration-300 after:absolute after:bottom-0 after:start-0 after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:translate-x-0.5 hover:text-gold hover:after:w-full"
+         className="relative text-sm tracking-[0.03em] text-secondary transition-all duration-300 after:absolute after:bottom-0 after:start-0 after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:translate-x-0.5 hover:text-accent hover:after:w-full"
        >
          {link.label}
        </Link>
@@ -255,7 +249,7 @@ export function Footer({
  </nav>
 
  <nav aria-label={t("discover", "Discover")}>
- <p className="text-[0.55rem] font-semibold uppercase tracking-[0.25em] text-white/40">
+ <p className="text-sm font-semibold uppercase tracking-[0.08em] text-secondary">
    {t("discover", "DISCOVER")}
  </p>
  <ul className="mt-5 space-y-3.5">
@@ -263,7 +257,7 @@ export function Footer({
      <li key={link.label} className="relative">
        <Link
          href={link.href}
-         className="relative text-[0.78rem] tracking-[0.03em] text-white/50 transition-all duration-300 after:absolute after:bottom-0 after:start-0 after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:translate-x-0.5 hover:text-gold hover:after:w-full"
+         className="relative text-sm tracking-[0.03em] text-secondary transition-all duration-300 after:absolute after:bottom-0 after:start-0 after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:translate-x-0.5 hover:text-accent hover:after:w-full"
        >
          {link.label}
        </Link>
@@ -272,16 +266,16 @@ export function Footer({
  </ul>
  </nav>
 
- <nav aria-label={t("help", "Help")}>
- <p className="text-[0.55rem] font-semibold uppercase tracking-[0.25em] text-white/40">
-   {t("help", "HELP")}
+ <nav aria-label={t("collections", "Collections")}>
+ <p className="text-sm font-semibold uppercase tracking-[0.08em] text-secondary">
+   {t("collections", "COLLECTIONS")}
  </p>
  <ul className="mt-5 space-y-3.5">
-   {helpLinks.map((link) => (
+   {collectionLinks.map((link) => (
      <li key={link.label} className="relative">
        <Link
          href={link.href}
-         className="relative text-[0.78rem] tracking-[0.03em] text-white/50 transition-all duration-300 after:absolute after:bottom-0 after:start-0 after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:translate-x-0.5 hover:text-gold hover:after:w-full"
+         className="relative text-sm tracking-[0.03em] text-secondary transition-all duration-300 after:absolute after:bottom-0 after:start-0 after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:translate-x-0.5 hover:text-accent hover:after:w-full"
        >
          {link.label}
        </Link>
@@ -300,32 +294,20 @@ export function Footer({
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: "-40px" }}
         transition={{ duration: shouldReduceMotion ? 0 : 0.55, ease: PREMIUM_EASE }}
-        className="border-t border-white/[0.06]"
+        className="border-t border-line"
       >
-        <div className="mx-auto flex max-w-[1520px] flex-col items-start justify-between gap-5 px-5 py-8 sm:px-8 md:flex-row md:items-center md:px-10 lg:px-16 xl:px-20">
+        <div className="market-container flex flex-col items-start justify-between gap-5 py-6 md:flex-row md:items-center">
           <motion.p
             initial={shouldReduceMotion ? false : { opacity: 0, y: 6 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: shouldReduceMotion ? 0 : 0.5, ease: PREMIUM_EASE, delay: shouldReduceMotion ? 0 : 0.08 }}
-            className="text-[0.48rem] tracking-[0.15em] text-white/50"
+            className="text-sm tracking-[0.08em] text-secondary"
           >
             {copyright}
           </motion.p>
           <div className="flex items-center gap-6">
-            <nav className="flex items-center gap-5">
-              {legalLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="text-[0.48rem] tracking-[0.15em] text-white/50 transition-colors duration-300 hover:text-gold"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-            <span className="h-px w-px bg-ivory/[0.06]" />
-            <span className="text-[0.42rem] tracking-[0.18em] text-white/40">
+            <span className="text-sm tracking-[0.08em] text-secondary">
               {t("location", "Casablanca · Morocco")}
             </span>
             <LanguageSwitcher />

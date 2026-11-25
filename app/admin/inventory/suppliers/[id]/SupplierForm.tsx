@@ -60,19 +60,19 @@ export function SupplierForm({ supplier }: { supplier: Supplier | null }) {
         <div>
           <Link
             href="/admin/inventory/suppliers"
-            className="mb-2 inline-flex items-center gap-1 text-xs text-muted transition hover:text-white"
+            className="mb-2 inline-flex items-center gap-1 text-xs text-muted transition hover:text-foreground"
           >
             &larr; Back to Suppliers
           </Link>
-          <h1 className="text-3xl font-semibold tracking-tight text-white">
+          <h1 className="text-3xl font-semibold tracking-tight text-foreground">
             {isNew ? t("add_supplier", "Add Supplier") : `${t("edit")}: ${supplier.name}`}
           </h1>
         </div>
       </div>
 
       <form action={handleSubmit} className="space-y-8">
-        <div className="luxury-card rounded-card border border-white/[0.06] bg-card p-6">
-          <p className="luxury-label mb-6 text-[10px] text-muted">{t("supplier_information", "Supplier Information")}</p>
+        <div className="luxury-card rounded-card border border-line bg-card p-6">
+          <p className="luxury-label mb-6 text-xs text-muted">{t("supplier_information", "Supplier Information")}</p>
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <Field label={t("supplier_name", "Supplier Name")} name="name" defaultValue={supplier?.name} required />
             <Field label={t("company", "Company")} name="company" defaultValue={supplier?.company} />
@@ -86,7 +86,7 @@ export function SupplierForm({ supplier }: { supplier: Supplier | null }) {
             <Field label={t("contact_person", "Contact Person")} name="contactPerson" defaultValue={supplier?.contactPerson} />
             <div className="md:col-span-2">
               <div className="space-y-2">
-                <label className="luxury-label text-[10px] text-muted">{t("supplier_notes", "Notes")}</label>
+                <label className="luxury-label text-xs text-muted">{t("supplier_notes", "Notes")}</label>
                 <textarea
                   name="notes"
                   defaultValue={supplier?.notes}
@@ -103,9 +103,9 @@ export function SupplierForm({ supplier }: { supplier: Supplier | null }) {
                 type="checkbox"
                 name="active"
                 defaultChecked={supplier?.active ?? true}
-                className="h-4 w-4 rounded border-white/20 bg-white/5 accent-gold"
+                className="h-4 w-4 rounded border-line bg-surface accent-gold"
               />
-              <span className="text-sm text-white">{t("active", "Active")}</span>
+              <span className="text-sm text-foreground">{t("active", "Active")}</span>
             </label>
           </div>
         </div>
@@ -145,7 +145,7 @@ function Field({
 }) {
   return (
     <div className="space-y-2">
-      <label className="luxury-label text-[10px] text-muted">{label}</label>
+      <label className="luxury-label text-xs text-muted">{label}</label>
       <input
         type={type}
         name={name}

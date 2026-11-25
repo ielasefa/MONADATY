@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { PREMIUM_EASE } from "@/lib/motion";
 
 type RevealProps = {

@@ -1,5 +1,6 @@
 "use client";
 
+import { categoryLabel } from "@/lib/category-label";
 import { memo, useEffect, useState } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
 
@@ -24,7 +25,7 @@ export const FilterSidebar = memo(function FilterSidebar({
   onAvailabilityChange,
   categories,
 }: FilterSidebarProps) {
-  const { t } = useTranslation("shop");
+  const { t, lang } = useTranslation("shop");
   const [localMin, setLocalMin] = useState(minPrice);
   const [localMax, setLocalMax] = useState(maxPrice);
 
@@ -37,8 +38,8 @@ export const FilterSidebar = memo(function FilterSidebar({
     <aside aria-label={t("filter")} className="flex flex-col gap-6">
       {/* Header */}
       <div>
-        <p className="label-utility tracking-[0.55em] text-gold/60">{t("filter")}</p>
-        <h4 className="font-display mt-2 text-lg tracking-wide text-white">
+        <p className="label-utility tracking-[0.08em] text-accent">{t("filter")}</p>
+        <h4 className="font-display mt-2 text-lg tracking-wide text-foreground">
           {t("refine", "Refine")}
         </h4>
       </div>
@@ -47,7 +48,7 @@ export const FilterSidebar = memo(function FilterSidebar({
 
       {/* Category */}
       <div role="group" aria-labelledby="filter-category" className="space-y-3">
-        <p id="filter-category" className="label-utility tracking-[0.22em] text-white/40">
+        <p id="filter-category" className="label-utility tracking-[0.08em] text-secondary">
           {t("category")}
         </p>
         <div className="flex flex-col gap-1.5">
@@ -60,13 +61,13 @@ export const FilterSidebar = memo(function FilterSidebar({
                 type="button"
                 aria-pressed={activeCategorySlug === slug}
                 onClick={() => onCategoryChange(c)}
-                className={`inline-flex h-9 w-full items-center rounded-input px-4 text-[0.65rem] font-medium transition-all duration-200 ${
+                className={`inline-flex h-9 w-full items-center rounded-input px-4 text-sm font-medium transition-all duration-200 ${
                   activeCategorySlug === slug
-                    ? "bg-burgundy text-white"
-                    : "border border-white/[0.06] bg-transparent text-white/50 hover:border-white/[0.14] hover:text-white"
+                    ? "bg-burgundy text-foreground"
+                    : "border border-line bg-transparent text-secondary hover:border-line hover:text-foreground"
                 }`}
               >
-                {c === "all" ? t("all") : c}
+                {c === "all" ? t("all") : categoryLabel(c, lang)}
               </button>
             );
           })}
@@ -75,7 +76,7 @@ export const FilterSidebar = memo(function FilterSidebar({
 
       {/* Price */}
       <div className="space-y-3">
-        <p className="label-utility tracking-[0.22em] text-white/40">{t("price")}</p>
+        <p className="label-utility tracking-[0.08em] text-secondary">{t("price")}</p>
         <div className="flex items-center gap-2.5">
           <div className="relative flex-1">
             <input
@@ -86,10 +87,9 @@ export const FilterSidebar = memo(function FilterSidebar({
               value={localMin || ""}
               onChange={(e) => setLocalMin(Number(e.target.value))}
               className="storefront-input"
-              style={{ WebkitTextFillColor: "#FFFFFF", caretColor: "#FFFFFF" }}
             />
           </div>
-          <span className="text-white/35">—</span>
+          <span className="text-secondary">—</span>
           <div className="relative flex-1">
             <input
               type="number"
@@ -99,14 +99,13 @@ export const FilterSidebar = memo(function FilterSidebar({
               value={localMax || ""}
               onChange={(e) => setLocalMax(Number(e.target.value))}
               className="storefront-input"
-              style={{ WebkitTextFillColor: "#FFFFFF", caretColor: "#FFFFFF" }}
             />
           </div>
         </div>
         <button
           type="button"
           onClick={() => onPriceChange(localMin, localMax)}
-          className="btn-secondary h-9 w-full text-[0.55rem] font-semibold uppercase tracking-[0.14em]"
+          className="btn-secondary h-9 w-full text-sm font-semibold uppercase tracking-[0.08em]"
           aria-label={t("apply_price_filter", "Apply price filter")}
         >
           {t("apply")}
@@ -115,7 +114,7 @@ export const FilterSidebar = memo(function FilterSidebar({
 
       {/* Availability */}
       <div className="space-y-3">
-        <p className="label-utility tracking-[0.22em] text-white/40">{t("availability")}</p>
+        <p className="label-utility tracking-[0.08em] text-secondary">{t("availability")}</p>
         <label className="inline-flex items-center gap-3 cursor-pointer select-none">
           <div className="relative flex h-5 w-9 items-center">
             <input
@@ -124,10 +123,10 @@ export const FilterSidebar = memo(function FilterSidebar({
               onChange={(e) => onAvailabilityChange(e.target.checked)}
               className="peer sr-only"
             />
-            <div className="h-full w-full rounded-full border border-white/[0.1] bg-surface transition-colors duration-200 peer-checked:border-burgundy peer-checked:bg-burgundy" />
+            <div className="h-full w-full rounded-full border border-line bg-surface transition-colors duration-200 peer-checked:border-burgundy peer-checked:bg-burgundy" />
             <div className="absolute inset-y-0 start-0.5 m-auto h-3 w-3 rounded-full bg-white/50 transition-all duration-200 peer-checked:translate-x-4 peer-checked:bg-white" />
           </div>
-          <span className="text-[0.68rem] text-white/55">{t("in_stock_only")}</span>
+          <span className="text-sm text-secondary">{t("in_stock_only")}</span>
         </label>
       </div>
     </aside>
