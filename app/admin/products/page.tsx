@@ -284,8 +284,6 @@ export default function ProductsPage() {
             {t("add_product", "Add product")}
           </Link>
         </header>
-        <p className="mb-4 text-sm text-secondary">{t("stock_unit_hint")}</p>
-
         <section className="mb-5 rounded-xl border border-line bg-card p-3" aria-label={t("product_filters", "Product filters")}>
           <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(240px,2fr)_repeat(3,minmax(130px,1fr))]">
             <div className="relative min-w-0">

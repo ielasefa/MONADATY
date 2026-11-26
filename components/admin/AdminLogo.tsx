@@ -1,47 +1,43 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@/hooks/useTranslation";
 
 const DEFAULT_ARIA_LABEL = "MONADATY — back to store";
 
 /**
- * MONADATY monogram + wordmark for the admin auth screens.
- * Dark chip with a red→yellow gradient, clickable to return to the storefront.
+ * The same gold MONADATY mark and wordmark used by the storefront.
  */
 export function AdminLogo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   const router = useRouter();
   const { t, lang, translations } = useTranslation("common");
   const [ariaLabel, setAriaLabel] = useState(DEFAULT_ARIA_LABEL);
+  const gradientId = `admin-wordmark-metal-${useId().replace(/:/g, "")}`;
 
   useEffect(() => {
     setAriaLabel(t("monadaty_logo_aria", DEFAULT_ARIA_LABEL));
   }, [lang, t, translations]);
-
-  const dims =
-    size === "lg" ? "h-16 w-16" : size === "sm" ? "h-10 w-10" : "h-14 w-14";
-  const text =
-    size === "lg" ? "text-3xl" : size === "sm" ? "text-lg" : "text-2xl";
 
   return (
     <button
       type="button"
       onClick={() => router.push("/")}
       aria-label={ariaLabel}
-      className="group mx-auto flex flex-col items-center gap-3 outline-none"
+      className={`market-admin-logo market-admin-logo-${size} group outline-none`}
     >
-      <div
-        className={`relative flex ${dims} items-center justify-center rounded-2xl border border-line bg-gradient-to-br from-red/30 via-red/10 to-yellow/20 transition-transform duration-200 group-hover:scale-105`}
-      >
-        <span className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.18),transparent_60%)]" />
-        <span className={`relative font-display ${text} font-bold leading-none text-accent`}>
-          M
-        </span>
-      </div>
-      <span className="font-display text-xl font-bold uppercase tracking-[0.08em] text-accent transition-colors group-hover:text-foreground">
-        MONADATY
-      </span>
+      <svg className="market-admin-logo-mark" viewBox="0 0 56 25" fill="none" aria-hidden="true">
+        <defs>
+          <linearGradient id={gradientId} x1="0" y1="0" x2="56" y2="25" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#8C6228" />
+            <stop offset=".5" stopColor="#E8CD91" />
+            <stop offset="1" stopColor="#8C6228" />
+          </linearGradient>
+        </defs>
+        <path d="M2 22C11 22 12 4 20 4s8 16 14 16S39 4 46 4s7 16 10 18" stroke={`url(#${gradientId})`} strokeWidth="6" />
+      </svg>
+      <span className="market-admin-logo-name">MONADATY</span>
+      <small className="market-admin-logo-subtitle">ELASRI BUSINESS</small>
     </button>
   );
 }

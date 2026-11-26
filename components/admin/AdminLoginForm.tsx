@@ -53,7 +53,7 @@ export function AdminLoginForm({ requestedDestination }: { requestedDestination?
   return (
     <div className="market-auth market-login">
       <aside className="market-login-story">
-        <Link href="/" className="text-2xl font-bold tracking-[.08em]">MONADATY</Link>
+        <AdminLogo size="lg" />
         <div><span className="market-login-rule" aria-hidden="true" /><p className="mb-5 text-sm font-medium">{labels.eyebrow}</p><h2>{labels.story}</h2><p className="mt-6 max-w-sm text-base leading-relaxed">{labels.description}</p></div>
         <p className="text-sm">{labels.private}</p>
       </aside>

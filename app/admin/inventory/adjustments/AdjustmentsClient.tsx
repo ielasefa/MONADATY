@@ -56,7 +56,9 @@ export function AdjustmentsClient({
     debounceRef.current = setTimeout(async () => {
       setSearching(true);
       try {
-        const res = await fetch(`/api/admin/products/search?q=${encodeURIComponent(productQuery)}`);
+        const search = new URLSearchParams({ q: productQuery });
+        if (selectedWarehouse) search.set("warehouseId", selectedWarehouse);
+        const res = await fetch(`/api/admin/products/search?${search.toString()}`);
         const data = await res.json();
         setSearchResults(data.products || []);
       } catch {
@@ -65,7 +67,7 @@ export function AdjustmentsClient({
       setSearching(false);
     }, 300);
     return () => clearTimeout(debounceRef.current);
-  }, [productQuery]);
+  }, [productQuery, selectedWarehouse]);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
@@ -127,7 +129,11 @@ export function AdjustmentsClient({
               <label className="luxury-label text-xs text-muted">{t("warehouse", "Warehouse")}</label>
               <select
                 value={selectedWarehouse}
-                onChange={(e) => setSelectedWarehouse(e.target.value)}
+                onChange={(e) => {
+                  setSelectedWarehouse(e.target.value);
+                  setSelectedProduct(null);
+                  setCurrentStock(null);
+                }}
                 className="input-premium w-full"
                 required
               >

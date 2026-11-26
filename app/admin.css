@@ -115,6 +115,9 @@
 .admin-dashboard-welcome h1 { color: white; font-size: clamp(1.8rem, 3vw, 2.6rem); }
 .admin-dashboard-welcome > * { position: relative; z-index: 1; }
 .admin-dashboard-welcome .admin-welcome-name { color: var(--market-gold-light); }
+.admin-dashboard-page { display: grid; min-width: 0; gap: clamp(22px, 2.2vw, 32px); }
+.admin-dashboard-page > * { min-width: 0; }
+.admin-dashboard-page .admin-dashboard-welcome { margin: 0; }
 .admin-kpi-card { border: 1px solid var(--market-line); border-radius: 16px; background: #fff; box-shadow: var(--market-shadow); }
 .admin-kpi-card:hover { border-color: #ccb28a; }
 .admin-kpi-card[data-accent="true"] { border-top: 3px solid var(--market-gold); padding-top: 18px; }

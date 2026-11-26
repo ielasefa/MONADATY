@@ -61,7 +61,7 @@ export function Panel({
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: EASE, delay }}
-      className={`rounded-xl border border-line bg-card ${
+      className={`rounded-2xl border border-line bg-card shadow-[0_8px_24px_rgba(69,4,7,0.035)] ${
         hover
           ? "transition-colors duration-300 hover:border-gold/20"
           : ""
@@ -85,8 +85,8 @@ export function SectionHeading({
   return (
     <div className={`flex items-end justify-between gap-4 ${className}`}>
       <div className="flex items-center gap-2.5">
-        <span className="h-3.5 w-px bg-gold/60" aria-hidden />
-        <h2 className="text-xs font-semibold uppercase tracking-[0.08em] text-secondary">
+        <span className="h-5 w-1 shrink-0 rounded-full bg-gold" aria-hidden />
+        <h2 className="text-sm font-semibold text-brand">
           {title}
         </h2>
       </div>

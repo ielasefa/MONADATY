@@ -114,10 +114,12 @@ export function DashboardClient(props: Props) {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="admin-dashboard-page">
       <DashboardHeader adminName={props.adminName} />
 
       <KpiGrid kpis={kpis} />
+
+      <QuickActions />
 
       <StatusHighlights
         pendingOrders={props.pendingOrders}
@@ -131,8 +133,6 @@ export function DashboardClient(props: Props) {
         bestSellingProduct={props.bestSellingProduct}
         bestCollection={props.bestCollection}
       />
-
-      <QuickActions />
 
       <AnalyticsSection
         revenueData={props.revenueChartData}

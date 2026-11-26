@@ -72,7 +72,6 @@ export const ADMIN_UI_COPY: Copy = {
     product_filters: text("Filtres des produits", "Product filters", "تصفية المنتجات"),
     products_load_error: text("Impossible de charger les produits. Réessayez pour consulter le stock.", "Products could not be loaded. Retry to view stock.", "تعذر تحميل المنتجات. أعد المحاولة لعرض المخزون."),
     stock_changed_reload: text("Le stock a changé depuis l’ouverture du formulaire. Rechargez le produit avant de modifier sa quantité.", "Stock changed since this form was opened. Reload before changing its quantity.", "تغير المخزون منذ فتح النموذج. أعد تحميل المنتج قبل تعديل الكمية."),
-    stock_unit_hint: text("Les boutons −/+ retirent ou ajoutent une unité du produit, ou un pack si le produit est vendu par pack.", "−/+ removes or adds one product unit, or one pack when the product is sold by the pack.", "الأزرار −/+ تنقص أو تضيف وحدة من المنتج، أو حزمة واحدة إذا كان المنتج يباع بالحزمة."),
     best_seller_all: text("Meilleures ventes : toutes", "Best sellers: all", "الأكثر مبيعاً: الكل"),
     sort_by: text("Trier par", "Sort by", "ترتيب حسب"),
     newest: text("Plus récents", "Newest", "الأحدث"),

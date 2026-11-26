@@ -48,7 +48,9 @@ export function TransfersClient({
     debounceRef.current = setTimeout(async () => {
       setSearching(true);
       try {
-        const res = await fetch(`/api/admin/products/search?q=${encodeURIComponent(productQuery)}`);
+        const search = new URLSearchParams({ q: productQuery });
+        if (fromWarehouse) search.set("warehouseId", fromWarehouse);
+        const res = await fetch(`/api/admin/products/search?${search.toString()}`);
         const data = await res.json();
         setSearchResults(data.products || []);
       } catch {
@@ -57,7 +59,7 @@ export function TransfersClient({
       setSearching(false);
     }, 300);
     return () => clearTimeout(debounceRef.current);
-  }, [productQuery]);
+  }, [productQuery, fromWarehouse]);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
@@ -121,7 +123,10 @@ export function TransfersClient({
               <label className="luxury-label text-xs text-muted">{t("from_warehouse", "From Warehouse")}</label>
               <select
                 value={fromWarehouse}
-                onChange={(e) => setFromWarehouse(e.target.value)}
+                onChange={(e) => {
+                  setFromWarehouse(e.target.value);
+                  setSelectedProduct(null);
+                }}
                 className="input-premium w-full"
                 required
               >

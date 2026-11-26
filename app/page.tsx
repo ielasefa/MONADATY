@@ -81,7 +81,7 @@ export default async function HomePage() {
               <BrandStory
                 title={content.aboutSection.title}
                 description={content.aboutSection.description}
-                image={content.aboutSection.image || content.hero.media[0] || landingCollections.find((collection) => collection.image)?.image || firstProduct?.image || ""}
+                image={content.aboutSection.image || "/images/storefront/monadaty-wholesale-supply.png"}
               />
             );
           }
