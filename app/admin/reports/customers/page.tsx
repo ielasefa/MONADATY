@@ -7,12 +7,20 @@ export default function CustomersReportPage() {
   const { t } = useTranslation("admin");
   const [data, setData] = useState<{ totalCustomers: number; avgOrdersPerCustomer: number; avgSpentPerCustomer: number; customers: any[] }>({ totalCustomers: 0, avgOrdersPerCustomer: 0, avgSpentPerCustomer: 0, customers: [] });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const res = await fetch("/api/admin/reports/customers");
-    if (res.ok) setData(await res.json());
-    setLoading(false);
+    setError(false);
+    try {
+      const res = await fetch("/api/admin/reports/customers", { cache: "no-store" });
+      if (!res.ok) throw new Error("Could not load customer report");
+      setData(await res.json());
+    } catch {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => { fetchData(); }, [fetchData]);
@@ -25,6 +33,8 @@ export default function CustomersReportPage() {
         <p className="luxury-label mb-2">{t("reports")}</p>
         <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t("customers_report")}</h1>
       </div>
+
+      {error && <div role="alert" className="mb-6 rounded-card border border-burgundy/20 bg-burgundy/[0.04] p-4 text-sm text-burgundy">{t("report_load_failed", "The report data could not be loaded. Refresh the page and try again.")}</div>}
 
       <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-3">
         <div className="rounded-card border border-line bg-card p-4">
@@ -62,6 +72,7 @@ export default function CustomersReportPage() {
                   <td className="py-2.5">{c.total.toFixed(2)} DH</td>
                 </tr>
               ))}
+              {data.customers.length === 0 && <tr><td colSpan={4} className="py-8 text-center text-sm text-muted">{t("no_report_data", "No customer data is available yet.")}</td></tr>}
             </tbody>
           </table>
         </div>

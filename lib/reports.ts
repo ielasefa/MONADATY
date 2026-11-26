@@ -1,13 +1,22 @@
 import { prisma } from "./prisma";
+import type { Prisma } from "@/generated/prisma/client";
 
 function parsePrice(val: string | null): number {
   if (!val) return 0;
   return parseFloat(val.replace(/[^0-9.]/g, "")) || 0;
 }
 
+function reportableOrderWhere(from: Date, to: Date): Prisma.OrderWhereInput {
+  return {
+    createdAt: { gte: from, lte: to },
+    orderStatus: { notIn: ["cancelled", "refunded"] },
+    paymentStatus: { not: "refunded" },
+  };
+}
+
 export async function getSalesReport(from: Date, to: Date) {
   const orders = await prisma.order.findMany({
-    where: { createdAt: { gte: from, lte: to }, paymentStatus: "paid" },
+    where: reportableOrderWhere(from, to),
     include: { items: true },
     orderBy: { createdAt: "asc" },
   });
@@ -37,7 +46,7 @@ export async function getSalesReport(from: Date, to: Date) {
 
 export async function getRevenueReport(from: Date, to: Date) {
   const orders = await prisma.order.findMany({
-    where: { createdAt: { gte: from, lte: to }, paymentStatus: "paid" },
+    where: reportableOrderWhere(from, to),
     orderBy: { createdAt: "asc" },
   });
 
@@ -63,22 +72,30 @@ export async function getRevenueReport(from: Date, to: Date) {
 }
 
 export async function getProfitReport(from: Date, to: Date) {
-  const products = await prisma.product.findMany({
-    where: { createdAt: { gte: from, lte: to } },
-    select: { name: true, price: true, costPrice: true, stock: true },
+  const orders = await prisma.order.findMany({
+    where: reportableOrderWhere(from, to),
+    include: {
+      items: { include: { product: { select: { costPrice: true } } } },
+    },
   });
 
-  const totalRevenue = products.reduce((sum, p) => sum + parsePrice(p.price) * p.stock, 0);
-  const totalCost = products.reduce((sum, p) => sum + parsePrice(p.costPrice) * p.stock, 0);
+  const totalRevenue = orders.reduce((sum, order) => sum + parsePrice(order.total), 0);
+  const totalCost = orders.reduce(
+    (sum, order) => sum + order.items.reduce(
+      (itemSum, item) => itemSum + parsePrice(item.product?.costPrice ?? null) * item.quantity,
+      0,
+    ),
+    0,
+  );
   const profit = totalRevenue - totalCost;
   const margin = totalRevenue > 0 ? (profit / totalRevenue) * 100 : 0;
 
-  return { totalRevenue, totalCost, profit, margin: Math.round(margin * 100) / 100 };
+  return { orderCount: orders.length, totalRevenue, totalCost, profit, margin: Math.round(margin * 100) / 100 };
 }
 
 export async function getCustomersReport(from: Date, to: Date) {
   const orders = await prisma.order.findMany({
-    where: { createdAt: { gte: from, lte: to } },
+    where: reportableOrderWhere(from, to),
     select: { customerEmail: true, customerName: true, total: true, createdAt: true },
     orderBy: { createdAt: "desc" },
   });
@@ -141,7 +158,7 @@ export async function getOrdersReport(from: Date, to: Date) {
 export async function getProductsReport(from: Date, to: Date) {
   const items = await prisma.orderItem.findMany({
     where: {
-      order: { createdAt: { gte: from, lte: to }, paymentStatus: "paid" },
+      order: reportableOrderWhere(from, to),
     },
     select: { name: true, quantity: true, totalPrice: true, productId: true },
   });

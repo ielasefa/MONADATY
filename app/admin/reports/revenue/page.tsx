@@ -11,19 +11,27 @@ export default function RevenueReportPage() {
   const [data, setData] = useState<{ month: string; revenue: number }[]>([]);
   const [summary, setSummary] = useState({ totalRevenue: 0, subtotalRevenue: 0, shippingRevenue: 0, discountTotal: 0, netRevenue: 0 });
   const [loading, setLoading] = useState(true);
-  const [days, setDays] = useState(30);
+  const [error, setError] = useState(false);
+  const [days, setDays] = useState(0);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
+    setError(false);
     const to = new Date().toISOString();
-    const from = new Date(Date.now() - days * 86400000).toISOString();
-    const res = await fetch(`/api/admin/reports/revenue?from=${from}&to=${to}`);
-    if (res.ok) {
+    const from = days === 0 ? new Date(0).toISOString() : new Date(Date.now() - days * 86400000).toISOString();
+    try {
+      const res = await fetch(`/api/admin/reports/revenue?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`, { cache: "no-store" });
+      if (!res.ok) throw new Error("Could not load revenue report");
       const json = await res.json();
       setData(json.monthlyData || []);
       setSummary(json);
+    } catch {
+      setError(true);
+      setData([]);
+      setSummary({ totalRevenue: 0, subtotalRevenue: 0, shippingRevenue: 0, discountTotal: 0, netRevenue: 0 });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, [days]);
 
   useEffect(() => { fetchData(); }, [fetchData]);
@@ -43,12 +51,15 @@ export default function RevenueReportPage() {
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t("revenue_report")}</h1>
           <select value={days} onChange={e => setDays(Number(e.target.value))} className="input-premium px-3 py-1.5 text-sm">
+            <option value={0}>{t("all_time", "All time")}</option>
             <option value={30}>{t("days_30")}</option>
             <option value={90}>{t("days_90")}</option>
             <option value={365}>{t("months_12")}</option>
           </select>
         </div>
       </div>
+
+      {error && <div role="alert" className="mb-6 rounded-card border border-burgundy/20 bg-burgundy/[0.04] p-4 text-sm text-burgundy">{t("report_load_failed", "The report data could not be loaded. Refresh the page and try again.")}</div>}
 
       <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
         <div className="rounded-card border border-line bg-card p-4">
@@ -72,7 +83,7 @@ export default function RevenueReportPage() {
       <div className="mb-6 grid gap-6 md:grid-cols-2">
         <div className="rounded-card border border-line bg-card p-6">
           <h3 className="mb-4 text-sm font-semibold text-foreground">{t("monthly_revenue", "Monthly Revenue")}</h3>
-          <div className="h-72">
+          {data.length === 0 ? <div className="flex h-72 items-center justify-center text-sm text-muted">{t("no_report_data", "No revenue data for this period yet.")}</div> : <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
@@ -82,11 +93,11 @@ export default function RevenueReportPage() {
                 <Bar dataKey="revenue" fill="#8C6228" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
-          </div>
+          </div>}
         </div>
         <div className="rounded-card border border-line bg-card p-6">
           <h3 className="mb-4 text-sm font-semibold text-foreground">{t("revenue_breakdown")}</h3>
-          <div className="h-72">
+          {pieData.length === 0 ? <div className="flex h-72 items-center justify-center text-sm text-muted">{t("no_report_data", "No revenue data for this period yet.")}</div> : <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie data={pieData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} dataKey="value" label={({ name, value }) => `${name}: ${value.toFixed(0)} DH`}>
@@ -95,7 +106,7 @@ export default function RevenueReportPage() {
                 <Tooltip contentStyle={{ background: "#FFFFFF", border: "1px solid #E8E1D8", borderRadius: 8 }} />
               </PieChart>
             </ResponsiveContainer>
-          </div>
+          </div>}
         </div>
       </div>
     </div>

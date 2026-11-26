@@ -13,21 +13,29 @@ export default function OrdersReportPage() {
   const { t } = useTranslation("admin");
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const res = await fetch("/api/admin/reports/orders");
-    if (res.ok) setData(await res.json());
-    setLoading(false);
+    setError(false);
+    try {
+      const res = await fetch("/api/admin/reports/orders", { cache: "no-store" });
+      if (!res.ok) throw new Error("Could not load orders report");
+      setData(await res.json());
+    } catch {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
   if (loading) return <div className="container-shell mx-auto px-6 py-10"><div className="h-32 animate-pulse rounded-card bg-surface" /></div>;
-  if (!data) return null;
+  const report = data ?? { totalOrders: 0, statusCounts: {}, paymentCounts: {}, orders: [] };
 
-  const statusData = Object.entries(data.statusCounts).map(([name, value]) => ({ name, value }));
-  const paymentData = Object.entries(data.paymentCounts).map(([name, value]) => ({ name, value }));
+  const statusData = Object.entries(report.statusCounts).map(([name, value]) => ({ name, value }));
+  const paymentData = Object.entries(report.paymentCounts).map(([name, value]) => ({ name, value }));
 
   return (
     <div className="container-shell mx-auto px-6 py-10">
@@ -36,10 +44,12 @@ export default function OrdersReportPage() {
         <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t("orders_report")}</h1>
       </div>
 
+      {error && <div role="alert" className="mb-6 rounded-card border border-burgundy/20 bg-burgundy/[0.04] p-4 text-sm text-burgundy">{t("report_load_failed", "The report data could not be loaded. Refresh the page and try again.")}</div>}
+
       <div className="mb-6 grid gap-6 md:grid-cols-2">
         <div className="rounded-card border border-line bg-card p-6">
           <h3 className="mb-4 text-sm font-semibold text-foreground">{t("order_status_dist")}</h3>
-          <div className="h-64">
+          {statusData.length === 0 ? <div className="flex h-64 items-center justify-center text-sm text-muted">{t("no_report_data", "No order data is available yet.")}</div> : <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie data={statusData} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={({ name, value }) => `${name}: ${value}`}>
@@ -48,11 +58,11 @@ export default function OrdersReportPage() {
                 <Tooltip contentStyle={{ background: "#FFFFFF", border: "1px solid #E8E1D8", borderRadius: 8 }} />
               </PieChart>
             </ResponsiveContainer>
-          </div>
+          </div>}
         </div>
         <div className="rounded-card border border-line bg-card p-6">
           <h3 className="mb-4 text-sm font-semibold text-foreground">{t("payment_status_dist")}</h3>
-          <div className="h-64">
+          {paymentData.length === 0 ? <div className="flex h-64 items-center justify-center text-sm text-muted">{t("no_report_data", "No order data is available yet.")}</div> : <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie data={paymentData} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={({ name, value }) => `${name}: ${value}`}>
@@ -61,12 +71,12 @@ export default function OrdersReportPage() {
                 <Tooltip contentStyle={{ background: "#FFFFFF", border: "1px solid #E8E1D8", borderRadius: 8 }} />
               </PieChart>
             </ResponsiveContainer>
-          </div>
+          </div>}
         </div>
       </div>
 
       <div className="rounded-card border border-line bg-card p-6">
-        <h3 className="mb-4 text-sm font-semibold text-foreground">All Orders ({data.totalOrders})</h3>
+        <h3 className="mb-4 text-sm font-semibold text-foreground">{t("all_orders_count", `All Orders (${report.totalOrders})`)}</h3>
         <div className="max-h-96 overflow-y-auto">
           <table className="w-full text-start text-sm">
             <thead>
@@ -79,7 +89,7 @@ export default function OrdersReportPage() {
               </tr>
             </thead>
             <tbody>
-              {data.orders.map((o: any, i: number) => (
+              {report.orders.map((o: any, i: number) => (
                 <tr key={i} className="border-b border-line text-secondary">
                   <td className="py-2.5">{o.number}</td>
                   <td className="py-2.5">{o.customer}</td>
@@ -88,6 +98,7 @@ export default function OrdersReportPage() {
                   <td className="py-2.5">{new Date(o.date).toLocaleDateString()}</td>
                 </tr>
               ))}
+              {report.orders.length === 0 && <tr><td colSpan={5} className="py-8 text-center text-sm text-muted">{t("no_report_data", "No order data is available yet.")}</td></tr>}
             </tbody>
           </table>
         </div>

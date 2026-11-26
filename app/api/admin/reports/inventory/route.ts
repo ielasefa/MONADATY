@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { searchParams } = new URL(request.url);
-  const from = searchParams.get("from") ? new Date(searchParams.get("from")!) : new Date(Date.now() - 30 * 86400000);
+  const from = searchParams.get("from") ? new Date(searchParams.get("from")!) : new Date(0);
   const to = searchParams.get("to") ? new Date(searchParams.get("to")!) : new Date();
 
   try {
@@ -19,6 +19,10 @@ export async function GET(request: NextRequest) {
       prisma.product.count({ where: { stock: { lte: 0 } } }),
       prisma.inventoryMovement.findMany({
         where: { createdAt: { gte: from, lte: to } },
+        include: {
+          product: { select: { name: true } },
+          warehouse: { select: { name: true } },
+        },
         orderBy: { createdAt: "desc" },
         take: 100,
       }),
