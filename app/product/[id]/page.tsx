@@ -104,10 +104,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </nav>
       </div>
 
-      {/* Hero — gallery 5 / information 7, composed with whitespace */}
+      {/* Product image and ordering details, balanced in two columns */}
       <section className={`${CONTAINER} product-hero`}>
         <div className="product-hero-grid">
-          {/* Gallery — clean, never dominates */}
+          {/* Gallery — give the product image room to read */}
           <FadeIn delay={0.1} y={20} duration={0.6} className="min-w-0">
             <div className="product-gallery-sticky">
               <ProductGallery
@@ -123,7 +123,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </div>
           </FadeIn>
 
-          {/* Information — the primary focus, sticky */}
+          {/* Product information and ordering */}
           <div className="product-information min-w-0">
             <div>
 {/* Category eyebrow + badge */}

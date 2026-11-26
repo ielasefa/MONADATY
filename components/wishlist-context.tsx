@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 type WishlistContextType = {
   items: string[];
+  hydrated: boolean;
   add: (id: string) => void;
   remove: (id: string) => void;
   toggle: (id: string) => void;
@@ -15,23 +16,30 @@ const WishlistContext = createContext<WishlistContextType | null>(null);
 
 export function WishlistProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<string[]>([]);
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     try {
       const raw = localStorage.getItem("monadaty:wishlist");
-      if (raw) setItems(JSON.parse(raw));
+      if (raw) {
+        const parsed: unknown = JSON.parse(raw);
+        if (Array.isArray(parsed)) setItems([...new Set(parsed.filter((id): id is string => typeof id === "string" && id.length > 0))]);
+      }
     } catch {
       // ignore
+    } finally {
+      setHydrated(true);
     }
   }, []);
 
   useEffect(() => {
+    if (!hydrated) return;
     try {
       localStorage.setItem("monadaty:wishlist", JSON.stringify(items));
     } catch {
       // ignore
     }
-  }, [items]);
+  }, [items, hydrated]);
 
   function add(id: string) {
     setItems((cur) => (cur.includes(id) ? cur : [...cur, id]));
@@ -51,6 +59,7 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
 
   const value: WishlistContextType = {
     items,
+    hydrated,
     add,
     remove,
     toggle,

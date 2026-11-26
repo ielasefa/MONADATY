@@ -35,7 +35,7 @@ export function ProductGallery({ name, gallery, image, brand, category, collecti
   }, [activeIndex, gallerySource.length]);
 
   return (
-    <div className="product-gallery mx-auto flex w-full max-w-[560px] flex-col gap-4 md:gap-5">
+    <div className="product-gallery mx-auto flex w-full max-w-[620px] flex-col gap-4 md:gap-5">
       <div className="product-gallery-frame group relative aspect-square w-full overflow-hidden rounded-2xl border border-line bg-surface shadow-[var(--market-shadow)]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_38%,rgba(214,179,90,0.09),transparent_62%)]" />
         {activeImage ? (
@@ -53,8 +53,8 @@ export function ProductGallery({ name, gallery, image, brand, category, collecti
                 alt={name}
                 fill
                 priority
-                sizes="(min-width: 1024px) 420px, (min-width: 768px) 42vw, 360px"
-                className="object-contain p-7 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.025] motion-reduce:transition-none motion-reduce:group-hover:scale-100 sm:p-10 lg:p-12"
+                sizes="(min-width: 1280px) 620px, (min-width: 1024px) 48vw, 100vw"
+                className="object-contain p-3 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.025] motion-reduce:transition-none motion-reduce:group-hover:scale-100 sm:p-4 lg:p-5"
               />
             </motion.div>
           </AnimatePresence>

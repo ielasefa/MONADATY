@@ -1,8 +1,8 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import dynamic from "next/dynamic";
 import { AnimatePresence, motion } from "framer-motion";
+import { CartDrawer } from "@/components/CartDrawer";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import type { Product } from "@/types";
 import { formatMoney, parseMoney } from "@/lib/money";
@@ -41,10 +41,6 @@ type CartContextValue = {
 };
 
 const STORAGE_KEY = "monadaty-cart";
-
-const CartDrawer = dynamic(() => import("@/components/CartDrawer").then((mod) => mod.CartDrawer), {
-  ssr: false,
-});
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
 

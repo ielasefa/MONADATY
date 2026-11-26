@@ -125,7 +125,37 @@
 .admin-kpi-card .admin-kpi-value { overflow-wrap: anywhere; color: var(--market-wine); font-family: var(--font-ui); font-size: clamp(1.35rem, 2.4vw, 2.2rem); font-weight: 650; font-variant-numeric: tabular-nums; }
 .admin-notifications { width: min(380px, calc(100vw - 32px)); max-height: min(500px, 70dvh); overflow-y: auto; border: 1px solid var(--market-line); border-radius: 16px; background: #fff; box-shadow: 0 12px 40px rgb(69 4 7 / 12%); }
 
+.admin-team-page { display: grid; min-width: 0; gap: 24px; }
+.admin-team-header { display: flex; min-width: 0; align-items: center; justify-content: space-between; gap: 20px; border: 1px solid var(--market-line); border-radius: 18px; background: linear-gradient(115deg, #fff 60%, #fbf6ed); padding: clamp(18px, 2.3vw, 30px); box-shadow: var(--market-shadow); }
+.admin-team-heading { display: flex; min-width: 0; align-items: center; gap: 18px; }
+.admin-team-icon { display: grid; width: 54px; height: 54px; flex: 0 0 auto; place-items: center; border: 1px solid #ead8b3; border-radius: 16px; background: #fcf5e6; color: var(--market-wine); }
+.admin-team-icon svg { width: 27px; height: 27px; }
+.admin-team-heading .luxury-label { color: var(--market-gold-dark); font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.admin-team-heading h1 { font-size: clamp(1.55rem, 2.3vw, 2.15rem); }
+.admin-team-description { margin-top: 5px; color: var(--market-muted); font-size: .875rem; line-height: 1.6; }
+.admin-team-add { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; gap: 8px; padding-inline: 18px; }
+.admin-team-table-scroll { overflow-x: auto; }
+.admin-team-table { min-width: 850px; table-layout: auto; }
+.admin-team-table th { padding: 15px 18px; text-align: start; white-space: nowrap; }
+.admin-team-table td { padding: 15px 18px; color: var(--market-ink); font-size: .875rem; vertical-align: middle; }
+.admin-team-name { display: flex; min-width: 190px; align-items: center; gap: 11px; font-weight: 600; white-space: nowrap; }
+.admin-team-avatar { display: grid; width: 36px; height: 36px; flex: 0 0 auto; place-items: center; border: 1px solid #ead8b3; border-radius: 11px; background: #fcf5e6; color: var(--market-wine); font-size: .875rem; font-weight: 700; }
+.admin-team-email { color: var(--market-muted) !important; }
+.admin-team-role, .admin-team-status { display: inline-flex; align-items: center; border: 1px solid var(--market-line); border-radius: 999px; background: var(--market-paper); padding: 5px 10px; color: #665a4f; font-size: .72rem; font-weight: 650; white-space: nowrap; }
+.admin-team-status { border-color: #dce9de; background: #f1f8f2; color: #356b42; }
+.admin-team-table .badge-gold, .admin-team-table .badge-red { display: inline-flex; align-items: center; border-radius: 999px; padding: 5px 10px; font-size: .72rem; font-weight: 650; white-space: nowrap; }
+.admin-team-login, .admin-team-never-login { color: var(--market-muted); font-size: .8125rem; white-space: nowrap; }
+.admin-team-never-login { color: #9a3b3b; font-weight: 600; }
+.admin-team-delete { border: 1px solid #f0d0d0; border-radius: 9px; background: #fff7f7; padding: 7px 11px; color: #a32424; font-size: .75rem; font-weight: 600; white-space: nowrap; transition: background-color 160ms, border-color 160ms; }
+.admin-team-delete:hover:not(:disabled) { border-color: #e7b1b1; background: #ffeded; }
+
 @media (max-width: 639px) {
+  .admin-team-header { align-items: flex-start; flex-direction: column; }
+  .admin-team-heading { align-items: flex-start; gap: 13px; }
+  .admin-team-icon { width: 46px; height: 46px; border-radius: 13px; }
+  .admin-team-icon svg { width: 23px; height: 23px; }
+  .admin-team-add { width: 100%; }
+  .admin-team-table th, .admin-team-table td { padding-inline: 13px; }
   .admin-topbar .language-switcher > button > svg { display: none; }
   .admin-sidebar:not([data-open="true"]) { visibility: hidden; }
   .admin-sidebar[data-open="true"] { visibility: visible; }

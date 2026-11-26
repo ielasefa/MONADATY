@@ -32,11 +32,11 @@ export default async function CollectionsPage() {
             <span className="h-px w-9 bg-gold" />
             {copy.collections.eyebrow}
           </p>
-          <div className="mt-4 grid gap-5 lg:grid-cols-12 lg:items-end">
-            <h1 className="storefront-page-title lg:col-span-8">
+          <div className="mt-2.5 max-w-3xl">
+            <h1 className="storefront-page-title">
               {copy.collections.title}
             </h1>
-            <p className="max-w-xl text-sm leading-[1.85] text-secondary lg:col-span-4 lg:justify-self-end">
+            <p className="mt-2.5 max-w-[68ch] text-base leading-[1.65] text-secondary">
               {copy.collections.description}
             </p>
           </div>
@@ -123,33 +123,31 @@ function CollectionTile({
   return (
     <Link
       href={`/shop?collection=${collection.slug}`}
-      className={`group relative flex flex-col overflow-hidden rounded-2xl border border-line bg-card text-start shadow-[var(--market-shadow)] transition-all duration-500 hover:-translate-y-1 hover:border-line ${className}`}
+      className={`group relative block overflow-hidden rounded-2xl border border-line bg-[#450407] text-start shadow-[var(--market-shadow)] transition-all duration-500 hover:-translate-y-1 hover:border-[#d6b35a]/50 ${className}`}
     >
-      <div className="relative min-h-0 flex-1 overflow-hidden">
       <CollectionArtwork
         image={collection.image}
         title={collection.title}
         accent={collection.accent}
         sizes={sizes}
-        className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+        className="absolute inset-0 scale-[1.08] object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.12] motion-reduce:transition-none motion-reduce:scale-100"
         monogramSize={prominent ? "text-[10rem]" : "text-[7rem]"}
       />
-      </div>
-      <div className="market-image-caption market-collection-caption relative shrink-0 text-foreground" dir="auto">
-        <p className="text-sm font-semibold uppercase tracking-[0.08em] text-accent">
+      <span aria-hidden="true" className="collection-tile-shade absolute inset-0" />
+      <div className={prominent ? "collection-tile-caption-overlay absolute inset-x-0 bottom-0" : "collection-tile-caption-overlay collection-tile-caption-compact absolute inset-x-0 bottom-0"} dir="auto">
+        <p className="collection-tile-label-overlay">
           {label} · {String(count).padStart(2, "0")}
         </p>
-        <h2 className={`mt-3 max-w-[16ch] translate-y-1 font-display leading-[0.94] tracking-[-0.025em] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0 motion-reduce:transform-none motion-reduce:transition-none ${prominent ? "text-4xl sm:text-5xl" : "text-3xl"}`}>
+        <h2 className={prominent ? "collection-tile-title-overlay collection-tile-title-large-overlay" : "collection-tile-title-overlay"}>
           {collection.title}
         </h2>
         {collection.description && prominent && (
-          <p className="mt-4 line-clamp-2 max-w-xl text-sm leading-[1.75] text-secondary">
+          <p className="collection-tile-description-overlay">
             {collection.description}
           </p>
         )}
-        <span aria-hidden="true" className="mt-5 block h-px w-12 origin-left scale-x-1/2 bg-gold transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100 motion-reduce:transform-none motion-reduce:transition-none rtl:origin-right" />
-        <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.08em] text-secondary transition-[color,transform] duration-300 group-hover:translate-x-1 group-hover:text-accent motion-reduce:transform-none rtl:group-hover:-translate-x-1">
-          {action} <span aria-hidden="true" className="rtl:rotate-180">→</span>
+        <span className={prominent ? "collection-tile-action-overlay" : "collection-tile-action-overlay collection-tile-action-icon-overlay"}>
+          {prominent && action}<span aria-hidden="true">→</span>
         </span>
       </div>
     </Link>

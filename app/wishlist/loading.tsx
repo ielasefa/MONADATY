@@ -1,23 +1,28 @@
-import { Skeleton } from "@/components/skeletons/Skeleton";
-
 export default function WishlistLoading() {
   return (
-    <div className="container-premium py-12">
-      <div className="mb-8 space-y-2">
-        <Skeleton className="h-3 w-20" rounded="full" />
-        <Skeleton className="h-10 w-48" rounded="lg" />
-      </div>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="overflow-hidden rounded-md border border-line bg-card">
-            <Skeleton className="aspect-[4/5] w-full" rounded="none" />
-            <div className="space-y-3 p-6">
-              <Skeleton className="h-5 w-36" rounded="md" />
-              <Skeleton className="h-5 w-20" rounded="md" />
-            </div>
+    <div className="wishlist-page bg-canvas" role="status" aria-busy="true" aria-label="Loading favorites">
+      <section className="border-b border-line bg-surface">
+        <div className="storefront-container wishlist-intro">
+          <div className="wishlist-loading-line" style={{ width: 120, marginTop: 0 }} />
+          <div className="wishlist-loading-line wishlist-loading-line-wide" style={{ width: 280, height: 38, marginTop: 22 }} />
+          <div className="wishlist-loading-line" style={{ width: "min(100%, 420px)", height: 14, marginTop: 18 }} />
+          <div className="wishlist-loading-line" style={{ width: "min(86%, 360px)", height: 14, marginTop: 8 }} />
+        </div>
+      </section>
+      <section className="wishlist-content">
+        <div className="storefront-container">
+          <div className="wishlist-loading-grid">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div className="wishlist-loading-card" key={index}>
+                <div className="wishlist-loading-image" />
+                <div className="wishlist-loading-line wishlist-loading-line-wide" />
+                <div className="wishlist-loading-line" />
+                <div className="wishlist-loading-button" />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      </section>
     </div>
   );
 }
