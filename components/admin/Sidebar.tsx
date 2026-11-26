@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
+import { AdminLogoMark } from "@/components/admin/AdminLogo";
 
 type NavItem = { label: string; href: string; icon: string };
 
@@ -13,7 +15,7 @@ const GROUPS = [
   { key: "sales", hrefs: ["/admin/orders", "/admin/customers", "/admin/invoices"] },
   { key: "operations", hrefs: ["/admin/inventory"] },
   { key: "content", hrefs: ["/admin/landing", "/admin/blog", "/admin/translations"] },
-  { key: "system", hrefs: ["/admin/settings", "/admin/security", "/admin/automation", "/admin/admins"] },
+  { key: "system", hrefs: ["/admin/settings", "/admin/admins"] },
 ] as const;
 
 const LABEL_KEYS: Record<string, string> = {
@@ -60,7 +62,7 @@ function NavIcon({ href }: { href: string }) {
   return <>{icons[href] ?? icons["/admin/dashboard"]}</>;
 }
 
-export function AdminSidebar({ items, websiteName }: { items: NavItem[]; websiteName?: string }) {
+export function AdminSidebar({ items, websiteName, logoUrl }: { items: NavItem[]; websiteName?: string; logoUrl?: string }) {
   const { t } = useTranslation("admin");
   const displayName = websiteName || "MONADATY";
   const pathname = usePathname();
@@ -168,13 +170,17 @@ export function AdminSidebar({ items, websiteName }: { items: NavItem[]; website
         }`}
       >
       <div className="admin-sidebar-brand">
-        <Link href="/admin/dashboard" className="admin-brand-badge" aria-label={t("dashboard", "Dashboard")}>
-          M
+        <Link href="/admin/dashboard" className={`admin-sidebar-logo ${logoUrl ? "admin-sidebar-logo-image" : ""}`} aria-label={t("dashboard", "Dashboard")}>
+          {logoUrl ? (
+            <Image src={logoUrl} alt="" width={132} height={44} unoptimized className="admin-sidebar-current-logo" />
+          ) : (
+            <AdminLogoMark className="admin-sidebar-logo-mark" />
+          )}
         </Link>
-        <div className="min-w-0 sm:hidden lg:block">
+        {!logoUrl && <div className="min-w-0 sm:hidden lg:block">
           <p className="truncate text-sm font-semibold tracking-[0.08em] text-white">{displayName}</p>
           <p className="mt-1 text-xs text-secondary">{t("administration", "Administration")}</p>
-        </div>
+        </div>}
         <button
           type="button"
           onClick={() => setMobileOpen(false)}

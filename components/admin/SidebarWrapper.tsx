@@ -14,5 +14,5 @@ export default async function SidebarWrapper() {
     getSiteSettings().catch(() => null),
   ]);
 
-  return <AdminSidebar items={items} websiteName={settings?.websiteName} />;
+  return <AdminSidebar items={items} websiteName={settings?.websiteName} logoUrl={settings?.logo} />;
 }

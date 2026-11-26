@@ -46,7 +46,7 @@ export function MarketDepartments({ categories }: { categories: MarketCategory[]
             {categories.slice(0, 4).map(({ slug, name, image, productImage }) => (
               <li key={slug}>
                 <Link href={`/shop?category=${encodeURIComponent(slug)}`} className="market-category" data-product-image={productImage || undefined}>
-                  <SafeImage src={image?.trim() || `/images/storefront/category-${categoryArtwork(slug)}.webp`} alt="" fill sizes="(min-width: 1024px) 19vw, (min-width: 640px) 33vw, 50vw" className={productImage ? "object-contain p-2 pe-[40%]" : "object-cover"} fallback={<span className="market-category-fallback" />} />
+                  <SafeImage src={image?.trim() || `/images/storefront/category-${categoryArtwork(slug)}.webp`} alt="" fill sizes="(min-width: 1024px) 22vw, (min-width: 640px) 33vw, 50vw" className={productImage ? "object-contain p-1 pe-[30%]" : "object-cover"} fallback={<span className="market-category-fallback" />} />
                   <span>{categoryLabel(name, lang)}</span>
                 </Link>
               </li>

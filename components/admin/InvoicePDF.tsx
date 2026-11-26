@@ -36,18 +36,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 10,
   },
-  logoBox: {
-    width: 40,
-    height: 40,
-    borderRadius: 10,
-    backgroundColor: colors.burgundy,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  logoText: {
-    color: colors.gold,
-    fontSize: 18,
-    fontWeight: 700,
+  logoImage: {
+    width: 144,
+    height: 48,
+    objectFit: "contain",
   },
   brandName: {
     fontSize: 22,
@@ -325,6 +317,7 @@ type Props = {
   creditNoteNumber?: string;
   format?: "receipt" | "a4";
   translations?: Partial<InvoiceTranslations>;
+  logoUrl?: string;
 };
 
 const DEFAULT_TRANSLATIONS: InvoiceTranslations = {
@@ -357,7 +350,7 @@ const DEFAULT_TRANSLATIONS: InvoiceTranslations = {
   monadaty: "MONADATY",
 };
 
-export function InvoiceDocument({ order, invoiceNumber, invoiceDate, qrDataUrl, isCreditNote, creditNoteNumber, format = "receipt", translations: tOverrides }: Props) {
+export function InvoiceDocument({ order, invoiceNumber, invoiceDate, qrDataUrl, isCreditNote, creditNoteNumber, format = "receipt", translations: tOverrides, logoUrl }: Props) {
   const tStrings = { ...DEFAULT_TRANSLATIONS, ...tOverrides };
   const t = (key: keyof InvoiceTranslations, replacements?: Record<string, string>) => {
     let val = tStrings[key] || key;
@@ -475,13 +468,14 @@ export function InvoiceDocument({ order, invoiceNumber, invoiceDate, qrDataUrl, 
           <>
             <View style={styles.header}>
               <View style={styles.logoArea}>
-                <View style={styles.logoBox}>
-                  <Text style={styles.logoText}>M</Text>
-                </View>
-                <View>
-                  <Text style={styles.brandName}>{t("monadaty")}</Text>
-                  <Text style={{ fontSize: 7, color: colors.muted, marginTop: 1 }}>{t("company_name")}</Text>
-                </View>
+                {logoUrl ? (
+                  <Image source={{ uri: logoUrl }} style={styles.logoImage} />
+                ) : (
+                  <View>
+                    <Text style={styles.brandName}>{t("monadaty")}</Text>
+                    <Text style={{ fontSize: 7, color: colors.muted, marginTop: 1 }}>{t("company_name")}</Text>
+                  </View>
+                )}
               </View>
               <View>
                 <Text style={styles.invoiceTitle}>{docTitle}</Text>

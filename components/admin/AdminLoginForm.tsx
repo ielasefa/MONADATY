@@ -14,7 +14,7 @@ const copy = {
   ar: { eyebrow: "مساحة المهنيين", title: "دخول الإدارة", intro: "سجّل الدخول لإدارة متجرك.", email: "البريد الإلكتروني", emailPlaceholder: "you@company.ma", password: "كلمة المرور", passwordPlaceholder: "كلمة المرور الخاصة بك", show: "إظهار كلمة المرور", hide: "إخفاء كلمة المرور", submit: "تسجيل الدخول", loading: "جارٍ تسجيل الدخول…", back: "العودة إلى المتجر", story: "متجرك،\nبين يديك.", description: "أدر منتجاتك وطلباتك واختيارات المشروبات من مساحة واحدة.", private: "إدارة موناداتي", invalid: "البريد الإلكتروني أو كلمة المرور غير صحيحة.", origin: "عنوان هذه الصفحة غير معتمد للدخول. افتح الصفحة من عنوان متجرك.", rate: "محاولات كثيرة مؤخراً. انتظر قليلاً قبل المحاولة مجدداً.", server: "تسجيل الدخول غير متاح مؤقتاً. حاول مجدداً بعد قليل.", network: "تعذّر الاتصال بالخادم. تحقق من اتصالك.", session: "تعذّر تأكيد تسجيل الدخول. أعد تحميل الصفحة وحاول مجدداً." },
 };
 
-export function AdminLoginForm({ requestedDestination }: { requestedDestination?: string }) {
+export function AdminLoginForm({ requestedDestination, logoUrl }: { requestedDestination?: string; logoUrl?: string }) {
   const { lang } = useTranslation("auth");
   const labels = copy[lang];
   const [email, setEmail] = useState("");
@@ -53,13 +53,13 @@ export function AdminLoginForm({ requestedDestination }: { requestedDestination?
   return (
     <div className="market-auth market-login">
       <aside className="market-login-story">
-        <AdminLogo size="lg" />
+        <AdminLogo size="lg" logoUrl={logoUrl} />
         <div><span className="market-login-rule" aria-hidden="true" /><p className="mb-5 text-sm font-medium">{labels.eyebrow}</p><h2>{labels.story}</h2><p className="mt-6 max-w-sm text-base leading-relaxed">{labels.description}</p></div>
         <p className="text-sm">{labels.private}</p>
       </aside>
       <div className="market-login-content">
         <section className="market-auth-card w-full max-w-md p-6 sm:p-10" aria-labelledby="login-title">
-          <div className="mb-8 flex items-start justify-between gap-4"><AdminLogo size="md" /><LanguageSwitcher /></div>
+          <div className="mb-8 flex items-start justify-between gap-4"><AdminLogo size="md" logoUrl={logoUrl} /><LanguageSwitcher /></div>
           <h1 id="login-title" className="text-2xl font-semibold text-brand sm:text-3xl">{labels.title}</h1>
           <p className="mt-3 text-base leading-relaxed text-secondary">{labels.intro}</p>
           <form onSubmit={submit} className="mt-8 space-y-5" aria-busy={loading} aria-describedby={error ? "login-error" : undefined}>

@@ -11,6 +11,7 @@ import QRCode from "qrcode";
 import { randomUUID } from "crypto";
 import { getAppUrl } from "@/lib/env-validator";
 import { INVOICE_ROOT } from "@/lib/invoice-storage";
+import { getSiteSettings } from "@/lib/db";
 
 export async function POST(req: NextRequest) {
   const csrfError = requireOrigin(req);
@@ -108,12 +109,17 @@ export async function POST(req: NextRequest) {
       import("@/components/admin/InvoicePDF"),
       import("react"),
     ]);
+    const settings = await getSiteSettings().catch(() => null);
+    const logoUrl = settings?.logo
+      ? new URL(settings.logo, getAppUrl()).toString()
+      : undefined;
 
     const element = React.createElement(InvoiceDocument, {
       order: storedOrder,
       invoiceNumber,
       invoiceDate,
       qrDataUrl,
+      logoUrl,
     });
 
     // Buffer rendering stays entirely in Node and avoids the Web Stream/Node

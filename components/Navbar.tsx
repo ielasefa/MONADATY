@@ -3,6 +3,7 @@
 import { categoryLabel } from "@/lib/category-label";
 import { Suspense, useCallback, useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useCart } from "@/components/cart-context";
 import { useWishlist } from "@/components/wishlist-context";
@@ -80,7 +81,7 @@ function CategoryMenu({ categories, lang, mobile = false, onNavigate }: { catego
   );
 }
 
-export function Navbar({ categories, websiteName }: { categories: Category[]; websiteName: string }) {
+export function Navbar({ categories, websiteName, logoUrl }: { categories: Category[]; websiteName: string; logoUrl?: string }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [cmdOpen, setCmdOpen] = useState(false);
@@ -142,11 +143,17 @@ export function Navbar({ categories, websiteName }: { categories: Category[]; we
     <header className="storefront-theme market-header z-50" data-scrolled={scrolled}>
       <div className="market-header-main market-container">
         <Link href="/" className="market-wordmark" aria-label={websiteName + " — " + labels.home}>
-          <svg width="56" height="25" viewBox="0 0 56 25" fill="none" aria-hidden="true">
-            <defs><linearGradient id="market-wordmark-metal" x1="0" y1="0" x2="56" y2="25" gradientUnits="userSpaceOnUse"><stop stopColor="#8C6228" /><stop offset=".5" stopColor="#E8CD91" /><stop offset="1" stopColor="#8C6228" /></linearGradient></defs>
-            <path d="M2 22C11 22 12 4 20 4s8 16 14 16S39 4 46 4s7 16 10 18" stroke="url(#market-wordmark-metal)" strokeWidth="6" />
-          </svg>
-          <span>{websiteName}</span><small>{labels.brand}</small>
+          {logoUrl ? (
+            <Image src={logoUrl} alt="" width={220} height={80} unoptimized className="market-wordmark-image" />
+          ) : (
+            <>
+              <svg width="56" height="25" viewBox="0 0 56 25" fill="none" aria-hidden="true">
+                <defs><linearGradient id="market-wordmark-metal" x1="0" y1="0" x2="56" y2="25" gradientUnits="userSpaceOnUse"><stop stopColor="#8C6228" /><stop offset=".5" stopColor="#E8CD91" /><stop offset="1" stopColor="#8C6228" /></linearGradient></defs>
+                <path d="M2 22C11 22 12 4 20 4s8 16 14 16S39 4 46 4s7 16 10 18" stroke="url(#market-wordmark-metal)" strokeWidth="6" />
+              </svg>
+              <span>{websiteName}</span><small>{labels.brand}</small>
+            </>
+          )}
         </Link>
         <nav aria-label={labels.primary} className="market-navigation">
           <ul className="market-navigation-links">

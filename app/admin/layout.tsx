@@ -6,6 +6,7 @@ import { getLanguage, getTranslation, loadTranslations } from "@/lib/translation
 import SidebarWrapper from "@/components/admin/SidebarWrapper";
 import { getNotifications, getUnreadCount } from "@/lib/admin-notifications";
 import { AdminTopbar } from "@/components/admin/AdminTopbar";
+import { getSiteSettings } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
@@ -37,15 +38,16 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     return <div className="min-h-screen bg-canvas">{children}</div>;
   }
 
-  const [notifications, unreadCount] = await Promise.all([
+  const [notifications, unreadCount, settings] = await Promise.all([
     getNotifications(),
     getUnreadCount(),
+    getSiteSettings().catch(() => null),
   ]);
   return (
     <div className="admin-shell flex min-h-screen min-w-0 bg-canvas">
       <SidebarWrapper />
       <div className="admin-main min-w-0 flex-1 bg-canvas p-0">
-        <AdminTopbar initialNotifications={notifications} initialUnread={unreadCount} />
+        <AdminTopbar initialNotifications={notifications} initialUnread={unreadCount} logoUrl={settings?.logo || ""} />
         <div className="admin-workspace">{children}</div>
       </div>
     </div>

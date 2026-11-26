@@ -47,12 +47,17 @@
 .admin-shell label, .admin-shell button { font-size: .875rem; }
 .admin-shell :focus-visible { outline: 2px solid var(--market-gold-dark); outline-offset: 3px; }
 
-.admin-topbar { position: sticky; top: 12px; z-index: 40; display: flex; min-height: 72px; min-width: 0; align-items: center; justify-content: space-between; gap: 12px; margin: 12px 16px 0; padding: 12px 14px; padding-inline-start: 62px; border: 1px solid var(--market-line); border-radius: 20px; background: #fff; box-shadow: var(--market-shadow); }
-.admin-topbar .language-switcher > button { min-height: 44px; color: var(--market-muted); }
-.admin-topbar-title { overflow: hidden; color: var(--market-wine); font-size: .9375rem; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
-.admin-topbar-caption { color: var(--market-muted); font-size: .75rem; line-height: 1.5; }
-.admin-topbar-actions { display: flex; flex-shrink: 0; align-items: center; gap: 8px; }
+.admin-topbar { position: sticky; top: 12px; z-index: 40; display: flex; min-height: 76px; min-width: 0; align-items: center; justify-content: space-between; gap: 16px; margin: 12px 16px 0; padding: 12px 18px; padding-inline-start: 62px; border: 1px solid rgb(232 225 216 / 90%); border-radius: 20px; background: rgb(255 255 255 / 92%); box-shadow: 0 8px 28px rgb(69 4 7 / 6%); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); }
+.admin-topbar .language-switcher > button { min-height: 44px; border: 1px solid var(--market-line); border-radius: 10px; background: #fff; color: var(--market-wine); }
+.admin-topbar .language-switcher > button:hover { border-color: #d8c39e; background: #fbf7ef; }
+.admin-topbar-title { overflow: hidden; color: var(--market-wine); font-family: var(--font-editorial); font-size: 1.0625rem; font-weight: 600; line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; }
+.admin-topbar-caption { color: var(--market-gold-dark); font-size: .6875rem; font-weight: 700; letter-spacing: .1em; line-height: 1.5; text-transform: uppercase; }
+.admin-topbar-actions { display: flex; flex-shrink: 0; align-items: center; gap: 10px; }
 .admin-topbar .admin-brand-badge { width: 36px; height: 36px; font-size: 18px; }
+.admin-topbar-logo { display: grid; width: 38px; height: 38px; flex: 0 0 auto; place-items: center; border: 1px solid #ead8b3; border-radius: 11px; background: #fcf5e6; }
+.admin-topbar-logo-mark { width: 29px; height: 14px; }
+.admin-topbar-current-logo-link { width: auto; max-width: 148px; height: 44px; border: 0; background: transparent; }
+.admin-topbar-current-logo { display: block; width: auto; max-width: 148px; height: 40px; object-fit: contain; }
 .admin-icon-button { display: inline-flex; width: 44px; height: 44px; flex-shrink: 0; align-items: center; justify-content: center; border: 1px solid var(--market-line); border-radius: 10px; background: #fff; color: var(--market-wine); transition: background-color 180ms; }
 .admin-icon-button:hover { background: var(--market-paper); }
 .admin-menu-toggle { position: fixed; inset-inline-start: 24px; top: 26px; z-index: 60; }
@@ -74,6 +79,12 @@
 .admin-sidebar-link:hover { color: #fff; background: rgb(255 255 255 / 8%); }
 .admin-sidebar-link[aria-current="page"] { color: var(--market-wine); background: #fff; box-shadow: 0 3px 10px rgb(0 0 0 / 5%); }
 .admin-sidebar-link svg { flex-shrink: 0; width: 19px; height: 19px; }
+.admin-sidebar-logo { display: grid; width: 42px; height: 42px; flex: 0 0 auto; place-items: center; border: 1px solid rgb(232 205 145 / 45%); border-radius: 12px; background: rgb(255 255 255 / 7%); transition: background-color 180ms, border-color 180ms; }
+.admin-sidebar-logo:hover { border-color: rgb(232 205 145 / 80%); background: rgb(255 255 255 / 12%); }
+.admin-sidebar-logo-mark { width: 32px; height: 15px; }
+.admin-sidebar-logo-image { width: 150px; height: 48px; border: 0; background: transparent; }
+.admin-sidebar-logo-image:hover { border: 0; background: transparent; opacity: .9; }
+.admin-sidebar-current-logo { display: block; width: auto; max-width: 146px; height: 44px; object-fit: contain; }
 .admin-sidebar :focus-visible { outline-color: var(--market-gold-light); }
 .admin-sidebar-footer { display: grid; flex-shrink: 0; gap: 4px; border-top: 1px solid rgb(255 255 255 / 12%); padding: 12px; }
 
@@ -170,6 +181,10 @@
   .admin-sidebar-footer { padding: 8px; }
   .admin-topbar { top: 16px; margin: 16px 24px 0; padding: 12px 20px; }
   .admin-shell .container-shell { padding: 28px 24px 48px; }
+}
+@media (min-width: 640px) and (max-width: 1023px) {
+  .admin-sidebar-logo-image { width: 50px; height: 50px; }
+  .admin-sidebar-current-logo { max-width: 46px; height: 44px; }
 }
 @media (min-width: 1024px) {
   .admin-sidebar-brand { justify-content: flex-start; padding-inline: 20px; }

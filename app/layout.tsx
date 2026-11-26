@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Playfair_Display, Inter, Noto_Sans_Arabic } from "next/font/google";
+import localFont from "next/font/local";
 import { headers, cookies } from "next/headers";
 import "./globals.css";
 import "./admin.css";
@@ -18,21 +18,23 @@ import { getLanguageFromCookie, getTranslation, loadTranslationNamespaces, LANGU
 import { TranslationProvider } from "@/components/TranslationHydrator";
 import { SiteShell } from "@/components/SiteShell";
 
-const playfairDisplay = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+const playfairDisplay = localFont({
+  src: "./fonts/playfair-display-latin.woff2",
+  weight: "400 700",
   variable: "--font-playfair",
   display: "swap",
 });
 
-const inter = Inter({
-  subsets: ["latin"],
+const inter = localFont({
+  src: "./fonts/inter-latin.woff2",
+  weight: "100 900",
   variable: "--font-inter",
   display: "swap",
 });
 
-const arabic = Noto_Sans_Arabic({
-  subsets: ["arabic"],
+const arabic = localFont({
+  src: "./fonts/noto-sans-arabic.woff2",
+  weight: "100 900",
   variable: "--font-arabic",
   display: "swap",
 });

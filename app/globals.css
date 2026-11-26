@@ -1060,6 +1060,7 @@ select option { background-color: #171717; color: #FFFFFF; }
 }
 .market-wordmark svg { width: 36px; height: 18px; margin-bottom: .15rem; }
 .market-wordmark small { margin-top: .28rem; font-size: .625rem; letter-spacing: .12em; font-weight: 700; text-transform: uppercase; }
+.market-wordmark-image { display: block; width: clamp(130px, 15vw, 190px); height: 54px; object-fit: contain; }
 .market-header-actions { display: flex; align-items: center; gap: .35rem; }
 .market-header-actions [aria-controls="mobile-menu"] { width: 44px; height: 44px; color: var(--market-wine); }
 .market-header .market-cart-button {
@@ -1358,7 +1359,7 @@ select option { background-color: #171717; color: #FFFFFF; }
   position: relative;
   isolation: isolate;
   align-items: end;
-  min-height: 108px;
+  min-height: 136px;
   overflow: hidden;
   border: 1px solid var(--market-line);
   border-radius: var(--market-radius);
@@ -1429,7 +1430,7 @@ select option { background-color: #171717; color: #FFFFFF; }
   .market-navigation [data-catalogue] { padding-inline: 1.2rem; border-radius: 12px; background: var(--market-wine); color: #fff; }
   .market-navigation [data-catalogue]:hover { background: var(--market-wine-hover); color: #fff; }
   .market-category-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
-  .market-category { min-height: 137px; align-items: center; justify-items: end; }
+  .market-category { min-height: 188px; align-items: center; justify-items: end; }
   .market-category::after { background: linear-gradient(to left, rgb(69 4 7 / 95%), transparent 72%); }
   [dir="rtl"] .market-category::after { transform: scaleX(-1); }
   .market-category > span:last-child { max-width: 60%; font-size: .95rem; text-align: end; }
@@ -1733,6 +1734,10 @@ select option { background-color: #171717; color: #FFFFFF; }
 .market-admin-logo-mark { width: 56px; height: 25px; margin-bottom: 5px; }
 .market-admin-logo-name { font-size: 1.4rem; font-weight: 800; letter-spacing: .075em; }
 .market-admin-logo-subtitle { margin-top: 6px; font-size: .62rem; font-weight: 700; letter-spacing: .17em; }
+.market-admin-logo-image { display: block; width: auto; object-fit: contain; }
+.market-admin-logo-image-sm { max-width: 160px; height: 64px; }
+.market-admin-logo-image-md { max-width: 210px; height: 84px; }
+.market-admin-logo-image-lg { max-width: 280px; height: 112px; }
 .market-admin-logo-sm .market-admin-logo-mark { width: 38px; height: 17px; margin-bottom: 3px; }
 .market-admin-logo-sm .market-admin-logo-name { font-size: 1rem; }
 .market-admin-logo-sm .market-admin-logo-subtitle { margin-top: 4px; font-size: .5rem; }
