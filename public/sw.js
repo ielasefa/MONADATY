@@ -1,4 +1,3 @@
-const RETIREMENT_WORKER = `
 const LEGACY_CACHE_NAMES = ["monadaty-v1", "monadaty-v2"];
 
 self.addEventListener("install", (event) => {
@@ -22,18 +21,3 @@ self.addEventListener("activate", (event) => {
     }
   })());
 });
-`;
-
-export const dynamic = "force-dynamic";
-
-export function GET() {
-  return new Response(RETIREMENT_WORKER, {
-    headers: {
-      "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
-      "Content-Type": "application/javascript; charset=utf-8",
-      Expires: "0",
-      Pragma: "no-cache",
-      "Service-Worker-Allowed": "/",
-    },
-  });
-}
