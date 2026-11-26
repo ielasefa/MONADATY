@@ -1,0 +1,8 @@
+{
+  "/api/translations/route": "app/api/translations/route.js",
+  "/page": "app/page.js",
+  "/shop/page": "app/shop/page.js",
+  "/wishlist/page": "app/wishlist/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/admin/dashboard/page": "app/admin/dashboard/page.js"
+}

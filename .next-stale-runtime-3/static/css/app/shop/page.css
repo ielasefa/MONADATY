@@ -1,0 +1,30 @@
+/*!***************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[10].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[10].use[3]!./app/shop/shop.css ***!
+  \***************************************************************************************************************************************************************************************************************************************************************/
+.catalogue-intro { border-bottom: 1px solid var(--market-line); background: radial-gradient(ellipse at 90% 0%, #f2eadc, transparent 55%); }
+.catalogue-intro-layout { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-block: 28px; }
+.catalogue-intro-copy { min-width: 0; }
+.market-catalogue .storefront-eyebrow { gap: 10px; font-size: .8125rem; line-height: 1.6; text-transform: none; letter-spacing: .035em; }
+.catalogue-intro .storefront-eyebrow > span { width: 28px; height: 1px; background: var(--market-gold); }
+.market-catalogue .catalogue-intro h1 { margin-top: 10px; color: var(--market-wine); font-size: clamp(1.875rem, 2.8vw, 2.375rem); line-height: var(--type-heading-leading); letter-spacing: var(--type-heading-tracking); }
+.catalogue-description { max-width: 68ch; margin-top: 10px; color: var(--market-muted); font-size: 1rem; line-height: 1.65; }
+.catalogue-count { display: inline-flex; align-items: center; flex-shrink: 0; gap: 9px; padding: 10px 15px; border: 1px solid #e2d6c2; border-radius: 12px; background: #fff; color: #6e4b24; font-size: .875rem; font-weight: 500; line-height: 1.5; }
+.catalogue-count svg { color: #91682e; }
+.catalogue-results { padding-block: 24px 56px; }
+.market-catalogue .catalogue-filters > :not([hidden]) ~ :not([hidden]) { margin-top: 20px; }
+.catalogue-category-list button { text-transform: none; letter-spacing: .01em; }
+.market-catalogue .catalogue-search-bar { padding: 10px; border-radius: 14px; background: #fff; }
+@media (max-width: 639px) {
+  .catalogue-intro-layout { flex-wrap: wrap; gap: 16px; padding-block: 23px; }
+  .market-catalogue .catalogue-intro h1 { font-size: 1.875rem; }
+  .catalogue-description { margin-top: 9px; }
+  .catalogue-count { padding: 7px 11px; font-size: .8125rem; }
+  .catalogue-count svg { width: 17px; height: 17px; }
+  .catalogue-results { padding-block: 18px 36px; }
+  .market-catalogue .catalogue-search-bar { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; }
+  .catalogue-search-bar > div:first-child { grid-column: 1 / -1; }
+  .catalogue-search-bar > div { min-width: 0; }
+  .catalogue-search-bar > button { padding-inline: 14px; font-size: .875rem; letter-spacing: 0; text-transform: none; }
+  .market-catalogue .catalogue-filters > :not([hidden]) ~ :not([hidden]) { margin-top: 16px; }
+}
+

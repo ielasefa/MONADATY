@@ -1,0 +1,132 @@
+{
+  "node": {
+    "000a6ba9ba1d8542c0abd9fab0f116a02357dd466d": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fielasef%2FDesktop%2FMONADATY%2Flib%2Fadmin-notifications.ts%22%2C%5B%7B%22id%22%3A%22000a6ba9ba1d8542c0abd9fab0f116a02357dd466d%22%2C%22exportedName%22%3A%22markAllAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%22005467d6d9c6b8e1ebe81c922d3fb0ca5ab43405f7%22%2C%22exportedName%22%3A%22getNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200b0b3f843f7a8c0d2a5301e7ea02b042a3708802d%22%2C%22exportedName%22%3A%22getUnreadCount%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200e0099caf7c3a34b6715dd946585ac3a96c6cf647%22%2C%22exportedName%22%3A%22ensureLowStockNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2240461dc866eba42eebd863b54fe57e6daf0fd593f2%22%2C%22exportedName%22%3A%22markAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%224085ea3686a78d309604555e7dee658431c7163ace%22%2C%22exportedName%22%3A%22ensureOrderNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%227899101fad50acc17c293b88ad8a15dca789021e9f%22%2C%22exportedName%22%3A%22createNotification%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": true
+        },
+        "app/admin/dashboard/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fielasef%2FDesktop%2FMONADATY%2Flib%2Fadmin-notifications.ts%22%2C%5B%7B%22id%22%3A%22000a6ba9ba1d8542c0abd9fab0f116a02357dd466d%22%2C%22exportedName%22%3A%22markAllAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%22005467d6d9c6b8e1ebe81c922d3fb0ca5ab43405f7%22%2C%22exportedName%22%3A%22getNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200b0b3f843f7a8c0d2a5301e7ea02b042a3708802d%22%2C%22exportedName%22%3A%22getUnreadCount%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200e0099caf7c3a34b6715dd946585ac3a96c6cf647%22%2C%22exportedName%22%3A%22ensureLowStockNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2240461dc866eba42eebd863b54fe57e6daf0fd593f2%22%2C%22exportedName%22%3A%22markAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%224085ea3686a78d309604555e7dee658431c7163ace%22%2C%22exportedName%22%3A%22ensureOrderNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%227899101fad50acc17c293b88ad8a15dca789021e9f%22%2C%22exportedName%22%3A%22createNotification%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": true
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc",
+        "app/admin/dashboard/page": "rsc"
+      },
+      "filename": "lib/admin-notifications.ts",
+      "exportedName": "markAllAsRead"
+    },
+    "005467d6d9c6b8e1ebe81c922d3fb0ca5ab43405f7": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fielasef%2FDesktop%2FMONADATY%2Flib%2Fadmin-notifications.ts%22%2C%5B%7B%22id%22%3A%22000a6ba9ba1d8542c0abd9fab0f116a02357dd466d%22%2C%22exportedName%22%3A%22markAllAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%22005467d6d9c6b8e1ebe81c922d3fb0ca5ab43405f7%22%2C%22exportedName%22%3A%22getNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200b0b3f843f7a8c0d2a5301e7ea02b042a3708802d%22%2C%22exportedName%22%3A%22getUnreadCount%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200e0099caf7c3a34b6715dd946585ac3a96c6cf647%22%2C%22exportedName%22%3A%22ensureLowStockNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2240461dc866eba42eebd863b54fe57e6daf0fd593f2%22%2C%22exportedName%22%3A%22markAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%224085ea3686a78d309604555e7dee658431c7163ace%22%2C%22exportedName%22%3A%22ensureOrderNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%227899101fad50acc17c293b88ad8a15dca789021e9f%22%2C%22exportedName%22%3A%22createNotification%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": true
+        },
+        "app/admin/dashboard/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fielasef%2FDesktop%2FMONADATY%2Flib%2Fadmin-notifications.ts%22%2C%5B%7B%22id%22%3A%22000a6ba9ba1d8542c0abd9fab0f116a02357dd466d%22%2C%22exportedName%22%3A%22markAllAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%22005467d6d9c6b8e1ebe81c922d3fb0ca5ab43405f7%22%2C%22exportedName%22%3A%22getNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200b0b3f843f7a8c0d2a5301e7ea02b042a3708802d%22%2C%22exportedName%22%3A%22getUnreadCount%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200e0099caf7c3a34b6715dd946585ac3a96c6cf647%22%2C%22exportedName%22%3A%22ensureLowStockNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2240461dc866eba42eebd863b54fe57e6daf0fd593f2%22%2C%22exportedName%22%3A%22markAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%224085ea3686a78d309604555e7dee658431c7163ace%22%2C%22exportedName%22%3A%22ensureOrderNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%227899101fad50acc17c293b88ad8a15dca789021e9f%22%2C%22exportedName%22%3A%22createNotification%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": true
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc",
+        "app/admin/dashboard/page": "rsc"
+      },
+      "filename": "lib/admin-notifications.ts",
+      "exportedName": "getNotifications"
+    },
+    "00b0b3f843f7a8c0d2a5301e7ea02b042a3708802d": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fielasef%2FDesktop%2FMONADATY%2Flib%2Fadmin-notifications.ts%22%2C%5B%7B%22id%22%3A%22000a6ba9ba1d8542c0abd9fab0f116a02357dd466d%22%2C%22exportedName%22%3A%22markAllAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%22005467d6d9c6b8e1ebe81c922d3fb0ca5ab43405f7%22%2C%22exportedName%22%3A%22getNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200b0b3f843f7a8c0d2a5301e7ea02b042a3708802d%22%2C%22exportedName%22%3A%22getUnreadCount%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200e0099caf7c3a34b6715dd946585ac3a96c6cf647%22%2C%22exportedName%22%3A%22ensureLowStockNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2240461dc866eba42eebd863b54fe57e6daf0fd593f2%22%2C%22exportedName%22%3A%22markAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%224085ea3686a78d309604555e7dee658431c7163ace%22%2C%22exportedName%22%3A%22ensureOrderNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%227899101fad50acc17c293b88ad8a15dca789021e9f%22%2C%22exportedName%22%3A%22createNotification%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": true
+        },
+        "app/admin/dashboard/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fielasef%2FDesktop%2FMONADATY%2Flib%2Fadmin-notifications.ts%22%2C%5B%7B%22id%22%3A%22000a6ba9ba1d8542c0abd9fab0f116a02357dd466d%22%2C%22exportedName%22%3A%22markAllAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%22005467d6d9c6b8e1ebe81c922d3fb0ca5ab43405f7%22%2C%22exportedName%22%3A%22getNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200b0b3f843f7a8c0d2a5301e7ea02b042a3708802d%22%2C%22exportedName%22%3A%22getUnreadCount%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200e0099caf7c3a34b6715dd946585ac3a96c6cf647%22%2C%22exportedName%22%3A%22ensureLowStockNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2240461dc866eba42eebd863b54fe57e6daf0fd593f2%22%2C%22exportedName%22%3A%22markAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%224085ea3686a78d309604555e7dee658431c7163ace%22%2C%22exportedName%22%3A%22ensureOrderNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%227899101fad50acc17c293b88ad8a15dca789021e9f%22%2C%22exportedName%22%3A%22createNotification%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": true
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc",
+        "app/admin/dashboard/page": "rsc"
+      },
+      "filename": "lib/admin-notifications.ts",
+      "exportedName": "getUnreadCount"
+    },
+    "00e0099caf7c3a34b6715dd946585ac3a96c6cf647": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fielasef%2FDesktop%2FMONADATY%2Flib%2Fadmin-notifications.ts%22%2C%5B%7B%22id%22%3A%22000a6ba9ba1d8542c0abd9fab0f116a02357dd466d%22%2C%22exportedName%22%3A%22markAllAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%22005467d6d9c6b8e1ebe81c922d3fb0ca5ab43405f7%22%2C%22exportedName%22%3A%22getNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200b0b3f843f7a8c0d2a5301e7ea02b042a3708802d%22%2C%22exportedName%22%3A%22getUnreadCount%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200e0099caf7c3a34b6715dd946585ac3a96c6cf647%22%2C%22exportedName%22%3A%22ensureLowStockNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2240461dc866eba42eebd863b54fe57e6daf0fd593f2%22%2C%22exportedName%22%3A%22markAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%224085ea3686a78d309604555e7dee658431c7163ace%22%2C%22exportedName%22%3A%22ensureOrderNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%227899101fad50acc17c293b88ad8a15dca789021e9f%22%2C%22exportedName%22%3A%22createNotification%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": true
+        },
+        "app/admin/dashboard/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fielasef%2FDesktop%2FMONADATY%2Flib%2Fadmin-notifications.ts%22%2C%5B%7B%22id%22%3A%22000a6ba9ba1d8542c0abd9fab0f116a02357dd466d%22%2C%22exportedName%22%3A%22markAllAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%22005467d6d9c6b8e1ebe81c922d3fb0ca5ab43405f7%22%2C%22exportedName%22%3A%22getNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200b0b3f843f7a8c0d2a5301e7ea02b042a3708802d%22%2C%22exportedName%22%3A%22getUnreadCount%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200e0099caf7c3a34b6715dd946585ac3a96c6cf647%22%2C%22exportedName%22%3A%22ensureLowStockNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2240461dc866eba42eebd863b54fe57e6daf0fd593f2%22%2C%22exportedName%22%3A%22markAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%224085ea3686a78d309604555e7dee658431c7163ace%22%2C%22exportedName%22%3A%22ensureOrderNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%227899101fad50acc17c293b88ad8a15dca789021e9f%22%2C%22exportedName%22%3A%22createNotification%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": true
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc",
+        "app/admin/dashboard/page": "rsc"
+      },
+      "filename": "lib/admin-notifications.ts",
+      "exportedName": "ensureLowStockNotifications"
+    },
+    "40461dc866eba42eebd863b54fe57e6daf0fd593f2": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fielasef%2FDesktop%2FMONADATY%2Flib%2Fadmin-notifications.ts%22%2C%5B%7B%22id%22%3A%22000a6ba9ba1d8542c0abd9fab0f116a02357dd466d%22%2C%22exportedName%22%3A%22markAllAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%22005467d6d9c6b8e1ebe81c922d3fb0ca5ab43405f7%22%2C%22exportedName%22%3A%22getNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200b0b3f843f7a8c0d2a5301e7ea02b042a3708802d%22%2C%22exportedName%22%3A%22getUnreadCount%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200e0099caf7c3a34b6715dd946585ac3a96c6cf647%22%2C%22exportedName%22%3A%22ensureLowStockNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2240461dc866eba42eebd863b54fe57e6daf0fd593f2%22%2C%22exportedName%22%3A%22markAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%224085ea3686a78d309604555e7dee658431c7163ace%22%2C%22exportedName%22%3A%22ensureOrderNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%227899101fad50acc17c293b88ad8a15dca789021e9f%22%2C%22exportedName%22%3A%22createNotification%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": true
+        },
+        "app/admin/dashboard/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fielasef%2FDesktop%2FMONADATY%2Flib%2Fadmin-notifications.ts%22%2C%5B%7B%22id%22%3A%22000a6ba9ba1d8542c0abd9fab0f116a02357dd466d%22%2C%22exportedName%22%3A%22markAllAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%22005467d6d9c6b8e1ebe81c922d3fb0ca5ab43405f7%22%2C%22exportedName%22%3A%22getNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200b0b3f843f7a8c0d2a5301e7ea02b042a3708802d%22%2C%22exportedName%22%3A%22getUnreadCount%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200e0099caf7c3a34b6715dd946585ac3a96c6cf647%22%2C%22exportedName%22%3A%22ensureLowStockNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2240461dc866eba42eebd863b54fe57e6daf0fd593f2%22%2C%22exportedName%22%3A%22markAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%224085ea3686a78d309604555e7dee658431c7163ace%22%2C%22exportedName%22%3A%22ensureOrderNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%227899101fad50acc17c293b88ad8a15dca789021e9f%22%2C%22exportedName%22%3A%22createNotification%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": true
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc",
+        "app/admin/dashboard/page": "rsc"
+      },
+      "filename": "lib/admin-notifications.ts",
+      "exportedName": "markAsRead"
+    },
+    "4085ea3686a78d309604555e7dee658431c7163ace": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fielasef%2FDesktop%2FMONADATY%2Flib%2Fadmin-notifications.ts%22%2C%5B%7B%22id%22%3A%22000a6ba9ba1d8542c0abd9fab0f116a02357dd466d%22%2C%22exportedName%22%3A%22markAllAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%22005467d6d9c6b8e1ebe81c922d3fb0ca5ab43405f7%22%2C%22exportedName%22%3A%22getNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200b0b3f843f7a8c0d2a5301e7ea02b042a3708802d%22%2C%22exportedName%22%3A%22getUnreadCount%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200e0099caf7c3a34b6715dd946585ac3a96c6cf647%22%2C%22exportedName%22%3A%22ensureLowStockNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2240461dc866eba42eebd863b54fe57e6daf0fd593f2%22%2C%22exportedName%22%3A%22markAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%224085ea3686a78d309604555e7dee658431c7163ace%22%2C%22exportedName%22%3A%22ensureOrderNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%227899101fad50acc17c293b88ad8a15dca789021e9f%22%2C%22exportedName%22%3A%22createNotification%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": true
+        },
+        "app/admin/dashboard/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fielasef%2FDesktop%2FMONADATY%2Flib%2Fadmin-notifications.ts%22%2C%5B%7B%22id%22%3A%22000a6ba9ba1d8542c0abd9fab0f116a02357dd466d%22%2C%22exportedName%22%3A%22markAllAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%22005467d6d9c6b8e1ebe81c922d3fb0ca5ab43405f7%22%2C%22exportedName%22%3A%22getNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200b0b3f843f7a8c0d2a5301e7ea02b042a3708802d%22%2C%22exportedName%22%3A%22getUnreadCount%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200e0099caf7c3a34b6715dd946585ac3a96c6cf647%22%2C%22exportedName%22%3A%22ensureLowStockNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2240461dc866eba42eebd863b54fe57e6daf0fd593f2%22%2C%22exportedName%22%3A%22markAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%224085ea3686a78d309604555e7dee658431c7163ace%22%2C%22exportedName%22%3A%22ensureOrderNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%227899101fad50acc17c293b88ad8a15dca789021e9f%22%2C%22exportedName%22%3A%22createNotification%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": true
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc",
+        "app/admin/dashboard/page": "rsc"
+      },
+      "filename": "lib/admin-notifications.ts",
+      "exportedName": "ensureOrderNotifications"
+    },
+    "7899101fad50acc17c293b88ad8a15dca789021e9f": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fielasef%2FDesktop%2FMONADATY%2Flib%2Fadmin-notifications.ts%22%2C%5B%7B%22id%22%3A%22000a6ba9ba1d8542c0abd9fab0f116a02357dd466d%22%2C%22exportedName%22%3A%22markAllAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%22005467d6d9c6b8e1ebe81c922d3fb0ca5ab43405f7%22%2C%22exportedName%22%3A%22getNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200b0b3f843f7a8c0d2a5301e7ea02b042a3708802d%22%2C%22exportedName%22%3A%22getUnreadCount%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200e0099caf7c3a34b6715dd946585ac3a96c6cf647%22%2C%22exportedName%22%3A%22ensureLowStockNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2240461dc866eba42eebd863b54fe57e6daf0fd593f2%22%2C%22exportedName%22%3A%22markAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%224085ea3686a78d309604555e7dee658431c7163ace%22%2C%22exportedName%22%3A%22ensureOrderNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%227899101fad50acc17c293b88ad8a15dca789021e9f%22%2C%22exportedName%22%3A%22createNotification%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": true
+        },
+        "app/admin/dashboard/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fielasef%2FDesktop%2FMONADATY%2Flib%2Fadmin-notifications.ts%22%2C%5B%7B%22id%22%3A%22000a6ba9ba1d8542c0abd9fab0f116a02357dd466d%22%2C%22exportedName%22%3A%22markAllAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%22005467d6d9c6b8e1ebe81c922d3fb0ca5ab43405f7%22%2C%22exportedName%22%3A%22getNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200b0b3f843f7a8c0d2a5301e7ea02b042a3708802d%22%2C%22exportedName%22%3A%22getUnreadCount%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2200e0099caf7c3a34b6715dd946585ac3a96c6cf647%22%2C%22exportedName%22%3A%22ensureLowStockNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%2240461dc866eba42eebd863b54fe57e6daf0fd593f2%22%2C%22exportedName%22%3A%22markAsRead%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%224085ea3686a78d309604555e7dee658431c7163ace%22%2C%22exportedName%22%3A%22ensureOrderNotifications%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%2C%7B%22id%22%3A%227899101fad50acc17c293b88ad8a15dca789021e9f%22%2C%22exportedName%22%3A%22createNotification%22%2C%22filename%22%3A%22lib%2Fadmin-notifications.ts%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": true
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc",
+        "app/admin/dashboard/page": "rsc"
+      },
+      "filename": "lib/admin-notifications.ts",
+      "exportedName": "createNotification"
+    }
+  },
+  "edge": {},
+  "encryptionKey": "l3Zqw99o1dLRyjK/inG/kCYA2DP3wjQFBVB+VIFp1lk="
+}

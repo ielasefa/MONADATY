@@ -23,16 +23,16 @@ export default async function CollectionsPage() {
   const [largeCollection, ...smallCollections] = showcase;
 
   return (
-    <div className="bg-canvas">
+    <div className="collection-page bg-canvas">
       <section className="relative overflow-hidden border-b border-line bg-surface">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_0%,rgba(214,179,90,0.09),transparent_38%)]" />
-        <div className="storefront-container storefront-section relative">
+        <div className="storefront-container collection-intro relative">
           <Reveal>
           <p className="storefront-eyebrow">
             <span className="h-px w-9 bg-gold" />
             {copy.collections.eyebrow}
           </p>
-          <div className="mt-6 grid gap-7 lg:grid-cols-12 lg:items-end">
+          <div className="mt-4 grid gap-5 lg:grid-cols-12 lg:items-end">
             <h1 className="storefront-page-title lg:col-span-8">
               {copy.collections.title}
             </h1>
@@ -44,7 +44,7 @@ export default async function CollectionsPage() {
         </div>
       </section>
 
-      <section className="storefront-container storefront-section">
+      <section className="storefront-container collection-content">
         {largeCollection ? (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
             <Reveal className="md:col-span-7" delay={0.04}>
@@ -53,7 +53,7 @@ export default async function CollectionsPage() {
                 count={counts[largeCollection.slug] ?? 0}
                 label={copy.collections.label}
                 action={copy.collections.explore}
-                className="h-80 md:h-[560px]"
+                className="h-72 md:h-[440px]"
                 sizes="(min-width: 768px) 58vw, 100vw"
                 prominent
               />
@@ -67,7 +67,7 @@ export default async function CollectionsPage() {
                     count={counts[collection.slug] ?? 0}
                     label={copy.collections.label}
                     action={copy.collections.explore}
-                    className="h-64 md:h-full"
+                    className="h-56 md:h-full"
                     sizes="(min-width: 768px) 42vw, 100vw"
                   />
                 </Reveal>
@@ -82,7 +82,7 @@ export default async function CollectionsPage() {
           </div>
         )}
         {ordered.length > 3 && (
-          <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {ordered.slice(3).map((collection) => (
               <CollectionTile
                 key={collection.slug}
@@ -90,7 +90,7 @@ export default async function CollectionsPage() {
                 count={counts[collection.slug] ?? 0}
                 label={copy.collections.label}
                 action={copy.collections.explore}
-                className="h-64"
+                className="h-56"
                 sizes="(min-width: 1024px) 32vw, (min-width: 640px) 50vw, 100vw"
               />
             ))}

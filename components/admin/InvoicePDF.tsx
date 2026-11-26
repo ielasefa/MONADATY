@@ -266,6 +266,26 @@ const styles = StyleSheet.create({
   },
 });
 
+const receiptStyles = StyleSheet.create({
+  page: { padding: 16, fontSize: 8, fontFamily: "Helvetica", color: colors.text },
+  brand: { fontSize: 16, fontWeight: 700, color: colors.burgundy, textAlign: "center", letterSpacing: 1.2 },
+  company: { marginTop: 2, fontSize: 7, color: colors.muted, textAlign: "center" },
+  title: { marginTop: 12, fontSize: 12, fontWeight: 700, color: colors.text, textAlign: "center" },
+  number: { marginTop: 3, fontSize: 8, color: colors.muted, textAlign: "center" },
+  divider: { marginVertical: 10, borderBottomWidth: 1, borderBottomColor: colors.border, borderStyle: "dashed" },
+  line: { marginBottom: 4, fontSize: 8, lineHeight: 1.35 },
+  label: { color: colors.muted },
+  item: { marginBottom: 9 },
+  itemName: { fontSize: 8, fontWeight: 700, lineHeight: 1.35 },
+  itemMeta: { marginTop: 2, flexDirection: "row", justifyContent: "space-between", fontSize: 7, color: colors.muted },
+  totalRow: { marginBottom: 4, flexDirection: "row", justifyContent: "space-between", fontSize: 8 },
+  totalLabel: { color: colors.muted },
+  grand: { marginTop: 6, paddingTop: 7, borderTopWidth: 1.5, borderTopColor: colors.burgundy, flexDirection: "row", justifyContent: "space-between", fontSize: 10, fontWeight: 700, color: colors.burgundy },
+  status: { marginTop: 8, textAlign: "center", fontSize: 8, fontWeight: 700 },
+  qr: { width: 70, height: 70, alignSelf: "center", marginTop: 12 },
+  thanks: { marginTop: 12, textAlign: "center", fontSize: 7, color: colors.muted, lineHeight: 1.4 },
+});
+
 type InvoiceTranslations = {
   credit_note: string;
   invoice_label: string;
@@ -303,6 +323,7 @@ type Props = {
   qrDataUrl?: string;
   isCreditNote?: boolean;
   creditNoteNumber?: string;
+  format?: "receipt" | "a4";
   translations?: Partial<InvoiceTranslations>;
 };
 
@@ -336,7 +357,7 @@ const DEFAULT_TRANSLATIONS: InvoiceTranslations = {
   monadaty: "MONADATY",
 };
 
-export function InvoiceDocument({ order, invoiceNumber, invoiceDate, qrDataUrl, isCreditNote, creditNoteNumber, translations: tOverrides }: Props) {
+export function InvoiceDocument({ order, invoiceNumber, invoiceDate, qrDataUrl, isCreditNote, creditNoteNumber, format = "receipt", translations: tOverrides }: Props) {
   const tStrings = { ...DEFAULT_TRANSLATIONS, ...tOverrides };
   const t = (key: keyof InvoiceTranslations, replacements?: Record<string, string>) => {
     let val = tStrings[key] || key;
@@ -358,6 +379,56 @@ export function InvoiceDocument({ order, invoiceNumber, invoiceDate, qrDataUrl, 
   const docTitle = isCreditNote ? t("credit_note").toUpperCase() : t("invoice_label").toUpperCase();
   const docNumber = isCreditNote ? creditNoteNumber || invoiceNumber : invoiceNumber;
   const statusColor = order.paymentStatus === "paid" ? "#0F8B6F" : "#C1121F";
+
+  const receiptHeight = Math.max(440, 400 + order.items.length * 40 + Math.ceil((order.address.length + order.customerName.length) / 45) * 12 + (qrDataUrl ? 88 : 0));
+  if (format === "receipt") return (
+    <Document>
+      <Page size={[226.77, receiptHeight]} style={receiptStyles.page}>
+        <Text style={receiptStyles.brand}>{t("monadaty")}</Text>
+        <Text style={receiptStyles.company}>{t("company_name")}</Text>
+        <Text style={receiptStyles.title}>{docTitle}</Text>
+        <Text style={receiptStyles.number}>{docNumber}</Text>
+
+        <View style={receiptStyles.divider} />
+        <Text style={receiptStyles.line}>{t("order_number")}: {order.orderNumber}</Text>
+        <Text style={receiptStyles.line}>{t("issue_date")}: {invoiceDate}</Text>
+        <Text style={receiptStyles.line}>{t("payment_method")}: {order.paymentMethod.replace(/_/g, " ")}</Text>
+        <Text style={[receiptStyles.line, { color: statusColor }]}>{order.paymentStatus.toUpperCase()}</Text>
+
+        <View style={receiptStyles.divider} />
+        <Text style={receiptStyles.itemName}>{t("bill_to")}</Text>
+        <Text style={receiptStyles.line}>{order.customerName}</Text>
+        {order.customerEmail ? <Text style={receiptStyles.line}>{order.customerEmail}</Text> : null}
+        {order.phone ? <Text style={receiptStyles.line}>{order.phone}</Text> : null}
+        {order.address ? <Text style={receiptStyles.line}>{order.address}</Text> : null}
+        <Text style={receiptStyles.line}>{[order.city, order.postalCode, order.country].filter(Boolean).join(", ")}</Text>
+
+        <View style={receiptStyles.divider} />
+        <Text style={[receiptStyles.itemName, { marginBottom: 8 }]}>{isCreditNote ? t("credited_items") : t("order_items")}</Text>
+        {order.items.map((item, index) => (
+          <View key={`${item.productId || item.slug}-${index}`} style={receiptStyles.item}>
+            <Text style={receiptStyles.itemName}>{item.name}</Text>
+            <View style={receiptStyles.itemMeta}>
+              <Text>{item.quantity} × {item.unitPrice}</Text>
+              <Text>{item.totalPrice}</Text>
+            </View>
+          </View>
+        ))}
+
+        <View style={receiptStyles.divider} />
+        {!isCreditNote && <View style={receiptStyles.totalRow}><Text style={receiptStyles.totalLabel}>{t("subtotal")}</Text><Text>{fmt(subtotalNum)}</Text></View>}
+        {!isCreditNote && <View style={receiptStyles.totalRow}><Text style={receiptStyles.totalLabel}>{t("shipping")}</Text><Text>{fmt(shippingNum)}</Text></View>}
+        {!isCreditNote && discountNum > 0 && <View style={receiptStyles.totalRow}><Text style={receiptStyles.totalLabel}>{t("discount")}</Text><Text>-{fmt(discountNum)}</Text></View>}
+        {!isCreditNote && <View style={receiptStyles.totalRow}><Text style={receiptStyles.totalLabel}>{t("tax")}</Text><Text>{fmt(taxNum)}</Text></View>}
+        <View style={receiptStyles.grand}>
+          <Text>{isCreditNote ? t("credit_amount") : t("grand_total")}</Text>
+          <Text>{fmt(totalNum)}</Text>
+        </View>
+        {qrDataUrl ? <Image source={{ uri: qrDataUrl }} style={receiptStyles.qr} /> : null}
+        <Text style={receiptStyles.thanks}>{t("terms_body", { docType: isCreditNote ? t("credit_note") : t("invoice_label") })}</Text>
+      </Page>
+    </Document>
+  );
 
   const MyPage = ({ children, ...props }: { children: React.ReactNode; [key: string]: unknown }) => (
     <Page size="A4" style={styles.page} {...props}>

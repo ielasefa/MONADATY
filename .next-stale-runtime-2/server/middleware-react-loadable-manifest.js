@@ -1,0 +1,1 @@
+self.__REACT_LOADABLE_MANIFEST="{\"components/cart-context.tsx -> @/components/CartDrawer\":{\"id\":\"components/cart-context.tsx -> @/components/CartDrawer\",\"files\":[\"static/chunks/_app-pages-browser_components_CartDrawer_tsx.js\"]}}"

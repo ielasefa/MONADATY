@@ -18,10 +18,10 @@ export default async function WishlistPage() {
   const products: Product[] = rows;
 
 return (
-    <div className="bg-canvas">
+    <div className="wishlist-page bg-canvas">
       <section className="relative overflow-hidden border-b border-line bg-surface">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_0%,rgba(214,179,90,0.09),transparent_36%)]" />
-        <div className="storefront-container storefront-section relative">
+        <div className="storefront-container wishlist-intro relative">
           <FadeIn y={18} duration={0.62}>
           <p className="storefront-eyebrow">
             <span className="h-px w-9 bg-gold" />
@@ -37,8 +37,8 @@ return (
         </div>
       </section>
 
-      <section>
-        <div className="storefront-container py-12 md:py-16 lg:py-20">
+      <section className="wishlist-content">
+        <div className="storefront-container">
           <WishlistPageClient products={products} />
         </div>
       </section>

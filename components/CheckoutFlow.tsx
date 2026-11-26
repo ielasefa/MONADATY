@@ -50,19 +50,12 @@ function validateMoroccanPhone(phone: string): boolean {
   return MOROCCAN_PHONE_REGEX.test(phone.replace(/\s/g, ""));
 }
 
-const MOROCCAN_POSTAL_REGEX = /^\d{5}$/;
-
-function validatePostalCode(code: string): boolean {
-  return code === "" || MOROCCAN_POSTAL_REGEX.test(code);
-}
-
 type DeliveryState = {
   fullName: string;
   email: string;
   phone: string;
   city: string;
   address: string;
-  postalCode: string;
 };
 
 type DeliveryErrors = Partial<Record<keyof DeliveryState, string>>;
@@ -111,7 +104,6 @@ const emptyDeliveryState: DeliveryState = {
   phone: "",
   city: "",
   address: "",
-  postalCode: "",
 };
 
 export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
@@ -183,10 +175,6 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
       nextErrors.phone = t("invalid_phone");
     }
 
-    if (deliveryState.postalCode && !validatePostalCode(deliveryState.postalCode)) {
-      nextErrors.postalCode = t("invalid_postal");
-    }
-
     if (Object.keys(nextErrors).length > 0) {
       setErrors(nextErrors);
       const firstField = Object.keys(nextErrors)[0];
@@ -213,7 +201,6 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
       phone: deliveryState.phone.trim(),
       address: deliveryState.address.trim(),
       city: deliveryState.city.trim(),
-      postalCode: deliveryState.postalCode.trim(),
       country: "Morocco",
       paymentMethod: "cash_on_delivery",
       shippingMethod: "delivery",
@@ -316,7 +303,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
     placeholder: string,
     optional = false,
   ) {
-    const id = field === "fullName" ? "checkout-name" : field === "postalCode" ? "checkout-postal" : `checkout-${field}`;
+    const id = field === "fullName" ? "checkout-name" : `checkout-${field}`;
     const hint = field === "email" ? t("email_optional_hint") : undefined;
     return (
       <div className="checkout-field">
@@ -328,8 +315,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
           name={field}
           type={type}
           autoComplete={autoComplete}
-          inputMode={field === "postalCode" ? "numeric" : undefined}
-          maxLength={field === "postalCode" ? 5 : field === "email" ? 254 : 160}
+          maxLength={field === "email" ? 254 : 160}
           value={deliveryState[field]}
           onChange={(e) => handleChange(field, e.target.value)}
           placeholder={placeholder}
@@ -347,9 +333,9 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
 
   return (
     <motion.div
-      initial={shouldReduce ? false : { opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: shouldReduce ? 0 : 0.4, ease: PREMIUM_EASE }}
+      initial={false}
+      animate={{ opacity: 1 }}
+      transition={{ duration: shouldReduce ? 0 : 0.2, ease: PREMIUM_EASE }}
       className="checkout-content"
     >
       <div className="checkout-toolbar">
@@ -402,7 +388,6 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
                     </select>
                     {errors.city && <p id="err-city" className="checkout-field-error">{errors.city}</p>}
                   </div>
-                  {renderInput("postalCode", t("postal_code"), "text", "postal-code", t("postal_example"), true)}
                 </div>
                 <div className="checkout-field">
                   <label htmlFor="checkout-address">{t("address")} <span className="checkout-required" aria-hidden="true">*</span></label>

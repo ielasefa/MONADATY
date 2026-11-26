@@ -1,0 +1,38 @@
+{
+  "components/admin/dashboard/AnalyticsSection.tsx -> ../charts/CollectionSalesChart": {
+    "id": "components/admin/dashboard/AnalyticsSection.tsx -> ../charts/CollectionSalesChart",
+    "files": [
+      "static/chunks/_app-pages-browser_components_admin_charts_CollectionSalesChart_tsx.js"
+    ]
+  },
+  "components/admin/dashboard/AnalyticsSection.tsx -> ../charts/MonthlyRevenueChart": {
+    "id": "components/admin/dashboard/AnalyticsSection.tsx -> ../charts/MonthlyRevenueChart",
+    "files": [
+      "static/chunks/_app-pages-browser_components_admin_charts_MonthlyRevenueChart_tsx.js"
+    ]
+  },
+  "components/admin/dashboard/AnalyticsSection.tsx -> ../charts/OrdersChart": {
+    "id": "components/admin/dashboard/AnalyticsSection.tsx -> ../charts/OrdersChart",
+    "files": [
+      "static/chunks/_app-pages-browser_components_admin_charts_OrdersChart_tsx.js"
+    ]
+  },
+  "components/admin/dashboard/AnalyticsSection.tsx -> ../charts/RevenueChart": {
+    "id": "components/admin/dashboard/AnalyticsSection.tsx -> ../charts/RevenueChart",
+    "files": [
+      "static/chunks/_app-pages-browser_components_admin_charts_RevenueChart_tsx.js"
+    ]
+  },
+  "components/admin/dashboard/AnalyticsSection.tsx -> ../charts/TopProductsChart": {
+    "id": "components/admin/dashboard/AnalyticsSection.tsx -> ../charts/TopProductsChart",
+    "files": [
+      "static/chunks/_app-pages-browser_components_admin_charts_TopProductsChart_tsx.js"
+    ]
+  },
+  "components/cart-context.tsx -> @/components/CartDrawer": {
+    "id": "components/cart-context.tsx -> @/components/CartDrawer",
+    "files": [
+      "static/chunks/_app-pages-browser_components_CartDrawer_tsx.js"
+    ]
+  }
+}

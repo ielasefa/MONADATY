@@ -22,7 +22,7 @@ export default async function AboutPage() {
   const lang = await getLanguage();
   const copy = getLandingCopy(lang).about;
   const content = await getLandingContent();
-  const image = content.aboutSection.image?.trim() || "/uploads/monadaty/about/a60496f8d9234ed0.webp";
+  const image = "/images/storefront/monadaty-about-showcase.png";
 
   return (
     <div className="market-about">

@@ -20,6 +20,7 @@ export function CommandPalette({ open, onClose, brandName = "MONADATY" }: Comman
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [search, setSearch] = useState("");
   const shouldReduceMotion = useReducedMotion();
+  const { lang } = useTranslation("common");
   const { t: tCommon } = useTranslation("common");
   const { t: tHome } = useTranslation("home");
   const { t: tNavbar } = useTranslation("navbar");
@@ -96,7 +97,7 @@ export function CommandPalette({ open, onClose, brandName = "MONADATY" }: Comman
               role="dialog"
               aria-modal="true"
               aria-label={tCommon("search_commands")}
-              className="w-full max-w-xl overflow-hidden rounded-2xl border border-[#E8E1D8] bg-white text-foreground shadow-premium-xl"
+              className="w-full max-w-xl overflow-hidden rounded-2xl border border-[#E8E1D8] bg-white text-[#211916] shadow-[0_24px_80px_rgba(28,12,8,.24)]"
               loop
               onKeyDown={(e: React.KeyboardEvent) => {
                 if (e.key === "Escape") onClose();
@@ -112,16 +113,24 @@ export function CommandPalette({ open, onClose, brandName = "MONADATY" }: Comman
                   value={search}
                   onValueChange={setSearch}
                   placeholder={tCommon("search_drinks_commands")}
-                  className="h-14 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-secondary focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                  className="h-14 flex-1 bg-transparent text-base font-medium text-[#211916] outline-none placeholder:text-[#776d66] focus-visible:ring-2 focus-visible:ring-gold/30"
                   aria-label={tCommon("search_commands")}
                 />
+                <button
+                  type="button"
+                  onClick={onClose}
+                  aria-label={lang === "ar" ? "إغلاق البحث" : lang === "fr" ? "Fermer la recherche" : "Close search"}
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#e8e1d8] bg-[#faf8f5] text-lg font-medium leading-none text-[#5f1013] transition-colors hover:bg-[#780b10] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b8863b]"
+                >
+                  <span aria-hidden="true">×</span>
+                </button>
                 <kbd className="hidden rounded-md border border-line bg-ivory/[0.02] px-2 py-1 text-sm font-medium text-secondary sm:inline">
                   {tCommon("esc_key")}
                 </kbd>
               </div>
 
               <Command.List className="max-h-80 overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-ivory/10">
-                <Command.Empty className="py-12 text-center text-sm text-secondary">
+                <Command.Empty className="py-12 text-center text-sm font-medium text-[#5f524b]">
                   {tCommon("no_results")}
                 </Command.Empty>
 
@@ -129,7 +138,7 @@ export function CommandPalette({ open, onClose, brandName = "MONADATY" }: Comman
                   <Command.Group
                     key={group}
                     heading={group}
-                    className="mb-2 [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-2 [&_[cmdk-group-heading]]:text-sm [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-[0.08em] [&_[cmdk-group-heading]]:text-secondary"
+                    className="mb-2 [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-2 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-bold [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-[0.08em] [&_[cmdk-group-heading]]:text-[#780b10]"
                   >
                     {filtered
                       .filter((item) => item.group === group)
@@ -141,7 +150,7 @@ export function CommandPalette({ open, onClose, brandName = "MONADATY" }: Comman
                             router.push(item.href);
                             onClose();
                           }}
-                          className="flex cursor-pointer items-center gap-3 rounded-md px-3 py-2.5 text-sm text-secondary transition-all duration-150 hover:translate-x-1 data-[selected=true]:bg-[#FAF8F5] data-[selected=true]:text-foreground"
+                          className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-[#342923] transition-colors duration-150 hover:bg-[#faf5ed] data-[selected=true]:bg-[#780b10] data-[selected=true]:text-white"
                         >
                           <svg aria-hidden="true" width={20} height={20} className="shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
                             {iconPaths[item.icon]}
@@ -155,7 +164,7 @@ export function CommandPalette({ open, onClose, brandName = "MONADATY" }: Comman
 
                 <Command.Group
                   heading={tCommon("quick_actions")}
-                  className="[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-2 [&_[cmdk-group-heading]]:text-sm [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-[0.08em] [&_[cmdk-group-heading]]:text-brand"
+                    className="[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-2 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-bold [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-[0.08em] [&_[cmdk-group-heading]]:text-[#780b10]"
                 >
                   <Command.Item
                     value={tCommon("home")}
@@ -163,7 +172,7 @@ export function CommandPalette({ open, onClose, brandName = "MONADATY" }: Comman
                       router.push("/");
                       onClose();
                     }}
-                    className="flex cursor-pointer items-center gap-3 rounded-md px-3 py-2.5 text-sm text-secondary transition-all duration-150 hover:translate-x-1 data-[selected=true]:bg-[#FAF8F5] data-[selected=true]:text-foreground"
+                    className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-[#342923] transition-colors duration-150 hover:bg-[#faf5ed] data-[selected=true]:bg-[#780b10] data-[selected=true]:text-white"
                   >
                     <svg aria-hidden="true" width={20} height={20} className="shrink-0 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
                       {iconPaths.home}

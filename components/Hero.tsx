@@ -59,17 +59,27 @@ export function Hero({ settings, fallbackImage, preview = false, collectionsHref
   const { lang } = useTranslation("home");
   const { hero } = getLandingCopy(lang);
   if (!preview) {
+    const heroImages = {
+      fr: "/images/storefront/monadaty-hero-fr.png",
+      en: "/images/storefront/monadaty-hero-en.png",
+      ar: "/images/storefront/monadaty-hero-ar.png",
+    } as const;
+    const catalogHotspots = {
+      fr: { left: "9.2%", top: "71%", width: "22%", height: "12%" },
+      en: { left: "14.3%", top: "70%", width: "20.5%", height: "12%" },
+      ar: { left: "18.3%", top: "72%", width: "19%", height: "11%" },
+    } as const;
     return (
-      <section className="market-hero market-hero-reference" aria-label={hero.imageAlt}>
+      <section className="market-hero market-hero-reference" data-language={lang} aria-label={hero.imageAlt}>
         <Image
-          src="/images/storefront/monadaty-hero-reference.png"
+          src={heroImages[lang]}
           alt={hero.imageAlt}
           fill
           priority
           sizes="(max-width: 640px) 100vw, 96vw"
           className="market-hero-reference-image"
         />
-        <Link className="market-hero-reference-shop" href={settings.ctaLink || "/shop"} aria-label={hero.primaryCta} />
+        <Link className="market-hero-reference-shop" href={settings.ctaLink || "/shop"} style={catalogHotspots[lang]} aria-label={hero.primaryCta} />
       </section>
     );
   }
