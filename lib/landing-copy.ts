@@ -93,7 +93,6 @@ const LANDING_COPY = {
       "titleAccent": "Nous l’approvisionnons.",
       "description": "Épiceries, cafés, restaurants : nous simplifions votre approvisionnement en boissons, du choix du catalogue à la livraison à votre commerce.",
       "imageAlt": "Une sélection de boissons : eau, sodas et jus.",
-      "imageCaption": "Les boissons du quotidien, réunies pour les professionnels.",
       "services": [
         "Pour les professionnels",
         "Livraison à Rabat & Salé",
@@ -247,7 +246,6 @@ const LANDING_COPY = {
       "titleAccent": "We keep it stocked.",
       "description": "Grocers, cafés and restaurants: we make restocking drinks simple, from browsing the catalogue to delivery at your business.",
       "imageAlt": "A selection of bottled water, soft drinks and juices.",
-      "imageCaption": "Everyday drinks, brought together for businesses.",
       "services": [
         "For professionals",
         "Delivery in Rabat & Salé",
@@ -400,7 +398,6 @@ const LANDING_COPY = {
       "titleAccent": "ونحن نهتم بمشروباتك.",
       "description": "للبقالات والمقاهي والمطاعم: نسهّل تزويد متجرك بالمشروبات، من اختيار المنتجات في الكتالوج إلى توصيلها إلى باب محلك.",
       "imageAlt": "تشكيلة من قنينات المياه والمشروبات الغازية والعصائر.",
-      "imageCaption": "مشروبات يومية، جمعناها لتلبية احتياجات المهنيين.",
       "services": [
         "خاص بالمهنيين",
         "التوصيل إلى الرباط وسلا",

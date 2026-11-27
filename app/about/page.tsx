@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { SafeImage } from "@/components/SafeImage";
-import { BrandLogo } from "@/components/BrandLogo";
+import Image from "next/image";
 import { getLandingCopy } from "@/lib/landing-copy";
 import { getLanguage } from "@/lib/translations";
 import { FadeIn } from "@/components/motion/FadeIn";
@@ -38,9 +37,8 @@ export default async function AboutPage() {
         <FadeIn className="about-hero-visual" delay={0.08} y={12}>
           <figure>
             <div className="about-image">
-              <SafeImage src={image} alt={copy.imageAlt} fill priority sizes="(min-width: 1024px) 46vw, 100vw" className="object-cover" />
+              <Image src={image} alt={copy.imageAlt} width={1448} height={1086} priority sizes="(min-width: 640px) 46vw, 100vw" className="block h-auto w-full object-contain" />
             </div>
-            <figcaption><BrandLogo className="about-caption-logo" width={90} height={30} /><span>{copy.imageCaption}</span></figcaption>
           </figure>
         </FadeIn>
         <ul className="about-services">

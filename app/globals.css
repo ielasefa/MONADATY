@@ -1964,7 +1964,6 @@ select option { background-color: #171717; color: #FFFFFF; }
 .market-wordmark:has(.brand-logo) { display: flex; justify-content: center; padding: 0; }
 .market-wordmark .market-wordmark-image { width: clamp(136px, 14vw, 196px); height: auto; max-height: 66px; }
 .footer-brand-logo { width: 228px; height: auto; }
-.about-caption-logo { width: 90px; height: auto; flex-shrink: 0; }
 .storefront-shell { --page-title-size: clamp(1.75rem, 2.6vw, 2.25rem); --page-title-leading: 1.35; }
 .storefront-shell :is(.collection-intro, .wishlist-intro) .storefront-page-title,
 .storefront-shell .catalogue-intro h1 { font-size: var(--page-title-size); line-height: var(--page-title-leading); letter-spacing: -.02em; }
