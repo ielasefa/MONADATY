@@ -1039,9 +1039,7 @@ export function MoroccanMoment({ product }: { product?: ProductData }) {
                 </div>
               )}
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-[#6E1F2A]/10 via-transparent to-[#D6B35A]/[0.06]" />
-              <span className="market-image-caption absolute bottom-5 start-5 rounded-full border border-line bg-black/45 px-4 py-2 text-sm font-medium uppercase tracking-[0.08em] text-secondary backdrop-blur-md sm:bottom-7 sm:start-7">
-                {copy.discovery.visualLabel}
-              </span>
+
             </div>
           </Reveal>
           <Reveal delay={0.12} className="lg:col-span-4 lg:col-start-9">

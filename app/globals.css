@@ -1735,9 +1735,9 @@ select option { background-color: #171717; color: #FFFFFF; }
 .market-admin-logo-name { font-size: 1.4rem; font-weight: 800; letter-spacing: .075em; }
 .market-admin-logo-subtitle { margin-top: 6px; font-size: .62rem; font-weight: 700; letter-spacing: .17em; }
 .market-admin-logo-image { display: block; width: auto; object-fit: contain; }
-.market-admin-logo-image-sm { max-width: 160px; height: 64px; }
-.market-admin-logo-image-md { max-width: 210px; height: 84px; }
-.market-admin-logo-image-lg { max-width: 280px; height: 112px; }
+.market-admin-logo-image-sm { width: 160px; max-width: 100%; height: auto; }
+.market-admin-logo-image-md { width: 210px; max-width: 100%; height: auto; }
+.market-admin-logo-image-lg { width: 280px; max-width: 100%; height: auto; }
 .market-admin-logo-sm .market-admin-logo-mark { width: 38px; height: 17px; margin-bottom: 3px; }
 .market-admin-logo-sm .market-admin-logo-name { font-size: 1rem; }
 .market-admin-logo-sm .market-admin-logo-subtitle { margin-top: 4px; font-size: .5rem; }
@@ -1960,7 +1960,7 @@ select option { background-color: #171717; color: #FFFFFF; }
 }
 
 /* Shared storefront typography and the approved brand asset. */
-.brand-logo { display: block; object-fit: contain; object-position: center; border-radius: 6px; }
+.brand-logo { display: block; max-width: 100%; height: auto; aspect-ratio: 3 / 1; object-fit: contain; object-position: center; border-radius: 0; }
 .market-wordmark:has(.brand-logo) { display: flex; justify-content: center; padding: 0; }
 .market-wordmark .market-wordmark-image { width: clamp(136px, 14vw, 196px); height: auto; max-height: 66px; }
 .footer-brand-logo { width: 228px; height: auto; }
@@ -1979,8 +1979,3 @@ select option { background-color: #171717; color: #FFFFFF; }
   .collection-intro { padding-block: 23px; }
   .market-wordmark .market-wordmark-image { width: 136px; max-height: 48px; }
 }
-
-.market-hero-approved-brand { position: absolute; z-index: 1; left: 8%; top: 0; width: 29%; height: 17%; display: flex; align-items: center; justify-content: flex-start; direction: ltr; background: linear-gradient(90deg, #450000 75%, transparent); }
-.market-hero-approved-brand .brand-logo { width: auto; max-width: 100%; height: 100%; border-radius: 0; }
-.market-hero-reference[data-language="en"] .market-hero-approved-brand { left: 13%; width: 27%; }
-.market-hero-reference[data-language="ar"] .market-hero-approved-brand { left: 17%; width: 27%; }

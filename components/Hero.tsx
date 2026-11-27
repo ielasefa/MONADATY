@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { BrandLogo } from "@/components/BrandLogo";
 import Link from "next/link";
 import { MarketIcon } from "@/components/MarketIcon";
 import { SafeImage } from "@/components/SafeImage";
@@ -80,7 +79,6 @@ export function Hero({ settings, fallbackImage, preview = false, collectionsHref
           sizes="(max-width: 640px) 100vw, 96vw"
           className="market-hero-reference-image"
         />
-        <div className="market-hero-approved-brand"><BrandLogo width={260} height={87} priority /></div>
         <Link className="market-hero-reference-shop" href={settings.ctaLink || "/shop"} style={catalogHotspots[lang]} aria-label={hero.primaryCta} />
       </section>
     );

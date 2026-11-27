@@ -53,7 +53,6 @@ const LANDING_COPY = {
       eyebrow: "LES INDISPENSABLES DU RAYON",
       description:
         "Des sodas connus aux eaux et jus du quotidien, retrouvez les boissons qui tournent le plus dans votre commerce. Commandez en ligne, on livre jusqu’à vous.",
-      visualLabel: "VOS BOISSONS, LIVRÉES",
       explore: "DÉCOUVRIR LES BOISSONS",
     },
     newsletter: {
@@ -208,7 +207,6 @@ const LANDING_COPY = {
       eyebrow: "SHELF ESSENTIALS",
       description:
         "From well-known sodas to everyday waters and juices, find the drinks that move fastest in your business. Order online and we deliver to you.",
-      visualLabel: "YOUR DRINKS, DELIVERED",
       explore: "DISCOVER DRINKS",
     },
     newsletter: {
@@ -363,7 +361,6 @@ const LANDING_COPY = {
       eyebrow: "أساسيات الرف",
       description:
         "من المشروبات الغازية المعروفة إلى المياه والعصائر اليومية، تجد هنا المشروبات الأكثر دوراناً في محلك. اطلب عبر الإنترنت وخلي التوصيل علينا.",
-      visualLabel: "مشروباتك تصلك أينما كنت",
       explore: "اكتشف المشروبات",
     },
     newsletter: {
