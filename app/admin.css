@@ -198,3 +198,53 @@
 @media (prefers-reduced-motion: reduce) {
   .admin-shell *, .admin-shell *::before, .admin-shell *::after { scroll-behavior: auto; animation-duration: .01ms; transition-duration: .01ms; }
 }
+
+/* Homepage management exposes the product and collection selections only. */
+.homepage-admin { max-width: 1440px; }
+.homepage-admin-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; margin-bottom: 28px; }
+.homepage-admin-heading h1 { color: #780b10; font-size: clamp(1.5rem, 2.2vw, 1.875rem); line-height: 1.4; }
+.homepage-admin-heading p { margin-top: 9px; max-width: 64ch; color: #7b6d61; font-size: .875rem; line-height: 1.8; }
+.homepage-admin-heading > a { flex-shrink: 0; display: inline-flex; align-items: center; gap: 9px; }
+.homepage-admin-panel { padding: 24px; }
+.homepage-admin-panel + .homepage-admin-panel { margin-top: 24px; }
+.homepage-admin-panel-heading { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 24px; }
+.homepage-admin-section-icon { display: grid; place-items: center; width: 40px; height: 40px; flex-shrink: 0; border: 1px solid #e8d9c0; border-radius: 10px; background: #fbf6ec; color: #956c30; }
+.homepage-admin-panel-heading h2 { color: #630b11; font-size: 1rem; font-weight: 600; line-height: 1.5; }
+.homepage-admin-panel-heading p { margin-top: 6px; color: #807165; font-size: .8125rem; line-height: 1.7; }
+.homepage-admin-count { margin-inline-start: auto; flex-shrink: 0; padding: 5px 10px; border: 1px solid #e8dfd3; border-radius: 8px; color: #8c6228; background: #faf8f5; font-size: .8125rem; font-variant-numeric: tabular-nums; direction: ltr; }
+.homepage-admin-products { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.homepage-admin-slot { min-width: 0; padding: 14px; border: 1px solid #e8e0d6; border-radius: 12px; background: #fcfaf7; }
+.homepage-admin label { display: block; margin-bottom: 10px; color: #665346; font-size: .75rem; font-weight: 600; line-height: 1.6; }
+.homepage-admin-image { position: relative; display: grid; place-items: center; width: 100%; height: 144px; margin-bottom: 14px; overflow: hidden; border: 1px solid #eee7de; border-radius: 9px; background: #fff; color: #c4b49c; }
+.homepage-admin-slot select, .homepage-admin-collection-slot select { display: block; width: 100%; min-width: 0; min-height: 44px; padding-inline: 10px 26px; font-size: .8125rem; }
+.homepage-admin-product-price { margin-top: 10px; color: #8c6228; font-size: .8125rem; font-variant-numeric: tabular-nums; }
+.homepage-admin-collections { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.homepage-admin-collection-slot { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; align-items: center; padding: 12px; border: 1px solid #e8e0d6; border-radius: 12px; }
+.homepage-admin-collection-slot > div { min-width: 0; }
+.homepage-admin-image-collection { width: 64px; height: 64px; margin: 0; }
+.homepage-admin-collection-slot label { margin-bottom: 6px; }
+.homepage-admin-fixed { display: flex; align-items: center; gap: 8px; margin-top: 20px; color: #8a7967; font-size: .75rem; line-height: 1.8; }
+.homepage-admin-fixed svg { flex-shrink: 0; }
+.homepage-admin-feedback { margin-top: 20px; padding: 12px 16px; border: 1px solid #d9e3d6; border-radius: 10px; color: #477048; background: #f5f9f3; font-size: .875rem; line-height: 1.7; }
+.homepage-admin-feedback-error { border-color: #e7c6c6; background: #fff7f5; color: #9b2029; }
+.homepage-admin-savebar { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 24px; padding-top: 20px; border-top: 1px solid #e8dfd4; }
+.homepage-admin-savebar > p { color: #8a7967; font-size: .8125rem; line-height: 1.6; }
+.homepage-admin button:disabled { opacity: .5; cursor: not-allowed; }
+.homepage-admin-empty { margin-bottom: 20px; color: #8a7967; font-size: .875rem; line-height: 1.8; }
+.homepage-admin-empty a { color: #780b10; text-decoration: underline; text-underline-offset: 4px; }
+@media (max-width: 1199px) {
+  .homepage-admin-products { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .homepage-admin-collections { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 539px) {
+  .homepage-admin-heading { flex-wrap: wrap; gap: 16px; margin-bottom: 22px; }
+  .homepage-admin-panel { padding: 16px; }
+  .homepage-admin-panel-heading { gap: 10px; }
+  .homepage-admin-section-icon { width: 34px; height: 34px; }
+  .homepage-admin-panel-heading h2 { font-size: .9375rem; }
+  .homepage-admin-count { padding: 4px 7px; }
+  .homepage-admin-products { gap: 10px; }
+  .homepage-admin-slot { padding: 10px; }
+  .homepage-admin-image:not(.homepage-admin-image-collection) { height: 108px; }
+  .homepage-admin-savebar { align-items: stretch; flex-direction: column; gap: 12px; }
+}

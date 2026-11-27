@@ -47,8 +47,8 @@ const validBody = {
   subtotal: "100.00 DH",
   shipping: "0.00 DH",
   shippingMethod: "delivery",
-  tax: "8.00 DH",
-  total: "108.00 DH",
+  tax: "0.00 DH",
+  total: "100.00 DH",
   postalCode: "10000",
 };
 
@@ -74,7 +74,7 @@ describe("POST /api/orders/create", () => {
     mockCreateOrder.mockResolvedValue({
       orderNumber: "MON-001",
       id: "o1",
-      total: "108.00 DH",
+      total: "100.00 DH",
       orderStatus: "pending",
       paymentStatus: "pending",
       customerName: "Test Customer",
@@ -114,7 +114,7 @@ describe("POST /api/orders/create", () => {
 
   it.each([undefined, null, "", "   "])("accepts an optional email (%s) without sending a confirmation", async (email) => {
     mockCreateOrder.mockResolvedValueOnce({
-      id: "order-no-email", orderNumber: "MON-NO-EMAIL", total: "108.00 DH",
+      id: "order-no-email", orderNumber: "MON-NO-EMAIL", total: "100.00 DH",
       orderStatus: "pending", paymentStatus: "pending", customerEmail: "", replayed: false,
     });
     const response = await POST(makeRequest({ ...validBody, customerEmail: email }));
@@ -160,7 +160,7 @@ describe("POST /api/orders/create", () => {
     mockCreateOrder.mockResolvedValueOnce({
       orderNumber: "MON-TEST-001",
       id: "order-1",
-      total: "108.00 DH",
+      total: "100.00 DH",
       orderStatus: "pending",
       paymentStatus: "pending",
       customerName: "Test Customer",
@@ -189,7 +189,7 @@ describe("POST /api/orders/create", () => {
     mockCreateOrder.mockResolvedValueOnce({
       orderNumber: "MON-TEST-001",
       id: "order-1",
-      total: "108.00 DH",
+      total: "100.00 DH",
       orderStatus: "pending",
       paymentStatus: "pending",
       customerName: "Test Customer",
@@ -211,7 +211,7 @@ describe("POST /api/orders/create", () => {
     mockGetOrderByIdempotencyKey.mockResolvedValueOnce({
       orderNumber: "MON-RECOVERED",
       id: "order-recovered",
-      total: "108.00 DH",
+      total: "100.00 DH",
       orderStatus: "pending",
       paymentStatus: "pending",
       customerName: "Test Customer",

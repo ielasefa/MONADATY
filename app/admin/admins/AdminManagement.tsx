@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useTranslation } from "@/hooks/useTranslation";
+import { adminDeleteCopy } from "@/lib/admin-delete-copy";
 
 type AdminRecord = {
   id: string;
@@ -15,8 +16,10 @@ type AdminRecord = {
   createdAt: Date;
 };
 
-export function AdminManagement({ admins: initialAdmins }: { admins: AdminRecord[] }) {
-  const { t } = useTranslation("admin");
+export function AdminManagement({ admins: initialAdmins, currentAdminId }: { admins: AdminRecord[]; currentAdminId: string }) {
+  const { t, lang } = useTranslation("admin");
+  const labels = adminDeleteCopy[lang];
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const router = useRouter();
   const [admins, setAdmins] = useState(initialAdmins);
   const [showCreate, setShowCreate] = useState(false);
@@ -54,18 +57,30 @@ export function AdminManagement({ admins: initialAdmins }: { admins: AdminRecord
     }
   }
 
-   async function handleDelete(id: string) {
-     const res = await fetch(`/api/admin/admins/${id}`, { method: "DELETE" });
+  function deleteReason(admin: AdminRecord) {
+    if (admins.length <= 1) return labels.CANNOT_DELETE_LAST_ADMIN;
+    if (admin.role === "SUPER_ADMIN" && admins.filter(item => item.role === "SUPER_ADMIN").length <= 1) return labels.CANNOT_DELETE_LAST_SUPER_ADMIN;
+    if (admin.id === currentAdminId) return labels.CANNOT_DELETE_CURRENT_ADMIN;
+    return undefined;
+  }
 
-     if (res.ok) {
-       setAdmins((prev) => prev.filter((a) => a.id !== id));
-       router.refresh();
-       toast.success(t("admin_deleted_success", "Admin deleted successfully"));
-     } else {
-       const data = await res.json();
-       toast.error(data.error || t("fail_delete_admin"));
-     }
-   }
+  async function handleDelete(id: string) {
+    if (deletingId) return;
+    setDeletingId(id);
+    try {
+      const res = await fetch(`/api/admin/admins/${id}`, { method: "DELETE" });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
+        setAdmins(previous => previous.filter(admin => admin.id !== id));
+        router.refresh();
+        toast.success(t("admin_deleted_success", "Admin deleted successfully"));
+      } else {
+        const code = data.error as keyof typeof labels;
+        toast.error(labels[code] || labels.failed);
+      }
+    } catch { toast.error(labels.failed); }
+    finally { setDeletingId(null); }
+  }
 
   return (
     <div className="admin-team-page">
@@ -192,11 +207,11 @@ export function AdminManagement({ admins: initialAdmins }: { admins: AdminRecord
                 <td>
                   <button
                     onClick={() => handleDelete(a.id)}
-                    disabled={admins.length <= 1}
+                    disabled={Boolean(deleteReason(a)) || deletingId !== null}
                     className="admin-team-delete disabled:opacity-40"
-                    title={admins.length <= 1 ? t("cannot_delete_last") : undefined}
+                    title={deleteReason(a)}
                   >
-                    {t("delete_admin")}
+                    {deletingId === a.id ? labels.deleting : t("delete_admin")}
                   </button>
                 </td>
               </tr>

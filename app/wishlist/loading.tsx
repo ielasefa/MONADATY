@@ -1,12 +1,11 @@
 export default function WishlistLoading() {
   return (
     <div className="wishlist-page bg-canvas" role="status" aria-busy="true" aria-label="Loading favorites">
-      <section className="border-b border-line bg-surface">
+      <section className="wishlist-heading">
         <div className="storefront-container wishlist-intro">
           <div className="wishlist-loading-line" style={{ width: 120, marginTop: 0 }} />
-          <div className="wishlist-loading-line wishlist-loading-line-wide" style={{ width: 280, height: 38, marginTop: 22 }} />
-          <div className="wishlist-loading-line" style={{ width: "min(100%, 420px)", height: 14, marginTop: 18 }} />
-          <div className="wishlist-loading-line" style={{ width: "min(86%, 360px)", height: 14, marginTop: 8 }} />
+          <div className="wishlist-loading-line wishlist-loading-line-wide" style={{ width: 280, height: 38, marginTop: 10 }} />
+          <div className="wishlist-loading-line" style={{ width: "min(100%, 560px)", height: 16, marginTop: 10 }} />
         </div>
       </section>
       <section className="wishlist-content">

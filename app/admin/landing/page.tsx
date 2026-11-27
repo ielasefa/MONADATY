@@ -1,24 +1,16 @@
-import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getAuthenticatedAdmin } from "@/lib/auth";
-import {
-  getAdminLanding,
-  getFeaturedSectionEntries,
-  getLandingCollections,
-  getLatestLandingConfigId,
-  getVersions,
-} from "@/lib/landing-cms";
-import { LandingCMS } from "./LandingCMS";
-import { HomepageProductSelection } from "@/components/admin/HomepageProductSelection";
+import { getAdminLanding, getFeaturedSectionEntries, getLandingCollections, getLatestLandingConfigId } from "@/lib/landing-cms";
+import { getProducts } from "@/lib/db";
+import { getLanguage } from "@/lib/translations";
+import { landingAdminCopy } from "@/lib/landing-admin-copy";
 import { isMissingCmsTable, loadLegacyFeaturedSelection } from "@/lib/featured-selection";
+import { LandingCMS } from "./LandingCMS";
 
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const { getLanguage, getTranslation, loadTranslations } = await import("@/lib/translations");
-  const lang = await getLanguage();
-  const translations = await loadTranslations("admin");
-  return { title: getTranslation(translations, "landing_page_title", lang, "Landing Page CMS") };
+export async function generateMetadata() {
+  return { title: landingAdminCopy[await getLanguage()].title };
 }
 
 export default async function AdminLandingPage() {
@@ -30,30 +22,23 @@ export default async function AdminLandingPage() {
     configId = await getLatestLandingConfigId();
   } catch (error) {
     if (!isMissingCmsTable(error)) throw error;
-    return <HomepageProductSelection {...await loadLegacyFeaturedSelection()} />;
+    const selection = await loadLegacyFeaturedSelection();
+    return <LandingCMS products={selection.products} initialProductIds={selection.productIds} />;
   }
 
-  const [landingData, featuredEntries, versions, allCollections] = await Promise.all([
-    getAdminLanding(),
-    getFeaturedSectionEntries(configId),
-    getVersions(configId),
-    getLandingCollections(),
+  const [landingData, entries, collections, products] = await Promise.all([
+    getAdminLanding(), getFeaturedSectionEntries(configId), getLandingCollections(), getProducts(),
   ]);
+  const configuredIds = String(landingData.collectionHeader?.selectedCollectionIds || "").split(",").filter(Boolean);
+  const validCollectionIds = configuredIds.filter(id => collections.some(collection => collection.id === id));
+  const collectionIds = configuredIds.length > 0 ? validCollectionIds : collections.slice(0, 3).map(collection => collection.id);
 
-  return (
-    <LandingCMS
-      configId={configId}
-      landingData={landingData}
-      featuredEntries={featuredEntries}
-      allCollections={allCollections}
-      versions={versions.map((v: { id: string; version: number; status: string; label: string; createdBy: string; createdAt: Date | string }) => ({
-        id: v.id,
-        version: v.version,
-        status: v.status,
-        label: v.label,
-        createdBy: v.createdBy,
-        createdAt: v.createdAt instanceof Date ? v.createdAt.toISOString() : String(v.createdAt),
-      }))}
-    />
-  );
+  return <LandingCMS
+    configId={configId}
+    products={products.map(({ id, name, image, price }) => ({ id, name, image, price }))}
+    initialProductIds={entries.map(entry => entry.productId)}
+    collections={collections.map(({ id, name, image }) => ({ id, name, image }))}
+    initialCollectionIds={collectionIds}
+    published={landingData.status === "published"}
+  />;
 }

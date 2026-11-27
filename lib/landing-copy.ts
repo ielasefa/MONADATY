@@ -77,8 +77,8 @@ const LANDING_COPY = {
       description: "Sodas, eaux, jus et plus — tout ce qu’il faut à votre commerce, au même endroit.",
     },
     wishlist: {
-      eyebrow: "VOTRE SÉLECTION",
-      title: "VOS FAVORIS",
+      eyebrow: "Votre sélection",
+      title: "Vos favoris",
       description: "Gardez les boissons dont votre commerce a besoin sous la main et revenez les commander quand vous voulez.",
     },
     checkout: {
@@ -230,8 +230,8 @@ const LANDING_COPY = {
       description: "Sodas, water, juices and more — everything your business needs, in one place.",
     },
     wishlist: {
-      eyebrow: "YOUR SELECTION",
-      title: "YOUR FAVORITES",
+      eyebrow: "Your selection",
+      title: "Your favorites",
       description: "Keep the drinks your business relies on close and come back to order them whenever you are ready.",
     },
     checkout: {

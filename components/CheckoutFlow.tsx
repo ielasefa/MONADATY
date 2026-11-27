@@ -12,6 +12,7 @@ import { ProductImage } from "@/components/ProductImage";
 import { resolveDatabaseProductImage } from "@/lib/product-images";
 import { PREMIUM_EASE } from "@/lib/motion";
 import { isCheckoutCity, isValidCheckoutEmail } from "@/lib/checkout-validators";
+import { CheckoutProgress } from "@/components/CheckoutProgress";
 
 function formatPrice(price: string, quantity: number): string {
   return formatMoney(parseMoney(price) * quantity);
@@ -125,8 +126,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
     [items],
   );
 
-  const taxValue = useMemo(() => subtotalValue * 0.08, [subtotalValue]);
-  const totalValue = subtotalValue + taxValue;
+  const totalValue = subtotalValue;
 
   const lineItems = useMemo(
     () =>
@@ -207,7 +207,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
       idempotencyKey,
       subtotal: formatMoney(subtotalValue),
       shipping: "0.00 DH",
-      tax: formatMoney(taxValue),
+      tax: "0.00 DH",
       total: formatMoney(totalValue),
       items: items.map((item) => ({
         productId: item.id,
@@ -262,6 +262,9 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
     }
   }
 
+  // Keep the pending screen mounted after clearing the cart, until navigation finishes.
+  if (isSubmitting) return <CheckoutProgress confirming />;
+
   if (!items.length) {
     return (
       <motion.div
@@ -269,6 +272,7 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: shouldReduce ? 0 : 0.6, ease: PREMIUM_EASE }}
         className="flex min-h-[60vh] items-center justify-center"
+        data-checkout-empty
       >
         <div className="max-w-lg text-center">
           <div className="mx-auto mb-8 flex h-20 w-20 items-center justify-center rounded-full border border-line bg-card">
@@ -447,7 +451,6 @@ export function CheckoutFlow({ cities = [] }: CheckoutFlowProps) {
             </div>
             <dl className="checkout-totals">
               <div><dt>{t("cart_subtotal")}</dt><dd dir="ltr">{formatMoney(subtotalValue)}</dd></div>
-              <div><dt>{t("tax_rate")}</dt><dd dir="ltr">{formatMoney(taxValue)}</dd></div>
               <div><dt>{t("delivery_fee")}</dt><dd className="checkout-free">{t("delivery_included")}</dd></div>
             </dl>
             <div className="checkout-grand-total"><div><p>{t("cart_total")}</p><span>{t("payment_at_delivery")}</span></div><strong dir="ltr">{formatMoney(totalValue)}</strong></div>

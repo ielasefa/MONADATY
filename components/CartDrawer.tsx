@@ -239,7 +239,6 @@ export function CartDrawer() {
               <span className="label-utility text-secondary">{t("cart_subtotal")}</span>
               <span className="text-xl font-semibold text-foreground">{subtotal}</span>
             </div>
-            <p className="mt-1 label-utility text-secondary">{t("taxes_shipping_note")}</p>
 
             <div className="my-4 h-px bg-gold/[0.16]" />
 

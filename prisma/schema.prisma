@@ -137,8 +137,8 @@ model ProductHistory {
   id        String   @id @default(uuid())
   productId String
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  adminId   String
-  admin     Admin    @relation(fields: [adminId], references: [id])
+  adminId   String?
+  admin     Admin?   @relation(fields: [adminId], references: [id], onDelete: SetNull)
   adminName String   @default("")
   action    String
   field     String   @default("")
@@ -362,8 +362,9 @@ model Faq {
 
 model AdminLog {
   id        String   @id @default(uuid())
-  adminId   String
-  admin     Admin    @relation(fields: [adminId], references: [id])
+  adminId   String?
+  admin     Admin?   @relation(fields: [adminId], references: [id], onDelete: SetNull)
+  adminName String   @default("")
   action    String
   entity    String
   entityId  String   @default("")

@@ -10,6 +10,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { OrderStatusWorkflow } from "@/components/admin/OrderStatusWorkflow";
 import { OrderTimeline } from "@/components/OrderTimeline";
 import { InvoicePanel } from "@/components/admin/InvoicePanel";
+import { parseMoney } from "@/lib/money";
 
 function toDateInputValue(iso: string): string {
   if (!iso) return "";
@@ -248,10 +249,10 @@ export default function AdminOrderDetailPage() {
                   <span>{t("subtotal")}</span>
                   <span>{order.subtotal}</span>
                 </div>
-                <div className="flex items-center justify-between text-sm text-muted">
+                {parseMoney(order.tax) > 0 && <div className="flex items-center justify-between text-sm text-muted">
                   <span>{t("tax")}</span>
                   <span>{order.tax}</span>
-                </div>
+                </div>}
                 <div className="divider-gold flex items-center justify-between border-t border-gold/20 pt-3 text-base font-medium text-foreground">
                   <span>{t("total")}</span>
                   <span className="font-display text-lg font-semibold text-accent">{order.total}</span>

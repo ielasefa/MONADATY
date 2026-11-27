@@ -14,7 +14,8 @@ import { MarketIcon } from "@/components/MarketIcon";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { Language } from "@/context/LanguageContext";
 
-type Category = { slug: string; name: string };
+export type NavbarCategory = { slug: string; name: string; image?: string; productImage?: boolean; count?: number };
+type Category = NavbarCategory;
 const copy = {
   fr: { home: "Accueil", shop: "Catalogue", categories: "Catégories", all: "Toutes les boissons", collections: "Collections", about: "À propos", search: "Rechercher une boisson ou une marque", menu: "Ouvrir le menu", close: "Fermer le menu", quickSearch: "Recherche rapide", wishlist: "Favoris", cart: "Panier", primary: "Navigation principale", brand: "ELASRI BUSINESS" },
   en: { home: "Home", shop: "Catalogue", categories: "Categories", all: "All beverages", collections: "Collections", about: "About", search: "Search drinks or brands", menu: "Open menu", close: "Close menu", quickSearch: "Quick search", wishlist: "Favorites", cart: "Cart", primary: "Main navigation", brand: "ELASRI BUSINESS" },
@@ -25,6 +26,34 @@ function Chevron({ open }: { open: boolean }) {
   return <svg aria-hidden="true" className={"h-4 w-4 shrink-0 transition-transform " + (open ? "rotate-180" : "")} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="m5 7 5 5 5-5" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 }
 
+const categoryMenuCopy = {
+  ar: { title: "تسوّق حسب الفئة", browse: "تصفّح الكتالوج كاملًا" },
+  fr: { title: "Choisissez votre catégorie", browse: "Voir tout le catalogue" },
+  en: { title: "Shop by category", browse: "Browse the full catalogue" },
+};
+
+function categoryProductCount(count: number, lang: Language) {
+  const number = new Intl.NumberFormat(lang).format(count);
+  if (lang === "ar") {
+    if (count === 1) return "منتج واحد";
+    if (count === 2) return "منتجان";
+    return `${number} ${count >= 3 && count <= 10 ? "منتجات" : "منتج"}`;
+  }
+  return `${number} ${lang === "fr" ? (count === 1 ? "produit" : "produits") : (count === 1 ? "product" : "products")}`;
+}
+
+function CategoryThumbnail({ category }: { category: Category }) {
+  const [failed, setFailed] = useState(false);
+  const source = category.image?.trim();
+  return (
+    <span className="market-category-thumbnail" data-product-image={category.productImage || undefined} aria-hidden="true">
+      {source && source !== "/images/placeholder.svg" && !failed ? (
+        <Image src={source} alt="" width={56} height={56} onError={() => setFailed(true)} />
+      ) : <MarketIcon name="box" />}
+    </span>
+  );
+}
+
 function CategoryMenu({ categories, lang, mobile = false, onNavigate }: { categories: Category[]; lang: Language; mobile?: boolean; onNavigate?: () => void }) {
   const [open, setOpen] = useState(false);
   const id = useId();
@@ -33,8 +62,9 @@ function CategoryMenu({ categories, lang, mobile = false, onNavigate }: { catego
   const pinned = useRef(false);
   const delay = useRef<ReturnType<typeof setTimeout> | null>(null);
   const labels = copy[lang];
+  const menuCopy = categoryMenuCopy[lang];
   const clearDelay = () => { if (delay.current) clearTimeout(delay.current); };
-  const close = useCallback(() => { pinned.current = false; setOpen(false); }, []);
+  const close = useCallback(() => { if (delay.current) clearTimeout(delay.current); pinned.current = false; setOpen(false); }, []);
 
   useEffect(() => () => { if (delay.current) clearTimeout(delay.current); }, []);
   useEffect(() => {
@@ -53,28 +83,54 @@ function CategoryMenu({ categories, lang, mobile = false, onNavigate }: { catego
   return (
     <div ref={ref} className={"market-category-menu " + (mobile ? "market-category-menu-mobile" : "")}
       onMouseEnter={mobile ? undefined : () => { clearDelay(); delay.current = setTimeout(() => setOpen(true), 80); }}
-      onMouseLeave={mobile ? undefined : () => { clearDelay(); if (!pinned.current) delay.current = setTimeout(close, 160); }}
+      onMouseLeave={mobile ? undefined : () => { clearDelay(); if (!pinned.current) delay.current = setTimeout(close, 220); }}
       onBlur={(event) => { if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget as Node)) close(); }}
     >
       <button ref={trigger} type="button" className="market-category-trigger" aria-expanded={open} aria-controls={open ? id : undefined}
         onClick={() => { clearDelay(); if (pinned.current) close(); else { pinned.current = true; setOpen(true); } }}
         onKeyDown={(event) => {
           if (event.key === "ArrowDown") {
-            event.preventDefault(); pinned.current = true; setOpen(true);
+            event.preventDefault(); clearDelay(); pinned.current = true; setOpen(true);
             requestAnimationFrame(() => ref.current?.querySelector<HTMLAnchorElement>("[data-category-panel] a")?.focus());
           }
         }}
       >
-        <MarketIcon name="box" /><span>{labels.categories}</span><Chevron open={open} />
+        <svg className="market-category-grid-icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></svg><span>{labels.categories}</span><Chevron open={open} />
       </button>
       {open && (
-        <div id={id} data-category-panel className="market-category-dropdown">
-          <Link href="/shop" className="market-category-all" onClick={navigate}>{labels.all}</Link>
-          <ul className="market-category-options">
+        <div id={id} data-category-panel className="market-category-dropdown" role="region" aria-label={menuCopy.title}
+          onKeyDown={(event) => {
+            if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) return;
+            const links = Array.from(event.currentTarget.querySelectorAll<HTMLAnchorElement>("a"));
+            if (!links.length) return;
+            event.preventDefault();
+            const current = links.indexOf(document.activeElement as HTMLAnchorElement);
+            const next = event.key === "Home" ? 0 : event.key === "End" ? links.length - 1
+              : (current + (event.key === "ArrowDown" ? 1 : -1) + links.length) % links.length;
+            links[next]?.focus();
+          }}
+        >
+          <div className="market-category-heading">
+            <p>{menuCopy.title}</p>
+            <span aria-hidden="true">{new Intl.NumberFormat(lang).format(categories.length)}</span>
+          </div>
+          {categories.length > 0 && <ul className="market-category-options">
             {categories.map(category => (
-              <li key={category.slug}><Link href={"/shop?category=" + encodeURIComponent(category.slug)} onClick={navigate}>{categoryLabel(category.name, lang)}</Link></li>
+              <li key={category.slug}>
+                <Link className="market-category-option" href={"/shop?category=" + encodeURIComponent(category.slug)} onClick={navigate}>
+                  <CategoryThumbnail key={category.image || category.slug} category={category} />
+                  <span className="market-category-option-copy">
+                    <span className="market-category-option-name">{categoryLabel(category.name, lang)}</span>
+                    {category.count !== undefined && <small>{categoryProductCount(category.count, lang)}</small>}
+                  </span>
+                  <span className="market-category-option-arrow"><MarketIcon name="arrow" /></span>
+                </Link>
+              </li>
             ))}
-          </ul>
+          </ul>}
+          <Link href="/shop" className="market-category-all" onClick={navigate}>
+            <span>{menuCopy.browse}</span><MarketIcon name="arrow" />
+          </Link>
         </div>
       )}
     </div>

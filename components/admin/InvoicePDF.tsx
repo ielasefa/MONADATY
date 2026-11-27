@@ -412,7 +412,7 @@ export function InvoiceDocument({ order, invoiceNumber, invoiceDate, qrDataUrl, 
         {!isCreditNote && <View style={receiptStyles.totalRow}><Text style={receiptStyles.totalLabel}>{t("subtotal")}</Text><Text>{fmt(subtotalNum)}</Text></View>}
         {!isCreditNote && <View style={receiptStyles.totalRow}><Text style={receiptStyles.totalLabel}>{t("shipping")}</Text><Text>{fmt(shippingNum)}</Text></View>}
         {!isCreditNote && discountNum > 0 && <View style={receiptStyles.totalRow}><Text style={receiptStyles.totalLabel}>{t("discount")}</Text><Text>-{fmt(discountNum)}</Text></View>}
-        {!isCreditNote && <View style={receiptStyles.totalRow}><Text style={receiptStyles.totalLabel}>{t("tax")}</Text><Text>{fmt(taxNum)}</Text></View>}
+        {!isCreditNote && taxNum > 0 && <View style={receiptStyles.totalRow}><Text style={receiptStyles.totalLabel}>{t("tax")}</Text><Text>{fmt(taxNum)}</Text></View>}
         <View style={receiptStyles.grand}>
           <Text>{isCreditNote ? t("credit_amount") : t("grand_total")}</Text>
           <Text>{fmt(totalNum)}</Text>
@@ -559,10 +559,10 @@ export function InvoiceDocument({ order, invoiceNumber, invoiceDate, qrDataUrl, 
                   <Text style={styles.totalLabel}>{t("discount")}</Text>
                   <Text style={[styles.totalValue, { color: colors.burgundy }]}>-{fmt(discountNum)}</Text>
                 </View>
-                <View style={styles.totalRow}>
+                {taxNum > 0 && <View style={styles.totalRow}>
                   <Text style={styles.totalLabel}>{t("tax")}</Text>
                   <Text style={styles.totalValue}>{fmt(taxNum)}</Text>
-                </View>
+                </View>}
                 <View style={styles.grandTotalRow}>
                   <Text style={styles.grandTotalLabel}>{t("grand_total")}</Text>
                   <Text style={styles.grandTotalValue}>{fmt(totalNum)}</Text>

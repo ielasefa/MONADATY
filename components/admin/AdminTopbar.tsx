@@ -8,6 +8,7 @@ import type { AdminNotificationType } from "@/lib/admin-notifications";
 import { useTranslation } from "@/hooks/useTranslation";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import Link from "next/link";
+import { landingAdminCopy } from "@/lib/landing-admin-copy";
 
 type Props = {
   initialNotifications: AdminNotificationType[];
@@ -41,7 +42,7 @@ const PAGE_CONTEXT = [
 
 export function AdminTopbar({ initialNotifications, initialUnread, logoUrl }: Props) {
   const pathname = usePathname();
-  const { t } = useTranslation("admin");
+  const { t, lang } = useTranslation("admin");
   const context = PAGE_CONTEXT.find((item) => item.match.test(pathname)) ?? {
     group: "Admin",
     title: "Control center",
@@ -57,8 +58,8 @@ export function AdminTopbar({ initialNotifications, initialUnread, logoUrl }: Pr
           <span className="truncate">{t(`nav_group_${context.group.toLowerCase()}`, context.group)}</span>
         </div>
           <div className="flex min-w-0 items-baseline gap-3 sm:mt-0.5">
-            <p className="admin-topbar-title">{t(`topbar_${context.title.toLowerCase().replace(/\s+/g, "_")}`, context.title)}</p>
-            <p className="hidden truncate text-sm text-secondary 2xl:block">{t(`topbar_${context.title.toLowerCase().replace(/\s+/g, "_")}_description`, context.description)}</p>
+            <p className="admin-topbar-title">{pathname.startsWith("/admin/landing") ? landingAdminCopy[lang].title : t(`topbar_${context.title.toLowerCase().replace(/\s+/g, "_")}`, context.title)}</p>
+            <p className="hidden truncate text-sm text-secondary 2xl:block">{pathname.startsWith("/admin/landing") ? landingAdminCopy[lang].description : t(`topbar_${context.title.toLowerCase().replace(/\s+/g, "_")}_description`, context.description)}</p>
           </div>
       </div>
 

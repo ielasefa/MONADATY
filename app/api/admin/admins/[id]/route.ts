@@ -6,6 +6,7 @@ import { requireSuperAdmin } from "@/lib/auth-guard";
 import { requireOrigin } from "@/lib/csrf";
 import { getAuthenticatedAdmin } from "@/lib/auth";
 import { createAuditLog } from "@/lib/audit";
+import { AdminDeletionError, deleteAdminAccount } from "@/lib/admin-deletion";
 
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireSuperAdmin();
@@ -86,27 +87,18 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
 
   try {
     const { id } = await params;
-
-    const admin = await prisma.admin.findUnique({ where: { id } });
-    if (!admin) {
-      return NextResponse.json({ error: "Admin not found" }, { status: 404 });
-    }
-
-    const adminCount = await prisma.admin.count();
-    if (adminCount <= 1) {
-      return NextResponse.json({ error: "Cannot delete the last admin" }, { status: 400 });
-    }
-
-    await prisma.admin.delete({ where: { id } });
-
-    const authed = await getAuthenticatedAdmin();
-    if (authed) {
-      createAuditLog({ adminId: authed.id, action: "delete", entity: "Admin", entityId: id });
-    }
-
+    const actor = await getAuthenticatedAdmin();
+    if (!actor) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const deleted = await deleteAdminAccount(id, actor.id);
+    await createAuditLog({ adminId: actor.id, adminName: actor.name, action: "delete", entity: "Admin", entityId: id, oldValue: JSON.stringify({ name: deleted.name, email: deleted.email, role: deleted.role }) });
     return NextResponse.json({ success: true });
   } catch (err) {
-    logError(err, "Failed to delete admin:");
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    if (err instanceof AdminDeletionError) return NextResponse.json({ error: err.code }, { status: err.status });
+    const code = err && typeof err === "object" && "code" in err ? err.code : "";
+    if (code === "P2025") return NextResponse.json({ error: "ADMIN_NOT_FOUND" }, { status: 404 });
+    if (code === "P2034") return NextResponse.json({ error: "ADMIN_DELETE_CONFLICT" }, { status: 409 });
+    if (code === "P2003") return NextResponse.json({ error: "ADMIN_HAS_HISTORY" }, { status: 409 });
+    logError(err, "Failed to delete admin");
+    return NextResponse.json({ error: "DELETE_FAILED" }, { status: 500 });
   }
 }

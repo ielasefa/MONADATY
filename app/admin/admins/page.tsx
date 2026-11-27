@@ -24,7 +24,7 @@ export default async function AdminsPage() {
 
   return (
     <div className="container-shell mx-auto px-6 py-10">
-      <AdminManagement admins={admins} />
+      <AdminManagement admins={admins} currentAdminId={admin.id} />
     </div>
   );
 }

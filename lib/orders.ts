@@ -76,7 +76,6 @@ export type OrderCreateInput = {
 
 const MAX_ORDER_ITEMS = 50;
 const MAX_ITEM_QUANTITY = 99;
-const TAX_RATE = 0.08;
 
 export type OrderCreateErrorCode =
   | "VALIDATION_ERROR"
@@ -287,8 +286,7 @@ export async function createOrder(input: OrderCreateInput): Promise<OrderCreateR
         }
       }
 
-      const taxNum = serverSubtotal * TAX_RATE;
-      const totalNum = serverSubtotal + taxNum - discountNum;
+      const totalNum = serverSubtotal - discountNum;
 
       const created = await tx.order.create({
         data: {
@@ -303,7 +301,7 @@ export async function createOrder(input: OrderCreateInput): Promise<OrderCreateR
           subtotal: formatMoney(serverSubtotal),
           shipping: "0.00 DH",
           shippingMethod: input.shippingMethod,
-          tax: formatMoney(taxNum),
+          tax: "0.00 DH",
           total: formatMoney(totalNum),
           couponCode: input.couponCode ?? null,
           discountAmount: formatMoney(discountNum),

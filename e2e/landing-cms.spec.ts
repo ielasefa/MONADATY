@@ -92,74 +92,37 @@ test.describe("Featured Products CMS", () => {
     }
   });
 
-  test("admin can view featured products in landing page", async ({ page }) => {
+  test("homepage management exposes only product and collection choices", async ({ page }) => {
     await loginViaAPI(page);
     await page.goto("/admin/landing");
-    await page.waitForLoadState("networkidle", { timeout: 15000 });
-
-    const tabs = page.locator("button[data-section-key]");
-    const count = await tabs.count();
-    expect(count).toBe(9);
-
-    await page.locator('button[data-section-key="featured"]').click();
-
-    const sectionCard = page.getByTestId("landing-section-card").first();
-    await expect(sectionCard).toBeVisible({ timeout: 5000 });
+    const editor = page.locator(".homepage-admin");
+    await expect(editor).toBeVisible();
+    await expect(editor.locator('select[name^="product-"]')).toHaveCount(4);
+    await expect(editor.locator('button[type="submit"]')).toHaveCount(1);
+    await expect(editor.locator("input, textarea")).toHaveCount(0);
+    await expect(page.locator("[data-section-key]")).toHaveCount(0);
   });
 
-  test("admin can interact with featured products form", async ({ page }) => {
+  test("a failed product save never publishes the homepage", async ({ page }) => {
     await loginViaAPI(page);
     await page.goto("/admin/landing");
-    await page.waitForLoadState("networkidle", { timeout: 15000 });
-
-    await page.locator('button[data-section-key="featured"]').click();
-
-    const timeOrigin = await page.evaluate(() => performance.timeOrigin);
-    const [saveResponse] = await Promise.all([
-      page.waitForResponse(
-        (response) => response.url().endsWith("/api/admin/landing/order") && response.request().method() === "PUT",
-      ),
-      page.getByTestId("landing-save-draft").click(),
-    ]);
-    expect(saveResponse.status()).toBe(200);
-    await expect(page.getByTestId("landing-save-draft")).toBeEnabled();
-    expect(await page.evaluate(() => performance.timeOrigin)).toBe(timeOrigin);
-  });
-});
-
-test.describe("Landing CMS", () => {
-  test("admin can access all CMS tabs", async ({ page }) => {
-    await loginViaAPI(page);
-    await page.goto("/admin/landing");
-    await page.waitForLoadState("networkidle", { timeout: 15000 });
-
-    const tabs = page.locator("button[data-section-key]");
-    const count = await tabs.count();
-    expect(count).toBe(9);
-
-    for (let i = 0; i < Math.min(count, 10); i++) {
-      await tabs.nth(i).click();
-      await page.waitForTimeout(300);
-      const sectionCard = page.getByTestId("landing-section-card").first();
-      await expect(sectionCard).toBeVisible({ timeout: 3000 });
-    }
-  });
-
-  test("SEO settings are reachable", async ({ page }) => {
-    await loginViaAPI(page);
-    await page.goto("/admin/landing");
-    await page.waitForLoadState("networkidle", { timeout: 15000 });
-
-    await page.locator('button[data-section-key="seo"]').click();
-    await expect(page.getByTestId("landing-section-card").first()).toBeVisible();
-  });
-
-  test("newsletter settings are reachable", async ({ page }) => {
-    await loginViaAPI(page);
-    await page.goto("/admin/landing");
-    await page.waitForLoadState("networkidle", { timeout: 15000 });
-
-    await page.locator('button[data-section-key="newsletter"]').click();
-    await expect(page.getByTestId("landing-section-card").first()).toBeVisible();
+    const slots = page.locator('.homepage-admin select[name^="product-"]');
+    await expect(slots).toHaveCount(4);
+    const ids = await slots.evaluateAll(elements => elements.map(element => (element as HTMLSelectElement).value));
+    test.skip(ids.some(id => !id) || new Set(ids).size !== 4, "Requires four configured homepage products");
+    let published = false;
+    await page.route("**/api/admin/landing/featured-products", route => route.fulfill({
+      status: 500, contentType: "application/json", body: JSON.stringify({ error: "SAVE_FAILED" }),
+    }));
+    await page.route("**/api/admin/landing/publish", route => {
+      published = true;
+      return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ success: true }) });
+    });
+    await slots.nth(0).selectOption("");
+    await slots.nth(1).selectOption(ids[0]);
+    await slots.nth(0).selectOption(ids[1]);
+    await page.locator('.homepage-admin button[type="submit"]').click();
+    await expect(page.locator(".homepage-admin-feedback-error")).toBeVisible();
+    expect(published).toBe(false);
   });
 });

@@ -84,7 +84,7 @@ function confirmedOrder(overrides: Record<string, unknown> = {}) {
   return {
     id: "order-1",
     orderNumber: "MON-001",
-    total: "108.00 DH",
+    total: "100.00 DH",
     orderStatus: "pending",
     paymentStatus: "pending",
     customerName: input.customerName,
@@ -103,8 +103,8 @@ describe("createOrder transaction and idempotency", () => {
     productFindMany.mockResolvedValue([databaseProduct]);
     productUpdateMany.mockResolvedValue({ count: 1 });
     productFindUnique.mockResolvedValue(databaseProduct);
-    orderCreate.mockImplementation(({ data }: { data: { orderNumber: string } }) =>
-      Promise.resolve(confirmedOrder({ orderNumber: data.orderNumber })),
+    orderCreate.mockImplementation(({ data }: { data: { orderNumber: string; total: string } }) =>
+      Promise.resolve(confirmedOrder({ orderNumber: data.orderNumber, total: data.total })),
     );
     transaction.mockImplementation(async (callback: (client: typeof tx) => unknown) => callback(tx));
   });
@@ -112,14 +112,15 @@ describe("createOrder transaction and idempotency", () => {
   it("uses canonical database data and decrements stock safely inside one transaction", async () => {
     const result = await createOrder(input);
 
-    expect(result).toMatchObject({ id: "order-1", total: "108.00 DH", replayed: false });
+    expect(result).toMatchObject({ id: "order-1", total: "100.00 DH", replayed: false });
     expect(transaction).toHaveBeenCalledTimes(1);
     expect(orderCreate).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({
           subtotal: "100.00 DH",
-          tax: "8.00 DH",
-          total: "108.00 DH",
+          tax: "0.00 DH",
+          shipping: "0.00 DH",
+          total: "100.00 DH",
           items: {
             create: [
               expect.objectContaining({
@@ -145,7 +146,7 @@ describe("createOrder transaction and idempotency", () => {
 
   it("aggregates duplicate product lines before validation and decrement", async () => {
     orderCreate.mockResolvedValueOnce(
-      confirmedOrder({ items: [{ name: databaseProduct.name, quantity: 5, unitPrice: databaseProduct.price }], total: "270.00 DH" }),
+      confirmedOrder({ items: [{ name: databaseProduct.name, quantity: 5, unitPrice: databaseProduct.price }], total: "250.00 DH" }),
     );
 
     await createOrder({ ...input, items: [...input.items, { ...input.items[0], quantity: 3 }] });
@@ -155,6 +156,22 @@ describe("createOrder transaction and idempotency", () => {
       where: expect.objectContaining({ stock: { gte: 5 } }),
       data: { stock: { decrement: 5 } },
     }));
+    expect(orderCreate).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ subtotal: "250.00 DH", tax: "0.00 DH", total: "250.00 DH" }) }));
+  });
+
+  it("charges exactly the catalogue price times quantity despite client-supplied fees", async () => {
+    productFindMany.mockResolvedValueOnce([{ ...databaseProduct, price: "24.00 DH" }]);
+    const result = await createOrder({ ...input, items: [{ ...input.items[0], quantity: 3 }], subtotal: "1.00 DH", tax: "5.76 DH", shipping: "50.00 DH", total: "127.76 DH" });
+    expect(result).toMatchObject({ total: "72.00 DH" });
+    expect(orderCreate).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ subtotal: "72.00 DH", tax: "0.00 DH", shipping: "0.00 DH", total: "72.00 DH" }) }));
+  });
+
+  it("still applies valid discounts without introducing any extra fees", async () => {
+    couponFindUnique.mockResolvedValueOnce({ id: "coupon-1", isActive: true, expiresAt: null, minPurchase: "0.00 DH", discountAmount: "0.00 DH", discountPercent: 10, maxUsage: 0 });
+    couponUpdateMany.mockResolvedValueOnce({ count: 1 });
+    const result = await createOrder({ ...input, couponCode: "SAVE10" });
+    expect(result).toMatchObject({ total: "90.00 DH" });
+    expect(orderCreate).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ subtotal: "100.00 DH", tax: "0.00 DH", shipping: "0.00 DH", discountAmount: "10.00 DH", total: "90.00 DH" }) }));
   });
 
   it("rejects insufficient stock before creating an order", async () => {

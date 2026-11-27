@@ -7,32 +7,20 @@ import { FadeIn } from "@/components/motion/FadeIn";
 
 export const dynamic = "force-dynamic";
 
-/* ============================================================
-   WISHLIST PAGE — editorial minimal
-   ============================================================ */
-
 export default async function WishlistPage() {
   const lang = await getLanguage();
   const copy = getLandingCopy(lang);
   const rows = await getProducts();
   const products: Product[] = rows;
 
-return (
+  return (
     <div className="wishlist-page bg-canvas">
-      <section className="relative overflow-hidden border-b border-line bg-surface">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_0%,rgba(214,179,90,0.09),transparent_36%)]" />
-        <div className="storefront-container wishlist-intro relative">
-          <FadeIn y={18} duration={0.62}>
-          <p className="storefront-eyebrow">
-            <span className="h-px w-9 bg-gold" />
-            {copy.wishlist.eyebrow}
-          </p>
-          <h1 className="storefront-page-title mt-6">
-            {copy.wishlist.title}
-          </h1>
-          <p className="mt-5 max-w-xl text-sm leading-[1.85] text-secondary sm:text-[0.95rem]">
-            {copy.wishlist.description}
-          </p>
+      <section className="wishlist-heading" aria-labelledby="wishlist-title">
+        <div className="storefront-container wishlist-intro">
+          <FadeIn y={10} duration={0.4}>
+            <p className="storefront-eyebrow"><span aria-hidden="true" />{copy.wishlist.eyebrow}</p>
+            <h1 id="wishlist-title" className="storefront-page-title">{copy.wishlist.title}</h1>
+            <p className="wishlist-description">{copy.wishlist.description}</p>
           </FadeIn>
         </div>
       </section>
