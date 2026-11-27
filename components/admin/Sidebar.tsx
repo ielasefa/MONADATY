@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { BrandLogo } from "@/components/BrandLogo";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
+import { AdminLogoMark } from "@/components/admin/AdminLogo";
 
 type NavItem = { label: string; href: string; icon: string };
 
@@ -61,8 +62,9 @@ function NavIcon({ href }: { href: string }) {
   return <>{icons[href] ?? icons["/admin/dashboard"]}</>;
 }
 
-export function AdminSidebar({ items }: { items: NavItem[]; websiteName?: string; logoUrl?: string }) {
+export function AdminSidebar({ items, websiteName, logoUrl }: { items: NavItem[]; websiteName?: string; logoUrl?: string }) {
   const { t } = useTranslation("admin");
+  const displayName = websiteName || "MONADATY";
   const pathname = usePathname();
   const router = useRouter();
   const signingOutRef = useRef(false);
@@ -168,10 +170,17 @@ export function AdminSidebar({ items }: { items: NavItem[]; websiteName?: string
         }`}
       >
       <div className="admin-sidebar-brand">
-        <Link href="/admin/dashboard" className="admin-sidebar-logo admin-sidebar-logo-image" aria-label={t("dashboard", "Dashboard")}>
-          <BrandLogo width={150} height={50} className="admin-sidebar-current-logo" />
+        <Link href="/admin/dashboard" className={`admin-sidebar-logo ${logoUrl ? "admin-sidebar-logo-image" : ""}`} aria-label={t("dashboard", "Dashboard")}>
+          {logoUrl ? (
+            <Image src={logoUrl} alt="" width={132} height={44} unoptimized className="admin-sidebar-current-logo" />
+          ) : (
+            <AdminLogoMark className="admin-sidebar-logo-mark" />
+          )}
         </Link>
-
+        {!logoUrl && <div className="min-w-0 sm:hidden lg:block">
+          <p className="truncate text-sm font-semibold tracking-[0.08em] text-white">{displayName}</p>
+          <p className="mt-1 text-xs text-secondary">{t("administration", "Administration")}</p>
+        </div>}
         <button
           type="button"
           onClick={() => setMobileOpen(false)}

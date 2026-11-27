@@ -15,19 +15,19 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ["food", "shopping", "lifestyle"],
     icons: [
       {
-        src: "/icons/icon-192.png?v=monadaty-3",
+        src: "/icons/icon-192.png?v=monadaty-4",
         sizes: "192x192",
         type: "image/png",
         purpose: "any",
       },
       {
-        src: "/icons/icon-512.png?v=monadaty-3",
+        src: "/icons/icon-512.png?v=monadaty-4",
         sizes: "512x512",
         type: "image/png",
         purpose: "any",
       },
       {
-        src: "/icons/icon-maskable-512.png?v=monadaty-3",
+        src: "/icons/icon-maskable-512.png?v=monadaty-4",
         sizes: "512x512",
         type: "image/png",
         purpose: "maskable",

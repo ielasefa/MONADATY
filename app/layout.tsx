@@ -1,4 +1,3 @@
-import { BRAND_LOGO_SRC } from "@/lib/brand";
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { headers, cookies } from "next/headers";
@@ -71,11 +70,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.svg?v=monadaty-3", sizes: "any", type: "image/svg+xml" },
-      { url: "/icons/favicon-32.png?v=monadaty-3", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.svg?v=monadaty-4", sizes: "any", type: "image/svg+xml" },
+      { url: "/icons/favicon-32.png?v=monadaty-4", sizes: "32x32", type: "image/png" },
     ],
-    shortcut: "/favicon.ico?v=monadaty-3",
-    apple: { url: "/apple-touch-icon.png?v=monadaty-3", sizes: "180x180", type: "image/png" },
+    shortcut: "/favicon.ico?v=monadaty-4",
+    apple: { url: "/apple-touch-icon.png?v=monadaty-4", sizes: "180x180", type: "image/png" },
   },
   appleWebApp: {
     capable: true,
@@ -125,7 +124,7 @@ export default async function RootLayout({
                 "@type": "Organization",
                 name: siteName,
                 url: siteUrl,
-                logo: `${siteUrl}${BRAND_LOGO_SRC}`,
+                logo: `${siteUrl}/icons/icon-512.png`,
               },
               {
                 "@context": "https://schema.org",

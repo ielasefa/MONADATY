@@ -198,6 +198,3 @@
 @media (prefers-reduced-motion: reduce) {
   .admin-shell *, .admin-shell *::before, .admin-shell *::after { scroll-behavior: auto; animation-duration: .01ms; transition-duration: .01ms; }
 }
-
-.admin-sidebar-logo-image { flex-shrink: 0; }
-.admin-sidebar-current-logo, .admin-topbar-current-logo { border-radius: 5px; }

@@ -2,7 +2,8 @@
 
 import { usePathname } from "next/navigation";
 import { NotificationBell } from "@/components/admin/NotificationBell";
-import { BrandLogo } from "@/components/BrandLogo";
+import { AdminLogoMark } from "@/components/admin/AdminLogo";
+import Image from "next/image";
 import type { AdminNotificationType } from "@/lib/admin-notifications";
 import { useTranslation } from "@/hooks/useTranslation";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
@@ -38,7 +39,7 @@ const PAGE_CONTEXT = [
   { match: /^\/admin\/dashboard/, group: "Overview", title: "Dashboard", description: "Store performance and operational overview." },
 ] as const;
 
-export function AdminTopbar({ initialNotifications, initialUnread }: Props) {
+export function AdminTopbar({ initialNotifications, initialUnread, logoUrl }: Props) {
   const pathname = usePathname();
   const { t } = useTranslation("admin");
   const context = PAGE_CONTEXT.find((item) => item.match.test(pathname)) ?? {
@@ -65,8 +66,12 @@ export function AdminTopbar({ initialNotifications, initialUnread }: Props) {
         <LanguageSwitcher />
         <NotificationBell initialNotifications={initialNotifications} initialUnread={initialUnread} />
         <div className="hidden h-11 items-center gap-2.5 border-s border-line ps-3 lg:flex">
-          <Link href="/" className="admin-topbar-logo admin-topbar-current-logo-link" aria-label={t("back_to_storefront", "Back to storefront")}>
-            <BrandLogo width={150} height={50} className="admin-topbar-current-logo" />
+          <Link href="/" className={`admin-topbar-logo ${logoUrl ? "admin-topbar-current-logo-link" : ""}`} aria-label={t("back_to_storefront", "Back to storefront")}>
+            {logoUrl ? (
+              <Image src={logoUrl} alt="" width={142} height={44} unoptimized className="admin-topbar-current-logo" />
+            ) : (
+              <AdminLogoMark className="admin-topbar-logo-mark" />
+            )}
           </Link>
           <div className="hidden min-w-0 sm:block">
             <p className="text-xs text-secondary">{t("admin_role", "Admin")}</p>

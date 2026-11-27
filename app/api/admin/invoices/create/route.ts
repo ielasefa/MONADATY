@@ -1,4 +1,3 @@
-import { BRAND_LOGO_SRC } from "@/lib/brand";
 import { logError } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
@@ -12,6 +11,7 @@ import QRCode from "qrcode";
 import { randomUUID } from "crypto";
 import { getAppUrl } from "@/lib/env-validator";
 import { INVOICE_ROOT } from "@/lib/invoice-storage";
+import { getSiteSettings } from "@/lib/db";
 
 export async function POST(req: NextRequest) {
   const csrfError = requireOrigin(req);
@@ -109,7 +109,10 @@ export async function POST(req: NextRequest) {
       import("@/components/admin/InvoicePDF"),
       import("react"),
     ]);
-    const logoUrl = new URL(BRAND_LOGO_SRC, getAppUrl()).toString();
+    const settings = await getSiteSettings().catch(() => null);
+    const logoUrl = settings?.logo
+      ? new URL(settings.logo, getAppUrl()).toString()
+      : undefined;
 
     const element = React.createElement(InvoiceDocument, {
       order: storedOrder,

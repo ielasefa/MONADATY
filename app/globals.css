@@ -1735,9 +1735,9 @@ select option { background-color: #171717; color: #FFFFFF; }
 .market-admin-logo-name { font-size: 1.4rem; font-weight: 800; letter-spacing: .075em; }
 .market-admin-logo-subtitle { margin-top: 6px; font-size: .62rem; font-weight: 700; letter-spacing: .17em; }
 .market-admin-logo-image { display: block; width: auto; object-fit: contain; }
-.market-admin-logo-image-sm { width: 160px; max-width: 100%; height: auto; }
-.market-admin-logo-image-md { width: 210px; max-width: 100%; height: auto; }
-.market-admin-logo-image-lg { width: 280px; max-width: 100%; height: auto; }
+.market-admin-logo-image-sm { max-width: 160px; height: 64px; }
+.market-admin-logo-image-md { max-width: 210px; height: 84px; }
+.market-admin-logo-image-lg { max-width: 280px; height: 112px; }
 .market-admin-logo-sm .market-admin-logo-mark { width: 38px; height: 17px; margin-bottom: 3px; }
 .market-admin-logo-sm .market-admin-logo-name { font-size: 1rem; }
 .market-admin-logo-sm .market-admin-logo-subtitle { margin-top: 4px; font-size: .5rem; }
@@ -1959,11 +1959,7 @@ select option { background-color: #171717; color: #FFFFFF; }
   .checkout-grand-total strong { font-size: 25px; }
 }
 
-/* Shared storefront typography and the approved brand asset. */
-.brand-logo { display: block; max-width: 100%; height: auto; aspect-ratio: 3 / 1; object-fit: contain; object-position: center; border-radius: 0; }
-.market-wordmark:has(.brand-logo) { display: flex; justify-content: center; padding: 0; }
-.market-wordmark .market-wordmark-image { width: clamp(136px, 14vw, 196px); height: auto; max-height: 66px; }
-.footer-brand-logo { width: 228px; height: auto; }
+/* Shared storefront typography. */
 .storefront-shell { --page-title-size: clamp(1.75rem, 2.6vw, 2.25rem); --page-title-leading: 1.35; }
 .storefront-shell :is(.collection-intro, .wishlist-intro) .storefront-page-title,
 .storefront-shell .catalogue-intro h1 { font-size: var(--page-title-size); line-height: var(--page-title-leading); letter-spacing: -.02em; }
@@ -1976,5 +1972,4 @@ select option { background-color: #171717; color: #FFFFFF; }
 @media (max-width: 639px) {
   .storefront-shell { --page-title-size: 1.625rem; }
   .collection-intro { padding-block: 23px; }
-  .market-wordmark .market-wordmark-image { width: 136px; max-height: 48px; }
 }

@@ -2,7 +2,6 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { BrandLogo } from "@/components/BrandLogo";
 import { useState } from "react";
 import { SafeImage } from "@/components/SafeImage";
 import { ProductImage } from "@/components/ProductImage";
@@ -1035,7 +1034,7 @@ export function MoroccanMoment({ product }: { product?: ProductData }) {
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center">
-                  <BrandLogo width={240} height={80} className="opacity-40" />
+                  <span className="font-display text-[8rem] text-accent/15 sm:text-[12rem]">M</span>
                 </div>
               )}
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-[#6E1F2A]/10 via-transparent to-[#D6B35A]/[0.06]" />
