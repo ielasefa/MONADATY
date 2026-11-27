@@ -276,3 +276,29 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           slot-name: Production
           package: ./deploy
+
+      - name: Restart application and verify the live release
+        shell: bash
+        run: |
+          set -euo pipefail
+          resource_group="$(az webapp list --query "[?name=='${AZURE_WEBAPP_NAME}'].resourceGroup | [0]" --output tsv)"
+          test -n "$resource_group" && test "$resource_group" != "None" || {
+            echo "::error::Could not resolve the Azure Web App resource group"
+            exit 1
+          }
+          az webapp restart --name "$AZURE_WEBAPP_NAME" --resource-group "$resource_group"
+
+          for attempt in $(seq 1 24); do
+            if curl --fail --silent --show-error --max-time 15 \
+              -H 'Cache-Control: no-cache' \
+              "https://monadaty.com/?release=${DEPLOYMENT_VERSION}" \
+              --output /tmp/monadaty-live-release.html; then
+              if grep -Fq "dpl=${DEPLOYMENT_VERSION}" /tmp/monadaty-live-release.html; then
+                echo "Live release verified: ${DEPLOYMENT_VERSION}"
+                exit 0
+              fi
+            fi
+            sleep 5
+          done
+          echo "::error::The domain is not serving the newly deployed commit"
+          exit 1
