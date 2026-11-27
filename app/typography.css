@@ -35,7 +35,7 @@ button, input, select, textarea { font-family: inherit; }
   line-height: var(--type-heading-leading);
   letter-spacing: var(--type-heading-tracking);
 }
-.storefront-shell .storefront-page-title { font-size: clamp(2rem, 3.8vw, 3.5rem); }
+.storefront-shell .storefront-page-title { font-size: var(--page-title-size); line-height: var(--page-title-leading); text-transform: none; }
 .storefront-shell :is(.storefront-section-title, .landing-title) { font-size: clamp(1.75rem, 2.8vw, 2.75rem); }
 .storefront-shell :is(p.text-sm, .landing-body) { font-size: 1rem; line-height: var(--type-body-leading); }
 .storefront-shell :is(.storefront-eyebrow, .landing-eyebrow) { font-size: .875rem; font-weight: 600; line-height: 1.6; letter-spacing: .06em; }
@@ -74,7 +74,7 @@ button, input, select, textarea { font-family: inherit; }
 .market-cart :is(.btn-primary, .btn-secondary) { font-size: .875rem; line-height: 1.5; letter-spacing: 0; }
 
 /* Checkout uses the same reading scale as the catalogue and information pages. */
-.market-checkout .checkout-intro-description { font-size: 1rem; line-height: var(--type-body-leading); }
+.market-checkout .checkout-intro-description { font-size: .8125rem; line-height: 1.8; }
 .market-checkout .checkout-card-heading h2 { font-size: 1.5rem; line-height: var(--type-heading-leading); }
 .market-checkout .checkout-card-heading p,
 .market-checkout .checkout-field-hint,
@@ -104,3 +104,6 @@ button, input, select, textarea { font-family: inherit; }
 [lang="ar"] :is(.storefront-shell, .market-header, .market-footer, .market-cart, .market-auth, .admin-shell) :is(.uppercase, .label-utility, .storefront-eyebrow, .landing-eyebrow) { letter-spacing: 0; text-transform: none; }
 [lang="ar"] .storefront-shell :is(p.text-sm, .landing-body), [lang="ar"] .market-footer p { line-height: 1.95; }
 [lang="ar"] .storefront-shell .market-product h3 { font-family: var(--font-ui); line-height: 1.65; height: 3.3rem; }
+
+.storefront-shell .checkout-intro .storefront-page-title { font-size: clamp(1.5rem, 2.2vw, 2rem); line-height: 1.5; }
+.storefront-shell .market-about h1 { font-size: var(--page-title-size); line-height: var(--page-title-leading); }

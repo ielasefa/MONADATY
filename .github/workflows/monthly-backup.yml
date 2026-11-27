@@ -1,0 +1,64 @@
+name: Monthly database backup to Google Drive
+
+on:
+  schedule:
+    # First day of every month, 03:15 UTC.
+    - cron: '15 3 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: monadaty-monthly-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    # Activate after the Drive credentials and folder have been configured.
+    if: github.event_name == 'workflow_dispatch' || vars.GOOGLE_DRIVE_BACKUPS_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    container: postgres:18-bookworm
+    timeout-minutes: 30
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_CA_CERT_BASE64: ${{ secrets.DATABASE_CA_CERT_BASE64 }}
+      GOOGLE_DRIVE_ID: ${{ secrets.GOOGLE_DRIVE_ID }}
+      GOOGLE_DRIVE_CLIENT_ID: ${{ secrets.GOOGLE_DRIVE_CLIENT_ID }}
+      GOOGLE_DRIVE_CLIENT_SECRET: ${{ secrets.GOOGLE_DRIVE_CLIENT_SECRET }}
+      GOOGLE_DRIVE_REFRESH_TOKEN: ${{ secrets.GOOGLE_DRIVE_REFRESH_TOKEN }}
+      BACKUP_DIR: ${{ github.workspace }}/backups
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+      - name: Check backup configuration
+        shell: bash
+        run: |
+          for setting in DATABASE_URL DATABASE_CA_CERT_BASE64 GOOGLE_DRIVE_ID GOOGLE_DRIVE_CLIENT_ID GOOGLE_DRIVE_CLIENT_SECRET GOOGLE_DRIVE_REFRESH_TOKEN; do
+            if [ -z "${!setting}" ]; then
+              echo "::error::Missing GitHub Secret: $setting"
+              exit 1
+            fi
+          done
+      - name: Install dependencies
+        run: npm ci
+      - name: Back up production database
+        run: npx tsx scripts/backup-db.ts
+      - name: Validate archive before upload
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          archives=("$BACKUP_DIR"/monadaty-backup-*.sql.gz)
+          test "${#archives[@]}" -eq 1
+          gzip -t "${archives[0]}"
+          gzip -dc "${archives[0]}" | pg_restore --list > /dev/null
+      - name: Upload to Google Drive and verify checksum
+        run: npx tsx scripts/upload-google-drive.ts
+      - name: Remove temporary database archives
+        if: always()
+        shell: bash
+        run: rm -rf -- "$BACKUP_DIR"

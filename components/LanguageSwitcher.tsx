@@ -56,7 +56,7 @@ export function LanguageSwitcher({ className = "", dropUp = false }: { className
         aria-label={t("select_language", { fr: "Choisir la langue", en: "Choose language", ar: "اختر اللغة" }[lang])}
         aria-expanded={open}
       >
-        <span className="text-sm">{current.flag}</span>
+        <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3a18 18 0 0 1 0 18 18 18 0 0 1 0-18Z" /></svg>
         <span>{current.code.toUpperCase()}</span>
         <svg
           width={24}
@@ -85,7 +85,7 @@ export function LanguageSwitcher({ className = "", dropUp = false }: { className
                   : "text-secondary hover:bg-ivory/[0.03] hover:text-foreground"
               }`}
             >
-              <span className="text-base">{l.flag}</span>
+              <span className="w-6 text-xs font-medium" aria-hidden="true">{l.code.toUpperCase()}</span>
               <span className="flex-1">{l.label}</span>
               {lang === l.code && (
                 <svg

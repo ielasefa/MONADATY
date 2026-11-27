@@ -2,27 +2,28 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { IconBag, IconBox, IconUsers, IconLayers, IconSettings } from "@/components/admin/dashboard/icons";
 import { useTranslation } from "@/hooks/useTranslation";
 
 export function QuickActions() {
   const { t } = useTranslation("admin");
 
   const actions = [
-    { label: t("add_product"), href: "/admin/shop", icon: "➕", desc: t("create_new_product") },
-    { label: t("order_management"), href: "/admin/orders", icon: "📦", desc: t("view_all_orders") },
+    { label: t("add_product"), href: "/admin/shop", icon: <IconBox className="h-5 w-5" />, desc: t("create_new_product") },
+    { label: t("order_management"), href: "/admin/orders", icon: <IconBag className="h-5 w-5" />, desc: t("view_all_orders") },
     {
       label: t("customer_management"),
       href: "/admin/customers",
-      icon: "👥",
+      icon: <IconUsers className="h-5 w-5" />,
       desc: t("customer_management"),
     },
     {
       label: t("manage_collections"),
       href: "/admin/collections",
-      icon: "📁",
+      icon: <IconLayers className="h-5 w-5" />,
       desc: t("manage_collections"),
     },
-    { label: t("settings"), href: "/admin/settings", icon: "⚙️", desc: t("site_settings") },
+    { label: t("settings"), href: "/admin/settings", icon: <IconSettings className="h-5 w-5" />, desc: t("site_settings") },
   ];
 
   return (
@@ -70,7 +71,7 @@ export function QuickActions() {
               <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               <div className="relative z-10 flex flex-col h-full">
                 <motion.span
-                  className="mb-3 block text-3xl"
+                  className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg border border-line text-accent"
                   whileHover={{ scale: 1.15, rotate: 5 }}
                   transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
                 >

@@ -1,3 +1,4 @@
+import { BRAND_LOGO_SRC } from "@/lib/brand";
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { headers, cookies } from "next/headers";
@@ -58,8 +59,8 @@ export const metadata: Metadata = {
     url: "/",
     title: siteName,
     description: siteDescription,
-    locale: "en_US",
-    alternateLocale: ["fr_FR", "ar_MA"],
+    locale: "ar_MA",
+    alternateLocale: ["fr_FR", "en_US"],
     images: [{ url: "/uploads/monadaty/hero/8236e9ab9f624611.png", width: 1200, height: 630, alt: siteName }],
   },
   twitter: {
@@ -70,11 +71,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.svg", sizes: "any", type: "image/svg+xml" },
-      { url: "/icons/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.svg?v=monadaty-3", sizes: "any", type: "image/svg+xml" },
+      { url: "/icons/favicon-32.png?v=monadaty-3", sizes: "32x32", type: "image/png" },
     ],
-    shortcut: "/favicon.ico",
-    apple: { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    shortcut: "/favicon.ico?v=monadaty-3",
+    apple: { url: "/apple-touch-icon.png?v=monadaty-3", sizes: "180x180", type: "image/png" },
   },
   appleWebApp: {
     capable: true,
@@ -124,7 +125,7 @@ export default async function RootLayout({
                 "@type": "Organization",
                 name: siteName,
                 url: siteUrl,
-                logo: `${siteUrl}/icons/icon-512.png`,
+                logo: `${siteUrl}${BRAND_LOGO_SRC}`,
               },
               {
                 "@context": "https://schema.org",

@@ -377,7 +377,7 @@ export function InvoiceDocument({ order, invoiceNumber, invoiceDate, qrDataUrl, 
   if (format === "receipt") return (
     <Document>
       <Page size={[226.77, receiptHeight]} style={receiptStyles.page}>
-        <Text style={receiptStyles.brand}>{t("monadaty")}</Text>
+        {logoUrl ? <Image source={{ uri: logoUrl }} style={{ width: 132, height: 44, objectFit: "contain", alignSelf: "center", marginBottom: 6 }} /> : <Text style={receiptStyles.brand}>{t("monadaty")}</Text>}
         <Text style={receiptStyles.company}>{t("company_name")}</Text>
         <Text style={receiptStyles.title}>{docTitle}</Text>
         <Text style={receiptStyles.number}>{docNumber}</Text>

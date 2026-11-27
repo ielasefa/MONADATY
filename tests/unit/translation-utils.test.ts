@@ -65,8 +65,8 @@ describe("lib/translation-utils", () => {
   });
 
   describe("DEFAULT_LANGUAGE", () => {
-    it("is French for a Moroccan brand", () => {
-      expect(DEFAULT_LANGUAGE).toBe<Language>("fr");
+    it("defaults to Arabic on the first visit", () => {
+      expect(DEFAULT_LANGUAGE).toBe<Language>("ar");
     });
   });
 });

@@ -38,7 +38,7 @@ export function MobileLanguageSwitcher({ onSelect }: { onSelect?: () => void }) 
               : "text-secondary hover:bg-ivory/[0.03] hover:text-foreground"
           }`}
         >
-          <span className="text-base">{l.flag}</span>
+          <span className="text-base">{l.code.toUpperCase()}</span>
           <span className={`flex-1 ${l.code === "ar" ? "font-arabic" : ""}`}>{l.label}</span>
           {lang === l.code && (
             <svg

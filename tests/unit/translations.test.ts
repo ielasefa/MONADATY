@@ -27,10 +27,10 @@ describe("lib/translations — cookie language helpers", () => {
       expect(getLanguageFromCookie("ar")).toBe<Language>("ar");
     });
 
-    it("falls back to fr for unknown or missing value", () => {
-      expect(getLanguageFromCookie("de")).toBe<Language>("fr");
-      expect(getLanguageFromCookie()).toBe<Language>("fr");
-      expect(getLanguageFromCookie("")).toBe<Language>("fr");
+    it("falls back to Arabic for unknown or missing value", () => {
+      expect(getLanguageFromCookie("de")).toBe<Language>("ar");
+      expect(getLanguageFromCookie()).toBe<Language>("ar");
+      expect(getLanguageFromCookie("")).toBe<Language>("ar");
     });
   });
 });

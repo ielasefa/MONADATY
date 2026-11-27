@@ -1,6 +1,6 @@
 export type Language = "fr" | "en" | "ar";
 
-export const DEFAULT_LANGUAGE: Language = "fr";
+export const DEFAULT_LANGUAGE: Language = "ar";
 
 export function interpolate(
   template: string,
@@ -24,8 +24,8 @@ export function resolveTranslation(
   const val = entry[lang];
   if (val && val.trim()) return val;
 
-  if (lang !== DEFAULT_LANGUAGE) {
-    const frVal = entry[DEFAULT_LANGUAGE];
+  if (lang !== "fr") {
+    const frVal = entry.fr;
     if (frVal && frVal.trim()) return frVal;
   }
 

@@ -22,7 +22,9 @@
     "db:stop": "bash scripts/db-stop.sh",
     "db:status": "nc -z 127.0.0.1 5432 && echo 'postgres running' || echo 'postgres not running'",
     "postinstall": "prisma generate",
-    "db:fix-images": "bash scripts/run-local-db-command.sh tsx scripts/fix-product-images.ts"
+    "db:fix-images": "bash scripts/run-local-db-command.sh tsx scripts/fix-product-images.ts",
+    "backup:local": "bash scripts/run-local-db-command.sh tsx scripts/backup-db.ts",
+    "backup:drive": "tsx scripts/upload-google-drive.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -38,6 +40,7 @@
     "cmdk": "^1.1.1",
     "dotenv": "^17.4.2",
     "framer-motion": "^12.42.2",
+    "google-auth-library": "^11.3.4",
     "next": "15.5.23",
     "qrcode": "^1.5.4",
     "react": "^19.0.0",

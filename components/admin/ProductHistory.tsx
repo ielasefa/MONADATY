@@ -3,19 +3,14 @@
 import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { ProductHistoryEntry } from "@/types";
+import { IconBox, IconSettings, IconTags, IconLayers } from "@/components/admin/dashboard/icons";
+import type { ReactNode } from "react";
 
-const ACTION_ICONS: Record<string, string> = {
-  Created: "✦",
-  Edited: "✎",
-  "Price Changed": "¤",
-  "Stock Changed": "↕",
-  "Status Changed": "⬡",
-  "Deleted Image": "✕",
-  "Uploaded Image": "⊕",
-  "Cover Changed": "⊡",
-  "Variant Added": "⊞",
-  "Variant Updated": "⊟",
-  "Variant Deleted": "⊠",
+const ACTION_ICONS: Record<string, ReactNode> = {
+  Created: <IconBox className="h-4 w-4" />,
+  Edited: <IconSettings className="h-4 w-4" />,
+  "Price Changed": <IconTags className="h-4 w-4" />,
+  "Stock Changed": <IconLayers className="h-4 w-4" />,
 };
 
 const ACTION_COLORS: Record<string, string> = {
@@ -72,7 +67,7 @@ export function ProductHistory({ productId }: { productId: string }) {
   if (history.length === 0) {
     return (
       <div className="flex flex-col items-center gap-3 py-8 text-secondary">
-        <span className="text-2xl">⏱</span>
+        <IconLayers className="h-6 w-6" />
         <p className="text-sm">{t("no_history_recorded", "No history recorded yet")}</p>
       </div>
     );
@@ -81,7 +76,7 @@ export function ProductHistory({ productId }: { productId: string }) {
   return (
     <div className="relative space-y-0">
       {history.map((entry, idx) => {
-        const icon = ACTION_ICONS[entry.action] || "•";
+        const icon = ACTION_ICONS[entry.action] || <IconSettings className="h-4 w-4" />;
         const color = ACTION_COLORS[entry.action] || "text-secondary";
         const isLast = idx === history.length - 1;
 

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { SafeImage } from "@/components/SafeImage";
-import { getLandingContent } from "@/lib/db";
+import { BrandLogo } from "@/components/BrandLogo";
 import { getLandingCopy } from "@/lib/landing-copy";
 import { getLanguage } from "@/lib/translations";
 import { FadeIn } from "@/components/motion/FadeIn";
@@ -21,7 +21,6 @@ const stepIcons: IconName[] = ["bottles", "cart", "truck"];
 export default async function AboutPage() {
   const lang = await getLanguage();
   const copy = getLandingCopy(lang).about;
-  const content = await getLandingContent();
   const image = "/images/storefront/monadaty-about-showcase.png";
 
   return (
@@ -29,7 +28,7 @@ export default async function AboutPage() {
       <section className="about-hero storefront-container" aria-labelledby="about-title">
         <FadeIn className="about-hero-copy" y={12}>
           <p className="storefront-eyebrow"><span />{copy.eyebrow}</p>
-          <h1 id="about-title">{copy.title}<em>{copy.titleAccent}</em></h1>
+          <h1 id="about-title" className="storefront-page-title">{copy.title}<em>{copy.titleAccent}</em></h1>
           <p className="about-lede">{copy.description}</p>
           <div className="about-actions">
             <Link href="/shop" className="btn-primary">{copy.cta}</Link>
@@ -41,7 +40,7 @@ export default async function AboutPage() {
             <div className="about-image">
               <SafeImage src={image} alt={copy.imageAlt} fill priority sizes="(min-width: 1024px) 46vw, 100vw" className="object-cover" />
             </div>
-            <figcaption><span className="about-image-monogram" aria-hidden="true">M</span><span>{copy.imageCaption}</span></figcaption>
+            <figcaption><BrandLogo className="about-caption-logo" width={90} height={30} /><span>{copy.imageCaption}</span></figcaption>
           </figure>
         </FadeIn>
         <ul className="about-services">

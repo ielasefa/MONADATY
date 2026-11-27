@@ -1773,13 +1773,13 @@ select option { background-color: #171717; color: #FFFFFF; }
 .checkout-intro { max-width: 760px; }
 .checkout-intro .storefront-page-title {
   margin-top: 16px;
-  font-size: clamp(2rem, 3.25vw, 3rem);
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
   line-height: 1.18;
   text-transform: none;
   letter-spacing: -.035em;
   text-wrap: balance;
 }
-.checkout-intro-description { margin-top: 15px; max-width: 650px; color: #766860; font-size: 14px; line-height: 1.85; }
+.checkout-intro-description { margin-top: 10px; max-width: 60ch; color: var(--market-muted); font-size: .8125rem; line-height: 1.8; }
 .checkout-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-block: 28px 22px; }
 .checkout-back { display: inline-flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 600; color: #766860; transition: color .2s; }
 .checkout-back:hover { color: #780b10; }
@@ -1942,7 +1942,7 @@ select option { background-color: #171717; color: #FFFFFF; }
 }
 @media (max-width: 539px) {
   .market-checkout { padding-block: 28px 40px; }
-  .checkout-intro .storefront-page-title { font-size: 30px; }
+  .checkout-intro .storefront-page-title { font-size: 1.5rem; }
   .checkout-intro-description { font-size: 12px; line-height: 1.85; }
   .checkout-toolbar { flex-wrap: wrap; gap: 12px; margin-block: 22px 20px; }
   .checkout-back { font-size: 11px; }
@@ -1958,3 +1958,29 @@ select option { background-color: #171717; color: #FFFFFF; }
   .checkout-payment { padding: 13px; gap: 10px; }
   .checkout-grand-total strong { font-size: 25px; }
 }
+
+/* Shared storefront typography and the approved brand asset. */
+.brand-logo { display: block; object-fit: contain; object-position: center; border-radius: 6px; }
+.market-wordmark:has(.brand-logo) { display: flex; justify-content: center; padding: 0; }
+.market-wordmark .market-wordmark-image { width: clamp(136px, 14vw, 196px); height: auto; max-height: 66px; }
+.footer-brand-logo { width: 228px; height: auto; }
+.about-caption-logo { width: 90px; height: auto; flex-shrink: 0; }
+.storefront-shell { --page-title-size: clamp(1.75rem, 2.6vw, 2.25rem); --page-title-leading: 1.35; }
+.storefront-shell :is(.collection-intro, .wishlist-intro) .storefront-page-title,
+.storefront-shell .catalogue-intro h1 { font-size: var(--page-title-size); line-height: var(--page-title-leading); letter-spacing: -.02em; }
+.collection-intro { padding-block: 28px; }
+.collection-intro p:not(.storefront-eyebrow) { font-size: .9375rem; line-height: 1.75; }
+.collection-page .collection-tile-title-overlay,
+.collection-page .collection-tile-title-large-overlay { font-family: var(--font-ui); font-size: clamp(1.25rem, 2vw, 1.75rem); font-weight: 600; line-height: 1.4; letter-spacing: 0; }
+.collection-page .collection-tile-description-overlay { font-size: .8125rem; line-height: 1.7; }
+[lang="ar"] .storefront-shell :is(.storefront-page-title, .catalogue-title, .collection-tile-title-overlay) { letter-spacing: 0; }
+@media (max-width: 639px) {
+  .storefront-shell { --page-title-size: 1.625rem; }
+  .collection-intro { padding-block: 23px; }
+  .market-wordmark .market-wordmark-image { width: 136px; max-height: 48px; }
+}
+
+.market-hero-approved-brand { position: absolute; z-index: 1; left: 8%; top: 0; width: 29%; height: 17%; display: flex; align-items: center; justify-content: flex-start; direction: ltr; background: linear-gradient(90deg, #450000 75%, transparent); }
+.market-hero-approved-brand .brand-logo { width: auto; max-width: 100%; height: 100%; border-radius: 0; }
+.market-hero-reference[data-language="en"] .market-hero-approved-brand { left: 13%; width: 27%; }
+.market-hero-reference[data-language="ar"] .market-hero-approved-brand { left: 17%; width: 27%; }

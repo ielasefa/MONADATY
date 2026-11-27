@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import Link from "next/link";
+import { BrandLogo } from "@/components/BrandLogo";
 import { useTranslation } from "@/hooks/useTranslation";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { getLandingCopy } from "@/lib/landing-copy";
@@ -145,13 +146,7 @@ export function Footer({
                 aria-label={`${websiteName || "MONADATY"} — ${t("home_label", "Home")}`}
                 className="group inline-block focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-4 focus-visible:ring-offset-black"
               >
-                <motion.span
-                  whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
-                  transition={{ duration: 0.3, ease: PREMIUM_EASE }}
-                  className="block font-display text-[clamp(2rem,4vw,2.75rem)] font-normal leading-[0.9] tracking-[-0.04em] text-accent transition-colors duration-700 group-hover:text-accent"
-                >
-                  {websiteName || "MONADATY"}
-                </motion.span>
+                <BrandLogo className="footer-brand-logo" width={240} height={80} />
               </Link>
               <p className="mt-5 max-w-sm text-sm leading-[1.8] text-secondary">
                 {copy.footer.brandDescription}
