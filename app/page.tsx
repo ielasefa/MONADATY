@@ -43,6 +43,18 @@ export default async function HomePage() {
 
   const showsCollections = landingCollections.length > 0 && content.collectionsSection.enabled;
   const firstProduct = landingProducts[0];
+  // Older published CMS settings still point to the retired supply banner.
+  // Resolve that banner to the replacement shipped with the storefront.
+  const configuredStoryImage = content.aboutSection.image?.trim();
+  const retiredStoryImages = new Set([
+    "/uploads/banners/e5f42ecbfc564c17.webp",
+    "https://monadaty.com/uploads/banners/e5f42ecbfc564c17.webp",
+    "https://www.monadaty.com/uploads/banners/e5f42ecbfc564c17.webp",
+    "https://monadaty-ilyas.azurewebsites.net/uploads/banners/e5f42ecbfc564c17.webp",
+  ]);
+  const storyImage = !configuredStoryImage || retiredStoryImages.has(configuredStoryImage)
+    ? "/images/storefront/monadaty-wholesale-supply.png"
+    : configuredStoryImage;
   const departments = <MarketDepartments categories={categories.filter((category) => products.some((product) => product.category === category.name)).map(({ slug, name, image }) => {
     const productImage = products.find((product) => product.category === name && product.image)?.image;
     return { slug, name, image: image || productImage, productImage: !image && Boolean(productImage) };
@@ -81,7 +93,7 @@ export default async function HomePage() {
               <BrandStory
                 title={content.aboutSection.title}
                 description={content.aboutSection.description}
-                image={content.aboutSection.image || "/images/storefront/monadaty-wholesale-supply.png"}
+                image={storyImage}
               />
             );
           }
