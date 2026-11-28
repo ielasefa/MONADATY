@@ -297,18 +297,53 @@ jobs:
 
       - name: Install PostgreSQL client and project dependencies
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_admin_delete_migration }}
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           sudo apt-get update
           sudo apt-get install --yes postgresql-client
           npm ci
 
+      - name: Read the production database connection from Azure
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_admin_delete_migration }}
+        env:
+          AZURE_WEBAPP_NAME: ${{ env.AZURE_WEBAPP_NAME }}
+        run: |
+          set -euo pipefail
+          resource_group="$(az webapp list --query "[?name=='${AZURE_WEBAPP_NAME}'].resourceGroup | [0]" --output tsv)"
+          test -n "$resource_group" && test "$resource_group" != "None" || {
+            echo "::error::Could not resolve the Azure Web App resource group"
+            exit 1
+          }
+
+          database_url="$(az webapp config appsettings list \
+            --name "$AZURE_WEBAPP_NAME" \
+            --resource-group "$resource_group" \
+            --query "[?name=='DATABASE_URL'].value | [0]" \
+            --output tsv)"
+          database_ca="$(az webapp config appsettings list \
+            --name "$AZURE_WEBAPP_NAME" \
+            --resource-group "$resource_group" \
+            --query "[?name=='DATABASE_CA_CERT_BASE64'].value | [0]" \
+            --output tsv)"
+
+          test -n "$database_url" && test "$database_url" != "None" || {
+            echo "::error::DATABASE_URL is missing from Azure Web App settings"
+            exit 1
+          }
+          test -n "$database_ca" && test "$database_ca" != "None" || {
+            echo "::error::DATABASE_CA_CERT_BASE64 is missing from Azure Web App settings"
+            exit 1
+          }
+
+          echo "::add-mask::$database_url"
+          echo "::add-mask::$database_ca"
+          {
+            printf 'DATABASE_URL=%s\n' "$database_url"
+            printf 'DATABASE_CA_CERT_BASE64=%s\n' "$database_ca"
+          } >> "$GITHUB_ENV"
+
       - name: Back up production database before migration
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_admin_delete_migration }}
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DATABASE_CA_CERT_BASE64: ${{ secrets.DATABASE_CA_CERT_BASE64 }}
           BACKUP_DIR: ${{ runner.temp }}/monadaty-production-backup
         run: npx tsx scripts/backup-db.ts
 
@@ -342,9 +377,6 @@ jobs:
 
       - name: Apply the admin deletion database migration
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_admin_delete_migration }}
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DATABASE_CA_CERT_BASE64: ${{ secrets.DATABASE_CA_CERT_BASE64 }}
         run: npx tsx scripts/apply-admin-delete-migration.ts
 
       - name: Deploy to Azure Web App
