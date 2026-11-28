@@ -5,6 +5,12 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      apply_admin_delete_migration:
+        description: "Back up production, apply the admin deletion migration, then deploy this release"
+        required: true
+        type: boolean
+        default: false
 
 env:
   NODE_VERSION: "22.x"
@@ -269,6 +275,77 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_EDE91C85784246F0B7EC08FBE9E4383A }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_0EFD8B8BDF5C478C919156C9993FB4F7 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_512A21CFD02A4B24A323A0028DCEFF84 }}
+
+      - name: Check migration branch
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_admin_delete_migration }}
+        run: |
+          test "$GITHUB_REF" = "refs/heads/main" || {
+            echo "::error::Run the production migration from the main branch only"
+            exit 1
+          }
+
+      - name: Check out migration files
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_admin_delete_migration }}
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js for database backup and migration
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_admin_delete_migration }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install PostgreSQL client and project dependencies
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_admin_delete_migration }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes postgresql-client
+          npm ci
+
+      - name: Back up production database before migration
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_admin_delete_migration }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_CA_CERT_BASE64: ${{ secrets.DATABASE_CA_CERT_BASE64 }}
+          BACKUP_DIR: ${{ runner.temp }}/monadaty-production-backup
+        run: npx tsx scripts/backup-db.ts
+
+      - name: Verify production backup archive
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_admin_delete_migration }}
+        env:
+          BACKUP_DIR: ${{ runner.temp }}/monadaty-production-backup
+        run: |
+          backup_file="$(find "$BACKUP_DIR" -maxdepth 1 -type f -name 'monadaty-backup-*.sql.gz' -print -quit)"
+          test -n "$backup_file" || {
+            echo "::error::Production database backup was not created"
+            exit 1
+          }
+          gzip -t "$backup_file"
+          entries="$(gzip -dc "$backup_file" | pg_restore --list)"
+          for table in admins admin_logs product_history; do
+            printf '%s\n' "$entries" | grep -Eq "TABLE DATA public $table " || {
+              echo "::error::Backup archive is missing the $table table data"
+              exit 1
+            }
+          done
+
+      - name: Save production backup artifact
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_admin_delete_migration }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: monadaty-production-pre-admin-delete-${{ github.run_id }}
+          path: ${{ runner.temp }}/monadaty-production-backup/*.sql.gz
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Apply the admin deletion database migration
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_admin_delete_migration }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_CA_CERT_BASE64: ${{ secrets.DATABASE_CA_CERT_BASE64 }}
+        run: npx tsx scripts/apply-admin-delete-migration.ts
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3

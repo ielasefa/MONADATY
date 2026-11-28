@@ -94,11 +94,19 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     return NextResponse.json({ success: true });
   } catch (err) {
     if (err instanceof AdminDeletionError) return NextResponse.json({ error: err.code }, { status: err.status });
-    const code = err && typeof err === "object" && "code" in err ? err.code : "";
+    const errorInfo = err && typeof err === "object" ? err as { code?: unknown; meta?: Record<string, unknown>; name?: unknown } : {};
+    const code = typeof errorInfo.code === "string" ? errorInfo.code : "";
     if (code === "P2025") return NextResponse.json({ error: "ADMIN_NOT_FOUND" }, { status: 404 });
     if (code === "P2034") return NextResponse.json({ error: "ADMIN_DELETE_CONFLICT" }, { status: 409 });
     if (code === "P2003") return NextResponse.json({ error: "ADMIN_HAS_HISTORY" }, { status: 409 });
-    logError(err, "Failed to delete admin");
+    const meta = errorInfo.meta ?? {};
+    logError(err, "Failed to delete admin", {
+      code: code || undefined,
+      errorName: typeof errorInfo.name === "string" ? errorInfo.name : undefined,
+      model: typeof meta.modelName === "string" ? meta.modelName : undefined,
+      field: typeof meta.field_name === "string" ? meta.field_name : undefined,
+      constraint: typeof meta.constraint === "string" ? meta.constraint : undefined,
+    });
     return NextResponse.json({ error: "DELETE_FAILED" }, { status: 500 });
   }
 }
