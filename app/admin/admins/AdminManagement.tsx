@@ -107,6 +107,8 @@ export function AdminManagement({ admins: initialAdmins, currentAdminId }: { adm
         </button>
       </div>
 
+      <p className="admin-team-history-note" role="note">{labels.history_kept}</p>
+
       {showCreate && (
         <div className="mb-6 luxury-card p-4 sm:p-7">
           <h2 className="mb-5 text-base font-semibold text-foreground">{t("create_new_admin")}</h2>
@@ -182,40 +184,45 @@ export function AdminManagement({ admins: initialAdmins, currentAdminId }: { adm
             </tr>
           </thead>
           <tbody>
-            {admins.map((a) => (
-              <tr key={a.id}>
-                <td className="admin-team-name">
-                  <span className="admin-team-avatar" aria-hidden="true">{a.name.trim().charAt(0).toLocaleUpperCase()}</span>
-                  <span>{a.name}</span>
-                </td>
-                <td className="admin-team-email">{a.email}</td>
-                <td>
-                  <span className={a.role === "SUPER_ADMIN" ? "badge-gold" : "admin-team-role"}>
-                    {a.role === "SUPER_ADMIN" ? t("super_admin") : t("admin_role")}
-                  </span>
-                </td>
-                <td>
-                  <span className={a.mustChangePassword ? "badge-red" : "admin-team-status"}>
-                    {a.mustChangePassword ? t("must_change") : t("active_status")}
-                  </span>
-                </td>
-                <td>
-                  <span className={a.lastLoginAt ? "admin-team-login" : "admin-team-never-login"}>
-                    {a.lastLoginAt ? new Date(a.lastLoginAt).toLocaleDateString() : t("never_logged")}
-                  </span>
-                </td>
-                <td>
-                  <button
-                    onClick={() => handleDelete(a.id)}
-                    disabled={Boolean(deleteReason(a)) || deletingId !== null}
-                    className="admin-team-delete disabled:opacity-40"
-                    title={deleteReason(a)}
-                  >
-                    {deletingId === a.id ? labels.deleting : t("delete_admin")}
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {admins.map((a) => {
+              const blockedReason = deleteReason(a);
+              return (
+                <tr key={a.id}>
+                  <td className="admin-team-name">
+                    <span className="admin-team-avatar" aria-hidden="true">{a.name.trim().charAt(0).toLocaleUpperCase()}</span>
+                    <span>{a.name}</span>
+                  </td>
+                  <td className="admin-team-email">{a.email}</td>
+                  <td>
+                    <span className={a.role === "SUPER_ADMIN" ? "badge-gold" : "admin-team-role"}>
+                      {a.role === "SUPER_ADMIN" ? t("super_admin") : t("admin_role")}
+                    </span>
+                  </td>
+                  <td>
+                    <span className={a.mustChangePassword ? "badge-red" : "admin-team-status"}>
+                      {a.mustChangePassword ? t("must_change") : t("active_status")}
+                    </span>
+                  </td>
+                  <td>
+                    <span className={a.lastLoginAt ? "admin-team-login" : "admin-team-never-login"}>
+                      {a.lastLoginAt ? new Date(a.lastLoginAt).toLocaleDateString() : t("never_logged")}
+                    </span>
+                  </td>
+                  <td>
+                    <button
+                      onClick={() => handleDelete(a.id)}
+                      disabled={Boolean(blockedReason) || deletingId !== null}
+                      className="admin-team-delete disabled:opacity-40"
+                      title={blockedReason}
+                      aria-describedby={blockedReason ? `admin-delete-reason-${a.id}` : undefined}
+                    >
+                      {deletingId === a.id ? labels.deleting : t("delete_admin")}
+                    </button>
+                    {blockedReason && <span id={`admin-delete-reason-${a.id}`} className="admin-team-delete-reason">{blockedReason}</span>}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
         </div>

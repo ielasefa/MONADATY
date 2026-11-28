@@ -85,7 +85,7 @@ export default async function HomePage() {
           }
 
           if (showsCollections) {
-            map.collections = <CollectionsShowcase collections={landingCollections} showcase={collectionShowcase} />;
+            map.collections = <CollectionsShowcase collections={landingCollections} showcase={collectionShowcase} products={products} />;
           }
 
           if (content.aboutSection.enabled) {

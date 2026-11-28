@@ -144,6 +144,7 @@
 .admin-team-heading .luxury-label { color: var(--market-gold-dark); font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 .admin-team-heading h1 { font-size: clamp(1.55rem, 2.3vw, 2.15rem); }
 .admin-team-description { margin-top: 5px; color: var(--market-muted); font-size: .875rem; line-height: 1.6; }
+.admin-team-history-note { margin: 14px 0; border: 1px solid #ead8b4; border-radius: 12px; background: #fffaf0; padding: 11px 14px; color: #624511; font-size: .82rem; line-height: 1.55; }
 .admin-team-add { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; gap: 8px; padding-inline: 18px; }
 .admin-team-table-scroll { overflow-x: auto; }
 .admin-team-table { min-width: 850px; table-layout: auto; }
@@ -159,6 +160,7 @@
 .admin-team-never-login { color: #9a3b3b; font-weight: 600; }
 .admin-team-delete { border: 1px solid #f0d0d0; border-radius: 9px; background: #fff7f7; padding: 7px 11px; color: #a32424; font-size: .75rem; font-weight: 600; white-space: nowrap; transition: background-color 160ms, border-color 160ms; }
 .admin-team-delete:hover:not(:disabled) { border-color: #e7b1b1; background: #ffeded; }
+.admin-team-delete-reason { display: block; max-width: 220px; margin-top: 5px; color: var(--market-muted); font-size: .68rem; line-height: 1.4; }
 
 @media (max-width: 639px) {
   .admin-team-header { align-items: flex-start; flex-direction: column; }

@@ -46,6 +46,17 @@ function ArrowRight() {
   );
 }
 
+function AboutLink({ label, secondary = false, className = "" }: { label: string; secondary?: boolean; className?: string }) {
+  return (
+    <Link href="/about" className={`${secondary ? "btn-secondary" : "btn-primary"} market-about-button ${className}`}>
+      <span>{label}</span>
+      <svg className="market-about-button-arrow" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M5 12h14m-6-6 6 6-6 6" />
+      </svg>
+    </Link>
+  );
+}
+
 function ProductImageOrFallback({
   src,
   alt,
@@ -262,9 +273,11 @@ function ShowcaseProductCard({
 export function CollectionsShowcase({
   collections,
   showcase = [],
+  products = [],
 }: {
   collections: CollectionData[];
   showcase?: CollectionShowcaseEntry[];
+  products?: ProductData[];
 }) {
   const { lang } = useTranslation("home");
   const copy = getLandingCopy(lang);
@@ -276,12 +289,20 @@ export function CollectionsShowcase({
   );
   if (uniqueCollections.length === 0) return null;
 
-  const showcaseBySlug = new Map(showcase.map((s) => [s.collectionSlug, s]));
+  // Keep showcase ordering, while always taking current product data and prices from the shop catalogue.
+  const catalogueById = new Map(products.map((product) => [product.id, product]));
+  const showcaseBySlug = new Map(showcase.map((entry) => [entry.collectionSlug, {
+    ...entry,
+    products: entry.products.map((product) => catalogueById.get(product.id)).filter((product): product is ProductData => Boolean(product)),
+  }]));
   const active = activeSlug ? showcaseBySlug.get(activeSlug) : undefined;
   const activeCollection = activeSlug
     ? uniqueCollections.find((c) => c.slug === activeSlug) ?? null
     : null;
   const activeProducts = active?.products ?? [];
+  const collectionProductCount = activeCollection
+    ? products.filter((product) => product.collection === activeCollection.slug).length
+    : 0;
 
   return (
     <section className="relative w-full overflow-hidden bg-canvas" id="collections">
@@ -524,11 +545,11 @@ export function CollectionsShowcase({
                     {activeCollection.title}
                   </h3>
                   <p className="mt-2 text-sm text-secondary">
-                    {copy.collections.productCount}
+                    {copy.collections.productCount.replace("{{count}}", String(collectionProductCount))}
                   </p>
                 </div>
                 <Link
-                  href={`/shop?category=${activeCollection.slug}`}
+                  href={`/shop?collection=${activeCollection.slug}`}
                   className="inline-flex items-center gap-2 text-sm font-medium uppercase tracking-[0.08em] text-secondary transition-colors duration-200 hover:text-accent"
                 >
                   {copy.collections.viewCollection}
@@ -626,10 +647,7 @@ export function BrandStory({
               ))}
             </div>
 
-            <Link href="/about" className="landing-secondary group mt-8">
-              {copy.value.cta}
-              <ArrowRight />
-            </Link>
+            <AboutLink label={copy.value.cta} className="mt-8" />
           </Reveal>
 
           <Reveal delay={0.12} className="lg:col-span-7">
@@ -1233,9 +1251,7 @@ export function FinalCTA() {
               <Link href="/shop" className="landing-primary w-full min-w-[180px] sm:w-auto">
                 {copy.finalCta.primary} <ArrowRight />
               </Link>
-              <Link href="/about" className="landing-secondary w-full sm:w-auto">
-                {copy.finalCta.secondary}
-              </Link>
+              <AboutLink label={copy.finalCta.secondary} secondary />
             </div>
           </div>
         </Reveal>

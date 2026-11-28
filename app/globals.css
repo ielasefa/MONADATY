@@ -1558,6 +1558,15 @@ select option { background-color: #171717; color: #FFFFFF; }
   background: #f8eeee;
 }
 
+.storefront-shell .market-about-button { display: inline-flex; width: fit-content; max-width: 100%; min-height: 48px; align-items: center; justify-content: center; gap: 14px; padding: 12px 22px; border: 1px solid var(--market-wine); border-radius: 10px; background: var(--market-wine); color: #fff; box-shadow: 0 3px 10px rgb(69 4 7 / 15%); font-size: .875rem; font-weight: 650; line-height: 1.5; letter-spacing: 0; text-transform: none; text-align: center; }
+.storefront-shell .market-about-button:hover { border-color: var(--market-wine-hover); background: var(--market-wine-hover); color: #fff; box-shadow: 0 5px 14px rgb(69 4 7 / 20%); }
+.storefront-shell .market-about-button:active { background: var(--market-wine-dark); border-color: var(--market-wine-dark); }
+.market-about-button > span { min-width: 0; overflow-wrap: anywhere; }
+.market-about-button-arrow { width: 18px; height: 18px; flex-shrink: 0; }
+[dir="rtl"] .market-about-button-arrow { transform: rotate(180deg); }
+.storefront-shell .market-about-button:focus-visible { outline: 2px solid var(--market-gold); outline-offset: 4px; box-shadow: none; }
+@media (max-width: 639px) { .storefront-shell .market-about-button { width: 100%; } }
+
 .storefront-shell .label-utility,
 .market-cart .label-utility {
   color: rgb(var(--color-secondary));

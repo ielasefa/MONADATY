@@ -32,7 +32,7 @@ const LANDING_COPY = {
       viewProducts: "VOIR LES PRODUITS",
       close: "FERMER",
       viewCollection: "VOIR LA COLLECTION",
-      productCount: "3 boissons à découvrir dans cette collection",
+      productCount: "{{count}} boissons disponibles dans cette collection",
       empty: "De nouvelles boissons arrivent bientôt dans cette collection.",
     },
     value: {
@@ -40,7 +40,7 @@ const LANDING_COPY = {
       title: "DU CHOIX. DES PRIX DE GROS.",
       description:
         "De quoi approvisionner votre boutique, café ou restaurant : commandez simplement vos boissons en gros, elles arrivent jusqu’à vous.\nPRIX DE GROS — Des tarifs pensés pour l’achat en gros par les professionnels.\nLARGE SÉLECTION — Toutes les catégories de boissons au même endroit.\nLIVRAISON JUSQU’À VOUS — Votre commande livrée directement à votre commerce.\nCOMMANDE SIMPLE — Trouvez et commandez vos boissons en quelques minutes.",
-      cta: "DÉCOUVRIR MONADATY",
+      cta: "Découvrir MONADATY",
       imageLabel: "SODAS · EAUX · JUS · ET PLUS",
     },
     social: {
@@ -69,7 +69,7 @@ const LANDING_COPY = {
       description:
         "Sodas, eaux, jus et plus : commandez simplement vos boissons en gros, nous nous occupons de la livraison.",
       primary: "COMMANDER MAINTENANT",
-      secondary: "DÉCOUVRIR MONADATY",
+      secondary: "Découvrir MONADATY",
     },
     shop: {
       eyebrow: "Le catalogue MONADATY",
@@ -185,7 +185,7 @@ const LANDING_COPY = {
       viewProducts: "VIEW PRODUCTS",
       close: "CLOSE",
       viewCollection: "VIEW COLLECTION",
-      productCount: "3 drinks to discover in this collection",
+      productCount: "{{count}} drinks available in this collection",
       empty: "More drinks are coming to this collection soon.",
     },
     value: {
@@ -193,7 +193,7 @@ const LANDING_COPY = {
       title: "MORE CHOICE. WHOLESALE PRICES.",
       description:
         "Everything you need to stock your shop, café or restaurant: order your beverages in bulk with ease and have them delivered to you.\nWHOLESALE PRICING — Terms built for professional buyers.\nWIDE SELECTION — Every beverage category in one place.\nDELIVERY TO YOU — Your order delivered straight to your business.\nEASY ORDERING — Find and order your drinks in minutes.",
-      cta: "DISCOVER MONADATY",
+      cta: "Discover MONADATY",
       imageLabel: "SODA · WATER · JUICE · AND MORE",
     },
     social: {
@@ -222,7 +222,7 @@ const LANDING_COPY = {
       description:
         "Sodas, water, juices and more: order your beverages in bulk with ease and leave the delivery to us.",
       primary: "ORDER NOW",
-      secondary: "DISCOVER MONADATY",
+      secondary: "Discover MONADATY",
     },
     shop: {
       eyebrow: "MONADATY catalogue",
@@ -338,7 +338,7 @@ const LANDING_COPY = {
       viewProducts: "عرض المنتجات",
       close: "إغلاق",
       viewCollection: "عرض المجموعة",
-      productCount: "3 مشروبات لاكتشافها في هذه المجموعة",
+      productCount: "{{count}} مشروبات متوفرة في هذه المجموعة",
       empty: "ستتوفر مشروبات جديدة في هذه المجموعة قريباً.",
     },
     value: {
