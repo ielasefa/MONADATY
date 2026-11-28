@@ -81,11 +81,17 @@ function snapshot(): Snapshot {
 }
 
 function assertBaseTables(current: Snapshot) {
-  if (!current.adminCount || !current.adminIdNullable || !current.adminNameExists) {
+  if (typeof current.adminCount !== "number" || current.adminCount < 1) {
     throw new Error("Production schema is missing expected administrator or history tables/columns; no changes applied.");
   }
-  if (!current.adminNameExists.adminLogs || !current.adminNameExists.productHistory) {
-    throw new Error("Expected history-name columns are missing; no changes applied.");
+  if (typeof current.adminLogCount !== "number" || typeof current.productHistoryCount !== "number") {
+    throw new Error("Expected administrator history tables are missing; no changes applied.");
+  }
+  if (typeof current.adminIdNullable?.adminLogs !== "boolean" || typeof current.adminIdNullable?.productHistory !== "boolean") {
+    throw new Error("Expected history adminId columns are missing; no changes applied.");
+  }
+  if (!current.adminNameExists?.productHistory) {
+    throw new Error("Expected product-history actor-name column is missing; no changes applied.");
   }
   if (current.adminLogFk.length !== 1 || current.productHistoryFk.length !== 1) {
     throw new Error("Expected exactly one admin foreign key in each history table; no changes applied.");
@@ -103,7 +109,7 @@ try {
 
   const logAlreadySetNull = before.adminLogFk[0].action === "n" && before.adminIdNullable.adminLogs;
   const historyAlreadySetNull = before.productHistoryFk[0].action === "n" && before.adminIdNullable.productHistory;
-  if (logAlreadySetNull && historyAlreadySetNull) {
+  if (logAlreadySetNull && historyAlreadySetNull && before.adminNameExists.adminLogs) {
     console.log("Admin history foreign keys already use ON DELETE SET NULL; no database changes needed.");
     process.exitCode = 0;
   } else {
@@ -120,6 +126,9 @@ try {
 
     const after = snapshot();
     assertBaseTables(after);
+    if (!after.adminNameExists.adminLogs || !after.adminNameExists.productHistory) {
+      throw new Error("Post-migration verification failed: history actor-name columns are missing.");
+    }
     if (after.adminLogFk[0].action !== "n" || after.productHistoryFk[0].action !== "n") {
       throw new Error("Post-migration verification failed: foreign keys are not ON DELETE SET NULL.");
     }
