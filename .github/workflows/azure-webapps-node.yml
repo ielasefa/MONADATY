@@ -221,6 +221,18 @@ jobs:
       contents: read
 
     steps:
+      - name: Check migration branch
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_admin_delete_migration }}
+        run: |
+          test "$GITHUB_REF" = "refs/heads/main" || {
+            echo "::error::Run the production migration from the main branch only"
+            exit 1
+          }
+
+      - name: Check out migration files
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_admin_delete_migration }}
+        uses: actions/checkout@v4
+
       - name: Download deployment artifact
         uses: actions/download-artifact@v4
         with:
@@ -275,18 +287,6 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_EDE91C85784246F0B7EC08FBE9E4383A }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_0EFD8B8BDF5C478C919156C9993FB4F7 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_512A21CFD02A4B24A323A0028DCEFF84 }}
-
-      - name: Check migration branch
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_admin_delete_migration }}
-        run: |
-          test "$GITHUB_REF" = "refs/heads/main" || {
-            echo "::error::Run the production migration from the main branch only"
-            exit 1
-          }
-
-      - name: Check out migration files
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_admin_delete_migration }}
-        uses: actions/checkout@v4
 
       - name: Set up Node.js for database backup and migration
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_admin_delete_migration }}
